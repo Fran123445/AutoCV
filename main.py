@@ -5,13 +5,7 @@ import json
 
 from etl.extract import JobDescriptionNotFound, extract_from_file
 
-
-def main():
-    data_dir = Path("data")
-    staging_dir = data_dir / "staging"
-    out_dir = data_dir / "extracted_descs"
-    out_dir.mkdir(parents=True, exist_ok=True)
-
+def extract(staging_dir: Path, out_dir: Path):
     extracted_count = 0
     skipped = []
 
@@ -32,6 +26,14 @@ def main():
     print(f"\nExtracted {extracted_count}, skipped {len(skipped)}.")
     for html_path, error in skipped:
         print(f"  {html_path.name}: {error}")
+            
+def main():
+    data_dir = Path("data")
+    staging_dir = data_dir / "staging"
+    out_dir = data_dir / "extracted_descs"
+    out_dir.mkdir(parents=True, exist_ok=True)
+
+    extract(staging_dir, out_dir)
 
 
 if __name__ == "__main__":
