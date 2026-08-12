@@ -15,29 +15,32 @@ def load_seed(filename: str, key: str) -> list[dict]:
         return json.load(f)[key]
 
 
-def render_names(entries: list[dict]) -> str:
+def render_names(entries: list[dict], key: str = "name") -> str:
     """
     Render a registry as a plain comma-separated list of canonical names.
 
     Args:
-        entries (list[dict]): Registry entries, each carrying a "name".
+        entries (list[dict]): Registry entries.
+        key (str): Field holding the canonical name. Seeds name it after the
+            column it loads into, which is "label" for seniority.
     """
-    return ", ".join(entry["name"] for entry in entries)
+    return ", ".join(entry[key] for entry in entries)
 
 
-def render_with_aliases(entries: list[dict]) -> str:
+def render_with_aliases(entries: list[dict], key: str = "name") -> str:
     """
     Render a registry as "canonical (alias, alias)" entries.
 
     Args:
-        entries (list[dict]): Registry entries, each carrying a "name" and an
-            "aliases" list.
+        entries (list[dict]): Registry entries, each carrying an "aliases" list.
+        key (str): Field holding the canonical name. Seeds name it after the
+            column it loads into, which is "label" for seniority.
     """
     rendered = []
     for entry in entries:
         if entry["aliases"]:
-            rendered.append(f"{entry['name']} ({', '.join(entry['aliases'])})")
+            rendered.append(f"{entry[key]} ({', '.join(entry['aliases'])})")
         else:
-            rendered.append(entry["name"])
+            rendered.append(entry[key])
 
     return ", ".join(rendered)

@@ -2,6 +2,7 @@ from llm.agents.concept_identifier.first_pass import run_first_pass as concepts_
 from llm.agents.concept_identifier.merge import merge_passes as merge_concept_passes
 from llm.agents.concept_identifier.models import ConceptList
 from llm.agents.concept_identifier.second_pass import run_second_pass as concepts_second_pass
+from llm.agents.seniority_identifier.classify import classify_seniority
 from llm.agents.tech_identifier.first_pass import run_first_pass as tech_first_pass
 from llm.agents.tech_identifier.merge import merge_passes as merge_tech_passes
 from llm.agents.tech_identifier.models import TechnologyList
@@ -68,4 +69,5 @@ def transform(jd_json: dict) -> dict:
         "body": job_desc,
         "technologies": _identify_technologies(job_desc).model_dump(),
         "concepts": _identify_concepts(job_desc).model_dump(),
+        "seniority": classify_seniority(job_desc).model_dump(),
     }
