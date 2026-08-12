@@ -8,8 +8,6 @@ from etl.extract import JobDescriptionNotFound, extract_from_file
 
 def main():
     data_dir = Path("data")
-    # Not recursive: each saved page sits next to a "<name>_files" folder of
-    # assets that includes .html of its own.
     staging_dir = data_dir / "staging"
     out_dir = data_dir / "extracted_descs"
     out_dir.mkdir(parents=True, exist_ok=True)
