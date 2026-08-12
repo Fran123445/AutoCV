@@ -5,17 +5,24 @@ from pathlib import Path
 from typing import Literal
 
 
-def _load_tech_list() -> list[str]:
+ENDPOINT = "http://localhost:5001/v1/chat/completions"
+TIMEOUT = 300.0
+# Gemma degenerates under greedy decoding, so sampling stays on.
+TEMPERATURE = 0.95
+
+SEEDS_PATH = Path(__file__).parents[3] / "seeds" / "technologies.json"
+
+
+def _load_registry() -> list[dict]:
     """
-    Load the list of technologies
+    Load the technology registry
     """
-    with open(Path(__file__).parent.parent.parent / "seeds" / "technologies.json", "r", encoding="utf-8") as f:
-        tech_dict = json.load(f)
-
-    return [tech["name"] for tech in tech_dict["technologies"]]
+    with open(SEEDS_PATH, "r", encoding="utf-8") as f:
+        return json.load(f)["technologies"]
 
 
-TECHNOLOGY_NAMES = _load_tech_list()
+REGISTRY = _load_registry()
+TECHNOLOGY_NAMES = [tech["name"] for tech in REGISTRY]
 
 # Constrained decoding turns this into a grammar, so a name outside the
 # registry becomes unrepresentable rather than merely discouraged.
@@ -56,6 +63,7 @@ class Technology(BaseModel):
         description="Upper bound of years for this specific technology. Null when the job description does not state it, meaning there is no upper limit.",
     )
 
+
 class TechnologyList(BaseModel):
     required_technologies: list[Technology] = Field(
         description="The technologies the job description demands."
@@ -67,42 +75,44 @@ class TechnologyList(BaseModel):
         description="Technologies mentioned in the job description but not available as an option."
     )
 
-tech_list_json = TechnologyList.model_json_schema()
 
-def _parse_reponse(response: httpx.Response) -> TechnologyList:
+def post_chat(prompt: str, schema: dict) -> dict:
     """
-    Parse the response from the LLM and return a TechnologyList object.
+    Send a prompt to the local model and return the parsed JSON content.
+
+    Args:
+        prompt (str): The full prompt to send.
+        schema (dict): JSON schema constraining the reply.
     """
+    payload = {
+        "messages": [{"role": "user", "content": prompt}],
+        "response_format": {"type": "json_object", "schema": schema},
+        "temperature": TEMPERATURE,
+    }
+
+    with httpx.Client() as client:
+        response = client.post(ENDPOINT, json=payload, timeout=TIMEOUT)
+
     try:
-        response_json = response.json()
-        content = response_json["choices"][0]["message"]["content"]
-        return TechnologyList.model_validate_json(content)
+        return json.loads(response.json()["choices"][0]["message"]["content"])
     except Exception as e:
-        raise ValueError(f"Failed to parse response: {e}. Response content: {response.text}")
+        raise ValueError(
+            f"Failed to parse response: {e}. Response content: {response.text}"
+        )
 
-def identify_technologies(job_desc: str):
+
+def run_first_pass(job_desc: str) -> TechnologyList:
     """
     Identify technologies mentioned in a job description.
 
     Args:
         job_desc (str): The job description text.
     """
+    prompt = PROMPT_TEMPLATE.format(
+        tech_list=", ".join(TECHNOLOGY_NAMES),
+        job_desc=job_desc,
+    )
 
-    prompt = PROMPT_TEMPLATE.format(tech_list=", ".join(TECHNOLOGY_NAMES),
-                                job_desc=job_desc)
-
-    payload = {
-        "messages": [{"role": "user", "content": prompt}],
-        "response_format": {"type": "json_object", "schema": tech_list_json},
-        # Extraction, not authoring: the same posting must map to the same JSON.
-        "temperature": 0.95,
-    }
-
-    with httpx.Client() as client:
-        response = client.post(
-            "http://localhost:5001/v1/chat/completions",
-            json=payload,
-            timeout=300.0,
-        )
-
-        return _parse_reponse(response)
+    return TechnologyList.model_validate(
+        post_chat(prompt, TechnologyList.model_json_schema())
+    )
