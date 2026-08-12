@@ -44,11 +44,16 @@ CREATE TABLE DimConcepts (
 
 CREATE TABLE FactJob (
     id                 INTEGER PRIMARY KEY,
+    linkedin_job_id    INTEGER NOT NULL UNIQUE,  -- clave de dedupe; sale de la
+                       -- URL guardada, no del cuerpo del HTML: ahí aparecen los
+                       -- ids de los avisos recomendados
     position_name      TEXT NOT NULL,        -- título tal cual aparece en la JD
     company_id         INTEGER REFERENCES DimCompany(id),
     role_id            INTEGER REFERENCES DimRole(id),
     seniority_id       INTEGER REFERENCES DimSeniority(id),
-    post_date          TEXT,                 -- ISO 8601; null si la JD no lo dice
+    post_date          TEXT,                 -- ISO 8601, derivado de scrape_date
+                       -- menos el tiempo transcurrido; precisión gruesa
+    post_date_raw      TEXT,                 -- 'hace 3 meses' tal cual
     scrape_date        TEXT NOT NULL,
     source_url         TEXT,
     location           TEXT,                 -- ubicación del puesto, no de la empresa
