@@ -1,26 +1,7 @@
-from pydantic import BaseModel, Field
+from llm.client import post_chat
 
-from .first_pass import REGISTRY, Technology, TechnologyList, post_chat
-
-
-# The first pass only ever sees canonical names, which is why terms like
-# "spark" or "pi historian" end up unmatched. This pass gets the aliases too,
-# so it can bridge a term in the posting to the name in the registry.
-def _allowed_technologies() -> str:
-    """
-    Render the registry as "canonical (alias, alias)" entries.
-    """
-    entries = []
-    for tech in REGISTRY:
-        if tech["aliases"]:
-            entries.append(f"{tech['name']} ({', '.join(tech['aliases'])})")
-        else:
-            entries.append(tech["name"])
-
-    return ", ".join(entries)
-
-
-ALLOWED_TECHNOLOGIES = _allowed_technologies()
+from .models import SecondPassResult, TechnologyList
+from .registry import NAMES_WITH_ALIASES
 
 
 PROMPT_TEMPLATE = """You are reviewing a first pass of technology extraction over a job description. The first pass found the technologies in <already_found> and recorded the terms it could not match in <unmatched>. Your job is to catch what it missed.
@@ -54,18 +35,6 @@ Allowed technologies:
 """
 
 
-class SecondPassResult(BaseModel):
-    missed_required_technologies: list[Technology] = Field(
-        description="Required technologies the first pass failed to report."
-    )
-    missed_nice_to_have_technologies: list[Technology] = Field(
-        description="Nice-to-have technologies the first pass failed to report."
-    )
-    resolved_terms: list[str] = Field(
-        description="Entries from the unmatched list that turned out to be a technology in the allowed list, copied verbatim."
-    )
-
-
 def run_second_pass(job_desc: str, first_pass: TechnologyList) -> SecondPassResult:
     """
     Review a first pass and report the technologies it missed.
@@ -80,7 +49,7 @@ def run_second_pass(job_desc: str, first_pass: TechnologyList) -> SecondPassResu
     )
 
     prompt = PROMPT_TEMPLATE.format(
-        tech_list=ALLOWED_TECHNOLOGIES,
+        tech_list=NAMES_WITH_ALIASES,
         already_found=", ".join(already_found) or "(nothing)",
         unmatched=", ".join(first_pass.discarded_technologies) or "(nothing)",
         job_desc=job_desc,

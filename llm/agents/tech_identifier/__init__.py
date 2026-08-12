@@ -1,5 +1,6 @@
-from .first_pass import Technology, TechnologyList, run_first_pass
-from .second_pass import SecondPassResult, run_second_pass
+from .models import SecondPassResult, Technology, TechnologyList
+from .first_pass import run_first_pass
+from .second_pass import run_second_pass
 
 __all__ = [
     "Technology",
