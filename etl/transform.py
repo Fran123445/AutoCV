@@ -1,7 +1,11 @@
-from llm.agents.tech_identifier.first_pass import run_first_pass
-from llm.agents.tech_identifier.merge import merge_passes
+from llm.agents.concept_identifier.first_pass import run_first_pass as concepts_first_pass
+from llm.agents.concept_identifier.merge import merge_passes as merge_concept_passes
+from llm.agents.concept_identifier.models import ConceptList
+from llm.agents.concept_identifier.second_pass import run_second_pass as concepts_second_pass
+from llm.agents.tech_identifier.first_pass import run_first_pass as tech_first_pass
+from llm.agents.tech_identifier.merge import merge_passes as merge_tech_passes
 from llm.agents.tech_identifier.models import TechnologyList
-from llm.agents.tech_identifier.second_pass import run_second_pass
+from llm.agents.tech_identifier.second_pass import run_second_pass as tech_second_pass
 
 
 def _identify_technologies(job_desc: str) -> TechnologyList:
@@ -18,10 +22,30 @@ def _identify_technologies(job_desc: str) -> TechnologyList:
         TechnologyList: The technologies the posting requires, the ones it
             treats as desirable, and the terms neither pass could match.
     """
-    first_pass = run_first_pass(job_desc)
-    second_pass = run_second_pass(job_desc, first_pass)
+    first_pass = tech_first_pass(job_desc)
+    second_pass = tech_second_pass(job_desc, first_pass)
 
-    return merge_passes(first_pass, second_pass)
+    return merge_tech_passes(first_pass, second_pass)
+
+
+def _identify_concepts(job_desc: str) -> ConceptList:
+    """
+    Identify concepts in a job description.
+
+    Same two-pass shape as the technologies: extract, then review for what the
+    first pass missed.
+
+    Args:
+        job_desc (str): The job description text.
+
+    Returns:
+        ConceptList: The concepts the posting requires, the ones it treats as
+            desirable, and the terms neither pass could match.
+    """
+    first_pass = concepts_first_pass(job_desc)
+    second_pass = concepts_second_pass(job_desc, first_pass)
+
+    return merge_concept_passes(first_pass, second_pass)
 
 
 def transform(jd_json: dict) -> dict:
@@ -43,4 +67,5 @@ def transform(jd_json: dict) -> dict:
         # the load stage should not have to reopen the extract output to get it.
         "body": job_desc,
         "technologies": _identify_technologies(job_desc).model_dump(),
+        "concepts": _identify_concepts(job_desc).model_dump(),
     }
