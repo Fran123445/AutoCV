@@ -1,43 +1,46 @@
 -- Dimensiones
+--
+-- Todo va con IF NOT EXISTS: db_creation.py corre este archivo entero en cada
+-- arranque, así una tabla nueva aparece sin tener que borrar la base.
 
-CREATE TABLE DimCompany (
+CREATE TABLE IF NOT EXISTS DimCompany (
     id           INTEGER PRIMARY KEY,
     company_name TEXT NOT NULL UNIQUE,
     location     TEXT,
     size         TEXT
 );
 
-CREATE TABLE DimRole (
+CREATE TABLE IF NOT EXISTS DimRole (
     id        INTEGER PRIMARY KEY,
     role_name TEXT NOT NULL UNIQUE   -- estandarizado: 'backend dev', 'bi dev', 'full stack dev', ...
 );
 
-CREATE TABLE DimSeniority (
+CREATE TABLE IF NOT EXISTS DimSeniority (
     id      INTEGER PRIMARY KEY,
     label   TEXT NOT NULL UNIQUE,    -- 'junior', 'ssr', 'senior', 'lead'
     min_exp INTEGER,                 -- años típicos del label, ambos nullable:
     max_exp INTEGER                  -- muchas JDs dicen 'Senior' sin años
 );
 
-CREATE TABLE DimTechnologies (
+CREATE TABLE IF NOT EXISTS DimTechnologies (
     id   INTEGER PRIMARY KEY,
     name TEXT NOT NULL UNIQUE        -- nombre canónico: 'javascript', 'postgresql', ...
 );
 
-CREATE TABLE TechnologyDependency (
+CREATE TABLE IF NOT EXISTS TechnologyDependency (
     child_id  INTEGER NOT NULL REFERENCES DimTechnologies(id),  -- 'react'
     parent_id INTEGER NOT NULL REFERENCES DimTechnologies(id),  -- implica 'javascript'
     PRIMARY KEY (child_id, parent_id)
 );
 
-CREATE TABLE DimConcepts (
+CREATE TABLE IF NOT EXISTS DimConcepts (
     id           INTEGER PRIMARY KEY,
     concept_name TEXT NOT NULL UNIQUE  -- 'agile', 'machine learning', 'data structures', ...
 );
 
 -- Fact
 
-CREATE TABLE FactJob (
+CREATE TABLE IF NOT EXISTS FactJob (
     id                 INTEGER PRIMARY KEY,
     linkedin_job_id    INTEGER NOT NULL UNIQUE,  -- clave de dedupe; sale de la
                        -- URL guardada, no del cuerpo del HTML: ahí aparecen los
@@ -64,7 +67,7 @@ CREATE TABLE FactJob (
 
 -- Bridges (N:M job ↔ tech/concept)
 
-CREATE TABLE JobTechnologies (
+CREATE TABLE IF NOT EXISTS JobTechnologies (
     job_id        INTEGER NOT NULL REFERENCES FactJob(id),
     technology_id INTEGER NOT NULL REFERENCES DimTechnologies(id),
     required      INTEGER NOT NULL DEFAULT 1,  -- 1 = must-have, 0 = nice-to-have
@@ -73,7 +76,7 @@ CREATE TABLE JobTechnologies (
     PRIMARY KEY (job_id, technology_id)
 );
 
-CREATE TABLE JobConcepts (
+CREATE TABLE IF NOT EXISTS JobConcepts (
     job_id     INTEGER NOT NULL REFERENCES FactJob(id),
     concept_id INTEGER NOT NULL REFERENCES DimConcepts(id),
     required   INTEGER NOT NULL DEFAULT 1,
