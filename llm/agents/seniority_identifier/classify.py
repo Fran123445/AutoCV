@@ -42,4 +42,6 @@ def classify_seniority(job_desc: str) -> Seniority:
         job_desc=job_desc,
     )
 
-    return Seniority.model_validate(post_chat(prompt, Seniority.model_json_schema()))
+    return Seniority.model_validate(
+        post_chat(prompt, Seniority.model_json_schema(), think=False)
+    )

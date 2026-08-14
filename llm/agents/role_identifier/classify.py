@@ -53,4 +53,6 @@ def classify_role(position_name: str | None, job_desc: str) -> Role:
         job_desc=job_desc,
     )
 
-    return Role.model_validate(post_chat(prompt, Role.model_json_schema()))
+    return Role.model_validate(
+        post_chat(prompt, Role.model_json_schema(), think=False)
+    )
