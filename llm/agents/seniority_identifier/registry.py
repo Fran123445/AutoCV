@@ -18,6 +18,6 @@ LABELS_WITH_ALIASES = render_with_aliases(REGISTRY, key="label")
 # years a posting states and leaves the label alone: mapping years to a label
 # belongs to the load stage, where it is deterministic.
 TYPICAL_YEARS = {
-    seniority["label"]: (seniority["min_exp"], seniority["max_exp"])
+    seniority["label"]: (seniority["typical_min_exp"], seniority["typical_max_exp"])
     for seniority in REGISTRY
 }

@@ -16,10 +16,13 @@ CREATE TABLE IF NOT EXISTS DimRole (
 );
 
 CREATE TABLE IF NOT EXISTS DimSeniority (
-    id      INTEGER PRIMARY KEY,
-    label   TEXT NOT NULL UNIQUE,    -- 'junior', 'ssr', 'senior', 'lead'
-    min_exp INTEGER,                 -- años típicos del label, ambos nullable:
-    max_exp INTEGER                  -- muchas JDs dicen 'Senior' sin años
+    id              INTEGER PRIMARY KEY,
+    label           TEXT NOT NULL UNIQUE,  -- 'junior', 'ssr', 'senior', 'lead'
+    typical_min_exp INTEGER,               -- años típicos del label, ambos
+    typical_max_exp INTEGER                -- nullable: muchas JDs dicen
+                    -- 'Senior' sin años. 'typical' porque describen la palabra,
+                    -- no ningún aviso: los años que pide un aviso concreto son
+                    -- otra cosa y no viven acá
 );
 
 CREATE TABLE IF NOT EXISTS DimTechnologies (

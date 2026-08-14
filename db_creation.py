@@ -36,14 +36,18 @@ def _load_seniority_data(connection: sqlite3.Connection) -> int:
     seniorities = load_seed("seniority.json", "seniorities")
     connection.executemany(
         """
-        INSERT INTO DimSeniority (label, min_exp, max_exp)
+        INSERT INTO DimSeniority (label, typical_min_exp, typical_max_exp)
         VALUES (?, ?, ?)
         ON CONFLICT(label) DO UPDATE SET
-            min_exp = excluded.min_exp,
-            max_exp = excluded.max_exp
+            typical_min_exp = excluded.typical_min_exp,
+            typical_max_exp = excluded.typical_max_exp
         """,
         [
-            (seniority["label"], seniority["min_exp"], seniority["max_exp"])
+            (
+                seniority["label"],
+                seniority["typical_min_exp"],
+                seniority["typical_max_exp"],
+            )
             for seniority in seniorities
         ],
     )
