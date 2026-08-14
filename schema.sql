@@ -24,11 +24,6 @@ CREATE TABLE DimTechnologies (
     name TEXT NOT NULL UNIQUE        -- nombre canónico: 'javascript', 'postgresql', ...
 );
 
-CREATE TABLE TechnologyAlias (
-    alias         TEXT PRIMARY KEY,  -- 'js', 'ecmascript', 'postgres', ...
-    technology_id INTEGER NOT NULL REFERENCES DimTechnologies(id)
-);
-
 CREATE TABLE TechnologyDependency (
     child_id  INTEGER NOT NULL REFERENCES DimTechnologies(id),  -- 'react'
     parent_id INTEGER NOT NULL REFERENCES DimTechnologies(id),  -- implica 'javascript'
