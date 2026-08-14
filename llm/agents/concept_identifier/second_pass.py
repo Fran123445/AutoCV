@@ -14,6 +14,7 @@ Rules:
 - Leave a term out of resolved_terms when it names a product, a tool or a vendor rather than a concept: Docker, Snowflake, Power BI, SAP. Those belong to a different list.
 - Then re-read the job description for concepts the first pass overlooked entirely. The responsibilities paragraphs are where they hide: what the role does day to day is stated there rather than in the requirements bullets.
 - Sort each one into required or nice-to-have: required for anything under requirements or phrased as mandatory, nice-to-have for "deseable", "nice to have", "a plus", "preferred", "bonus", "valorable", "no excluyente".
+- Give the optional block a second read of its own. First passes strip the products out of a section headed "It Is a Plus If You Also Have" or "Requisitos deseables" and walk past the concepts sitting next to them, so that block is where the missing nice-to-have entries usually are.
 - min_experience and max_experience: years demanded for that specific concept, and only when the description states them. Use null when it says nothing.
 - Ignore anything that appears only in benefits, perks or company boilerplate.
 - Return empty lists when the first pass missed nothing.
