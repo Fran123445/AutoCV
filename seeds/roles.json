@@ -1,0 +1,165 @@
+{
+  "description": "Seed registry for DimRole. 'name' is the canonical value for DimRole.role_name. 'aliases' are surface forms mapped to it; there is no RoleAlias table in schema.sql, so they widen prompt matching and are dropped at load time. 'category' has no column either. Seniority words are deliberately absent from every alias: 'Junior Java Developer' is a junior backend dev, and the level is DimSeniority's business, not this registry's. A programming language in a title does not settle the role either, so 'java developer' is not an alias of anything.",
+  "roles": [
+    {
+      "name": "backend dev",
+      "category": "engineering",
+      "aliases": ["backend developer", "back-end developer", "back end developer", "backend engineer", "back-end engineer", "desarrollador backend", "desarrollador/a backend", "desarrollador back-end", "server side developer", "api developer"]
+    },
+    {
+      "name": "frontend dev",
+      "category": "engineering",
+      "aliases": ["frontend developer", "front-end developer", "front end developer", "frontend engineer", "front-end engineer", "desarrollador frontend", "desarrollador/a frontend", "ui developer"]
+    },
+    {
+      "name": "full stack dev",
+      "category": "engineering",
+      "aliases": ["full stack developer", "fullstack developer", "full-stack developer", "full stack engineer", "fullstack engineer", "full-stack engineer", "desarrollador full stack", "desarrollador fullstack"]
+    },
+    {
+      "name": "mobile dev",
+      "category": "engineering",
+      "aliases": ["mobile developer", "mobile engineer", "android developer", "ios developer", "desarrollador mobile", "desarrollador movil", "desarrollador móvil"]
+    },
+    {
+      "name": "software dev",
+      "category": "engineering",
+      "aliases": ["software developer", "software engineer", "desarrollador de software", "ingeniero de software", "ingeniero/a de software", "programador", "developer", "desarrollador"]
+    },
+    {
+      "name": "embedded dev",
+      "category": "engineering",
+      "aliases": ["embedded developer", "embedded engineer", "firmware engineer", "desarrollador embebido"]
+    },
+    {
+      "name": "game dev",
+      "category": "engineering",
+      "aliases": ["game developer", "gameplay engineer", "desarrollador de videojuegos"]
+    },
+    {
+      "name": "data engineer",
+      "category": "data",
+      "aliases": ["ingeniero de datos", "ingeniero/a de datos", "big data engineer", "databricks engineer", "data platform engineer", "pipeline engineer"]
+    },
+    {
+      "name": "analytics engineer",
+      "category": "data",
+      "aliases": ["ingeniero de analitica", "ingeniero de analítica"]
+    },
+    {
+      "name": "data scientist",
+      "category": "data",
+      "aliases": ["cientifico de datos", "científico de datos", "cientifico/a de datos", "data science"]
+    },
+    {
+      "name": "data analyst",
+      "category": "data",
+      "aliases": ["analista de datos", "analista de informacion", "analista de información"]
+    },
+    {
+      "name": "bi dev",
+      "category": "data",
+      "aliases": ["bi developer", "business intelligence developer", "desarrollador bi", "desarrollador business intelligence"]
+    },
+    {
+      "name": "bi analyst",
+      "category": "data",
+      "aliases": ["business intelligence analyst", "analista bi", "analista de business intelligence"]
+    },
+    {
+      "name": "etl developer",
+      "category": "data",
+      "aliases": ["desarrollador etl", "data integration developer"]
+    },
+    {
+      "name": "data architect",
+      "category": "data",
+      "aliases": ["arquitecto de datos", "arquitecto/a de datos"]
+    },
+    {
+      "name": "dba",
+      "category": "data",
+      "aliases": ["database administrator", "administrador de base de datos", "administrador de bases de datos"]
+    },
+    {
+      "name": "ml engineer",
+      "category": "ai",
+      "aliases": ["machine learning engineer", "ingeniero de machine learning", "ingeniero de aprendizaje automatico", "ingeniero de aprendizaje automático"]
+    },
+    {
+      "name": "mlops engineer",
+      "category": "ai",
+      "aliases": ["mlops", "ml platform engineer"]
+    },
+    {
+      "name": "ai engineer",
+      "category": "ai",
+      "aliases": ["artificial intelligence engineer", "ia engineer", "ingeniero de ia", "ingeniero de inteligencia artificial", "genai engineer", "ai agents developer", "ai systems engineer", "llm engineer"]
+    },
+    {
+      "name": "devops engineer",
+      "category": "infrastructure",
+      "aliases": ["devops", "ingeniero devops", "ingeniero/a devops"]
+    },
+    {
+      "name": "sre",
+      "category": "infrastructure",
+      "aliases": ["site reliability engineer", "ingeniero de confiabilidad"]
+    },
+    {
+      "name": "cloud engineer",
+      "category": "infrastructure",
+      "aliases": ["ingeniero cloud", "ingeniero de nube", "cloud infrastructure engineer"]
+    },
+    {
+      "name": "platform engineer",
+      "category": "infrastructure",
+      "aliases": ["ingeniero de plataforma", "infrastructure engineer", "ingeniero de infraestructura"]
+    },
+    {
+      "name": "security engineer",
+      "category": "infrastructure",
+      "aliases": ["ingeniero de seguridad", "cybersecurity engineer", "ingeniero de ciberseguridad", "security analyst", "analista de seguridad"]
+    },
+    {
+      "name": "qa engineer",
+      "category": "quality",
+      "aliases": ["qa", "quality assurance engineer", "qa automation engineer", "automation qa", "tester", "analista de qa", "analista de testing", "ingeniero de calidad"]
+    },
+    {
+      "name": "systems analyst",
+      "category": "analysis",
+      "aliases": ["analista de sistemas", "systems and business analyst", "business and systems analyst"]
+    },
+    {
+      "name": "business analyst",
+      "category": "analysis",
+      "aliases": ["analista de negocio", "analista de negocios", "analista funcional de negocio"]
+    },
+    {
+      "name": "functional analyst",
+      "category": "analysis",
+      "aliases": ["analista funcional"]
+    },
+    {
+      "name": "solutions architect",
+      "category": "architecture",
+      "aliases": ["arquitecto de soluciones", "arquitecto/a de soluciones", "cloud architect", "arquitecto cloud"]
+    },
+    {
+      "name": "software architect",
+      "category": "architecture",
+      "aliases": ["arquitecto de software", "arquitecto/a de software", "technical architect"]
+    },
+    {
+      "name": "support engineer",
+      "category": "support",
+      "aliases": ["technical support engineer", "soporte tecnico", "soporte técnico", "analista de soporte", "help desk", "mesa de ayuda"]
+    },
+    {
+      "name": "rpa developer",
+      "category": "automation",
+      "aliases": ["desarrollador rpa", "automation developer", "desarrollador de automatizacion", "desarrollador de automatización"]
+    }
+  ]
+}

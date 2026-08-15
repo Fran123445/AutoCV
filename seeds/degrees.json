@@ -1,0 +1,75 @@
+{
+  "description": "Seed registry for DimDegree. 'name' is the canonical value for DimDegree.name, a field of study rather than a titled program: 'bachelor' vs 'master' is not encoded here because DimDegree.name is UNIQUE and a posting almost never pins the level anyway. 'field' loads into DimDegree.field, the broad bucket that lets a posting asking for 'any engineering degree' match a specific one. 'level' has a column but no seed value: it describes an instance of education (what someone actually earned), so it belongs on UserEducation, not on the canonical program. 'aliases' are surface forms mapped to the name; there is no DegreeAlias table in schema.sql, so they widen prompt matching and are dropped at load time. A degree is what the posting asks the candidate to hold, so 'analista de sistemas' (a role) and 'ingeniero de datos' (a role) are never aliases here.",
+  "degrees": [
+    {
+      "name": "computer science",
+      "field": "computing",
+      "aliases": ["ciencias de la computacion", "ciencias de la computación", "cs", "computacion", "computación", "licenciatura en ciencias de la computacion"]
+    },
+    {
+      "name": "systems engineering",
+      "field": "computing",
+      "aliases": ["ingenieria en sistemas", "ingeniería en sistemas", "ingenieria de sistemas", "ingeniería de sistemas", "licenciatura en sistemas", "analisis de sistemas", "análisis de sistemas"]
+    },
+    {
+      "name": "software engineering",
+      "field": "computing",
+      "aliases": ["ingenieria de software", "ingeniería de software", "ingenieria en software", "ingeniería en software"]
+    },
+    {
+      "name": "computer engineering",
+      "field": "computing",
+      "aliases": ["ingenieria en computacion", "ingeniería en computación", "ingenieria de computadoras", "ingeniería de computadoras"]
+    },
+    {
+      "name": "informatics",
+      "field": "computing",
+      "aliases": ["informatica", "informática", "ingenieria informatica", "ingeniería informática", "licenciatura en informatica", "licenciatura en informática", "tecnicatura en informatica", "it", "information technology", "tecnologias de la informacion", "tecnologías de la información"]
+    },
+    {
+      "name": "information systems",
+      "field": "computing",
+      "aliases": ["sistemas de informacion", "sistemas de información", "licenciatura en sistemas de informacion"]
+    },
+    {
+      "name": "data science",
+      "field": "computing",
+      "aliases": ["ciencia de datos", "licenciatura en ciencia de datos"]
+    },
+    {
+      "name": "electronics engineering",
+      "field": "engineering",
+      "aliases": ["ingenieria electronica", "ingeniería electrónica"]
+    },
+    {
+      "name": "telecommunications engineering",
+      "field": "engineering",
+      "aliases": ["ingenieria en telecomunicaciones", "ingeniería en telecomunicaciones", "ingenieria de telecomunicaciones"]
+    },
+    {
+      "name": "industrial engineering",
+      "field": "engineering",
+      "aliases": ["ingenieria industrial", "ingeniería industrial"]
+    },
+    {
+      "name": "engineering",
+      "field": "engineering",
+      "aliases": ["ingenieria", "ingeniería", "carrera de ingenieria", "carrera de ingeniería", "ingenieria afin", "ingeniería afín", "carreras afines de ingenieria"]
+    },
+    {
+      "name": "mathematics",
+      "field": "math",
+      "aliases": ["matematica", "matemática", "matematicas", "matemáticas", "licenciatura en matematica"]
+    },
+    {
+      "name": "statistics",
+      "field": "math",
+      "aliases": ["estadistica", "estadística", "licenciatura en estadistica"]
+    },
+    {
+      "name": "physics",
+      "field": "math",
+      "aliases": ["fisica", "física", "licenciatura en fisica"]
+    }
+  ]
+}

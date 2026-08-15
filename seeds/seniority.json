@@ -1,0 +1,35 @@
+{
+  "description": "Seed registry for DimSeniority. 'label' is the canonical value for DimSeniority.label. 'aliases' are surface forms mapped to it; there is no SeniorityAlias table in schema.sql, so they widen prompt matching and are dropped at load time. 'typical_min_exp' and 'typical_max_exp' are the years a label typically implies, which is what DimSeniority.typical_min_exp and DimSeniority.typical_max_exp hold: they describe the label itself, not any one posting, and are named apart from the min_exp/max_exp on the bridge tables because those are years a posting actually stated. They also drive the fallback for a posting that states years but never names a level, since the identifier reports the years and leaves the label null rather than guessing.",
+  "seniorities": [
+    {
+      "label": "trainee",
+      "aliases": ["intern", "internship", "pasante", "pasantia", "pasantía", "trainee program", "practicante", "becario"],
+      "typical_min_exp": 0,
+      "typical_max_exp": 1
+    },
+    {
+      "label": "junior",
+      "aliases": ["jr", "jr.", "entry level", "entry-level", "nivel inicial", "inicial"],
+      "typical_min_exp": 0,
+      "typical_max_exp": 2
+    },
+    {
+      "label": "ssr",
+      "aliases": ["semi senior", "semi-senior", "semisenior", "ssr.", "mid", "mid level", "mid-level", "intermediate", "intermedio"],
+      "typical_min_exp": 2,
+      "typical_max_exp": 5
+    },
+    {
+      "label": "senior",
+      "aliases": ["sr", "sr.", "avanzado"],
+      "typical_min_exp": 5,
+      "typical_max_exp": null
+    },
+    {
+      "label": "lead",
+      "aliases": ["tech lead", "team lead", "technical lead", "lider tecnico", "líder técnico", "lider de equipo", "líder de equipo", "staff", "principal"],
+      "typical_min_exp": 7,
+      "typical_max_exp": null
+    }
+  ]
+}

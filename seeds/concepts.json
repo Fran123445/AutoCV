@@ -1,0 +1,1030 @@
+{
+  "description": "Seed registry for DimConcepts. 'name' is the canonical value for DimConcepts.concept_name. 'aliases' are surface forms mapped to it; unlike technologies there is no ConceptAlias table in schema.sql, so they widen prompt matching and are dropped at load time. 'category' has no column either; keep it or drop it at load time. Named products, tools and vendors do not belong here, they live in seeds/technologies.json: this registry holds what a posting asks you to know rather than what it asks you to operate. Spanish surface forms are aliases because the postings are mixed-language while the canonical name stays English.",
+  "concepts": [
+    {
+      "name": "agile",
+      "category": "methodology",
+      "aliases": ["metodologias agiles", "metodologías ágiles", "agile methodologies", "metodologia agil", "metodología ágil"]
+    },
+    {
+      "name": "scrum",
+      "category": "methodology",
+      "aliases": []
+    },
+    {
+      "name": "kanban",
+      "category": "methodology",
+      "aliases": []
+    },
+    {
+      "name": "waterfall",
+      "category": "methodology",
+      "aliases": ["cascada"]
+    },
+    {
+      "name": "lean",
+      "category": "methodology",
+      "aliases": []
+    },
+    {
+      "name": "extreme programming",
+      "category": "methodology",
+      "aliases": ["xp"]
+    },
+    {
+      "name": "scaled agile framework",
+      "category": "methodology",
+      "aliases": ["safe"]
+    },
+    {
+      "name": "design thinking",
+      "category": "methodology",
+      "aliases": []
+    },
+    {
+      "name": "ci/cd",
+      "category": "practice",
+      "aliases": ["continuous integration", "continuous delivery", "continuous deployment", "ci/cd pipelines", "integracion continua", "integración continua"]
+    },
+    {
+      "name": "test driven development",
+      "category": "practice",
+      "aliases": ["tdd"]
+    },
+    {
+      "name": "behavior driven development",
+      "category": "practice",
+      "aliases": ["bdd"]
+    },
+    {
+      "name": "unit testing",
+      "category": "practice",
+      "aliases": ["unit tests", "pruebas unitarias", "tests unitarios"]
+    },
+    {
+      "name": "integration testing",
+      "category": "practice",
+      "aliases": ["integration tests", "pruebas de integracion", "pruebas de integración"]
+    },
+    {
+      "name": "end to end testing",
+      "category": "practice",
+      "aliases": ["e2e testing", "end-to-end testing"]
+    },
+    {
+      "name": "test automation",
+      "category": "practice",
+      "aliases": ["automated testing", "automatizacion de pruebas", "automatización de pruebas"]
+    },
+    {
+      "name": "quality assurance",
+      "category": "practice",
+      "aliases": ["qa", "aseguramiento de calidad"]
+    },
+    {
+      "name": "code review",
+      "category": "practice",
+      "aliases": ["peer review", "revision de codigo", "revisión de código"]
+    },
+    {
+      "name": "pair programming",
+      "category": "practice",
+      "aliases": []
+    },
+    {
+      "name": "refactoring",
+      "category": "practice",
+      "aliases": ["refactorizacion", "refactorización"]
+    },
+    {
+      "name": "clean code",
+      "category": "practice",
+      "aliases": ["codigo limpio", "código limpio", "code quality", "calidad de codigo", "calidad de código"]
+    },
+    {
+      "name": "technical documentation",
+      "category": "practice",
+      "aliases": ["documentacion tecnica", "documentación técnica", "technical writing"]
+    },
+    {
+      "name": "version control",
+      "category": "practice",
+      "aliases": ["control de versiones", "versionado", "branching strategies"]
+    },
+    {
+      "name": "devops",
+      "category": "practice",
+      "aliases": ["cultura devops"]
+    },
+    {
+      "name": "devsecops",
+      "category": "practice",
+      "aliases": []
+    },
+    {
+      "name": "gitops",
+      "category": "practice",
+      "aliases": []
+    },
+    {
+      "name": "mlops",
+      "category": "practice",
+      "aliases": ["ml ops", "machine learning operations"]
+    },
+    {
+      "name": "dataops",
+      "category": "practice",
+      "aliases": []
+    },
+    {
+      "name": "llmops",
+      "category": "practice",
+      "aliases": []
+    },
+    {
+      "name": "infrastructure as code",
+      "category": "practice",
+      "aliases": ["iac", "infraestructura como codigo", "infraestructura como código"]
+    },
+    {
+      "name": "site reliability engineering",
+      "category": "practice",
+      "aliases": ["sre"]
+    },
+    {
+      "name": "observability",
+      "category": "practice",
+      "aliases": ["observabilidad"]
+    },
+    {
+      "name": "monitoring and alerting",
+      "category": "practice",
+      "aliases": ["monitoring", "alerting", "monitoreo", "monitoreo y alertas"]
+    },
+    {
+      "name": "logging",
+      "category": "practice",
+      "aliases": ["log management", "gestion de logs", "gestión de logs"]
+    },
+    {
+      "name": "incident management",
+      "category": "practice",
+      "aliases": ["incident response", "on-call", "on call", "guardias", "gestion de incidentes", "gestión de incidentes"]
+    },
+    {
+      "name": "performance optimization",
+      "category": "practice",
+      "aliases": ["performance tuning", "optimizacion de performance", "optimización de performance", "performance improvement"]
+    },
+    {
+      "name": "troubleshooting",
+      "category": "practice",
+      "aliases": ["debugging", "resolucion de problemas", "resolución de problemas", "root cause analysis"]
+    },
+    {
+      "name": "capacity planning",
+      "category": "practice",
+      "aliases": []
+    },
+    {
+      "name": "disaster recovery",
+      "category": "practice",
+      "aliases": ["business continuity", "continuidad del negocio", "backup and recovery"]
+    },
+    {
+      "name": "cost optimization",
+      "category": "practice",
+      "aliases": ["finops", "optimizacion de costos", "optimización de costos", "cost management"]
+    },
+    {
+      "name": "software architecture",
+      "category": "architecture",
+      "aliases": ["arquitectura de software"]
+    },
+    {
+      "name": "microservices",
+      "category": "architecture",
+      "aliases": ["microservicios", "microservices architecture", "arquitectura de microservicios"]
+    },
+    {
+      "name": "monolithic architecture",
+      "category": "architecture",
+      "aliases": ["monolith", "monolito"]
+    },
+    {
+      "name": "serverless",
+      "category": "architecture",
+      "aliases": ["serverless architecture", "arquitectura serverless"]
+    },
+    {
+      "name": "event driven architecture",
+      "category": "architecture",
+      "aliases": ["event-driven architecture", "arquitectura orientada a eventos", "event driven"]
+    },
+    {
+      "name": "service oriented architecture",
+      "category": "architecture",
+      "aliases": ["soa"]
+    },
+    {
+      "name": "clean architecture",
+      "category": "architecture",
+      "aliases": []
+    },
+    {
+      "name": "hexagonal architecture",
+      "category": "architecture",
+      "aliases": ["ports and adapters"]
+    },
+    {
+      "name": "domain driven design",
+      "category": "architecture",
+      "aliases": ["ddd", "domain-driven design"]
+    },
+    {
+      "name": "model view controller",
+      "category": "architecture",
+      "aliases": ["mvc"]
+    },
+    {
+      "name": "design patterns",
+      "category": "architecture",
+      "aliases": ["patrones de diseño", "patrones de diseno"]
+    },
+    {
+      "name": "solid principles",
+      "category": "architecture",
+      "aliases": ["solid", "principios solid"]
+    },
+    {
+      "name": "object oriented programming",
+      "category": "architecture",
+      "aliases": ["oop", "poo", "programacion orientada a objetos", "programación orientada a objetos"]
+    },
+    {
+      "name": "functional programming",
+      "category": "architecture",
+      "aliases": ["programacion funcional", "programación funcional"]
+    },
+    {
+      "name": "api design",
+      "category": "architecture",
+      "aliases": ["api development", "apis", "diseño de apis", "api integration", "integracion de apis", "integración de apis"]
+    },
+    {
+      "name": "message queues",
+      "category": "architecture",
+      "aliases": ["messaging", "message brokers", "colas de mensajes", "mensajeria", "mensajería"]
+    },
+    {
+      "name": "caching",
+      "category": "architecture",
+      "aliases": ["cache", "cacheo"]
+    },
+    {
+      "name": "load balancing",
+      "category": "architecture",
+      "aliases": ["balanceo de carga"]
+    },
+    {
+      "name": "distributed systems",
+      "category": "architecture",
+      "aliases": ["distributed computing", "distributed databases", "sistemas distribuidos", "computacion distribuida", "computación distribuida"]
+    },
+    {
+      "name": "high availability",
+      "category": "architecture",
+      "aliases": ["alta disponibilidad"]
+    },
+    {
+      "name": "scalability",
+      "category": "architecture",
+      "aliases": ["escalabilidad", "scaling", "escalamiento"]
+    },
+    {
+      "name": "fault tolerance",
+      "category": "architecture",
+      "aliases": ["resilience", "resiliency", "tolerancia a fallos", "resiliencia"]
+    },
+    {
+      "name": "concurrency",
+      "category": "architecture",
+      "aliases": ["concurrencia", "multithreading", "programacion concurrente", "programación concurrente"]
+    },
+    {
+      "name": "parallel processing",
+      "category": "architecture",
+      "aliases": ["parallelism", "paralelismo", "procesamiento paralelo"]
+    },
+    {
+      "name": "multi tenancy",
+      "category": "architecture",
+      "aliases": ["multitenancy", "multi-tenant"]
+    },
+    {
+      "name": "containerization",
+      "category": "cloud_ops",
+      "aliases": ["containers", "contenedores", "contenerizacion", "contenerización"]
+    },
+    {
+      "name": "container orchestration",
+      "category": "cloud_ops",
+      "aliases": ["orquestacion de contenedores", "orquestación de contenedores"]
+    },
+    {
+      "name": "virtualization",
+      "category": "cloud_ops",
+      "aliases": ["virtualizacion", "virtualización"]
+    },
+    {
+      "name": "cloud computing",
+      "category": "cloud_ops",
+      "aliases": ["cloud", "la nube", "computacion en la nube", "computación en la nube"]
+    },
+    {
+      "name": "cloud migration",
+      "category": "cloud_ops",
+      "aliases": ["migracion a la nube", "migración a la nube"]
+    },
+    {
+      "name": "multi cloud",
+      "category": "cloud_ops",
+      "aliases": ["multicloud"]
+    },
+    {
+      "name": "hybrid cloud",
+      "category": "cloud_ops",
+      "aliases": ["nube hibrida", "nube híbrida"]
+    },
+    {
+      "name": "edge computing",
+      "category": "cloud_ops",
+      "aliases": []
+    },
+    {
+      "name": "networking",
+      "category": "cloud_ops",
+      "aliases": ["computer networks", "redes", "networking fundamentals"]
+    },
+    {
+      "name": "linux administration",
+      "category": "cloud_ops",
+      "aliases": ["administracion de servidores", "administración de servidores", "system administration", "sysadmin"]
+    },
+    {
+      "name": "data modeling",
+      "category": "data",
+      "aliases": ["data modelling", "modelado de datos"]
+    },
+    {
+      "name": "dimensional modeling",
+      "category": "data",
+      "aliases": ["star schema", "modelo dimensional", "kimball", "modelado dimensional"]
+    },
+    {
+      "name": "data warehousing",
+      "category": "data",
+      "aliases": ["data warehouse", "datawarehouse", "dwh", "almacen de datos", "almacén de datos"]
+    },
+    {
+      "name": "data lake",
+      "category": "data",
+      "aliases": ["datalake"]
+    },
+    {
+      "name": "lakehouse",
+      "category": "data",
+      "aliases": ["data lakehouse"]
+    },
+    {
+      "name": "medallion architecture",
+      "category": "data",
+      "aliases": ["bronze silver gold"]
+    },
+    {
+      "name": "etl",
+      "category": "data",
+      "aliases": ["extract transform load", "procesos etl"]
+    },
+    {
+      "name": "elt",
+      "category": "data",
+      "aliases": ["extract load transform"]
+    },
+    {
+      "name": "data pipelines",
+      "category": "data",
+      "aliases": ["data pipeline", "pipelines de datos", "data ingestion", "ingesta de datos", "ingestion pipelines"]
+    },
+    {
+      "name": "batch processing",
+      "category": "data",
+      "aliases": ["procesamiento por lotes", "procesamiento batch"]
+    },
+    {
+      "name": "stream processing",
+      "category": "data",
+      "aliases": ["streaming", "real time processing", "procesamiento en tiempo real", "tiempo real", "datos en tiempo real"]
+    },
+    {
+      "name": "change data capture",
+      "category": "data",
+      "aliases": ["cdc"]
+    },
+    {
+      "name": "data quality",
+      "category": "data",
+      "aliases": ["calidad de datos", "data validation", "validacion de datos", "validación de datos"]
+    },
+    {
+      "name": "data governance",
+      "category": "data",
+      "aliases": ["gobierno de datos", "gobernanza de datos"]
+    },
+    {
+      "name": "data lineage",
+      "category": "data",
+      "aliases": ["linaje de datos"]
+    },
+    {
+      "name": "master data management",
+      "category": "data",
+      "aliases": ["mdm", "gestion de datos maestros", "gestión de datos maestros"]
+    },
+    {
+      "name": "data catalog",
+      "category": "data",
+      "aliases": ["catalogo de datos", "catálogo de datos", "metadata management", "gestion de metadatos", "gestión de metadatos"]
+    },
+    {
+      "name": "data mesh",
+      "category": "data",
+      "aliases": []
+    },
+    {
+      "name": "data architecture",
+      "category": "data",
+      "aliases": ["arquitectura de datos"]
+    },
+    {
+      "name": "database design",
+      "category": "data",
+      "aliases": ["diseño de bases de datos", "diseno de bases de datos", "database administration", "administracion de bases de datos", "administración de bases de datos"]
+    },
+    {
+      "name": "relational databases",
+      "category": "data",
+      "aliases": ["relational database", "bases de datos relacionales", "rdbms", "modelo relacional"]
+    },
+    {
+      "name": "nosql",
+      "category": "data",
+      "aliases": ["non relational databases", "bases de datos no relacionales", "no sql"]
+    },
+    {
+      "name": "vector databases",
+      "category": "data",
+      "aliases": ["vector database", "bases de datos vectoriales", "vector stores", "vector store"]
+    },
+    {
+      "name": "graph databases",
+      "category": "data",
+      "aliases": ["bases de datos de grafos", "graph database"]
+    },
+    {
+      "name": "time series data",
+      "category": "data",
+      "aliases": ["time series", "series temporales", "series de tiempo"]
+    },
+    {
+      "name": "columnar storage",
+      "category": "data",
+      "aliases": ["almacenamiento columnar"]
+    },
+    {
+      "name": "database normalization",
+      "category": "data",
+      "aliases": ["normalization", "denormalization", "normalizacion", "normalización", "desnormalizacion", "desnormalización"]
+    },
+    {
+      "name": "indexing",
+      "category": "data",
+      "aliases": ["indices", "índices", "indexacion", "indexación"]
+    },
+    {
+      "name": "query optimization",
+      "category": "data",
+      "aliases": ["sql tuning", "query tuning", "optimizacion de consultas", "optimización de consultas", "optimizacion de queries", "optimización de queries"]
+    },
+    {
+      "name": "partitioning",
+      "category": "data",
+      "aliases": ["particionamiento", "particionado"]
+    },
+    {
+      "name": "sharding",
+      "category": "data",
+      "aliases": []
+    },
+    {
+      "name": "distributed storage",
+      "category": "data",
+      "aliases": ["almacenamiento distribuido"]
+    },
+    {
+      "name": "distributed processing",
+      "category": "data",
+      "aliases": ["distributed processing frameworks", "procesamiento distribuido"]
+    },
+    {
+      "name": "big data",
+      "category": "data",
+      "aliases": ["grandes volumenes de datos", "grandes volúmenes de datos"]
+    },
+    {
+      "name": "olap",
+      "category": "data",
+      "aliases": ["online analytical processing", "cubos olap"]
+    },
+    {
+      "name": "oltp",
+      "category": "data",
+      "aliases": ["online transaction processing"]
+    },
+    {
+      "name": "web scraping",
+      "category": "data",
+      "aliases": ["scraping", "crawling"]
+    },
+    {
+      "name": "data cleaning",
+      "category": "data",
+      "aliases": ["data wrangling", "limpieza de datos", "data preparation", "preparacion de datos", "preparación de datos"]
+    },
+    {
+      "name": "data integration",
+      "category": "data",
+      "aliases": ["integracion de datos", "integración de datos"]
+    },
+    {
+      "name": "data migration",
+      "category": "data",
+      "aliases": ["migracion de datos", "migración de datos"]
+    },
+    {
+      "name": "data privacy",
+      "category": "data",
+      "aliases": ["privacidad de datos", "data protection", "proteccion de datos", "protección de datos"]
+    },
+    {
+      "name": "business intelligence",
+      "category": "analytics",
+      "aliases": ["bi", "inteligencia de negocios"]
+    },
+    {
+      "name": "data analysis",
+      "category": "analytics",
+      "aliases": ["data analytics", "analisis de datos", "análisis de datos", "analitica de datos", "analítica de datos"]
+    },
+    {
+      "name": "exploratory data analysis",
+      "category": "analytics",
+      "aliases": ["eda", "analisis exploratorio", "análisis exploratorio"]
+    },
+    {
+      "name": "data visualization",
+      "category": "analytics",
+      "aliases": ["visualizacion de datos", "visualización de datos", "dataviz", "data viz"]
+    },
+    {
+      "name": "dashboarding",
+      "category": "analytics",
+      "aliases": ["dashboards", "tableros", "tableros de control"]
+    },
+    {
+      "name": "reporting",
+      "category": "analytics",
+      "aliases": ["reportes", "reporteria", "reportería", "informes"]
+    },
+    {
+      "name": "kpis",
+      "category": "analytics",
+      "aliases": ["kpi", "key performance indicators", "metricas de negocio", "métricas de negocio", "indicadores"]
+    },
+    {
+      "name": "statistics",
+      "category": "analytics",
+      "aliases": ["statistical analysis", "estadistica", "estadística", "analisis estadistico", "análisis estadístico"]
+    },
+    {
+      "name": "ab testing",
+      "category": "analytics",
+      "aliases": ["a/b testing", "experimentation", "experimentacion", "experimentación", "tests a/b"]
+    },
+    {
+      "name": "forecasting",
+      "category": "analytics",
+      "aliases": ["pronosticos", "pronósticos", "demand forecasting", "prevision de demanda", "previsión de demanda"]
+    },
+    {
+      "name": "cohort analysis",
+      "category": "analytics",
+      "aliases": ["analisis de cohortes", "análisis de cohortes"]
+    },
+    {
+      "name": "data storytelling",
+      "category": "analytics",
+      "aliases": ["storytelling with data", "narrativa de datos"]
+    },
+    {
+      "name": "self service analytics",
+      "category": "analytics",
+      "aliases": ["self-service analytics", "analitica de autoservicio", "analítica de autoservicio"]
+    },
+    {
+      "name": "machine learning",
+      "category": "ml",
+      "aliases": ["ml", "aprendizaje automatico", "aprendizaje automático", "aprendizaje de maquina", "aprendizaje de máquina"]
+    },
+    {
+      "name": "artificial intelligence",
+      "category": "ml",
+      "aliases": ["ai", "ia", "inteligencia artificial"]
+    },
+    {
+      "name": "deep learning",
+      "category": "ml",
+      "aliases": ["aprendizaje profundo"]
+    },
+    {
+      "name": "supervised learning",
+      "category": "ml",
+      "aliases": ["aprendizaje supervisado"]
+    },
+    {
+      "name": "unsupervised learning",
+      "category": "ml",
+      "aliases": ["aprendizaje no supervisado"]
+    },
+    {
+      "name": "reinforcement learning",
+      "category": "ml",
+      "aliases": ["aprendizaje por refuerzo"]
+    },
+    {
+      "name": "natural language processing",
+      "category": "ml",
+      "aliases": ["nlp", "procesamiento de lenguaje natural", "pln"]
+    },
+    {
+      "name": "computer vision",
+      "category": "ml",
+      "aliases": ["vision por computadora", "visión por computadora", "vision artificial", "visión artificial"]
+    },
+    {
+      "name": "speech recognition",
+      "category": "ml",
+      "aliases": ["speech to text", "asr", "reconocimiento de voz"]
+    },
+    {
+      "name": "recommender systems",
+      "category": "ml",
+      "aliases": ["recommendation systems", "sistemas de recomendacion", "sistemas de recomendación"]
+    },
+    {
+      "name": "anomaly detection",
+      "category": "ml",
+      "aliases": ["deteccion de anomalias", "detección de anomalías", "fraud detection", "deteccion de fraude", "detección de fraude"]
+    },
+    {
+      "name": "classification",
+      "category": "ml",
+      "aliases": ["clasificacion", "clasificación"]
+    },
+    {
+      "name": "regression",
+      "category": "ml",
+      "aliases": ["regresion", "regresión"]
+    },
+    {
+      "name": "clustering",
+      "category": "ml",
+      "aliases": ["segmentacion", "segmentación", "agrupamiento"]
+    },
+    {
+      "name": "time series forecasting",
+      "category": "ml",
+      "aliases": ["prediccion de series temporales", "predicción de series temporales"]
+    },
+    {
+      "name": "feature engineering",
+      "category": "ml",
+      "aliases": ["ingenieria de caracteristicas", "ingeniería de características"]
+    },
+    {
+      "name": "model training",
+      "category": "ml",
+      "aliases": ["entrenamiento de modelos", "model development"]
+    },
+    {
+      "name": "model evaluation",
+      "category": "ml",
+      "aliases": ["model validation", "evaluacion de modelos", "evaluación de modelos", "metricas de modelo", "métricas de modelo"]
+    },
+    {
+      "name": "hyperparameter tuning",
+      "category": "ml",
+      "aliases": ["hyperparameter optimization", "ajuste de hiperparametros", "ajuste de hiperparámetros"]
+    },
+    {
+      "name": "model deployment",
+      "category": "ml",
+      "aliases": ["model serving", "despliegue de modelos", "puesta en produccion de modelos", "puesta en producción de modelos"]
+    },
+    {
+      "name": "model monitoring",
+      "category": "ml",
+      "aliases": ["model drift", "data drift", "monitoreo de modelos"]
+    },
+    {
+      "name": "neural networks",
+      "category": "ml",
+      "aliases": ["redes neuronales", "neural network"]
+    },
+    {
+      "name": "convolutional neural networks",
+      "category": "ml",
+      "aliases": ["cnn", "cnns", "redes convolucionales"]
+    },
+    {
+      "name": "recurrent neural networks",
+      "category": "ml",
+      "aliases": ["rnn", "lstm", "redes recurrentes"]
+    },
+    {
+      "name": "transformer architecture",
+      "category": "ml",
+      "aliases": ["transformer models", "arquitectura transformer"]
+    },
+    {
+      "name": "transfer learning",
+      "category": "ml",
+      "aliases": ["aprendizaje por transferencia"]
+    },
+    {
+      "name": "explainable ai",
+      "category": "ml",
+      "aliases": ["xai", "explainability", "interpretability", "interpretabilidad", "explicabilidad"]
+    },
+    {
+      "name": "responsible ai",
+      "category": "ml",
+      "aliases": ["ai ethics", "etica de la ia", "ética de la ia", "ai governance", "gobernanza de la ia"]
+    },
+    {
+      "name": "predictive modeling",
+      "category": "ml",
+      "aliases": ["predictive analytics", "modelos predictivos", "analitica predictiva", "analítica predictiva"]
+    },
+    {
+      "name": "mathematical optimization",
+      "category": "ml",
+      "aliases": ["operations research", "investigacion operativa", "investigación operativa", "optimizacion matematica", "optimización matemática"]
+    },
+    {
+      "name": "generative ai",
+      "category": "genai",
+      "aliases": ["genai", "gen ai", "ia generativa", "generative artificial intelligence", "inteligencia artificial generativa"]
+    },
+    {
+      "name": "large language models",
+      "category": "genai",
+      "aliases": ["llm", "llms", "modelos de lenguaje", "modelos de lenguaje grandes"]
+    },
+    {
+      "name": "retrieval augmented generation",
+      "category": "genai",
+      "aliases": ["rag", "retrieval-augmented generation", "generacion aumentada por recuperacion", "generación aumentada por recuperación"]
+    },
+    {
+      "name": "prompt engineering",
+      "category": "genai",
+      "aliases": ["prompting", "ingenieria de prompts", "ingeniería de prompts", "diseño de prompts"]
+    },
+    {
+      "name": "fine tuning",
+      "category": "genai",
+      "aliases": ["fine-tuning", "model fine tuning", "ajuste fino", "instruction tuning"]
+    },
+    {
+      "name": "embeddings",
+      "category": "genai",
+      "aliases": ["embedding pipelines", "vector embeddings", "embeddings vectoriales"]
+    },
+    {
+      "name": "vector search",
+      "category": "genai",
+      "aliases": ["similarity search", "busqueda vectorial", "búsqueda vectorial", "busqueda por similitud", "búsqueda por similitud"]
+    },
+    {
+      "name": "semantic search",
+      "category": "genai",
+      "aliases": ["busqueda semantica", "búsqueda semántica"]
+    },
+    {
+      "name": "ai agents",
+      "category": "genai",
+      "aliases": ["agentic ai", "agentes de ia", "multi agent systems", "sistemas multiagente", "agent orchestration", "orquestacion de agentes", "orquestación de agentes"]
+    },
+    {
+      "name": "chatbots",
+      "category": "genai",
+      "aliases": ["conversational ai", "asistentes virtuales", "virtual assistants", "ia conversacional"]
+    },
+    {
+      "name": "knowledge graphs",
+      "category": "genai",
+      "aliases": ["knowledge graph", "grafos de conocimiento"]
+    },
+    {
+      "name": "multimodal models",
+      "category": "genai",
+      "aliases": ["multimodal", "modelos multimodales"]
+    },
+    {
+      "name": "context engineering",
+      "category": "genai",
+      "aliases": ["context window management"]
+    },
+    {
+      "name": "ai guardrails",
+      "category": "genai",
+      "aliases": ["guardrails", "ai safety", "content moderation"]
+    },
+    {
+      "name": "llm evaluation",
+      "category": "genai",
+      "aliases": ["evals", "llm evals", "evaluacion de llms", "evaluación de llms"]
+    },
+    {
+      "name": "authentication",
+      "category": "security",
+      "aliases": ["autenticacion", "autenticación"]
+    },
+    {
+      "name": "authorization",
+      "category": "security",
+      "aliases": ["autorizacion", "autorización", "rbac", "role based access control", "control de acceso"]
+    },
+    {
+      "name": "single sign on",
+      "category": "security",
+      "aliases": ["sso", "inicio de sesion unico", "inicio de sesión único"]
+    },
+    {
+      "name": "identity and access management",
+      "category": "security",
+      "aliases": ["iam", "gestion de identidades", "gestión de identidades"]
+    },
+    {
+      "name": "encryption",
+      "category": "security",
+      "aliases": ["cifrado", "encriptacion", "encriptación"]
+    },
+    {
+      "name": "cryptography",
+      "category": "security",
+      "aliases": ["criptografia", "criptografía"]
+    },
+    {
+      "name": "application security",
+      "category": "security",
+      "aliases": ["appsec", "seguridad de aplicaciones", "secure coding", "desarrollo seguro"]
+    },
+    {
+      "name": "network security",
+      "category": "security",
+      "aliases": ["seguridad de redes"]
+    },
+    {
+      "name": "cybersecurity",
+      "category": "security",
+      "aliases": ["ciberseguridad", "information security", "seguridad informatica", "seguridad informática", "infosec"]
+    },
+    {
+      "name": "penetration testing",
+      "category": "security",
+      "aliases": ["pentesting", "ethical hacking", "hacking etico", "hacking ético"]
+    },
+    {
+      "name": "vulnerability management",
+      "category": "security",
+      "aliases": ["gestion de vulnerabilidades", "gestión de vulnerabilidades"]
+    },
+    {
+      "name": "secrets management",
+      "category": "security",
+      "aliases": ["gestion de secretos", "gestión de secretos"]
+    },
+    {
+      "name": "zero trust",
+      "category": "security",
+      "aliases": []
+    },
+    {
+      "name": "regulatory compliance",
+      "category": "security",
+      "aliases": ["compliance", "cumplimiento normativo", "normativas"]
+    },
+    {
+      "name": "gdpr",
+      "category": "security",
+      "aliases": ["rgpd"]
+    },
+    {
+      "name": "iso 27001",
+      "category": "security",
+      "aliases": ["iso27001"]
+    },
+    {
+      "name": "soc 2",
+      "category": "security",
+      "aliases": ["soc2"]
+    },
+    {
+      "name": "pci dss",
+      "category": "security",
+      "aliases": ["pci"]
+    },
+    {
+      "name": "hipaa",
+      "category": "security",
+      "aliases": []
+    },
+    {
+      "name": "data structures",
+      "category": "fundamentals",
+      "aliases": ["estructuras de datos"]
+    },
+    {
+      "name": "algorithms",
+      "category": "fundamentals",
+      "aliases": ["algoritmos"]
+    },
+    {
+      "name": "algorithmic complexity",
+      "category": "fundamentals",
+      "aliases": ["big o", "complejidad algoritmica", "complejidad algorítmica"]
+    },
+    {
+      "name": "operating systems",
+      "category": "fundamentals",
+      "aliases": ["sistemas operativos"]
+    },
+    {
+      "name": "linear algebra",
+      "category": "fundamentals",
+      "aliases": ["algebra lineal", "álgebra lineal"]
+    },
+    {
+      "name": "technical leadership",
+      "category": "ways_of_working",
+      "aliases": ["liderazgo tecnico", "liderazgo técnico", "tech lead"]
+    },
+    {
+      "name": "mentoring",
+      "category": "ways_of_working",
+      "aliases": ["mentoria", "mentoría", "coaching"]
+    },
+    {
+      "name": "stakeholder management",
+      "category": "ways_of_working",
+      "aliases": ["gestion de stakeholders", "gestión de stakeholders", "manejo de stakeholders"]
+    },
+    {
+      "name": "requirements gathering",
+      "category": "ways_of_working",
+      "aliases": ["requirements analysis", "relevamiento de requerimientos", "analisis de requerimientos", "análisis de requerimientos", "toma de requerimientos"]
+    },
+    {
+      "name": "user stories",
+      "category": "ways_of_working",
+      "aliases": ["historias de usuario"]
+    },
+    {
+      "name": "project management",
+      "category": "ways_of_working",
+      "aliases": ["gestion de proyectos", "gestión de proyectos"]
+    },
+    {
+      "name": "process automation",
+      "category": "ways_of_working",
+      "aliases": ["automatizacion de procesos", "automatización de procesos", "rpa", "robotic process automation"]
+    },
+    {
+      "name": "business process improvement",
+      "category": "ways_of_working",
+      "aliases": ["mejora de procesos", "process optimization", "optimizacion de procesos", "optimización de procesos"]
+    }
+  ]
+}
