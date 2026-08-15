@@ -5,35 +5,14 @@ import re
 
 from bs4 import BeautifulSoup
 
-# LinkedIn's saved-page markup carries no JSON-LD, so every field below is
-# located by UI text. These anchors follow the LinkedIn interface language,
-# not the posting language: a Spanish UI is assumed throughout.
-BODY_START_ANCHOR = "Acerca del empleo"
-
-# The recommended-jobs rail is rendered inside the same container as the
-# description. Cutting at the first of these keeps other companies' postings
-# out of the text handed to the model.
-BODY_END_ANCHORS = (
-    "Establecer una alerta para empleos similares",
-    "Búsqueda de empleo más rápida con Premium",
-    "Más empleos",
-    "Ver más empleos como este",
+from etl.jobs.config import (
+    BODY_END_ANCHORS,
+    BODY_START_ANCHOR,
+    CONTRACT_TYPES,
+    MIN_BODY_LENGTH,
+    MODALITIES,
 )
 
-# Shortest legitimate description observed is 922 characters; anything far
-# below that means the page was saved before the description rendered.
-MIN_BODY_LENGTH = 300
-
-MODALITIES = ("En remoto", "Híbrido", "Presencial")
-
-CONTRACT_TYPES = (
-    "Jornada completa",
-    "Media jornada",
-    "Contrato temporal",
-    "Prácticas",
-    "Por contrato",
-    "Contrato de duración determinada",
-)
 
 _SOURCE_URL_RE = re.compile(r"saved from url=\(\d+\)([^\s\->]+)")
 _JOB_ID_RE = re.compile(r"/jobs/view/(\d+)")

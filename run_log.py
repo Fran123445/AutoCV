@@ -20,7 +20,7 @@ import queue
 import sqlite3
 import subprocess
 
-from db_creation import DB_PATH, ROOT_DIR
+from config import DB_PATH, ROOT_DIR
 from llm.config import BASE_URL, MODEL_NAME, TEMPERATURE, TIMEOUT
 
 

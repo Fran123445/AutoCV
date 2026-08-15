@@ -1,15 +1,7 @@
-from pathlib import Path
-
 import sqlite3
 
+from config import DB_PATH, SCHEMA_PATH
 from llm.seeds import load_seed
-
-
-ROOT_DIR = Path(__file__).parent
-SCHEMA_PATH = ROOT_DIR / "schema.sql"
-# Under data/, which is gitignored: the base is derivable from seeds/ plus the
-# scraped HTML, so it is an artifact rather than something to version.
-DB_PATH = ROOT_DIR / "data" / "autocv.db"
 
 
 def _create_schema(connection: sqlite3.Connection):

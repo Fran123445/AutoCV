@@ -15,6 +15,7 @@ from pathlib import Path
 import argparse
 import json
 
+from config import PROJECTS_EXTRACT_DIR, PROJECTS_TRANSFORM_DIR
 # Aliased, like the job side: this module has stage functions of its own whose
 # names would otherwise shadow the imports.
 from etl.projects.extract import extract as extract_projects
@@ -257,20 +258,16 @@ def main():
     args = parse_args()
     stages = args.stages
 
-    data_dir = Path("data")
-    extract_output_dir = data_dir / "extracted_projects"
-    transform_output_dir = data_dir / "transformed_projects"
-
     if "extract" in stages:
-        extract_output_dir.mkdir(parents=True, exist_ok=True)
-        extract(args.projects_dir, extract_output_dir)
+        PROJECTS_EXTRACT_DIR.mkdir(parents=True, exist_ok=True)
+        extract(args.projects_dir, PROJECTS_EXTRACT_DIR)
 
     if "transform" in stages:
-        transform_output_dir.mkdir(parents=True, exist_ok=True)
-        transform(extract_output_dir, transform_output_dir)
+        PROJECTS_TRANSFORM_DIR.mkdir(parents=True, exist_ok=True)
+        transform(PROJECTS_EXTRACT_DIR, PROJECTS_TRANSFORM_DIR)
 
     if "load" in stages:
-        load(transform_output_dir)
+        load(PROJECTS_TRANSFORM_DIR)
 
 
 if __name__ == "__main__":

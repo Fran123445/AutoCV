@@ -1,4 +1,5 @@
 import json
+import threading
 import time
 
 import httpx
@@ -16,15 +17,38 @@ from llm.config import (
 )
 
 
-# Shared across the worker threads rather than one client each, so they reuse
-# connections. httpx.Client is thread safe. The pool is capped at the same
-# number of workers, since a fifth connection to a four slot server would only
-# sit in the server's queue holding a socket open.
-client = httpx.Client(
-    base_url=BASE_URL,
-    timeout=TIMEOUT,
-    limits=httpx.Limits(max_connections=MAX_CONCURRENCY),
-)
+_client: httpx.Client | None = None
+_client_lock = threading.Lock()
+
+
+def get_client() -> httpx.Client:
+    """
+    The shared HTTP client, built on first use.
+
+    One client across the worker threads rather than one each, so they reuse
+    connections. httpx.Client is thread safe. The pool is capped at the same
+    number of workers, since a fifth connection to a four slot server would only
+    sit in the server's queue holding a socket open.
+
+    Built lazily so importing a task does not open a connection pool, and so a
+    caller that sets the environment or swaps this module's client does so
+    before anything binds to a base URL.
+    """
+    global _client
+
+    if _client is None:
+        with _client_lock:
+            # Re-checked under the lock: two workers can pass the test above
+            # before either takes it, and the loser would otherwise replace a
+            # client the winner is already holding connections on.
+            if _client is None:
+                _client = httpx.Client(
+                    base_url=BASE_URL,
+                    timeout=TIMEOUT,
+                    limits=httpx.Limits(max_connections=MAX_CONCURRENCY),
+                )
+
+    return _client
 
 
 def post_chat(prompt: str, schema: dict, think: bool = True, task_name: str = "unknown") -> dict:
@@ -75,7 +99,7 @@ def post_chat(prompt: str, schema: dict, think: bool = True, task_name: str = "u
     response = None
 
     try:
-        response = client.post(CHAT_COMPLETIONS_PATH, json=payload, headers=headers)
+        response = get_client().post(CHAT_COMPLETIONS_PATH, json=payload, headers=headers)
         call.http_status = response.status_code
 
         body = response.json()

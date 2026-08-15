@@ -1,6 +1,6 @@
 import json
 
-from llm.config import SEEDS_DIR
+from config import SEEDS_DIR
 
 
 def load_seed(filename: str, key: str) -> list[dict]:

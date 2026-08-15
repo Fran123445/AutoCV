@@ -36,6 +36,9 @@ dist/
 # Local environment files
 .env
 .env.*
+# The template carries no secrets and is the only record of what the variables
+# are, so it has to survive the two lines above.
+!.env.example
 
 # Temporary files
 *.tmp

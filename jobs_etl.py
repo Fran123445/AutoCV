@@ -13,6 +13,7 @@ from pathlib import Path
 import argparse
 import json
 
+from config import JOBS_EXTRACT_DIR, JOBS_TRANSFORM_DIR, STAGING_DIR
 from etl.jobs.extract import JobDescriptionNotFound, extract_from_file
 from etl.jobs.load import load as load_job
 # Aliased: this module has a transform() of its own, over directories rather
@@ -220,21 +221,16 @@ def main():
     args = parse_args()
     stages = args.stages
 
-    data_dir = Path("data")
-    staging_dir = data_dir / "staging"
-    extract_output_dir = data_dir / "extracted_descs"
-    transform_output_dir = data_dir / "transformed_descs"
-
     if "extract" in stages:
-        extract_output_dir.mkdir(parents=True, exist_ok=True)
-        extract(staging_dir, extract_output_dir)
+        JOBS_EXTRACT_DIR.mkdir(parents=True, exist_ok=True)
+        extract(STAGING_DIR, JOBS_EXTRACT_DIR)
 
     if "transform" in stages:
-        transform_output_dir.mkdir(parents=True, exist_ok=True)
-        transform(extract_output_dir, transform_output_dir)
+        JOBS_TRANSFORM_DIR.mkdir(parents=True, exist_ok=True)
+        transform(JOBS_EXTRACT_DIR, JOBS_TRANSFORM_DIR)
 
     if "load" in stages:
-        load(transform_output_dir)
+        load(JOBS_TRANSFORM_DIR)
 
 
 if __name__ == "__main__":
