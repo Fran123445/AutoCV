@@ -41,6 +41,14 @@ CREATE TABLE IF NOT EXISTS DimConcepts (
     concept_name TEXT NOT NULL UNIQUE  -- 'agile', 'machine learning', 'data structures', ...
 );
 
+CREATE TABLE IF NOT EXISTS DimDegree (
+    id     INTEGER PRIMARY KEY,
+    name   TEXT NOT NULL UNIQUE,  -- canónico: 'computer science', 'systems engineering', ...
+    level  TEXT,                  -- 'high school' | 'bachelor' | 'master' | 'phd' | ...
+    field  TEXT                   -- área amplia: 'cs', 'engineering', 'math'. Permite
+                   -- matchear 'cualquier master en cs' sin depender del nombre exacto
+);
+
 -- Fact
 
 CREATE TABLE IF NOT EXISTS FactJob (
@@ -86,6 +94,74 @@ CREATE TABLE IF NOT EXISTS JobConcepts (
     min_exp    INTEGER,
     max_exp    INTEGER,
     PRIMARY KEY (job_id, concept_id)
+);
+
+-- Lado candidato (el usuario). Multiuser desde el arranque aunque hoy haya uno
+-- solo: user_id atado a todo evita un refactor si mañana entran más candidatos.
+
+CREATE TABLE IF NOT EXISTS FactUser (
+    id         INTEGER PRIMARY KEY,
+    birth_date TEXT   -- ISO 8601
+);
+
+CREATE TABLE IF NOT EXISTS UserEducation (
+    user_id     INTEGER NOT NULL REFERENCES FactUser(id),
+    degree_id   INTEGER NOT NULL REFERENCES DimDegree(id),
+    institution TEXT,
+    start_date  TEXT,   -- ISO 8601
+    end_date    TEXT,   -- null = en curso
+    PRIMARY KEY (user_id, degree_id, institution)
+);
+
+-- Bridges de skills. proficiency vive acá, no en los projects:
+-- el project es evidencia de uso, el nivel es una afirmación del candidato.
+CREATE TABLE IF NOT EXISTS UserTechnologies (
+    user_id       INTEGER NOT NULL REFERENCES FactUser(id),
+    technology_id INTEGER NOT NULL REFERENCES DimTechnologies(id),
+    proficiency   INTEGER,   -- 1-5, misma escala en todo el lado usuario
+    PRIMARY KEY (user_id, technology_id)
+);
+
+CREATE TABLE IF NOT EXISTS UserConcepts (
+    user_id     INTEGER NOT NULL REFERENCES FactUser(id),
+    concept_id  INTEGER NOT NULL REFERENCES DimConcepts(id),
+    proficiency INTEGER,   -- 1-5
+    PRIMARY KEY (user_id, concept_id)
+);
+
+-- Historia laboral. Simétrico con FactJob: mismas dims (company/role/seniority)
+-- así el match candidato vs aviso compara peras con peras.
+CREATE TABLE IF NOT EXISTS FactExperience (
+    id           INTEGER PRIMARY KEY,
+    user_id      INTEGER NOT NULL REFERENCES FactUser(id),
+    company_id   INTEGER REFERENCES DimCompany(id),   -- reusa DimCompany
+    role_id      INTEGER REFERENCES DimRole(id),
+    seniority_id INTEGER REFERENCES DimSeniority(id),
+    start_date   TEXT,   -- ISO 8601
+    end_date     TEXT    -- null = actual
+);
+
+CREATE TABLE IF NOT EXISTS Project (
+    id            INTEGER PRIMARY KEY,
+    user_id       INTEGER NOT NULL REFERENCES FactUser(id),  -- denormalizado: los
+                  -- projects personales (experience_id null) igual saben de quién son
+    experience_id INTEGER REFERENCES FactExperience(id),     -- null = personal
+    task_desc     TEXT NOT NULL
+);
+
+-- Bridges de evidencia: qué tech/concepto tocó cada project. Sin proficiency;
+-- eso vive en UserTechnologies/UserConcepts. Los techs de un project deberían
+-- estar contenidos en los del usuario (rollup), no al revés.
+CREATE TABLE IF NOT EXISTS ProjectTechnologies (
+    project_id    INTEGER NOT NULL REFERENCES Project(id),
+    technology_id INTEGER NOT NULL REFERENCES DimTechnologies(id),
+    PRIMARY KEY (project_id, technology_id)
+);
+
+CREATE TABLE IF NOT EXISTS ProjectConcepts (
+    project_id INTEGER NOT NULL REFERENCES Project(id),
+    concept_id INTEGER NOT NULL REFERENCES DimConcepts(id),
+    PRIMARY KEY (project_id, concept_id)
 );
 
 -- Observabilidad de corridas
@@ -143,6 +219,9 @@ CREATE TABLE IF NOT EXISTS FactAgentCall (
     error             TEXT
 );
 
+CREATE INDEX IF NOT EXISTS idx_experience_user ON FactExperience(user_id);
+CREATE INDEX IF NOT EXISTS idx_project_user     ON Project(user_id);
+CREATE INDEX IF NOT EXISTS idx_project_exp      ON Project(experience_id);
 CREATE INDEX IF NOT EXISTS idx_jobrun_run   ON FactJobRun(run_id);
 CREATE INDEX IF NOT EXISTS idx_agentcall_jr ON FactAgentCall(job_run_id);
 CREATE INDEX IF NOT EXISTS idx_agentcall_ag ON FactAgentCall(agent_name);
