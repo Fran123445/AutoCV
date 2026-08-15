@@ -77,6 +77,9 @@ class JobRun:
     ended_at: str | None = None
     status: str = "running"
     error: str | None = None
+    # Filled by the load stage once the posting has a FactJob row. Stays null
+    # through extract and transform, where the posting is not in the base yet.
+    job_id: int | None = None
     calls: list[AgentCall] = field(default_factory=list)
 
 
@@ -294,13 +297,14 @@ class RunLogger:
         cursor = self.connection.execute(
             """
             INSERT INTO FactJobRun (
-                run_id, source_file, started_at, ended_at, status, error
+                run_id, source_file, job_id, started_at, ended_at, status, error
             )
-            VALUES (?, ?, ?, ?, ?, ?)
+            VALUES (?, ?, ?, ?, ?, ?, ?)
             """,
             (
                 self.run_id,
                 job_run.source_file,
+                job_run.job_id,
                 job_run.started_at,
                 job_run.ended_at,
                 job_run.status,

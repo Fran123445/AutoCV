@@ -6,6 +6,7 @@ import argparse
 import json
 
 from etl.extract import JobDescriptionNotFound, extract_from_file
+from etl.load import load as load_job
 # Aliased: this module has a transform() of its own, over directories rather
 # than over a single posting.
 from etl.transform import transform as transform_job
@@ -121,7 +122,65 @@ def transform(extract_output_dir: Path, transform_output_dir: Path):
         print(f"  {json_path.name}: {error!r}")
 
 
-STAGES = ("extract", "transform")
+def load(transform_output_dir: Path):
+    """
+    Load every transformed posting into the database.
+
+    Sequential, unlike transform: sqlite takes one writer, so there is no
+    concurrency to gain here. The loader dedupes on linkedin_job_id, so a
+    posting already in the base is skipped rather than failed, which is what
+    lets this be re-run over the same directory without touching applied status.
+
+    Args:
+        transform_output_dir (Path): Where the transform stage wrote its JSON.
+    """
+    json_paths = sorted(transform_output_dir.glob("*.json"))
+    loaded_count = 0
+    skipped_count = 0
+    failed = []
+
+    with RunLogger("load", postings_total=len(json_paths)) as run_log:
+        for json_path in json_paths:
+            try:
+                # The same telemetry wrapper transform uses, so a load that
+                # blows up on one posting still leaves a FactJobRun row behind.
+                # No agent calls happen here, so its call list stays empty.
+                with record_job_run(json_path.stem) as job_run:
+                    with json_path.open("r", encoding="utf-8") as f:
+                        transformed = json.load(f)
+
+                    # RunLogger owns the one writer connection with foreign keys
+                    # on; reuse it rather than open a second one that would only
+                    # contend for the write lock.
+                    job_id = load_job(transformed, run_log.connection)
+                    job_run.job_id = job_id
+            except Exception as error:
+                failed.append((json_path, error))
+                print(f"  FAILED {json_path.name}: {error!r}")
+                continue
+
+            if job_id is None:
+                skipped_count += 1
+                print(f"Skipped {json_path.name} (already loaded)")
+            else:
+                loaded_count += 1
+                print(f"Loaded {json_path.name} [{loaded_count}/{len(json_paths)}]")
+
+            # One posting per flush, matching transform: a long batch should not
+            # lose the telemetry of what did land if a later posting kills it.
+            run_log.flush()
+
+        run_log.postings_ok = loaded_count
+        run_log.postings_failed = len(failed)
+
+    print(
+        f"\nLoaded {loaded_count}, skipped {skipped_count}, failed {len(failed)}."
+    )
+    for json_path, error in failed:
+        print(f"  {json_path.name}: {error!r}")
+
+
+STAGES = ("extract", "transform", "load")
 
 
 def parse_args():
@@ -163,6 +222,9 @@ def main():
     if "transform" in stages:
         transform_output_dir.mkdir(parents=True, exist_ok=True)
         transform(extract_output_dir, transform_output_dir)
+
+    if "load" in stages:
+        load(transform_output_dir)
 
 
 if __name__ == "__main__":
