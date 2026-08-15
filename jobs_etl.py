@@ -1,3 +1,11 @@
+"""
+Runs the job postings pipeline: scraped LinkedIn pages in, FactJob rows out.
+
+The projects side has its own entry point, projects_etl.py, with the same three
+stages over a different source. They stay separate scripts rather than one with
+a switch: the two pipelines share nothing but the run tables, and a posting and
+a repo have neither the same input nor the same idea of what a stage costs.
+"""
 
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from pathlib import Path
@@ -184,7 +192,9 @@ STAGES = ("extract", "transform", "load")
 
 
 def parse_args():
-    parser = argparse.ArgumentParser(description="Run the AutoCV ETL stages.")
+    parser = argparse.ArgumentParser(
+        description="Run the AutoCV job postings ETL stages."
+    )
     parser.add_argument(
         "stages",
         nargs="*",
