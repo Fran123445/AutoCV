@@ -1,0 +1,312 @@
+{
+  "header": {
+    "position_name": "AI Agents Developer– Sourcing & Procurement",
+    "company_name": "Accenture Argentina",
+    "location": "Buenos Aires y alrededores",
+    "modality": null,
+    "contract_type": "Jornada completa",
+    "posted_raw": "hace 1 semana",
+    "posted_days_ago": 7,
+    "source_url": "https://www.linkedin.com/jobs/view/4327949760/",
+    "linkedin_job_id": 4327949760
+  },
+  "scrape_date": "2026-08-12",
+  "body": "El equipo de Supply Chain & Operations (SC&O) está enfocado en brindar valor a clientes de diversas industrias desarrollando estrategias y modelos operativos que integran las áreas de Planning, Sourcing & Procurement, Fulfillment y Process Management , utilizando metodologías ágiles, apoyándose en tecnologías emergentes y teniendo un gran criterio en el manejo de los datos. Como profesional en Sourcing & Procurement , participarás en el desarrollo e implementación de soluciones basadas en Inteligencia Artificial y automatización , que transforman la manera de comprar de nuestros clientes. Diseñarás y construirás Orchestradores y Agentes Inteligentes que optimizan los procesos de abastecimiento, integrando plataformas S2P (SAP Ariba, Coupa, GEP, Zycus, entre otras) con capacidades de decisión autónoma y análisis avanzado de datos. Formarás parte de una red global de innovación tecnológica dentro de SC&O, colaborando con equipos funcionales, de ingeniería y analítica, con oportunidades de participar en proyectos internacionales y de alto impacto. 📌 Qué desafíos te esperan: Diseñar y desarrollar soluciones de orquestación de agentes de IA aplicadas a procesos de Compras y Abastecimiento. Construir y mantener servicios backend y APIs que integren datos, reglas de negocio y plataformas de procurement. Desarrollar interfaces web (Angular o React) que permitan visualizar y gestionar las decisiones del Orchestrator (status de agentes, resultados, logs, dashboards). Colaborar con equipos funcionales para traducir procesos de negocio en flujos automatizados. Implementar workflows inteligentes para procesos S2C, P2P y SRM, conectando sistemas internos y externos. Participar en proyectos de transformación digital y adopción de tecnologías emergentes dentro de SC&O. Desarrollar y escalar prototipos cloud-native en Azure, AWS o entornos equivalentes. Contribuir a la definición de la arquitectura técnica de S&P Orchestrators y sus agentes especializados. Mantenerte actualizado sobre las tendencias de IA generativa, frameworks de agentes (LangChain, Semantic Kernel, Crew.AI, AutoGen) y metodologías ágiles. 📌 Requisitos: Título universitario en Ingeniería en Sistemas, Informática, Computación o carreras afines. Experiencia de al menos 2 años en desarrollo backend o ingeniería de software. Conocimiento sólido de Python (FastAPI, Flask o Django REST Framework). Familiaridad con integraciones de APIs REST / GraphQL, autenticación OAuth2 / SSO. Experiencia con bases de datos SQL / JSON / DuckDB / PostgreSQL. Conocimientos en DevOps (Docker, GitHub Actions, Azure Web Apps / Functions). Experiencia en desarrollo front-end con Angular o React, incluyendo consumo de APIs, manejo de estados, componentes modulares y seguridad. Deseable: experiencia con frameworks de agentes de IA (LangChain, Semantic Kernel, Crew.AI) o integraciones con plataformas de compras (Ariba, Coupa, Zycus, GEP). Excelente nivel de inglés, tanto oral como escrito. Capacidad de trabajo colaborativo con equipos multidisciplinarios. Curiosidad y entusiasmo por entender procesos de negocio de Compras, Abastecimiento y Supply Chain. 📌 Un lugar de trabajo único — descubrí los beneficios que tenemos para vos: 🍔 PedidosYa 👩‍⚕️ Prepaga Swiss Medical para vos y tu grupo familiar primario 💻 Reintegro de Conectividad 💪 Gimnasio 100% Bonificado 🌎 Vacaciones Flex 💯 Jornada Flex 📚 Certificaciones bonificadas (te ayudamos a certificar en tecnologías cloud, IA, Angular, y frameworks de desarrollo) 🎂 Día de cumpleaños libre 🏆 Bonos por performance y contribución tecnológica 🗓 Accenture Days 🤟🏽 Paquete de beneficios flexibles 👨‍👩‍👦‍👦 Licencias de paternidad y maternidad extendidas 💰 Ayuda Económica para Guardería 🚀 Acceso a comunidades globales de IA, Tech Labs y proyectos de innovación interna y muchos ➕!",
+  "technologies": {
+    "required_technologies": [
+      {
+        "name": "python",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "fastapi",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "flask",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "django rest framework",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "rest",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "graphql",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "oauth2",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "sql",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "json",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "duckdb",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "postgresql",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "docker",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "github actions",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "azure app service",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "azure functions",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "angular",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "react",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "azure",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "aws",
+        "min_experience": null,
+        "max_experience": null
+      }
+    ],
+    "nice_to_have_technologies": [
+      {
+        "name": "langchain",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "semantic kernel",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "crewai",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "autogen",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "sap ariba",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "coupa",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "zycus",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "gep smart",
+        "min_experience": null,
+        "max_experience": null
+      }
+    ],
+    "discarded_technologies": [
+      "SSO"
+    ]
+  },
+  "concepts": {
+    "required_concepts": [
+      {
+        "name": "agile",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "artificial intelligence",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "generative ai",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "ai agents",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "agentic workflows",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "process automation",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "data analysis",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "data integration",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "api design",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "authentication",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "single sign on",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "relational databases",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "devops",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "application security",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "logging",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "dashboarding",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "cloud computing",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "scalability",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "software architecture",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "business process improvement",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "english proficiency",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "cross functional collaboration",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "teamwork",
+        "min_experience": null,
+        "max_experience": null
+      }
+    ],
+    "nice_to_have_concepts": [],
+    "discarded_concepts": [
+      "ingeniería de software",
+      "desarrollo backend",
+      "transformación digital"
+    ]
+  },
+  "seniority": {
+    "label": null,
+    "min_experience": 2,
+    "max_experience": null,
+    "evidence": null
+  },
+  "role": {
+    "name": "ai engineer",
+    "evidence": "AI Agents Developer",
+    "unmatched": null
+  },
+  "degree": {
+    "degrees": [
+      {
+        "name": "systems engineering",
+        "evidence": "Ingeniería en Sistemas"
+      },
+      {
+        "name": "informatics",
+        "evidence": "Informática"
+      },
+      {
+        "name": "computer engineering",
+        "evidence": "Computación"
+      }
+    ],
+    "unmatched": []
+  }
+}

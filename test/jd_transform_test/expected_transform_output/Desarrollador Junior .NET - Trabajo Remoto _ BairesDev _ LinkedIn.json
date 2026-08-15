@@ -1,0 +1,121 @@
+{
+  "header": {
+    "position_name": "Desarrollador Junior .NET - Trabajo Remoto",
+    "company_name": "BairesDev",
+    "location": "América Latina",
+    "modality": "En remoto",
+    "contract_type": "Jornada completa",
+    "posted_raw": "hace 1 día",
+    "posted_days_ago": 1,
+    "source_url": "https://www.linkedin.com/jobs/view/4451410879/",
+    "linkedin_job_id": 4451410879
+  },
+  "scrape_date": "2026-08-12",
+  "body": "En BairesDev® llevamos 15 años liderando proyectos de tecnología para clientes como Google, Rolls-Royce y las startups más innovadoras de Silicon Valley. Actualmente, contamos con un equipo de 4000 profesionales conformado por el top 1% de la industria trabajando de forma remota desde más de 50 países. Al postularte a esta vacante, estarás dando el primer paso en un proceso que va más allá de lo convencional: Buscaremos conocer en profundidad tus habilidades, intereses y expectativas con el objetivo de realizar una búsqueda personalizada y encontrar el rol ideal para ti en BairesDev. Desarrollador Junior .NET en BairesDev Como Desarrollador Junior .NET, construirás aplicaciones dinámicas utilizando .NET y C#. Colaborarás en diversos proyectos, perfeccionando tus habilidades de desarrollo backend y administración de bases de datos. Lo que harás - Desarrollar y mantener aplicaciones .NET, centrándote en escribir código limpio y eficiente en C#. - Colaborar con equipos de desarrollo en diversos proyectos, contribuyendo a las diferentes etapas del ciclo de vida del desarrollo de software. - Identificar y solucionar errores de software, participando en la implementación de soluciones y optimizaciones. - Participar en revisiones de código para mantener una alta calidad del código y aprender mejores prácticas. - Mantenerte actualizado con los nuevos frameworks y bibliotecas de .NET, entendiendo cómo incorporarlos a los proyectos. - Participar en reuniones y debates de equipo, aportando ideas y comentarios para mejorar el desarrollo del proyecto. ¿Qué Buscamos? - 1+ año de experiencia con .NET. - Buen entendimiento de algoritmos básicos y estructuras de datos. - Conocimiento básico de sistemas de control de versiones, preferiblemente Git. - Capacidad para resolver problemas de forma eficaz y aprender nuevas tecnologías rápidamente. - Buen nivel de inglés. Qué ofrecemos para que tu trabajo (y tu vida) seja mais fácil: - Trabajo 100% remoto: trabaja desde tu casa o donde quieras. - Compensación en USD o en tu moneda local, como prefieras, muy por encima de la media del mercado. - Hardware y software. - Horarios flexibles - Licencias por mater/paternidad, vacaciones y días festivos nacionales pagos. - Ambiente laboral multicultural e innovador, perfecto para hacer amigos, colaborar y aprender de las personas más talentosas del mundo. - Oportunidades de crecimiento y desarrollo profesional a través de mentorías y entrenamientos. ¡Únete a nuestro equipo global!",
+  "technologies": {
+    "required_technologies": [
+      {
+        "name": ".net",
+        "min_experience": 1,
+        "max_experience": null
+      },
+      {
+        "name": "c#",
+        "min_experience": null,
+        "max_experience": null
+      }
+    ],
+    "nice_to_have_technologies": [
+      {
+        "name": "git",
+        "min_experience": null,
+        "max_experience": null
+      }
+    ],
+    "discarded_technologies": []
+  },
+  "concepts": {
+    "required_concepts": [
+      {
+        "name": "clean code",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "troubleshooting",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "performance optimization",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "code review",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "version control",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "algorithms",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "data structures",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "problem solving",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "english proficiency",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "teamwork",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "continuous learning",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "database design",
+        "min_experience": null,
+        "max_experience": null
+      }
+    ],
+    "nice_to_have_concepts": [],
+    "discarded_concepts": [
+      "software development lifecycle",
+      "backend development"
+    ]
+  },
+  "seniority": {
+    "label": "junior",
+    "min_experience": 1,
+    "max_experience": null,
+    "evidence": "Desarrollador Junior .NET"
+  },
+  "role": {
+    "name": "backend dev",
+    "evidence": "desarrollo backend",
+    "unmatched": null
+  },
+  "degree": {
+    "degrees": [],
+    "unmatched": []
+  }
+}

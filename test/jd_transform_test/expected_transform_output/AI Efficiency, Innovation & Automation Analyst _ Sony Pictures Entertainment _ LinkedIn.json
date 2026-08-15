@@ -1,0 +1,425 @@
+{
+  "header": {
+    "position_name": "AI Efficiency, Innovation & Automation Analyst",
+    "company_name": "Sony Pictures Entertainment",
+    "location": "Buenos Aires, Provincia de Buenos Aires, Argentina",
+    "modality": "Presencial",
+    "contract_type": "Jornada completa",
+    "posted_raw": "hace 2 semanas",
+    "posted_days_ago": 14,
+    "source_url": "https://www.linkedin.com/jobs/view/4446383097/",
+    "linkedin_job_id": 4446383097
+  },
+  "scrape_date": "2026-08-12",
+  "body": "General Summary Sony Pictures Entertainment is seeking a hands-on, technically strong AI Automation & Innovation Analyst to join the LATAM Data Analytics & Business Insights team, based in Bogota, Colombia or Buenos Aires, Argentina. Reporting into the Head of Data Analytics, this role will work closely with Analytics and Data Science team members and collaborate with stakeholders across all business lines to identify, design, build, and operationalize applied AI, automation, and data-driven solutions that improve efficiency, innovation, and decision-making. The role requires a practical full-stack profile capable of translating business needs into working prototypes, internal tools, dashboards, automations, and AI-enabled workflows. The analyst will connect front-end interfaces, backend logic, APIs, workflow automation, and AWS-based data warehouse assets to deliver functional end-to-end solutions. This position will work directly with the company’s data ecosystem, including hands-on querying, data preparation, integration, and application development using trusted AWS-based data assets. The analyst will also coordinate with Sony Cloud Operations, DevOps, Information Security, and technology governance teams to support deployment readiness, infrastructure alignment, access controls, documentation, security reviews, and compliance with internal technology standards. The ideal candidate combines strong technical execution, business curiosity, agility, and a practical innovation mindset. This is an individual contributor role. Responsibilities AI-Enabled Automation & Efficiency Develop and implement automation solutions that streamline repetitive, manual, or time-consuming business processes. Build AI-enabled workflows using Python, APIs, workflow automation tools, approved generative AI capabilities, and cloud-based data assets to improve productivity, speed, consistency, and decision-making. Full-Stack Solution Development Design and build end-to-end solutions, including data ingestion, backend logic, APIs, user interfaces, dashboards, lightweight web applications, internal tools, and deployment-ready prototypes. AWS Data Warehouse & Data Integration Work hands-on with the company’s AWS-based data warehouse to query, transform, integrate, and prepare data for AI, automation, and business-facing solutions. Develop reusable SQL queries, data extracts, backend logic, and data workflows that connect internal data sources with applications, dashboards, automations, and AI tools. Analytics & Data Science Collaboration Partner with Analytics and Data Science teams to understand analytical assets, predictive models, business logic, reporting products, and strategic priorities. Support the integration of analytics and model outputs into tools, workflows, dashboards, and AI-enabled solutions. Cloud, DevOps & Information Security Coordination Coordinate with Sony Cloud Operations, DevOps, Information Security, and technology governance teams to support the approval, deployment, and operationalization of AI and automation solutions. Prepare technical documentation, solution diagrams, access requirements, data flow descriptions, and deployment information for internal reviews. Applied AI Innovation Identify and apply practical AI techniques to solve concrete business problems, with emphasis on usability, speed, and measurable business value. Experiment with emerging AI capabilities, including generative AI, natural language interfaces, document intelligence, semantic search, summarization, classification, recommendation support, and AI-assisted content workflows. Stay connected with external vendors, technology partners, startups, and innovation ecosystems to bring relevant AI, automation, and emerging technology advancements into Sony, helping identify opportunities for pilots, proof-of-concepts, and scalable business applications. Agile Delivery & Documentation Develop quick prototypes, pilots, and modular solutions that can be tested, refined, approved, and scaled. Document solutions, workflows, assumptions, dependencies, technical requirements, and governance considerations to support adoption, maintenance, and scalability. Qualifications Education & Languages Bachelor’s or advanced degree in Computer Science, Data Science, Engineering, Information Systems, Statistics, Business Analytics, or a related quantitative or technical field. Fluent Spanish and English required; Portuguese is a plus. Experience 2 to 4 years of professional experience in full-stack development, analytics engineering, data automation, AI solution development, data engineering, business intelligence engineering, or related technical roles. Full-Stack Development Experience building practical end-to-end solutions involving user interfaces, backend logic, databases, APIs, workflow orchestration, and deployment-ready prototypes. The role does not require enterprise software engineering ownership but does require the ability to build functional, reliable tools that business users can test and adopt. Programming & Data Skills Strong proficiency in Python and SQL is required. Experience with JavaScript, TypeScript, React, Node.js, Flask, FastAPI, Streamlit, Dash, or similar frameworks is a strong plus. AWS Data Warehouse & Cloud Analytics Hands-on experience with cloud-based data warehouses or modern data platforms, preferably AWS. Experience with AWS services such as Redshift, S3, Glue, Athena, Lambda, SageMaker, or related analytics services is a strong plus. Applied AI & Automation Working knowledge of generative AI tools, large language models, prompt engineering, document automation, semantic search, embeddings, vector search, RAG architectures, chatbot development, or AI-assisted workflow design. APIs, Pipelines & Integrations Experience with APIs, data pipelines, data integration, system connectivity, workflow automation, data quality checks, and scalable analytical workflows. Familiarity with Airflow, AWS Step Functions, Prefect, Dagster, or similar orchestration tools is a plus. Cloud, DevOps & Governance Ability to work with Cloud Ops, DevOps, InfoSec, and enterprise technology teams. Familiarity with cloud deployment processes, CI/CD concepts, containerization, access controls, data privacy, and information security review processes is a plus. Visualization & Business-Facing Outputs Experience presenting data, automation outputs, AI-assisted results, monitoring metrics, and operational insights through dashboards, reports, custom tools, or Python visualization frameworks. Industry Experience Media and entertainment experience is a plus, especially in streaming, production studios, theatrical distribution, TV networks, digital media, social media, marketing analytics, advertising, content distribution, or audience insights. null null … más",
+  "technologies": {
+    "required_technologies": [
+      {
+        "name": "python",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "sql",
+        "min_experience": null,
+        "max_experience": null
+      }
+    ],
+    "nice_to_have_technologies": [
+      {
+        "name": "javascript",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "typescript",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "react",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "node.js",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "flask",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "fastapi",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "streamlit",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "dash",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "aws",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "redshift",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "amazon s3",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "aws glue",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "amazon athena",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "aws lambda",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "amazon sagemaker",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "apache airflow",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "aws step functions",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "prefect",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "dagster",
+        "min_experience": null,
+        "max_experience": null
+      }
+    ],
+    "discarded_technologies": [
+      "generative AI",
+      "large language models",
+      "prompt engineering",
+      "document automation",
+      "semantic search",
+      "embeddings",
+      "vector search",
+      "RAG architectures",
+      "chatbot development",
+      "AI-assisted workflow design",
+      "workflow automation",
+      "APIs",
+      "data pipelines",
+      "data integration",
+      "CI/CD",
+      "containerization"
+    ]
+  },
+  "concepts": {
+    "required_concepts": [
+      {
+        "name": "artificial intelligence",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "generative ai",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "large language models",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "prompt engineering",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "natural language processing",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "document intelligence",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "semantic search",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "embeddings",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "vector search",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "retrieval augmented generation",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "chatbots",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "text summarization",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "classification",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "recommender systems",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "process automation",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "api design",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "data pipelines",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "data integration",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "data quality",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "data warehousing",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "cloud computing",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "devops",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "business intelligence",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "predictive modeling",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "data analysis",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "data visualization",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "dashboarding",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "reporting",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "technical documentation",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "scalability",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "agile",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "cross functional collaboration",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "stakeholder management",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "requirements gathering",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "vendor management",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "english proficiency",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "statistics",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "data cleaning",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "cybersecurity",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "monitoring and alerting",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "regulatory compliance",
+        "min_experience": null,
+        "max_experience": null
+      }
+    ],
+    "nice_to_have_concepts": [
+      {
+        "name": "ci/cd",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "containerization",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "data privacy",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "authorization",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "marketing analytics",
+        "min_experience": null,
+        "max_experience": null
+      }
+    ],
+    "discarded_concepts": [
+      "full-stack development",
+      "analytics engineering",
+      "data engineering",
+      "workflow orchestration",
+      "technology governance"
+    ]
+  },
+  "seniority": {
+    "label": null,
+    "min_experience": 2,
+    "max_experience": 4,
+    "evidence": null
+  },
+  "role": {
+    "name": "ai engineer",
+    "evidence": "AI Efficiency, Innovation & Automation Analyst",
+    "unmatched": null
+  },
+  "degree": {
+    "degrees": [
+      {
+        "name": "computer science",
+        "evidence": "Bachelor’s or advanced degree in Computer Science"
+      },
+      {
+        "name": "data science",
+        "evidence": "Bachelor’s or advanced degree in Computer Science, Data Science"
+      },
+      {
+        "name": "engineering",
+        "evidence": "Bachelor’s or advanced degree in Computer Science, Data Science, Engineering"
+      },
+      {
+        "name": "information systems",
+        "evidence": "Bachelor’s or advanced degree in Computer Science, Data Science, Engineering, Information Systems"
+      },
+      {
+        "name": "statistics",
+        "evidence": "Bachelor’s or advanced degree in Computer Science, Data Science, Engineering, Information Systems, Statistics"
+      }
+    ],
+    "unmatched": [
+      "Business Analytics"
+    ]
+  }
+}

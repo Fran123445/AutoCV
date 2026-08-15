@@ -1,0 +1,211 @@
+{
+  "header": {
+    "position_name": "ANALYTICS ENGINEER",
+    "company_name": "Svitla Systems, Inc.",
+    "location": "Argentina",
+    "modality": "En remoto",
+    "contract_type": "Jornada completa",
+    "posted_raw": "hace 1 semana",
+    "posted_days_ago": 7,
+    "source_url": "https://www.linkedin.com/jobs/view/4449405121/",
+    "linkedin_job_id": 4449405121
+  },
+  "scrape_date": "2026-08-12",
+  "body": "Svitla Systems Inc. is looking for an Analytics Engineer for a full-time remote position (40 hours per week) in LATAM. Our client is a global healthcare communications network. The Business Insights Engineer I serves as a key member of the Measurement Enablement team, ensuring client data is accurate, up to date, and ready for reporting and analysis. This role bridges the gap between data engineering, analytics teams, and client stakeholders by managing data ingestion processes, validating data quality, maintaining reporting-ready data structures, and resolving issues throughout the data lifecycle. The perfect candidate enjoys investigating data questions, identifying root causes of data discrepancies, improving data quality, and working across multiple teams to ensure reliable data powers business decisions. Requirements 3-6 years of relevant experience. Strong knowledge of SQL and Python, in a Databricks environment preferred. Experience using ETL tools and data manipulation concepts (Funnel.io, DBT, or similar applications). Be comfortable partnering with Data Engineering on data sources, schemas, and refresh logic. Deep analytical and problem-solving skills related to data storage and structure for reporting. Understanding of reviewing data logic, KPI definitions, and QA outputs. Basic knowledge of BI (Tableau, Power BI) including data modeling, dashboard structure, calculated fields, usability, and data storytelling Strong written and verbal communication with technical and non-technical stakeholders. Ability to translate complex BI outputs into clear, executive-ready insights. Nice To Have Experience with Pharma, HCP, or healthcare media analytics. Expertise in digital media measurement (media KPIs, attribution concepts, omnichannel analysis). Experience inheriting or stabilizing existing data warehouse schemas. Responsibilities Coordinate the onboarding of new client data sources and data feeds. Partner with Data Engineering to ensure successful ingestion of data into Databricks. Monitor data delivery schedules and ingestion processes. Maintain source documentation, field mappings, and data inventories. Work directly with internal teams and external partners to resolve source-related issues. Monitor data freshness, completeness, and accuracy across client datasets. Perform ongoing quality assurance and reconciliation checks. Investigate missing, unexpected, or inconsistent data. Escalate, coordinate, and resolve remediation efforts with the appropriate teams. Maintain documentation of data quality findings and resolutions. Support the development of automated data quality checks and monitoring processes. Develop and maintain client-specific standard, custom, and master tables and reporting views within Databricks based on a medallion architecture. Assist with transforming and standardizing data from multiple sources into reporting-ready structures. Solve problems and help build solutions related to the data model to meet evolving reporting and analysis needs. Document business rules, transformation logic, and metric definitions. Support maintenance of reusable reporting datasets and standardized data models. Act as the primary point of contact for routine data-related questions. Partner with Client Services, Media, Strategy, and Data teams to align on data outputs and expectations. Work with analysts and measurement leads to understand reporting requirements. Communicate data issues, impacts, and resolutions to stakeholders. Assist with troubleshooting data discrepancies impacting reporting deliverables. Support Power BI developers and analysts with data-related questions. Assist with report validation and troubleshooting. Help verify data displayed in dashboards aligns with source systems and business requirements. Provide support for semantic models and reporting datasets when needed WE OFFER US and EU projects based on advanced technologies. Competitive compensation based on skills and experience. Comprehensive private medical insurance. Regular performance appraisals to support your growth. Flexibility in workspace, either remote, our welcoming office or local coworking. Bonuses for recommendations of new employees. Bonuses for article writing, public talks, other activities. 15 vacation days, 10 national holidays, 10 sick leaves. Personalized learning program tailored to your interests and skill development. Free tech webinars and meetups organized by Svitla. Fun corporate online\\offline celebrations and activities. Well-established remote culture. Awesome team, friendly and supportive community! Beneficios encontrados en el anuncio Medical insurance",
+  "technologies": {
+    "required_technologies": [
+      {
+        "name": "sql",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "python",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "dbt",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "tableau",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "power bi",
+        "min_experience": null,
+        "max_experience": null
+      }
+    ],
+    "nice_to_have_technologies": [
+      {
+        "name": "databricks",
+        "min_experience": null,
+        "max_experience": null
+      }
+    ],
+    "discarded_technologies": [
+      "Funnel.io"
+    ]
+  },
+  "concepts": {
+    "required_concepts": [
+      {
+        "name": "data quality",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "etl",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "data pipelines",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "data integration",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "data modeling",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "medallion architecture",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "data reconciliation",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "quality assurance",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "monitoring and alerting",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "troubleshooting",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "technical documentation",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "business intelligence",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "dashboarding",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "data storytelling",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "kpis",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "semantic layer",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "reporting",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "data analysis",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "client facing communication",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "cross functional collaboration",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "stakeholder management",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "problem solving",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "data catalog",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "test automation",
+        "min_experience": null,
+        "max_experience": null
+      }
+    ],
+    "nice_to_have_concepts": [
+      {
+        "name": "data warehousing",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "attribution modeling",
+        "min_experience": null,
+        "max_experience": null
+      }
+    ],
+    "discarded_concepts": [
+      "data manipulation",
+      "digital media measurement",
+      "omnichannel analysis",
+      "healthcare media analytics"
+    ]
+  },
+  "seniority": {
+    "label": null,
+    "min_experience": 3,
+    "max_experience": 6,
+    "evidence": null
+  },
+  "role": {
+    "name": "analytics engineer",
+    "evidence": "ANALYTICS ENGINEER",
+    "unmatched": null
+  },
+  "degree": {
+    "degrees": [],
+    "unmatched": []
+  }
+}

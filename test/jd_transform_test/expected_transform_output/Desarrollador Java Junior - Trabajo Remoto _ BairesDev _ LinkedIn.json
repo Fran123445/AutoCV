@@ -1,0 +1,110 @@
+{
+  "header": {
+    "position_name": "Desarrollador Java Junior - Trabajo Remoto",
+    "company_name": "BairesDev",
+    "location": "América Latina",
+    "modality": "En remoto",
+    "contract_type": "Jornada completa",
+    "posted_raw": "hace 1 día",
+    "posted_days_ago": 1,
+    "source_url": "https://www.linkedin.com/jobs/view/4451442025/",
+    "linkedin_job_id": 4451442025
+  },
+  "scrape_date": "2026-08-12",
+  "body": "En BairesDev® llevamos 15 años liderando proyectos de tecnología para clientes como Google, Rolls-Royce y las startups más innovadoras de Silicon Valley. Actualmente, contamos con un equipo de 4000 profesionales conformado por el top 1% de la industria trabajando de forma remota desde más de 50 países. Al postularte a esta vacante, estarás dando el primer paso en un proceso que va más allá de lo convencional: Buscaremos conocer en profundidad tus habilidades, intereses y expectativas con el objetivo de realizar una búsqueda personalizada y encontrar el rol ideal para ti en BairesDev. Desarrollador Java Junior en BairesDev Como Desarrollador Java Junior, aplica tus conocimientos de Java para contribuir al desarrollo de aplicaciones del lado del servidor. Participa en varias etapas del ciclo de vida del desarrollo, mejorando tus habilidades en Java y su aplicación en la construcción de soluciones de software robustas. Lo que harás: - Desarrollar y mantener aplicaciones Java, enfocándote en escribir código limpio y eficiente. - Colaborar con equipos de trabajo, contribuyendo en diferentes etapas del ciclo de vida del desarrollo de software. - Solucionar y depurar problemas de software, participando en la identificación e implementación de soluciones. - Participar en revisiones de código para mantener una alta calidad del código y aprender las mejores prácticas de la industria. - Mantenerte al día con nuevas tecnologías y frameworks de Java, entendiendo su aplicación en proyectos. - Participar activamente en reuniones y discusiones del equipo, contribuyendo al desarrollo de proyectos y la dinámica del equipo. Lo que buscamos: - 2 año de experiencia con Java. - Buena comprensión de algoritmos básicos y estructuras de datos. - Conocimientos básicos de sistemas de control de versiones, preferiblemente Git. - Capacidad para resolver problemas de manera efectiva y aprender nuevas tecnologías rápidamente. - Buen nivel de inglés. Qué ofrecemos para que tu trabajo (y tu vida) sea más fácil: - Trabajo 100% remoto: trabaja desde tu casa o donde quieras. - Compensación en USD o en tu moneda local, como prefieras, muy por encima de la media del mercado. - Hardware y software. - Horarios flexibles - Licencias por mater/paternidad, vacaciones y días festivos nacionales pagos. - Ambiente laboral multicultural e innovador, perfecto para hacer amigos, colaborar y aprender de las personas más talentosas del mundo. - Oportunidades de crecimiento y desarrollo profesional a través de mentorías y entrenamientos. ¡Únete a nuestro equipo global!",
+  "technologies": {
+    "required_technologies": [
+      {
+        "name": "java",
+        "min_experience": 2,
+        "max_experience": null
+      }
+    ],
+    "nice_to_have_technologies": [
+      {
+        "name": "git",
+        "min_experience": null,
+        "max_experience": null
+      }
+    ],
+    "discarded_technologies": []
+  },
+  "concepts": {
+    "required_concepts": [
+      {
+        "name": "clean code",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "code review",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "troubleshooting",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "algorithms",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "data structures",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "version control",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "problem solving",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "english proficiency",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "teamwork",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "adaptability",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "continuous learning",
+        "min_experience": null,
+        "max_experience": null
+      }
+    ],
+    "nice_to_have_concepts": [],
+    "discarded_concepts": [
+      "software development lifecycle"
+    ]
+  },
+  "seniority": {
+    "label": "junior",
+    "min_experience": 2,
+    "max_experience": null,
+    "evidence": "Desarrollador Java Junior"
+  },
+  "role": {
+    "name": "backend dev",
+    "evidence": "aplicaciones del lado del servidor",
+    "unmatched": null
+  },
+  "degree": {
+    "degrees": [],
+    "unmatched": []
+  }
+}

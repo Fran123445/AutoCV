@@ -1,0 +1,15 @@
+{
+  "header": {
+    "position_name": "Desarrollador/a Backend Python",
+    "company_name": "Credencial Payments",
+    "location": "Buenos Aires, Provincia de Buenos Aires, Argentina",
+    "modality": "Híbrido",
+    "contract_type": "Jornada completa",
+    "posted_raw": "hace 1 mes",
+    "posted_days_ago": 30,
+    "source_url": "https://www.linkedin.com/jobs/view/4435614218/",
+    "linkedin_job_id": 4435614218
+  },
+  "body": "Buscamos incorporar un Desarrollador/a Backend Python a nuestro equipo. 🚀 ¿Cuáles serán tus principales desafíos? Participar del ciclo completo de desarrollo requerimientos, diseño, implementación, pruebas y puesta en producción. Colaborar en la migración de sistemas legados hacia la nueva plataforma, entendiendo y documentando las reglas de negocio existentes. Contribuir en la mejora continua y optimización de plataformas transaccionales. Construir sistemas eficientes, reutilizables y bien testeados. Participar en la definición de nuevos requerimientos de producto y operaciones. Identificar y comunicar las mejores prácticas de desarrollo. Intervenir en el diseño de soluciones y de las revisiones de código. Requisitos 🛠️ ¿Qué buscamos? Experiencia en desarrollo backend con Python (2+ años). Manejo de Python asíncrono async/await, asyncio. Experiencia con algún framework web de Python. SQL y experiencia con bases de datos relacionales. Práctica habitual de testing automatizado (pytest o similar). Git como herramienta diaria. Ganas de aprender, buena comunicación y trabajo en equipo. Requisitos deseables FastAPI y Pydantic. Estudiante avanzado/a o graduado/a de Ingeniería ciencias de la Computación o carreras afines. PostgreSQL; SQLAlchemy y migraciones con Alembic. Tipado estático en Python (type hints, mypy) Docker y docker-compose. Redis y colas de tareas asíncronas (arq, Celery o similar). Bases NoSQL (MongoDB). Conocimiento de arquitectura hexagonal / Clean Architecture / DDD (gran diferencial). Experiencia en sistemas financieros, medios de pago o procesamiento batch de archivos (gran diferencial). Nociones de seguridad aplicada al desarrollo, normas estándar PCI. Inglés intermedio. Beneficios 🎁 ¿Qué te ofrecemos? Medicina Prepaga Cobertura médica para vos y tu grupo familiar directo. Esquema Híbrido Flexibilidad de 2 días de home office y 3 presenciales (Oficinas en Microcentro). Gastos Cubiertos Reintegro de conectividad (internet) y línea de celular corporativa. Más Descanso Vacaciones expresadas en días hábiles. SOMOS LATAM, OPERAMOS EN 15 PAÍSES, DESARROLLAMOS MEDIOS DE PAGO | PAGOS DIGITALES DESDE HACE MÁS DE 40 AÑOS.",
+  "scrape_date": "2026-08-12"
+}

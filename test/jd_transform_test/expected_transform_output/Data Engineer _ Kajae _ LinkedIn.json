@@ -1,0 +1,276 @@
+{
+  "header": {
+    "position_name": "Data Engineer",
+    "company_name": "Kajae",
+    "location": "América Latina",
+    "modality": "En remoto",
+    "contract_type": "Jornada completa",
+    "posted_raw": "hace 4 días",
+    "posted_days_ago": 4,
+    "source_url": "https://www.linkedin.com/jobs/view/4450378522/",
+    "linkedin_job_id": 4450378522
+  },
+  "scrape_date": "2026-08-12",
+  "body": "To apply, kindly submit your resume in English. Please note that applications submitted in any other language will not be considered. Candidates are also expected to research Kajae prior to applying and before participating in the interview process. We highly value preparation, initiative, and genuine interest in our company, services, and mission. Selected candidates may also be required to complete assessments or evaluations as part of the hiring process. Who we are: Kajae is a premium staff augmentation company, connecting top global talents to thriving US companies and clients offering fully remote opportunities. Our team hails from over 15 different countries, with the majority coming from the Philippines and Latin America. We pride ourselves on our tight-knit culture and strong bonds, despite working remotely across diverse timezones. What We Offer: • Competitive salary. Receive your pay in USD! 100% fully remote work setup. Work from home or work from anywhere in the world— forever! Eliminate the hassles of commuting and be around family more without missing out on life’s biggest moments. • Healthy work-life balance. There’s nothing we prioritize more. We do regular check-ins with the team for the first few months to provide support and work advice. We also make sure you are working with only the best clients and a healthy work environment. • Health Insurance. Covered after the third month of contract. • Mental Health Support Program. We have an in-house mental health professional to make sure our team members have all the support they need. • Referral Bonuses. Earn up to $100 USD for every successful candidate you refer (because you'll want to tell your friends!) • Fun virtual events. We have monthly virtual events where everyone gets together, play fun games, celebrate special holidays, with many opportunities to win cash and exciting prizes. • Kajae Spotlight Bonus. With stellar performance comes the Kajae Spotlight cash bonus! • We have a tribe! Get the chance to engage with the whole team on our team’s social platform and earn coins along the way. Bid on some of our crazy auctions and get the chance to win prizes like Airpods, Apple Watch, Starbucks gift cards, shopping or experience vouchers, and more! • Continuing Education. 100% free courses offered through our university partners in the US in order to earn academic credits for Master’s or Graduate Degree programs. • All-Expense Paid Summits. Earn your way to our annual Kajae Summit as a reward for your outstanding performance and tenure. The last two summits were held at Palawan, Philippines and Cusco, Peru (we saw Machu Picchu together!). Data Engineer – MVA Inference & Audience Development Role Mission As a Data Engineer, you will design, build, and maintain the compliant data pipelines and inference layers that power our audience development engine. Operating within a strict compliance-first framework, you will utilize aggregated, privacy-safe signals—including platform interests, general search intent, historical public safety geography, and reputable demographic data—to build high-performing audience segments. In this role, you will adopt an adversarial, stress-testing mindset to proactively evaluate and defend our data systems. You will strictly enforce technical guardrails, ensuring our platform never processes real-time incident locations or constructs individual \"knowledge\" of any specific accident. Key Information Location: Remote Employment Type: Full-Time Department: Data & Engineering What You Will Achieve (First 60–90 Days) Reliable Data Infrastructure: Deploy production-grade ETL/ELT pipelines operating with automated monitoring, comprehensive documentation, and repeatable deployment workflows. Governed Inference Library: Establish a managed library of reusable inference layers (geospatial, interest, search intent, demographic) equipped with clear data lineage and embedded compliance controls. Audit-Ready Workflows: Standardize the segment-building process, producing audit-ready artifacts for every campaign type. Performance Optimization: Deliver early performance lift and improved audience precision through structured experimentation and pipeline scaling. Key Responsibilities Build, scale, and optimize data models and pipelines to transform raw, privacy-safe signals into actionable marketing segments. Proactively stress-test data models and pipelines against potential compliance exploits or data-leakage scenarios to ensure zero unauthorized identification. Develop geospatial scoring models (at the ZIP, county, or corridor level) using aggregated historical data, explicitly excluding real-time or individual incident tracking. Collaborate directly with Growth, Marketing, and Legal/Compliance teams to translate regulatory requirements into concrete technical guardrails. Implement robust data lineage, data quality monitoring, source validation, and retention/freshness window rules across data assets. Evaluate and onboard third-party data vendors, performing diligence on data provenance, licensing, privacy certifications, and usage rights. Qualifications & Competencies Must-Have Experience SQL & Data Modeling: Expert SQL skills with proven experience building analysis-ready tables, dimensional models, and audience segment outputs. Python Engineering: Strong Python proficiency for data processing, pipeline automation, and orchestration support. Modern Cloud Data Stack: Hands-on experience with major cloud platforms (AWS, GCP, or Azure) and enterprise data warehouses (Snowflake, BigQuery, or Redshift). Adversarial Risk Mindset: Ability to think critically from a compliance and risk perspective, identifying vulnerabilities where data could be misused or misinterpreted before pipelines reach production. Governance & Lineage: A deep governance mindset focused on building audit trails, monitoring data freshness, tracking lineage, and implementing strict access controls. Geospatial Processing: Demonstrated ability to perform spatial joins, regional scoring, and spatial aggregations without relying on individual-level tracking. Cross-Functional Communication: Excellent communication skills with the ability to bridge technical specs with business growth goals and legal compliance requirements. Non-Negotiable Compliance Requirements Inference vs. Knowledge: Firm understanding of inference vs. knowledge and how to translate ethical boundaries into hard technical constraints. Historical Data Rules: Strict adherence to using aggregated historical geographical data (45+ days old), ensuring real-time incident data is never ingested or processed. Vendor Diligence: Diligent approach to data vendor auditing, usage logging, and licensing verification. Preferred Qualifications (\"Nice-to-Have\") Experience with data transformation and orchestration tools such as dbt, Apache Airflow, Dagster, or Apache Spark. Prior exposure to ad-tech/mar-tech activations and audience integrations (Meta, Google Ads, TikTok, or programmatic DSPs). Familiarity with privacy and regulatory frameworks impacting consumer data (CCPA/CPRA, TCPA, DPPA, GDPR concepts). What We Look For in Interviews Clear articulation of end-to-end data pipelines (source ingestion → transformation → delivery → monitoring). Demonstrated ability to evaluate systems critically to uncover potential privacy edge cases or compliance vulnerabilities. Concrete examples of data quality controls built to explicitly prevent non-compliant or prohibited use cases. Sound engineering judgment when managing sensitive datasets and regulated workflows. Proven experience executing geospatial segmentation or market mapping at scale. Beneficios encontrados en el anuncio Medical insurance Requisitos añadidos por el anunciante del empleo • Más de 5 años de experiencia laboral en Data Engineering • Bachelor's Degree",
+  "technologies": {
+    "required_technologies": [
+      {
+        "name": "sql",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "python",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "aws",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "gcp",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "azure",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "snowflake",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "bigquery",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "redshift",
+        "min_experience": null,
+        "max_experience": null
+      }
+    ],
+    "nice_to_have_technologies": [
+      {
+        "name": "dbt",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "apache airflow",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "dagster",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "apache spark",
+        "min_experience": null,
+        "max_experience": null
+      }
+    ],
+    "discarded_technologies": [
+      "Meta",
+      "Google Ads",
+      "TikTok",
+      "programmatic DSPs"
+    ]
+  },
+  "concepts": {
+    "required_concepts": [
+      {
+        "name": "english proficiency",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "data pipelines",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "etl",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "elt",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "data modeling",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "dimensional modeling",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "data warehousing",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "cloud computing",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "data governance",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "data lineage",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "data quality",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "monitoring and alerting",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "technical documentation",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "performance optimization",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "geospatial data",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "data privacy",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "data anonymization",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "authorization",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "regulatory compliance",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "data retention",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "logging",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "vendor management",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "customer segmentation",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "process automation",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "critical thinking",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "cross functional collaboration",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "problem solving",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "scalability",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "ab testing",
+        "min_experience": null,
+        "max_experience": null
+      }
+    ],
+    "nice_to_have_concepts": [
+      {
+        "name": "data integration",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "gdpr",
+        "min_experience": null,
+        "max_experience": null
+      }
+    ],
+    "discarded_concepts": [
+      "inference versus knowledge",
+      "data transformation",
+      "data orchestration",
+      "data leakage prevention",
+      "privacy certifications",
+      "spatial joins",
+      "spatial aggregations",
+      "regional scoring",
+      "ad-tech activations",
+      "mar-tech activations",
+      "market mapping"
+    ]
+  },
+  "seniority": {
+    "label": null,
+    "min_experience": 5,
+    "max_experience": null,
+    "evidence": null
+  },
+  "role": {
+    "name": "data engineer",
+    "evidence": "Data Engineer",
+    "unmatched": null
+  },
+  "degree": {
+    "degrees": [],
+    "unmatched": []
+  }
+}

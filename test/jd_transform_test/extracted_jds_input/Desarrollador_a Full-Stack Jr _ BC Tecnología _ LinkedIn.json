@@ -1,0 +1,15 @@
+{
+  "header": {
+    "position_name": "Desarrollador/a Full-Stack Jr",
+    "company_name": "BC Tecnología",
+    "location": "América Latina",
+    "modality": "En remoto",
+    "contract_type": "Jornada completa",
+    "posted_raw": "hace 3 mes",
+    "posted_days_ago": 90,
+    "source_url": "https://www.linkedin.com/jobs/view/4413875502/",
+    "linkedin_job_id": 4413875502
+  },
+  "body": "En BC Tecnología, somos una consultora TI que crea equipos ágiles y desarrolla soluciones para clientes de servicios financieros, seguros, retail y gobierno. Participarás en un proyecto enfocado en el desarrollo y evolución de aplicaciones web modernas y escalables para una empresa importante en México, en modalidad remota LATAM. El trabajo se centra en tecnologías Microsoft, combinando backend con C#/.NET y frontends con frameworks modernos, con colaboración entre equipos multidisciplinarios (desarrollo, QA y negocio) para implementar mejoras continuas, atender incidencias y asegurar calidad mediante pruebas, debugging y documentación técnica básica. Responsabilidades Participar en el desarrollo y mantenimiento de aplicaciones web. Desarrollar funcionalidades frontend utilizando Angular. Construir y mantener APIs y servicios backend en C# / .NET. Diseñar, consultar y optimizar bases de datos PostgreSQL. Colaborar con equipos de desarrollo, QA y negocio para la implementación de mejoras. Realizar pruebas, debugging y documentación técnica básica. Dar seguimiento a incidencias y mejoras continuas de las plataformas. Requisitos y Perfil Formación: Ingeniería en Sistemas, Tecnologías de la Información o carrera afín. Experiencia: experiencia mínima de 1 año en desarrollo web. Backend: conocimientos en desarrollo con C# / .NET. Frontend: experiencia básica o académica con Angular. Base de datos: manejo de PostgreSQL. Web fundamentals: conocimientos en HTML, CSS y JavaScript / TypeScript. APIs: consumo y desarrollo de APIs REST. Control de versiones: manejo básico de Git. Inglés intermedio Avanzado Plus / Deseable Conocimiento en Azure o servicios cloud. Experiencia con Entity Framework. Conocimientos en Docker. Experiencia trabajando con Jira o Azure DevOps.",
+  "scrape_date": "2026-08-12"
+}

@@ -1,0 +1,87 @@
+{
+  "header": {
+    "position_name": "EY - Junior de IT",
+    "company_name": "EY",
+    "location": "Buenos Aires, Provincia de Buenos Aires, Argentina",
+    "modality": "Presencial",
+    "contract_type": "Jornada completa",
+    "posted_raw": "hace 1 semana",
+    "posted_days_ago": 7,
+    "source_url": "https://www.linkedin.com/jobs/view/4361977461/",
+    "linkedin_job_id": 4361977461
+  },
+  "scrape_date": "2026-08-12",
+  "body": "Sobre EY EY es una firma global líder que ofrece servicios de Auditoría, Consultoría, Estrategia y Transacciones e Impuestos, con una red integrada de alrededor de 400.000 profesionales en 150 países del mundo. Nuestro propósito es construir un mundo mejor de negocios para nuestra gente, para nuestros clientes y para nuestras comunidades. Trabajamos continuamente para mejorar la calidad de nuestros servicios, invirtiendo en nuestra gente y en innovación. Las oportunidades de crecer, tener éxito y desarrollarse en EY son ilimitadas. EY cree en la igualdad de oportunidades y no discrimina por motivos de género, edad, estado civil, credo, identidad de género, orientación sexual, origen étnico u origen nacional, discapacidad o características físicas. Todas nuestras oportunidades de trabajo están abiertas a personas con discapacidad y buscamos alentar a que se postulen para nuestras diferentes posiciones. En caso de necesitar algún ajuste razonable o apoyo, por favor no dejes de aclararlo en tu postulación. ¿Qué oportunidades ofrecemos para tu carrera en tecnología? Buscamos estudiantes y/o graduadas/os de carreras como Licenciatura en Sistemas, Ingeniería en Informática o afines para que se sumen a nuestros equipos. Esta publicación tiene como objetivo conformar un Banco de Talentos para posiciones Junior en distintas áreas de tecnología. A lo largo del año incorporaremos personas de acuerdo con las vacantes que se vayan habilitando. Te invitamos a postularte y adjuntar tu CV para que podamos considerarte y contactarte cuando surjan oportunidades acordes a tu perfil. El contacto se realizará en función de las necesidades de cada equipo, por lo que no es inmediato. Contamos con oportunidades tanto para prácticas rentadas como para posiciones a largo plazo en relación de dependencia. Los equipos en los que incorporamos personas son los siguientes: Technology Risk Ciberseguridad Procesos IT SAP RPA Data & IA Engineering Tecnología Forense Desarrollo backend y front end Requisitos Estudiantes o graduados/as de carreras universitarias como Informática, Sistemas o afines. Disponibilidad para trabajar full time. No es necesario contar con experiencia laboral previa. Inglés intermedio/avanzado (no excluyente). ¿Qué ofrecemos? Formar parte de una de las mejores empresas para trabajar (GPTW Argentina). Formar parte de un equipo de trabajo altamente reconocido en el mercado y basado en las mejores prácticas. Modalidad de trabajo #híbrido. Cobertura médica privada para vos y tu grupo familiar. Monto adicional mensual por conectividad/trabajo remoto. Descuentos en importante red de gimnasios, comercios y universidades. Envíos gratis y descuentos en app de delivery. Snacks gratuitos en la oficina. Revisiones salariales periódicas. Programas de capacitación continua presenciales y virtuales. Plataforma de entrenamiento virtual con más de 18.000 cursos disponibles, entre los cuales se encuentran los cursos de Udemy y Coursera. Acceso a EY Badges, programa global de certificaciones en diferentes áreas de conocimiento. EY Master in Business Analytics y Master in Sustainability, innovadores programas de aprendizaje virtual en asociación con Hult International Business School. Capacitación en idioma inglés: política de clases, open lessons gratuitas, webinars de doble impacto y libre acceso a la plataforma de aprendizaje virtual. Ayuda económica para quienes se mudan a Buenos Aires para trabajar en EY. Consultorios médicos y nutricionales. Programas anuales de salud. Políticas de flexibilidad, licencias especiales y softlanding para personas gestantes. ¡Y mucho más! Si querés ver todo lo que tenemos para vos, hacé clic acá: https://www.youtube.com/watch?v=B2zkSJZ_NZw&t=38s Búsqueda Laboral Equitativa. El empleador solo podrá solicitarle la información estrictamente necesaria para el desempeño en el trabajo que se ofrece. (Ley 6471/21 CABA) EY | Atracción y Adquisición de Talento (011) 4875-4888 25 de Mayo 487, Ciudad Autónoma de Buenos Aires https://www.ey.com/es_ar/careers/technology Instagram: www.instagram.com/ey.argentina Facebook: www.facebook.com/EYCareersArgentina X: www.x.com/EY_CareersAR LinkedIn: www.linkedin.com/company/ernstandyoung YouTube: www.youtube.com/user/ErnstandYoungAR #CampusEY #ShapeTheFutureWithConfidence #Hibrido",
+  "technologies": {
+    "required_technologies": [
+      {
+        "name": "sap",
+        "min_experience": null,
+        "max_experience": null
+      }
+    ],
+    "nice_to_have_technologies": [],
+    "discarded_technologies": [
+      "RPA"
+    ]
+  },
+  "concepts": {
+    "required_concepts": [
+      {
+        "name": "cybersecurity",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "process automation",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "artificial intelligence",
+        "min_experience": null,
+        "max_experience": null
+      }
+    ],
+    "nice_to_have_concepts": [
+      {
+        "name": "english proficiency",
+        "min_experience": null,
+        "max_experience": null
+      }
+    ],
+    "discarded_concepts": []
+  },
+  "seniority": {
+    "label": "junior",
+    "min_experience": null,
+    "max_experience": null,
+    "evidence": "Esta publicación tiene como objetivo conformar un Banco de Talentos para posiciones Junior en distintas áreas de tecnología."
+  },
+  "role": {
+    "name": null,
+    "evidence": null,
+    "unmatched": null
+  },
+  "degree": {
+    "degrees": [
+      {
+        "name": "information systems",
+        "evidence": "Licenciatura en Sistemas"
+      },
+      {
+        "name": "informatics",
+        "evidence": "Ingeniería en Informática"
+      },
+      {
+        "name": "informatics",
+        "evidence": "Informática"
+      },
+      {
+        "name": "systems engineering",
+        "evidence": "Sistemas"
+      }
+    ],
+    "unmatched": []
+  }
+}

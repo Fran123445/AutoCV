@@ -1,0 +1,286 @@
+{
+  "header": {
+    "position_name": "Data Engineer Microsoft Fabric",
+    "company_name": "POSSUMUS",
+    "location": "Buenos Aires y alrededores",
+    "modality": "En remoto",
+    "contract_type": "Jornada completa",
+    "posted_raw": "hace 2 días",
+    "posted_days_ago": 2,
+    "source_url": "https://www.linkedin.com/jobs/view/4454058216/",
+    "linkedin_job_id": 4454058216
+  },
+  "scrape_date": "2026-08-15",
+  "body": "At Possumus, we are looking for a Data Engineer ssr to join strategic data and analytics initiatives built on the Microsoft ecosystem. This role is responsible for designing, building and maintaining scalable data architectures that support Business Intelligence, Advanced Analytics, Machine Learning and AI-driven solutions. You will work closely with Data Analysts, Technical Leaders and business stakeholders to ensure data solutions are secure, governed, scalable and aligned with best practices and organizational standards. What you will be doing Design and build scalable and secure data architectures using Microsoft Fabric and Azure. Develop and maintain Data Lake, Lakehouse and Data Warehouse solutions following modern data architecture principles. Create and manage ETL/ELT pipelines using Data Factory, Dataflows Gen2 and related technologies. Design reusable semantic models for Power BI consumption and analytics. Implement CI/CD practices using Azure Pipelines and/or Microsoft Fabric deployment capabilities. Ensure data quality, governance, security, traceability and availability across the data platform. Collaborate with Data Analysts and Data Scientists in the preparation of datasets and predictive models. Participate in technical estimations, architecture discussions and pre-sales activities. Support and guide users and technical teams in the adoption of Microsoft data technologies. Soft skills we value Flexibility and adaptability to evolving technologies and business needs. Proactive attitude and ownership mindset. Strong problem-solving and analytical thinking skills. Ability to work collaboratively with technical and business teams. Autonomy and continuous learning mindset. Strong communication skills and stakeholder interaction. Requisitos mínimos 2+ years of experience as Data Engineer, Analytics Engineer or similar roles. Strong experience with Microsoft Fabric. Experience designing and implementing Data Lake, Lakehouse and Data Warehouse architectures. Solid understanding of ETL/ELT processes and data integration patterns. Experience with Data Factory, Dataflows Gen2 and data transformation processes. Strong SQL skills and experience working with large-scale datasets. Experience designing semantic models for Power BI consumption. Knowledge of Azure cloud services related to data platforms. Experience with Git-based version control and deployment practices. Understanding of data governance, security and access management concepts. Desirable requeriments Experience with Microsoft Purview for data governance. Experience with Databricks and notebook-based data transformations. Knowledge of Data Mesh, UCAD and Medallion Architecture. Experience implementing CI/CD using Azure DevOps or Azure Pipelines. Power BI experience, including DAX and semantic modeling. Microsoft Certifications Such As DP-700 – Microsoft Fabric Data Engineer Associate DP-600 – Fabric Analytics Engineer Associate DP-900 – Azure Data Fundamentals PL-300 – Power BI Data Analyst Our Hiring Process TA Interview Technical interview Psycho-occupational interview Job Offer If you want to learn more about us, please click the following links: https://possumus.tech/ https://possumus.tech/es-es/culture",
+  "technologies": {
+    "required_technologies": [
+      {
+        "name": "microsoft fabric",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "azure",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "azure data factory",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "power bi",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "sql",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "git",
+        "min_experience": null,
+        "max_experience": null
+      }
+    ],
+    "nice_to_have_technologies": [
+      {
+        "name": "microsoft purview",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "databricks",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "azure devops",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "azure pipelines",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "dax",
+        "min_experience": null,
+        "max_experience": null
+      }
+    ],
+    "discarded_technologies": [
+      "Dataflows Gen2",
+      "UCAD"
+    ]
+  },
+  "concepts": {
+    "required_concepts": [
+      {
+        "name": "business intelligence",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "data architecture",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "scalability",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "data lake",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "lakehouse",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "data warehousing",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "etl",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "elt",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "data pipelines",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "data integration",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "semantic layer",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "ci/cd",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "data quality",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "data governance",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "data lineage",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "version control",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "identity and access management",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "machine learning",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "artificial intelligence",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "predictive modeling",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "software architecture",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "estimation",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "adaptability",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "problem solving",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "critical thinking",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "cross functional collaboration",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "stakeholder management",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "autonomy",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "continuous learning",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "proactivity",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "data analysis",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "big data",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "cloud computing",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "data modeling",
+        "min_experience": null,
+        "max_experience": null
+      }
+    ],
+    "nice_to_have_concepts": [
+      {
+        "name": "data mesh",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "medallion architecture",
+        "min_experience": null,
+        "max_experience": null
+      }
+    ],
+    "discarded_concepts": [
+      "UCAD",
+      "pre-sales activities",
+      "data transformation processes"
+    ]
+  },
+  "seniority": {
+    "label": "ssr",
+    "min_experience": 2,
+    "max_experience": null,
+    "evidence": "Data Engineer ssr"
+  },
+  "role": {
+    "name": "data engineer",
+    "evidence": "Data Engineer Microsoft Fabric",
+    "unmatched": null
+  },
+  "degree": {
+    "degrees": [],
+    "unmatched": []
+  }
+}

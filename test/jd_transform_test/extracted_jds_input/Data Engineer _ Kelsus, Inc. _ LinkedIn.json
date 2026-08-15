@@ -1,0 +1,15 @@
+{
+  "header": {
+    "position_name": "Data Engineer",
+    "company_name": "Kelsus, Inc.",
+    "location": "Argentina",
+    "modality": null,
+    "contract_type": "Jornada completa",
+    "posted_raw": "hace 1 año",
+    "posted_days_ago": 365,
+    "source_url": "https://www.linkedin.com/jobs/view/4121561010/",
+    "linkedin_job_id": 4121561010
+  },
+  "body": "We're hiring a highly motivated Data Engineer with expertise in Python, AWS Glue/pyspark, AWS Lambda, Kafka, and relational databases (specifically Postgres). You'll be responsible for designing, developing, and maintaining data processing and management solutions, ensuring data integrity and availability through collaboration with multidisciplinary teams. Responsibilities Design and develop efficient data pipelines using Python, AWS Glue/pyspark, AWS Lambda, Kafka, and related technologies. Implement and optimize ETL processes for data extraction, transformation, and loading into relational databases, especially Postgres. Collaborate on data warehouse architectures, ensuring proper data modeling, storage, and access. Utilize tools like StitchData and Apache Hudi for data integration and incremental management, improving efficiency and enabling complex operations. Identify and resolve data quality and consistency issues, implementing monitoring processes across pipelines and storage systems. Requirements Strong Python skills and proficiency in associated libraries for data processing and manipulation. Expertise in AWS Glue/pyspark, AWS Lambda, and Kafka for ETL workflow development and streaming architecture. Experience in designing and implementing relational databases, specifically Postgres. Practical knowledge of data pipeline development, ETL processes, and data warehouses. Familiarity with data integration tools like StitchData and Apache Hudi for efficient incremental data management. Advanced level of English for effective communication and collaboration. Benefits Competitive salary. Annual offsite team trip. Learn from a very high performing team. Training from US mentors. If you're a passionate Data Engineer with experience in these technologies and seek a stimulating and challenging environment, join our team and contribute to the success of our advanced data processing and management solutions!",
+  "scrape_date": "2026-08-12"
+}

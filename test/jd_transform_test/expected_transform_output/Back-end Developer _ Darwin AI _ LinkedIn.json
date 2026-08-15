@@ -1,0 +1,69 @@
+{
+  "header": {
+    "position_name": "Back-end Developer",
+    "company_name": "Darwin AI",
+    "location": "Buenos Aires y alrededores",
+    "modality": "Híbrido",
+    "contract_type": "Jornada completa",
+    "posted_raw": "hace 5 mes",
+    "posted_days_ago": 150,
+    "source_url": "https://www.linkedin.com/jobs/view/4377820527/",
+    "linkedin_job_id": 4377820527
+  },
+  "scrape_date": "2026-08-12",
+  "body": "About Darwin AI Darwin AI empowers mid-market companies by automating key business processes with AI-powered digital workers via WhatsApp. Our AI workers handle essential customer interactions, including inbound qualification, outbound reactivation, satisfaction surveys, appointment scheduling, payment collections, and more. As the only no-prompt AI solution on the market, Darwin AI enables mid-market businesses to leverage AI without requiring technical teams or expertise, offering seamless integration and immediate impact. Join a fast-growing team that's changing the way companies think about AI and technology! About The Back-end Developer Position We are looking to hire a top talent back-end Developer to come work with us at Darwin AI (https://www.getdarwin.ai/) You will work closely with our engineers to ensure system consistency and improve user experience. Requirements 3+ year experience working as a Back-end developer Solid experience with the following programming languages: Node.js Python Golang You also need to have experience working with Microservices/AWS. Benefits Language Classes: Access to language classes (English, Portuguese, Spanish) to enhance communication skills OpenAI Premium License: Complimentary access to Gemini premium license for personal or professional use Paid Time Off: Enjoy 25 days/year of paid vacations and holidays to recharge and maintain a healthy work-life balance Hybrid Work: We meet 2 days/week in our offices, the rest of the time you can work remotely from wherever you like!",
+  "technologies": {
+    "required_technologies": [
+      {
+        "name": "node.js",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "python",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "go",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "aws",
+        "min_experience": null,
+        "max_experience": null
+      }
+    ],
+    "nice_to_have_technologies": [],
+    "discarded_technologies": [
+      "Microservices"
+    ]
+  },
+  "concepts": {
+    "required_concepts": [
+      {
+        "name": "microservices",
+        "min_experience": null,
+        "max_experience": null
+      }
+    ],
+    "nice_to_have_concepts": [],
+    "discarded_concepts": []
+  },
+  "seniority": {
+    "label": null,
+    "min_experience": 3,
+    "max_experience": null,
+    "evidence": null
+  },
+  "role": {
+    "name": "backend dev",
+    "evidence": "Back-end Developer",
+    "unmatched": null
+  },
+  "degree": {
+    "degrees": [],
+    "unmatched": []
+  }
+}

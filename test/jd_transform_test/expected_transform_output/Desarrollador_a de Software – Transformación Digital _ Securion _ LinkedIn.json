@@ -1,0 +1,226 @@
+{
+  "header": {
+    "position_name": "Desarrollador/a de Software – Transformación Digital",
+    "company_name": "Securion",
+    "location": "Vicente López, Provincia de Buenos Aires, Argentina",
+    "modality": "Híbrido",
+    "contract_type": "Jornada completa",
+    "posted_raw": "hace 2 semanas",
+    "posted_days_ago": 14,
+    "source_url": "https://www.linkedin.com/jobs/view/4443646116/",
+    "linkedin_job_id": 4443646116
+  },
+  "scrape_date": "2026-08-12",
+  "body": "Queremos sumar al equipo una persona profesional, dinámica, enfocada en la calidad, la seguridad y las buenas prácticas. Tu propósito será desarrollar, mantener y documentar soluciones de software, automatizaciones e integraciones estratégicas, alineadas con los estándares técnicos y la arquitectura del área. Funciones principales Desarrollar y mantener funcionalidades de software con foco en la calidad y la escalabilidad. Participar en el diseño de soluciones colaborando de cerca con el Líder de Desarrollo. Implementar pruebas automatizadas (unitarias y de integración) y participar activamente en Code Reviews. Velar por la seguridad en el código manejo de datos sensibles, validación de inputs y gestión de credenciales. Colaborar en pipelines de CI/CD y en la mejora continua de los procesos de desarrollo. Dar soporte y mantenimiento a integraciones con sistemas estratégicos (SAP, Monday.com, Humand, entre otros). ¿Qué valoramos en el equipo? Proactividad, capacidad de aprendizaje autónomo, atención al detalle y excelente comunicación para el trabajo colaborativo. Requisitos Requisitos excluyentes Estudiante avanzado/a o graduado/a de carreras de Sistemas, Informática, Software o afines. Mínimo 3 años de experiencia en roles vinculados al desarrollo de software. Experiencia práctica en desarrollo Fullstack. Manejo fluido de control de versiones Git. Experiencia escribiendo pruebas automatizadas (unitarias e integración). Deseable (No excluyente) Experiencia en desarrollo y consumo de APls REST e integraciones entre sistemas. Manejo de lenguajes como Python y/o JavaScript / TypeScript. Conocimientos en contenedores (Docker), entornos Cloud o sistemas ERP/CRM. Beneficios Sueldo acorde a la posición. Medicina prepaga. Comedor en planta. Paquete de Beneficios Securion. ¡Somos Securion! Brindamos servicios de seguridad en todo el país a medida de las necesidades de seguridad de cada cliente. Integramos vigilancia física con tecnología de última generación para ofrecer una cobertura total para cada industria.",
+  "technologies": {
+    "required_technologies": [
+      {
+        "name": "git",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "sap",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "monday.com",
+        "min_experience": null,
+        "max_experience": null
+      }
+    ],
+    "nice_to_have_technologies": [
+      {
+        "name": "rest",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "python",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "javascript",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "typescript",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "docker",
+        "min_experience": null,
+        "max_experience": null
+      }
+    ],
+    "discarded_technologies": [
+      "Humand"
+    ]
+  },
+  "concepts": {
+    "required_concepts": [
+      {
+        "name": "technical documentation",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "software architecture",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "scalability",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "process automation",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "test automation",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "unit testing",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "integration testing",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "code review",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "application security",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "pii handling",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "secrets management",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "ci/cd",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "quality assurance",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "version control",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "proactivity",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "autonomy",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "attention to detail",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "teamwork",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "continuous learning",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "cross functional collaboration",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "data quality",
+        "min_experience": null,
+        "max_experience": null
+      }
+    ],
+    "nice_to_have_concepts": [
+      {
+        "name": "api design",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "data integration",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "containerization",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "cloud computing",
+        "min_experience": null,
+        "max_experience": null
+      }
+    ],
+    "discarded_concepts": [
+      "desarrollo Fullstack"
+    ]
+  },
+  "seniority": {
+    "label": null,
+    "min_experience": 3,
+    "max_experience": null,
+    "evidence": null
+  },
+  "role": {
+    "name": "software dev",
+    "evidence": "Desarrollador/a de Software",
+    "unmatched": null
+  },
+  "degree": {
+    "degrees": [
+      {
+        "name": "systems engineering",
+        "evidence": "Estudiante avanzado/a o graduado/a de carreras de Sistemas"
+      },
+      {
+        "name": "informatics",
+        "evidence": "Estudiante avanzado/a o graduado/a de carreras de Sistemas, Informática, Software o afines"
+      },
+      {
+        "name": "software engineering",
+        "evidence": "Estudiante avanzado/a o graduado/a de carreras de Sistemas, Informática, Software o afines"
+      }
+    ],
+    "unmatched": []
+  }
+}

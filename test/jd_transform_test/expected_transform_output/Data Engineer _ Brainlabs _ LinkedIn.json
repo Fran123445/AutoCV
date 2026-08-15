@@ -1,0 +1,454 @@
+{
+  "header": {
+    "position_name": "Data Engineer",
+    "company_name": "Brainlabs",
+    "location": "Argentina",
+    "modality": "Híbrido",
+    "contract_type": "Jornada completa",
+    "posted_raw": "hace 5 días",
+    "posted_days_ago": 5,
+    "source_url": "https://www.linkedin.com/jobs/view/4422140692/",
+    "linkedin_job_id": 4422140692
+  },
+  "scrape_date": "2026-08-12",
+  "body": "div]:bg-bg-000/50 [&_pre>div]:border-0.5 [&_pre>div]:border-border-400 [&_.ignore-pre-bg>div]:bg-transparent [&_.standard-markdown_:is(p,blockquote,h1,h2,h3,h4,h5,h6)]:pl-2 [&_.standard-markdown_:is(p,blockquote,ul,ol,h1,h2,h3,h4,h5,h6)]:pr-8 [&_.progressive-markdown_:is(p,blockquote,h1,h2,h3,h4,h5,h6)]:pl-2 [&_.progressive-markdown_:is(p,blockquote,ul,ol,h1,h2,h3,h4,h5,h6)]:pr-8\"> _*]:min-w-0 gap-3 [&_>_*:last-child]:mb-0 print:block print:[&_>_*_+_*]:mt-3 standard-markdown\"> Brainlabs is the independent, founder-led agency building the future of media. We have over 1000 Brainlabbers based across the global, all united through the 12 principles laid out in our Culture Code. We're full-service, with people and AI agents working side by side, all aligned to one thing: maximizing our clients' revenue through a genuinely scientific approach to media. If you want to help play your part in achieving this for the world's biggest brands in an environment that will support and challenge you in equal measure, this is where you do it. We are looking for a motivated and detail-oriented Data Engineer with 2+ years of experience in designing, building, and managing scalable data solutions on Google Cloud Platform (GCP). The ideal candidate will have a strong background in data engineering, cloud-based architectures, and proficiency in implementing data pipelines to transform raw data into actionable insights. Experience building or supporting AI and GenAI data workflows, including pipelines for LLM applications and AI/ML model training, is a strong plus. What You Do Data Pipeline Development: Design, develop, and maintain ETL/ELT pipelines using GCP tools like CloudFunctions, CloudRun, Dataflow, Dataproc, or Cloud Data Fusion. Ensure data pipelines are scalable, efficient, and optimised for performance. AI & GenAI Process Development: Build and manage data pipelines that support LLM and GenAI applications, including Retrieval-Augmented Generation (RAG) architectures, vector data stores, and prompt context assembly workflows. Curate and prepare datasets for AI/ML model training, covering feature engineering, labeling pipeline oversight, and data versioning using tools like Vertex AI Feature Store or DVC. Data Integration and Storage: Integrate data from various sources into GCP services such as BigQuery, Cloud Storage, and Cloud SQL. Design and implement data warehouse/mart solutions using BigQuery for analytics and reporting. Data Transformation & Optimization: Build transformation logic using SQL, Python, or Spark for preparing clean and structured data. Optimise query performance and storage cost in BigQuery or other GCP storage systems. Data Quality & Monitoring: Develop processes to ensure data quality, integrity, and consistency across the pipeline. Implement monitoring and logging systems using tools like Stackdriver or Looker. Requirement Understanding: Understand and interpret business and technical requirements to support data development tasks. Assist in building, testing, and maintaining data pipelines while ensuring alignment with project objectives and stakeholder needs Collaboration & Communication: Work closely with cross-functional teams, including data analysts, data scientists, and business stakeholders, to understand requirements. Provide technical guidance on GCP best practices and tools. Documentation & Maintenance: Maintain clear documentation of processes, workflows, and data architecture. Ensure regular maintenance and version control of pipelines and scripts. Who You Are Mandatory Skills: Hands-on experience with GCP services like CloudFunctions, CloudRun, Schedular, BigQuery, Dataflow, Pub/Sub, and Cloud Storage. Strong programming skills in Python, SQL. Knowledge of data modelling, schema design, and query optimization techniques. Experience in building batch and streaming data pipelines. Excellent communication and collaboration skills. Ability to work in a fast-paced and dynamic environment. Preferred Skills: Familiarity with orchestration tools like Apache Airflow, Cloud Composer, or similar. Working experience on other cloud stack for ETL(AWS or Azure) is a plus Experience with GCP’s AI/ML platform (Vertex AI, BigQuery ML, or AutoML) for building, evaluating, or serving models is a strong advantage. Hands-on experience building or supporting LLM/GenAI pipelines using frameworks such as LangChain, LlamaIndex, or Vertex AI Agent Builder. Familiarity with AI/ML data preparation practices, including feature engineering, dataset curation, and data versioning for model training workflows. Knowledge of CI/CD practices and tools like Git, Jenkins, or Terraform for pipeline deployments Understanding of data security, governance, and compliance practices on GCP. Education & Certifications: Bachelor’s degree in Computer Science, Engineering GCP Data Engineer or Associate Cloud Engineer certification (preferred but not mandatory) How You Succeed You successfully deliver complex projects on time and within scope, with clear stakeholder alignment throughout Your strategic recommendations and measurement frameworks directly influence client business decisions and outcomes Clients view you as a trusted advisor who deeply understands their business and data landscape You actively develop the skills and careers of team members under your mentorship You drive innovation through reusable frameworks, templates, and process improvements that benefit the broader team You maintain high client satisfaction What's In It For You ✨ This is a full time job (en relación de dependencia). Hybrid Salary (50% of net salary paid in USD) 20 working days vacation plus all Argentina public holidays. Private healthcare (OSDE 360). Adaptive/hybrid working from our offices in HIT Polo (Palermo). Free breakfast and lunch when in office. Access to learning and development opportunities. Mobility programmes - work from another country for up to 30 days! | What happens next? We know searching for a job is tough and that you want to find the best career and employer for you. We also want to ensure that this position is the best fit for both you and us. Therefore, you will participate in a comprehensive interview process that includes skills interviews with our team. The goal of this process is to allow you to get to know us as we learn more about you. A note on our offices: We pride ourselves in being a company with an office-centric culture and, for the majority of roles we expect people to be in commuting distance of the office and come in for around 3 days per week. Brainlabs actively seeks and encourages applications from candidates with diverse backgrounds and identities. We are proud to be an equal opportunity workplace: we are committed to equal opportunity for all applicants and employees regardless of age, disability, sex, gender reassignment, sexual orientation, pregnancy and maternity, race, religion, or belief, and marriage and civil partnerships. If you have a disability or special need that requires accommodation during the application process, please let us know! Please note that we will never ask you to transfer cash or make any other payment to us in order to apply for a role or to work for Brainlabs. Any such asks are fraudulent and should be reported to the appropriate authorities in your area.",
+  "technologies": {
+    "required_technologies": [
+      {
+        "name": "gcp",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "cloud functions",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "cloud run",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "cloud scheduler",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "bigquery",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "dataproc",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "google dataflow",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "cloud data fusion",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "pub/sub",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "cloud storage",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "cloud sql",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "python",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "sql",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "apache spark",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "looker",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "cloud logging",
+        "min_experience": null,
+        "max_experience": null
+      }
+    ],
+    "nice_to_have_technologies": [
+      {
+        "name": "apache airflow",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "cloud composer",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "aws",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "azure",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "vertex ai",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "vertex ai feature store",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "bigquery ml",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "automl",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "langchain",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "llamaindex",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "vertex ai agent builder",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "dvc",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "git",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "jenkins",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "terraform",
+        "min_experience": null,
+        "max_experience": null
+      }
+    ],
+    "discarded_technologies": [
+      "LLM",
+      "GenAI",
+      "Retrieval-Augmented Generation (RAG)",
+      "vector data stores"
+    ]
+  },
+  "concepts": {
+    "required_concepts": [
+      {
+        "name": "cloud computing",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "scalability",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "data pipelines",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "etl",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "elt",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "performance optimization",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "data integration",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "data warehousing",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "data marts",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "data modeling",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "database design",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "query optimization",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "data cleaning",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "batch processing",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "stream processing",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "data quality",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "monitoring and alerting",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "logging",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "requirements gathering",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "data architecture",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "technical documentation",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "version control",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "cost optimization",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "cross functional collaboration",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "attention to detail",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "adaptability",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "mentoring",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "stakeholder management",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "client facing communication",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "business process improvement",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "publish subscribe",
+        "min_experience": null,
+        "max_experience": null
+      }
+    ],
+    "nice_to_have_concepts": [
+      {
+        "name": "multi cloud",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "large language models",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "generative ai",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "retrieval augmented generation",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "vector databases",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "context engineering",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "artificial intelligence",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "machine learning",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "model training",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "feature engineering",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "data labeling",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "model evaluation",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "model deployment",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "ci/cd",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "data governance",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "regulatory compliance",
+        "min_experience": null,
+        "max_experience": null
+      }
+    ],
+    "discarded_concepts": [
+      "data engineering",
+      "data versioning",
+      "dataset curation",
+      "workflow orchestration",
+      "data security"
+    ]
+  },
+  "seniority": {
+    "label": null,
+    "min_experience": 2,
+    "max_experience": null,
+    "evidence": null
+  },
+  "role": {
+    "name": "data engineer",
+    "evidence": "Data Engineer",
+    "unmatched": null
+  },
+  "degree": {
+    "degrees": [
+      {
+        "name": "computer science",
+        "evidence": "Bachelor’s degree in Computer Science"
+      },
+      {
+        "name": "engineering",
+        "evidence": "Bachelor’s degree in Computer Science, Engineering"
+      }
+    ],
+    "unmatched": []
+  }
+}

@@ -1,0 +1,125 @@
+{
+  "header": {
+    "position_name": "Desarrollador.NET JR",
+    "company_name": "pss | beyond cybersecurity",
+    "location": "Ciudad Autónoma de Buenos Aires, Provincia de Buenos Aires, Argentina",
+    "modality": null,
+    "contract_type": "Jornada completa",
+    "posted_raw": "hace 6 días",
+    "posted_days_ago": 6,
+    "source_url": "https://www.linkedin.com/jobs/view/4449909406/",
+    "linkedin_job_id": 4449909406
+  },
+  "scrape_date": "2026-08-12",
+  "body": "En PSS estamos buscando un Desarrollador .NET Junior para sumarse a nuestro equipo! Si te apasiona el desarrollo de software, querés seguir aprendiendo y buscás un entorno donde crecer profesionalmente, esta oportunidad es para vos. Responsabilidades Desarrollo y mantenimiento de aplicaciones en .NET. Participar en el análisis, diseño e implementación de nuevas funcionalidades. Corregir errores y optimizar aplicaciones existentes. Trabajar en equipo con desarrolladores y otras áreas de tecnología. Participar en revisiones de código y procesos de mejora continua. Requisitos Experiencia de al menos 1 año desarrollando con .NET / C#. Conocimientos de SQL Server. Manejo de HTML, CSS y JavaScript. Conocimientos de Git. Estudiante o graduado de carreras de Sistemas o afines (deseable). Perfil proactivo, con ganas de aprender y trabajar en equipo. Si tu perfil se adapta a nuestra busqueda Esperamos tu postulacion!",
+  "technologies": {
+    "required_technologies": [
+      {
+        "name": ".net",
+        "min_experience": 1,
+        "max_experience": null
+      },
+      {
+        "name": "c#",
+        "min_experience": 1,
+        "max_experience": null
+      },
+      {
+        "name": "sql server",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "html",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "css",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "javascript",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "git",
+        "min_experience": null,
+        "max_experience": null
+      }
+    ],
+    "nice_to_have_technologies": [],
+    "discarded_technologies": []
+  },
+  "concepts": {
+    "required_concepts": [
+      {
+        "name": "performance optimization",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "troubleshooting",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "code review",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "cross functional collaboration",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "teamwork",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "proactivity",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "continuous learning",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "version control",
+        "min_experience": null,
+        "max_experience": null
+      }
+    ],
+    "nice_to_have_concepts": [],
+    "discarded_concepts": [
+      "desarrollo de software",
+      "mejora continua"
+    ]
+  },
+  "seniority": {
+    "label": "junior",
+    "min_experience": 1,
+    "max_experience": null,
+    "evidence": "Desarrollador .NET Junior"
+  },
+  "role": {
+    "name": "software dev",
+    "evidence": "Desarrollador.NET Junior",
+    "unmatched": null
+  },
+  "degree": {
+    "degrees": [
+      {
+        "name": "systems engineering",
+        "evidence": "Estudiante o graduado de carreras de Sistemas o afines"
+      }
+    ],
+    "unmatched": []
+  }
+}

@@ -1,0 +1,241 @@
+{
+  "header": {
+    "position_name": "Data Engineer",
+    "company_name": "ExxonMobil",
+    "location": "Buenos Aires, Provincia de Buenos Aires, Argentina",
+    "modality": null,
+    "contract_type": "Jornada completa",
+    "posted_raw": "hace 1 semana",
+    "posted_days_ago": 7,
+    "source_url": "https://www.linkedin.com/jobs/view/4420972947/",
+    "linkedin_job_id": 4420972947
+  },
+  "scrape_date": "2026-08-12",
+  "body": "About Us At ExxonMobil, our vision is to lead in energy innovations that advance modern living and a net-zero future. As one of the world’s largest publicly traded energy and chemical companies, we are powered by a unique and diverse workforce fueled by the pride in what we do and what we stand for. The success of our Upstream, Product Solutions and Low Carbon Solutions businesses is the result of the talent, curiosity and drive of our people. They bring solutions every day to optimize our strategy in energy, chemicals, lubricants and lower-emissions technologies. We invite you to bring your ideas to ExxonMobil to help create sustainable solutions that improve quality of life and meet society’s evolving needs. Learn more about our What and our Why and how we can work together . More About Us Our Global Business Center (GBC) in Buenos Aires was established in 2004 and our diverse and multinational workforce of more than 2800 colleagues have been powering ExxonMobil’s global businesses ever since. We are proud to be part of an inclusive, safe, and vibrant work environment. The IT department is seeking new candidates to its dynamic team. The department provides support worldwide to the Organizations all along the value chain from exploration through site development to production. What Role You Will Play In Our Team The Data Engineer is responsible for designing, building, and maintaining scalable data pipelines and platforms that support data-driven decision making across the organization. This role focuses on ensuring data availability, quality, and reliability by integrating data from multiple sources and enabling efficient data processing and consumption. You will work closely with cross-functional teams, including Data Engineers, BI developers, and business stakeholders, to deliver high-quality data solutions. Based in Buenos Aires, you will collaborate with global teams and contribute to the evolution of modern data platforms and analytics capabilities. While this description covers a broad range of technologies, we are hiring for multiple teams. We value strong experience in some of these areas and a willingness to learn others, you are not expected to meet every requirement to apply. What You Will Do Design, build, and maintain data pipelines and data integration workflows Ingest, transform, and optimize data from multiple sources and systems Ensure data quality, consistency, and reliability across data platforms Collaborate with data consumers (BI, analytics, business teams) to deliver usable datasets Monitor and troubleshoot data pipelines and data-related issues Contribute to data platform improvements, scalability, and performance Participate in Agile processes and collaborate with cross-functional teams Support documentation and knowledge sharing for data solutions About You Required qualifications: Bachelor’s degree in Computer Science, Engineering, or a related field (must be graduated) 2+ years of experience in Data Engineering, Data Platforms, or related roles. Experience working with data processing and transformation (SQL and Python) Experience with cloud data platforms (Databricks and/or Snowflake) Experience with data integration tools or platforms (e.g., Azure Data Factory or similar) Experience with relational databases and data modeling concepts Exposure to big data or distributed processing frameworks Basic understanding of APIs and data ingestion patterns Experience working with version control tools (e.g., Git) Strong problem-solving and troubleshooting skills Experience working in Agile or collaborative environments Good English communication skills (written and spoken) Nice to have: Experience with DBT Experience with CI/CD for data pipelines, GitHub actions, YAML. General knowledge of PI historian technology Familiarity with data visualization tools (Power BI, Tableau) Exposure to data governance, data quality, or metadata management The level and seniority for this position will be determined based on the candidate’s experience and skills. We welcome candidates with different experience levels who are eager to grow in Data Engineering. Your Benefits An ExxonMobil career is one designed to last. Our commitment to you runs deep: our employees grow personally and professionally, with benefits built on our core categories of health, security, finance, and life. We offer you: Competitive health coverage Flexible working hours 3-week vacation up to 5 years of service plus 1 personal day Online training tools Gym discounts and activities for sport and general well-being A solid ergonomic program Free vaccination campaigns Medical assistance available in the offices Equipped maternity rooms Among others More information on our Company’s benefits can be found here . Please note benefits may be changed from time to time without notice, subject to applicable law. Stay connected with us Learn more at our website Follow us on LinkedIN and Instagram Like us on Facebook Subscribe our channel at YouTube Equal Opportunity Employer All qualified applicants will receive consideration for employment without regard to race, color, religion, sex, age, sexual orientation, gender identity, national origin, citizenship status, protected veteran status, genetic information, or physical or mental disability. Corporate Separateness Nothing herein is intended to override the corporate separateness of local entities. Working relationships discussed herein do not necessarily represent a reporting connection, but may reflect a functional guidance, stewardship, or service relationship. Exxon Mobil Corporation has numerous affiliates, many with names that include ExxonMobil, Exxon, Esso and Mobil. For convenience and simplicity, those terms and terms like corporation, company, our, we and its are sometimes used as abbreviated references to specific affiliates or affiliate groups. Abbreviated references describing global or regional operational organizations and global or regional business lines are also sometimes used for convenience and simplicity. Similarly, ExxonMobil has business relationships with thousands of customers, suppliers, governments, and others. For convenience and simplicity, words like venture, joint venture, partnership, co-venturer, and partner are used to indicate business relationships involving common activities and interests, and those words may not indicate precise legal relationships Alternate Location: Nothing herein is intended to override the corporate separateness of local entities. Working relationships discussed herein do not necessarily represent a reporting connection, but may reflect a functional guidance, stewardship, or service relationship. Exxon Mobil Corporation has numerous affiliates, many with names that include ExxonMobil, Exxon, Esso and Mobil. For convenience and simplicity, those terms and terms like corporation, company, our, we and its are sometimes used as abbreviated references to specific affiliates or affiliate groups. Abbreviated references describing global or regional operational organizations and global or regional business lines are also sometimes used for convenience and simplicity. Similarly, ExxonMobil has business relationships with thousands of customers, suppliers, governments, and others. For convenience and simplicity, words like venture, joint venture, partnership, co-venturer, and partner are used to indicate business relationships involving common activities and interests, and those words may not indicate precise legal relationships.",
+  "technologies": {
+    "required_technologies": [
+      {
+        "name": "sql",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "python",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "databricks",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "snowflake",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "azure data factory",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "git",
+        "min_experience": null,
+        "max_experience": null
+      }
+    ],
+    "nice_to_have_technologies": [
+      {
+        "name": "dbt",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "github actions",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "yaml",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "osisoft pi",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "power bi",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "tableau",
+        "min_experience": null,
+        "max_experience": null
+      }
+    ],
+    "discarded_technologies": [
+      "APIs",
+      "CI/CD"
+    ]
+  },
+  "concepts": {
+    "required_concepts": [
+      {
+        "name": "data pipelines",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "data integration",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "data quality",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "relational databases",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "data modeling",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "big data",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "distributed processing",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "cloud computing",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "scalability",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "performance optimization",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "monitoring and alerting",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "troubleshooting",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "version control",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "agile",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "technical documentation",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "knowledge sharing",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "problem solving",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "cross functional collaboration",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "english proficiency",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "api design",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "business intelligence",
+        "min_experience": null,
+        "max_experience": null
+      }
+    ],
+    "nice_to_have_concepts": [
+      {
+        "name": "ci/cd",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "data visualization",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "data governance",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "data catalog",
+        "min_experience": null,
+        "max_experience": null
+      }
+    ],
+    "discarded_concepts": []
+  },
+  "seniority": {
+    "label": null,
+    "min_experience": 2,
+    "max_experience": null,
+    "evidence": null
+  },
+  "role": {
+    "name": "data engineer",
+    "evidence": "Data Engineer",
+    "unmatched": null
+  },
+  "degree": {
+    "degrees": [
+      {
+        "name": "computer science",
+        "evidence": "Bachelor’s degree in Computer Science, Engineering, or a related field"
+      },
+      {
+        "name": "engineering",
+        "evidence": "Bachelor’s degree in Computer Science, Engineering, or a related field"
+      }
+    ],
+    "unmatched": []
+  }
+}

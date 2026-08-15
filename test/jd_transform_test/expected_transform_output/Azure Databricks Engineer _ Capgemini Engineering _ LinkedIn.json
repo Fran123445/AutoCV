@@ -1,0 +1,298 @@
+{
+  "header": {
+    "position_name": "Azure Databricks Engineer",
+    "company_name": "Capgemini Engineering",
+    "location": "Buenos Aires, Provincia de Buenos Aires, Argentina",
+    "modality": null,
+    "contract_type": "Jornada completa",
+    "posted_raw": "hace 1 semana",
+    "posted_days_ago": 7,
+    "source_url": "https://www.linkedin.com/jobs/view/4446866988/",
+    "linkedin_job_id": 4446866988
+  },
+  "scrape_date": "2026-08-12",
+  "body": "At Capgemini Engineering, the world leader in engineering services, we bring together a global team of engineers, scientists, and architects to help the world’s most innovative companies unleash their potential. From autonomous cars to life-saving robots, our digital and software technology experts think outside the box as they provide unique R&D and engineering services across all industries. Join us for a career full of opportunities. Where you can make a difference. Where no two days are the same. Job Description Azure & Databricks Platform Support Engineer (SSr to Sr) Job Summary We are seeking an experienced Azure & Databricks Platform Support Engineer to manage, monitor, and optimize enterprise data platforms built on Azure and Databricks. The role involves ensuring platform reliability, performance, security, and operational excellence while supporting data engineering workloads, analytics platforms, and business-critical data pipelines. We are looking for a strong candidate who can work independently with customer. Key Responsibilities Monitor and support Azure Databricks workspaces, clusters, jobs, workflows, and Delta Lake environments. Provide L2/L3 support for Azure Data Platform services including Azure Databricks, Azure Data Factory (ADF), Azure Synapse, Azure Data Lake Storage (ADLS), Azure Key Vault, and Azure DevOps. Troubleshoot and resolve production incidents, job failures, performance bottlenecks, and data pipeline issues. Monitor scheduled workflows, triggers, pipelines, and batch processes ensuring SLA compliance. Implement proactive monitoring, alerting, logging, and observability using Azure Monitor, Log Analytics, and Application Insights. Manage platform security, RBAC, service principals, secrets, and data access controls. Support deployment automation through CI/CD pipelines using Azure DevOps. Perform platform maintenance activities including upgrades, patching, cluster optimization, and configuration management. Collaborate with upstream and downstream application teams, business users, and data engineering teams to resolve data integration issues. Create and maintain operational runbooks, knowledge articles, and support documentation. Drive continuous improvement initiatives focused on platform stability, performance tuning, and cost optimization. Support disaster recovery, backup strategies, and high-availability requirements. Required Skills Strong hands-on experience with Azure Databricks, PySpark, Spark SQL, and Python. Experience supporting Azure Data Factory, Azure Data Lake Storage (ADLS), Azure Synapse Analytics, and Azure SQL. Knowledge of Delta Lake, Unity Catalog, Databricks Workflows, and cluster management. Experience with monitoring and troubleshooting distributed data processing environments. Hands-on experience with Azure DevOps, Git, CI/CD pipelines, and Infrastructure as Code. Understanding of cloud security, identity management, networking, and governance in Azure. Experience with ETL/ELT frameworks and large-scale data processing. Strong analytical and problem-solving skills. Preferred Qualifications Azure Data Engineer Associate (DP-203). Databricks Certified Data Engineer Associate/Professional. Microsoft Azure Administrator Associate. Experience 3+ years of Data Platform experience. 3+ years of hands-on Azure Databricks support and administration. Experience supporting production environments in a 24x7 or managed services model. # LI-LB21 Job Description - Grade Specific Has more than a year of relevant work experience. Solid understanding of programming concepts, software design and software development principles. Consistently works to direction with minimal supervision, producing accurate and reliable results. Individuals are expected to be able to work on a range of tasks and problems, demonstrating their ability to apply their skills and knowledge. Organises own time to deliver against tasks set by others with a mid term horizon. Works co-operatively with others to achieve team goals and has a direct and positive impact on project performance and make decisions based on their understanding of the situation, not just the rules. Capgemini is a global business and technology transformation partner, helping organizations to accelerate their dual transition to a digital and sustainable world, while creating tangible impact for enterprises and society. It is a responsible and diverse group of 340,000 team members in more than 50 countries. With its strong over 55-year heritage, Capgemini is trusted by its clients to unlock the value of technology to address the entire breadth of their business needs. It delivers end-to-end services and solutions leveraging strengths from strategy and design to engineering, all fueled by its market leading capabilities in AI, generative AI, cloud and data, combined with its deep industry expertise and partner ecosystem.",
+  "technologies": {
+    "required_technologies": [
+      {
+        "name": "azure",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "databricks",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "azure databricks",
+        "min_experience": 3,
+        "max_experience": null
+      },
+      {
+        "name": "pyspark",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "spark sql",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "python",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "azure data factory",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "azure data lake storage",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "azure synapse",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "azure sql database",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "delta lake",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "unity catalog",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "azure key vault",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "azure devops",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "azure monitor",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "application insights",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "git",
+        "min_experience": null,
+        "max_experience": null
+      }
+    ],
+    "nice_to_have_technologies": [],
+    "discarded_technologies": [
+      "Log Analytics",
+      "Databricks Workflows"
+    ]
+  },
+  "concepts": {
+    "required_concepts": [
+      {
+        "name": "monitoring and alerting",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "logging",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "observability",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "troubleshooting",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "incident management",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "performance optimization",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "data pipelines",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "batch processing",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "service level objectives",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "authorization",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "identity and access management",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "secrets management",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "networking",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "ci/cd",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "infrastructure as code",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "data integration",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "runbooks",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "technical documentation",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "cost optimization",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "disaster recovery",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "high availability",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "patch management",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "distributed processing",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "etl",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "elt",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "big data",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "problem solving",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "autonomy",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "teamwork",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "cross functional collaboration",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "version control",
+        "min_experience": null,
+        "max_experience": null
+      }
+    ],
+    "nice_to_have_concepts": [],
+    "discarded_concepts": [
+      "operational excellence",
+      "data engineering",
+      "platform reliability",
+      "cloud security",
+      "governance",
+      "configuration management",
+      "backup strategies",
+      "cluster management",
+      "software design",
+      "software development principles",
+      "programming concepts",
+      "managed services model"
+    ]
+  },
+  "seniority": {
+    "label": "ssr",
+    "min_experience": 3,
+    "max_experience": null,
+    "evidence": "Azure & Databricks Platform Support Engineer (SSr to Sr)"
+  },
+  "role": {
+    "name": "data engineer",
+    "evidence": "Azure Databricks Engineer",
+    "unmatched": null
+  },
+  "degree": {
+    "degrees": [],
+    "unmatched": []
+  }
+}

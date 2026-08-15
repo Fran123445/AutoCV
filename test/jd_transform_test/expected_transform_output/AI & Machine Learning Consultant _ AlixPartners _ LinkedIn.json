@@ -1,0 +1,252 @@
+{
+  "header": {
+    "position_name": "AI & Machine Learning Consultant",
+    "company_name": "AlixPartners",
+    "location": "Buenos Aires, Provincia de Buenos Aires, Argentina",
+    "modality": null,
+    "contract_type": "Jornada completa",
+    "posted_raw": "hace 1 semana",
+    "posted_days_ago": 7,
+    "source_url": "https://www.linkedin.com/jobs/view/4378936628/",
+    "linkedin_job_id": 4378936628
+  },
+  "scrape_date": "2026-08-15",
+  "body": "At AlixPartners, we solve the most complex and critical challenges by moving quickly from analysis to action when it really matters; creating value that has a lasting impact on companies, their people, and the communities they serve. By understanding, respecting, and honoring the needs of our employees, clients, and communities, AlixPartners actively promotes an inclusive environment. We strongly believe in the value that diversity brings to our experiences and are committed to the perpetual enhancements of initiatives, policies, and practices. We hold ourselves accountable by providing the space for authenticity, growth, and equity for everyone. AlixPartners has embraced a hybrid work model to provide flexibility and support our employees’ work-life integration. Our hybrid model combines a mix of in-person (at client site or AlixPartners office) and remote working. Travel is part of this position, but the frequency may vary based on client, team, and individual circumstances. What You’ll Do Are you passionate about a future that exceeds your expectations? Here, at AlixPartners your passion becomes your career. We work in smaller and more senior teams that bring deep industry and functional knowledge to our clients. You will sit shoulder-to-shoulder with owners, boards, and CEOs to address the issues that sit at the top of their agendas - and often become front-page news. If you join our practice, you will work with financially secure, under-performing and distressed companies across a variety of urgent, high impact situations. Our elite professionals are recognized experts in their respective fields, bringing to bear their skills and experience to craft measurable, improved outcomes for our clients. Role The AI & Machine Learning Consultant is a full time employee role located in Buenos Aires, and the main responsabilities are: Model Development: Develop and refine models for pricing, forecasting future trends, and scoring to assess various metrics. Data Collection and Exploration: Gather and explore data to uncover insights that can help companies make better decisions. Work with Generative AI: Utilize generative AI technologies to automate processes traditionally performed by analysts. Dashboard Creation: Build dashboards for decision-making, providing a visual interpretation of data. Reporting: Generate reports with findings that can enhance business revenue and inform strategic decisions. We are open to hire different seniority levels, apply to learn more! This description is not designed to encompass a comprehensive listing of required activities, duties or responsibilities. What You’ll Need Bachelor’s degree with concentration in Computer Science, Engineering or another quantitative field More than 1 year of related experience. Proficient in Python for machine learning tasks. Machine Learning: Proficient in machine learning libraries such as Scikit-learn and XGBoost, with hands-on experience in building classification, regression, clustering, and forecasting models. Data Manipulation and Analysis: Proficient in using Pandas and NumPy. Statistical Analysis: Skilled in using SciPy and Statsmodels for advanced statistical analysis. Data Visualization: Competent in creating insightful visualizations with Matplotlib, Seaborn, and tools like Tableau or Power BI. Natural Language Processing: Familiar with text analysis using NLTK. SQL: Solid understanding of SQL for data querying and management. Databricks: Basic experience with Databricks for managing large-scale data processing. Apache Spark: Fundamental knowledge of PySpark for big data processing. Generative AI: Awareness of the capabilities and applications of generative AI technologies. Strong verbal and written communication skills in English. Ability to synthesize the requests received from team members at client sites. Capability to be a creative, innovative problem solver —but using simple ideas Motivated to discover and learn new analytical techniques and software tools to improve the quality of our work Authorized to work in applicable country and travel freely internationally without restrictions or visa sponsorship Desire to actively engage in geographically dispersed teams. Ability and willingness to work long hours and travel if necessary, to meet client demands Ability to work full time in an office and remote environment; physically able to sit/stand at a computer and work in front of a computer screen for significant portions of the workday. This description is not designed to encompass a comprehensive listing of required activities, duties or responsibilities. AlixPartners is a results-driven global consulting firm that specializes in helping businesses successfully address their most complex and critical challenges. You can learn more about our Culture and Career Development opportunities , The firm offers market-leading benefits that provide flexible options to support our employee’s needs including health benefits to help prioritise their physical and emotional well-being, time-off policies to help to recharge and financial/ retirement benefits that offer income protection and support long-term planning. The benefit type and level differ per location. AlixPartners is an equal opportunity employer. All qualified applicants will receive consideration for employment without regard to, among other things, race, colour, religion, sex, sexual orientation, gender identity, national origin, age, veteran status, or disability.",
+  "technologies": {
+    "required_technologies": [
+      {
+        "name": "python",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "scikit-learn",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "xgboost",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "pandas",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "numpy",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "scipy",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "statsmodels",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "matplotlib",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "seaborn",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "tableau",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "power bi",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "nltk",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "sql",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "databricks",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "apache spark",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "pyspark",
+        "min_experience": null,
+        "max_experience": null
+      }
+    ],
+    "nice_to_have_technologies": [],
+    "discarded_technologies": [
+      "machine learning",
+      "generative AI",
+      "Natural Language Processing"
+    ]
+  },
+  "concepts": {
+    "required_concepts": [
+      {
+        "name": "machine learning",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "artificial intelligence",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "generative ai",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "classification",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "regression",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "clustering",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "forecasting",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "data analysis",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "exploratory data analysis",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "statistics",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "data visualization",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "dashboarding",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "reporting",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "natural language processing",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "big data",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "distributed processing",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "process automation",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "english proficiency",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "client facing communication",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "problem solving",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "teamwork",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "continuous learning",
+        "min_experience": null,
+        "max_experience": null
+      },
+      {
+        "name": "model training",
+        "min_experience": null,
+        "max_experience": null
+      }
+    ],
+    "nice_to_have_concepts": [],
+    "discarded_concepts": []
+  },
+  "seniority": {
+    "label": null,
+    "min_experience": 1,
+    "max_experience": null,
+    "evidence": null
+  },
+  "role": {
+    "name": "ai engineer",
+    "evidence": "AI & Machine Learning Consultant",
+    "unmatched": null
+  },
+  "degree": {
+    "degrees": [
+      {
+        "name": "computer science",
+        "evidence": "Bachelor’s degree with concentration in Computer Science"
+      },
+      {
+        "name": "engineering",
+        "evidence": "Bachelor’s degree with concentration in Computer Science, Engineering or another quantitative field"
+      }
+    ],
+    "unmatched": [
+      "another quantitative field"
+    ]
+  }
+}
