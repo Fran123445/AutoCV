@@ -290,6 +290,86 @@
       "parents": []
     },
     {
+      "name": "julia",
+      "category": "language",
+      "aliases": [],
+      "parents": []
+    },
+    {
+      "name": "apex",
+      "category": "language",
+      "aliases": [
+        "salesforce apex"
+      ],
+      "parents": [
+        "salesforce"
+      ]
+    },
+    {
+      "name": "f#",
+      "category": "language",
+      "aliases": [
+        "fsharp"
+      ],
+      "parents": [
+        ".net"
+      ]
+    },
+    {
+      "name": "clojure",
+      "category": "language",
+      "aliases": [],
+      "parents": []
+    },
+    {
+      "name": "erlang",
+      "category": "language",
+      "aliases": [],
+      "parents": []
+    },
+    {
+      "name": "hcl",
+      "category": "language",
+      "aliases": [
+        "hashicorp configuration language"
+      ],
+      "parents": [
+        "terraform"
+      ]
+    },
+    {
+      "name": "bicep",
+      "category": "language",
+      "aliases": [],
+      "parents": [
+        "azure"
+      ]
+    },
+    {
+      "name": "cypher",
+      "category": "language",
+      "aliases": [],
+      "parents": [
+        "neo4j"
+      ]
+    },
+    {
+      "name": "sparql",
+      "category": "language",
+      "aliases": [],
+      "parents": []
+    },
+    {
+      "name": "pl/pgsql",
+      "category": "language",
+      "aliases": [
+        "plpgsql"
+      ],
+      "parents": [
+        "postgresql"
+      ]
+    },
+    {
       "name": "html",
       "category": "markup",
       "aliases": [
@@ -330,7 +410,8 @@
         "dotnet",
         ".net core",
         ".net framework",
-        "net core"
+        "net core",
+        "dotnet framework"
       ],
       "parents": []
     },
@@ -360,6 +441,22 @@
       "parents": [
         "javascript"
       ]
+    },
+    {
+      "name": "jvm",
+      "category": "runtime",
+      "aliases": [
+        "java virtual machine"
+      ],
+      "parents": []
+    },
+    {
+      "name": "webassembly",
+      "category": "runtime",
+      "aliases": [
+        "wasm"
+      ],
+      "parents": []
     },
     {
       "name": "react",
@@ -442,6 +539,51 @@
       ]
     },
     {
+      "name": "blazor",
+      "category": "frontend_framework",
+      "aliases": [],
+      "parents": [
+        ".net"
+      ]
+    },
+    {
+      "name": "remix",
+      "category": "frontend_framework",
+      "aliases": [],
+      "parents": [
+        "react"
+      ]
+    },
+    {
+      "name": "solid.js",
+      "category": "frontend_framework",
+      "aliases": [
+        "solidjs"
+      ],
+      "parents": [
+        "javascript"
+      ]
+    },
+    {
+      "name": "ember.js",
+      "category": "frontend_framework",
+      "aliases": [
+        "ember",
+        "emberjs"
+      ],
+      "parents": [
+        "javascript"
+      ]
+    },
+    {
+      "name": "htmx",
+      "category": "frontend_framework",
+      "aliases": [],
+      "parents": [
+        "html"
+      ]
+    },
+    {
       "name": "jquery",
       "category": "library",
       "aliases": [],
@@ -470,6 +612,25 @@
     },
     {
       "name": "bootstrap",
+      "category": "styling",
+      "aliases": [],
+      "parents": [
+        "css"
+      ]
+    },
+    {
+      "name": "styled-components",
+      "category": "styling",
+      "aliases": [
+        "styled components"
+      ],
+      "parents": [
+        "css",
+        "react"
+      ]
+    },
+    {
+      "name": "css modules",
       "category": "styling",
       "aliases": [],
       "parents": [
@@ -604,6 +765,280 @@
       ]
     },
     {
+      "name": "rxjs",
+      "category": "library",
+      "aliases": [],
+      "parents": [
+        "javascript"
+      ]
+    },
+    {
+      "name": "zustand",
+      "category": "library",
+      "aliases": [],
+      "parents": [
+        "react"
+      ]
+    },
+    {
+      "name": "tanstack query",
+      "category": "library",
+      "aliases": [
+        "react query"
+      ],
+      "parents": [
+        "react"
+      ]
+    },
+    {
+      "name": "react hook form",
+      "category": "library",
+      "aliases": [],
+      "parents": [
+        "react"
+      ]
+    },
+    {
+      "name": "three.js",
+      "category": "library",
+      "aliases": [
+        "threejs"
+      ],
+      "parents": [
+        "javascript"
+      ]
+    },
+    {
+      "name": "d3.js",
+      "category": "library",
+      "aliases": [
+        "d3"
+      ],
+      "parents": [
+        "javascript"
+      ]
+    },
+    {
+      "name": "chart.js",
+      "category": "library",
+      "aliases": [
+        "chartjs"
+      ],
+      "parents": [
+        "javascript"
+      ]
+    },
+    {
+      "name": "lodash",
+      "category": "library",
+      "aliases": [],
+      "parents": [
+        "javascript"
+      ]
+    },
+    {
+      "name": "axios",
+      "category": "library",
+      "aliases": [],
+      "parents": [
+        "javascript"
+      ]
+    },
+    {
+      "name": "ant design",
+      "category": "library",
+      "aliases": [
+        "antd"
+      ],
+      "parents": [
+        "react"
+      ]
+    },
+    {
+      "name": "chakra ui",
+      "category": "library",
+      "aliases": [],
+      "parents": [
+        "react"
+      ]
+    },
+    {
+      "name": "shadcn/ui",
+      "category": "library",
+      "aliases": [
+        "shadcn"
+      ],
+      "parents": [
+        "react",
+        "tailwind css"
+      ]
+    },
+    {
+      "name": "prisma",
+      "category": "library",
+      "aliases": [
+        "prisma orm"
+      ],
+      "parents": [
+        "typescript"
+      ]
+    },
+    {
+      "name": "typeorm",
+      "category": "library",
+      "aliases": [],
+      "parents": [
+        "typescript"
+      ]
+    },
+    {
+      "name": "sequelize",
+      "category": "library",
+      "aliases": [],
+      "parents": [
+        "node.js"
+      ]
+    },
+    {
+      "name": "sqlalchemy",
+      "category": "library",
+      "aliases": [],
+      "parents": [
+        "python"
+      ]
+    },
+    {
+      "name": "alembic",
+      "category": "library",
+      "aliases": [],
+      "parents": [
+        "sqlalchemy"
+      ]
+    },
+    {
+      "name": "pydantic",
+      "category": "library",
+      "aliases": [],
+      "parents": [
+        "python"
+      ]
+    },
+    {
+      "name": "celery",
+      "category": "library",
+      "aliases": [],
+      "parents": [
+        "python"
+      ]
+    },
+    {
+      "name": "requests",
+      "category": "library",
+      "aliases": [
+        "python requests"
+      ],
+      "parents": [
+        "python"
+      ]
+    },
+    {
+      "name": "beautifulsoup",
+      "category": "library",
+      "aliases": [
+        "bs4",
+        "beautiful soup"
+      ],
+      "parents": [
+        "python"
+      ]
+    },
+    {
+      "name": "scrapy",
+      "category": "library",
+      "aliases": [],
+      "parents": [
+        "python"
+      ]
+    },
+    {
+      "name": "streamlit",
+      "category": "library",
+      "aliases": [],
+      "parents": [
+        "python"
+      ]
+    },
+    {
+      "name": "gradio",
+      "category": "library",
+      "aliases": [],
+      "parents": [
+        "python"
+      ]
+    },
+    {
+      "name": "dash",
+      "category": "library",
+      "aliases": [
+        "plotly dash"
+      ],
+      "parents": [
+        "python"
+      ]
+    },
+    {
+      "name": "dapper",
+      "category": "library",
+      "aliases": [],
+      "parents": [
+        "c#"
+      ]
+    },
+    {
+      "name": "automapper",
+      "category": "library",
+      "aliases": [],
+      "parents": [
+        "c#"
+      ]
+    },
+    {
+      "name": "mediatr",
+      "category": "library",
+      "aliases": [],
+      "parents": [
+        "c#"
+      ]
+    },
+    {
+      "name": "lombok",
+      "category": "library",
+      "aliases": [
+        "project lombok"
+      ],
+      "parents": [
+        "java"
+      ]
+    },
+    {
+      "name": "jackson",
+      "category": "library",
+      "aliases": [],
+      "parents": [
+        "java"
+      ]
+    },
+    {
+      "name": "jpa",
+      "category": "library",
+      "aliases": [
+        "java persistence api"
+      ],
+      "parents": [
+        "java"
+      ]
+    },
+    {
       "name": "express",
       "category": "backend_framework",
       "aliases": [
@@ -669,6 +1104,92 @@
       ]
     },
     {
+      "name": "asp.net mvc",
+      "category": "backend_framework",
+      "aliases": [],
+      "parents": [
+        ".net"
+      ]
+    },
+    {
+      "name": "asp.net web api",
+      "category": "backend_framework",
+      "aliases": [
+        "web api"
+      ],
+      "parents": [
+        ".net"
+      ]
+    },
+    {
+      "name": "spring mvc",
+      "category": "backend_framework",
+      "aliases": [],
+      "parents": [
+        "spring"
+      ]
+    },
+    {
+      "name": "spring security",
+      "category": "backend_framework",
+      "aliases": [],
+      "parents": [
+        "spring"
+      ]
+    },
+    {
+      "name": "spring data",
+      "category": "backend_framework",
+      "aliases": [
+        "spring data jpa"
+      ],
+      "parents": [
+        "spring"
+      ]
+    },
+    {
+      "name": "fastify",
+      "category": "backend_framework",
+      "aliases": [],
+      "parents": [
+        "node.js"
+      ]
+    },
+    {
+      "name": "koa",
+      "category": "backend_framework",
+      "aliases": [
+        "koa.js"
+      ],
+      "parents": [
+        "node.js"
+      ]
+    },
+    {
+      "name": "tornado",
+      "category": "backend_framework",
+      "aliases": [],
+      "parents": [
+        "python"
+      ]
+    },
+    {
+      "name": "codeigniter",
+      "category": "backend_framework",
+      "aliases": [],
+      "parents": [
+        "php"
+      ]
+    },
+    {
+      "name": "cakephp",
+      "category": "backend_framework",
+      "aliases": [],
+      "parents": [
+        "php"
+      ]
+    },
+    {
       "name": "react native",
       "category": "mobile",
       "aliases": [],
@@ -716,6 +1237,65 @@
       "aliases": [],
       "parents": [
         "javascript"
+      ]
+    },
+    {
+      "name": "expo",
+      "category": "mobile",
+      "aliases": [],
+      "parents": [
+        "react native"
+      ]
+    },
+    {
+      "name": "swiftui",
+      "category": "mobile",
+      "aliases": [],
+      "parents": [
+        "swift"
+      ]
+    },
+    {
+      "name": "jetpack compose",
+      "category": "mobile",
+      "aliases": [],
+      "parents": [
+        "kotlin"
+      ]
+    },
+    {
+      "name": "kotlin multiplatform",
+      "category": "mobile",
+      "aliases": [
+        "kmp"
+      ],
+      "parents": [
+        "kotlin"
+      ]
+    },
+    {
+      "name": "cordova",
+      "category": "mobile",
+      "aliases": [
+        "apache cordova",
+        "phonegap"
+      ],
+      "parents": []
+    },
+    {
+      "name": "capacitor",
+      "category": "mobile",
+      "aliases": [],
+      "parents": []
+    },
+    {
+      "name": ".net maui",
+      "category": "mobile",
+      "aliases": [
+        "maui"
+      ],
+      "parents": [
+        ".net"
       ]
     },
     {
@@ -890,6 +1470,93 @@
       "parents": []
     },
     {
+      "name": "microsoft access",
+      "category": "database",
+      "aliases": [
+        "ms access"
+      ],
+      "parents": []
+    },
+    {
+      "name": "sybase",
+      "category": "database",
+      "aliases": [],
+      "parents": []
+    },
+    {
+      "name": "informix",
+      "category": "database",
+      "aliases": [],
+      "parents": []
+    },
+    {
+      "name": "memcached",
+      "category": "database",
+      "aliases": [],
+      "parents": []
+    },
+    {
+      "name": "arangodb",
+      "category": "database",
+      "aliases": [],
+      "parents": []
+    },
+    {
+      "name": "timescaledb",
+      "category": "database",
+      "aliases": [],
+      "parents": [
+        "postgresql"
+      ]
+    },
+    {
+      "name": "singlestore",
+      "category": "database",
+      "aliases": [
+        "memsql"
+      ],
+      "parents": []
+    },
+    {
+      "name": "supabase",
+      "category": "database",
+      "aliases": [],
+      "parents": [
+        "postgresql"
+      ]
+    },
+    {
+      "name": "azure cosmos db",
+      "category": "database",
+      "aliases": [
+        "cosmos db",
+        "cosmosdb"
+      ],
+      "parents": [
+        "azure"
+      ]
+    },
+    {
+      "name": "amazon aurora",
+      "category": "database",
+      "aliases": [
+        "aurora"
+      ],
+      "parents": [
+        "aws"
+      ]
+    },
+    {
+      "name": "mongodb atlas",
+      "category": "database",
+      "aliases": [
+        "atlas"
+      ],
+      "parents": [
+        "mongodb"
+      ]
+    },
+    {
       "name": "pinecone",
       "category": "vector_database",
       "aliases": [],
@@ -933,6 +1600,39 @@
       "aliases": [],
       "parents": [
         "postgresql"
+      ]
+    },
+    {
+      "name": "azure ai search",
+      "category": "vector_database",
+      "aliases": [
+        "azure cognitive search",
+        "cognitive search"
+      ],
+      "parents": [
+        "azure"
+      ]
+    },
+    {
+      "name": "lancedb",
+      "category": "vector_database",
+      "aliases": [],
+      "parents": []
+    },
+    {
+      "name": "vespa",
+      "category": "vector_database",
+      "aliases": [],
+      "parents": []
+    },
+    {
+      "name": "vertex ai vector search",
+      "category": "vector_database",
+      "aliases": [
+        "matching engine"
+      ],
+      "parents": [
+        "vertex ai"
       ]
     },
     {
@@ -1013,6 +1713,72 @@
         "hudi"
       ],
       "parents": []
+    },
+    {
+      "name": "microsoft fabric",
+      "category": "warehouse",
+      "aliases": [
+        "ms fabric"
+      ],
+      "parents": [
+        "azure"
+      ]
+    },
+    {
+      "name": "onelake",
+      "category": "warehouse",
+      "aliases": [],
+      "parents": [
+        "microsoft fabric"
+      ]
+    },
+    {
+      "name": "unity catalog",
+      "category": "warehouse",
+      "aliases": [],
+      "parents": [
+        "databricks"
+      ]
+    },
+    {
+      "name": "delta live tables",
+      "category": "warehouse",
+      "aliases": [
+        "lakeflow declarative pipelines"
+      ],
+      "parents": [
+        "databricks"
+      ]
+    },
+    {
+      "name": "databricks sql",
+      "category": "warehouse",
+      "aliases": [],
+      "parents": [
+        "databricks"
+      ]
+    },
+    {
+      "name": "snowpark",
+      "category": "warehouse",
+      "aliases": [],
+      "parents": [
+        "snowflake"
+      ]
+    },
+    {
+      "name": "dremio",
+      "category": "warehouse",
+      "aliases": [],
+      "parents": []
+    },
+    {
+      "name": "starburst",
+      "category": "warehouse",
+      "aliases": [],
+      "parents": [
+        "trino"
+      ]
     },
     {
       "name": "apache spark",
@@ -1102,6 +1868,80 @@
       ]
     },
     {
+      "name": "apache impala",
+      "category": "big_data",
+      "aliases": [
+        "impala"
+      ],
+      "parents": [
+        "hadoop"
+      ]
+    },
+    {
+      "name": "apache pig",
+      "category": "big_data",
+      "aliases": [
+        "pig"
+      ],
+      "parents": [
+        "hadoop"
+      ]
+    },
+    {
+      "name": "sqoop",
+      "category": "big_data",
+      "aliases": [
+        "apache sqoop"
+      ],
+      "parents": [
+        "hadoop"
+      ]
+    },
+    {
+      "name": "oozie",
+      "category": "big_data",
+      "aliases": [
+        "apache oozie"
+      ],
+      "parents": [
+        "hadoop"
+      ]
+    },
+    {
+      "name": "apache storm",
+      "category": "big_data",
+      "aliases": [
+        "storm"
+      ],
+      "parents": []
+    },
+    {
+      "name": "apache zookeeper",
+      "category": "big_data",
+      "aliases": [
+        "zookeeper"
+      ],
+      "parents": []
+    },
+    {
+      "name": "spark sql",
+      "category": "big_data",
+      "aliases": [],
+      "parents": [
+        "apache spark"
+      ]
+    },
+    {
+      "name": "spark structured streaming",
+      "category": "big_data",
+      "aliases": [
+        "structured streaming"
+      ],
+      "parents": [
+        "apache spark"
+      ]
+    },
+    {
       "name": "apache kafka",
       "category": "streaming",
       "aliases": [
@@ -1163,6 +2003,96 @@
       "parents": []
     },
     {
+      "name": "confluent",
+      "category": "streaming",
+      "aliases": [
+        "confluent cloud",
+        "confluent platform"
+      ],
+      "parents": [
+        "apache kafka"
+      ]
+    },
+    {
+      "name": "kafka connect",
+      "category": "streaming",
+      "aliases": [],
+      "parents": [
+        "apache kafka"
+      ]
+    },
+    {
+      "name": "kafka streams",
+      "category": "streaming",
+      "aliases": [],
+      "parents": [
+        "apache kafka"
+      ]
+    },
+    {
+      "name": "ksqldb",
+      "category": "streaming",
+      "aliases": [
+        "ksql"
+      ],
+      "parents": [
+        "apache kafka"
+      ]
+    },
+    {
+      "name": "apache pulsar",
+      "category": "streaming",
+      "aliases": [
+        "pulsar"
+      ],
+      "parents": []
+    },
+    {
+      "name": "redpanda",
+      "category": "streaming",
+      "aliases": [],
+      "parents": []
+    },
+    {
+      "name": "debezium",
+      "category": "streaming",
+      "aliases": [],
+      "parents": [
+        "apache kafka"
+      ]
+    },
+    {
+      "name": "amazon msk",
+      "category": "streaming",
+      "aliases": [
+        "msk"
+      ],
+      "parents": [
+        "aws",
+        "apache kafka"
+      ]
+    },
+    {
+      "name": "amazon sns",
+      "category": "streaming",
+      "aliases": [
+        "sns"
+      ],
+      "parents": [
+        "aws"
+      ]
+    },
+    {
+      "name": "azure service bus",
+      "category": "streaming",
+      "aliases": [
+        "service bus"
+      ],
+      "parents": [
+        "azure"
+      ]
+    },
+    {
       "name": "apache airflow",
       "category": "orchestration",
       "aliases": [
@@ -1211,6 +2141,40 @@
       "aliases": [
         "control m"
       ],
+      "parents": []
+    },
+    {
+      "name": "argo workflows",
+      "category": "orchestration",
+      "aliases": [],
+      "parents": [
+        "kubernetes"
+      ]
+    },
+    {
+      "name": "temporal",
+      "category": "orchestration",
+      "aliases": [],
+      "parents": []
+    },
+    {
+      "name": "mage",
+      "category": "orchestration",
+      "aliases": [
+        "mage.ai"
+      ],
+      "parents": []
+    },
+    {
+      "name": "kestra",
+      "category": "orchestration",
+      "aliases": [],
+      "parents": []
+    },
+    {
+      "name": "autosys",
+      "category": "orchestration",
+      "aliases": [],
       "parents": []
     },
     {
@@ -1346,6 +2310,77 @@
       ]
     },
     {
+      "name": "ibm datastage",
+      "category": "etl",
+      "aliases": [
+        "datastage"
+      ],
+      "parents": []
+    },
+    {
+      "name": "oracle data integrator",
+      "category": "etl",
+      "aliases": [
+        "odi"
+      ],
+      "parents": []
+    },
+    {
+      "name": "sap data services",
+      "category": "etl",
+      "aliases": [
+        "bods"
+      ],
+      "parents": [
+        "sap"
+      ]
+    },
+    {
+      "name": "mulesoft",
+      "category": "etl",
+      "aliases": [
+        "mule esb",
+        "anypoint platform"
+      ],
+      "parents": []
+    },
+    {
+      "name": "boomi",
+      "category": "etl",
+      "aliases": [
+        "dell boomi"
+      ],
+      "parents": []
+    },
+    {
+      "name": "apache camel",
+      "category": "etl",
+      "aliases": [
+        "camel"
+      ],
+      "parents": [
+        "java"
+      ]
+    },
+    {
+      "name": "matillion",
+      "category": "etl",
+      "aliases": [],
+      "parents": []
+    },
+    {
+      "name": "meltano",
+      "category": "etl",
+      "aliases": [],
+      "parents": []
+    },
+    {
+      "name": "stitch",
+      "category": "etl",
+      "aliases": [],
+      "parents": []
+    },
+    {
       "name": "aws",
       "category": "cloud",
       "aliases": [
@@ -1404,6 +2439,36 @@
     },
     {
       "name": "netlify",
+      "category": "cloud",
+      "aliases": [],
+      "parents": []
+    },
+    {
+      "name": "cloudflare",
+      "category": "cloud",
+      "aliases": [],
+      "parents": []
+    },
+    {
+      "name": "render",
+      "category": "cloud",
+      "aliases": [],
+      "parents": []
+    },
+    {
+      "name": "railway",
+      "category": "cloud",
+      "aliases": [],
+      "parents": []
+    },
+    {
+      "name": "fly.io",
+      "category": "cloud",
+      "aliases": [],
+      "parents": []
+    },
+    {
+      "name": "alibaba cloud",
       "category": "cloud",
       "aliases": [],
       "parents": []
@@ -1699,6 +2764,434 @@
       ]
     },
     {
+      "name": "amazon cloudwatch",
+      "category": "cloud_service",
+      "aliases": [
+        "cloudwatch"
+      ],
+      "parents": [
+        "aws"
+      ]
+    },
+    {
+      "name": "aws iam",
+      "category": "cloud_service",
+      "aliases": [
+        "iam"
+      ],
+      "parents": [
+        "aws"
+      ]
+    },
+    {
+      "name": "amazon api gateway",
+      "category": "cloud_service",
+      "aliases": [],
+      "parents": [
+        "aws"
+      ]
+    },
+    {
+      "name": "amazon cloudfront",
+      "category": "cloud_service",
+      "aliases": [
+        "cloudfront"
+      ],
+      "parents": [
+        "aws"
+      ]
+    },
+    {
+      "name": "aws fargate",
+      "category": "cloud_service",
+      "aliases": [
+        "fargate"
+      ],
+      "parents": [
+        "aws"
+      ]
+    },
+    {
+      "name": "amazon route 53",
+      "category": "cloud_service",
+      "aliases": [
+        "route 53"
+      ],
+      "parents": [
+        "aws"
+      ]
+    },
+    {
+      "name": "aws secrets manager",
+      "category": "cloud_service",
+      "aliases": [],
+      "parents": [
+        "aws"
+      ]
+    },
+    {
+      "name": "amazon elasticache",
+      "category": "cloud_service",
+      "aliases": [
+        "elasticache"
+      ],
+      "parents": [
+        "aws"
+      ]
+    },
+    {
+      "name": "amazon vpc",
+      "category": "cloud_service",
+      "aliases": [
+        "vpc"
+      ],
+      "parents": [
+        "aws"
+      ]
+    },
+    {
+      "name": "amazon eventbridge",
+      "category": "cloud_service",
+      "aliases": [
+        "eventbridge"
+      ],
+      "parents": [
+        "aws"
+      ]
+    },
+    {
+      "name": "aws dms",
+      "category": "cloud_service",
+      "aliases": [
+        "database migration service"
+      ],
+      "parents": [
+        "aws"
+      ]
+    },
+    {
+      "name": "aws codepipeline",
+      "category": "cloud_service",
+      "aliases": [
+        "codepipeline"
+      ],
+      "parents": [
+        "aws"
+      ]
+    },
+    {
+      "name": "aws codebuild",
+      "category": "cloud_service",
+      "aliases": [
+        "codebuild"
+      ],
+      "parents": [
+        "aws"
+      ]
+    },
+    {
+      "name": "aws amplify",
+      "category": "cloud_service",
+      "aliases": [
+        "amplify"
+      ],
+      "parents": [
+        "aws"
+      ]
+    },
+    {
+      "name": "amazon bedrock",
+      "category": "cloud_service",
+      "aliases": [
+        "bedrock",
+        "aws bedrock"
+      ],
+      "parents": [
+        "aws"
+      ]
+    },
+    {
+      "name": "amazon comprehend",
+      "category": "cloud_service",
+      "aliases": [
+        "comprehend"
+      ],
+      "parents": [
+        "aws"
+      ]
+    },
+    {
+      "name": "amazon rekognition",
+      "category": "cloud_service",
+      "aliases": [
+        "rekognition"
+      ],
+      "parents": [
+        "aws"
+      ]
+    },
+    {
+      "name": "amazon textract",
+      "category": "cloud_service",
+      "aliases": [
+        "textract"
+      ],
+      "parents": [
+        "aws"
+      ]
+    },
+    {
+      "name": "amazon transcribe",
+      "category": "cloud_service",
+      "aliases": [
+        "transcribe"
+      ],
+      "parents": [
+        "aws"
+      ]
+    },
+    {
+      "name": "amazon lex",
+      "category": "cloud_service",
+      "aliases": [
+        "lex"
+      ],
+      "parents": [
+        "aws"
+      ]
+    },
+    {
+      "name": "amazon kendra",
+      "category": "cloud_service",
+      "aliases": [
+        "kendra"
+      ],
+      "parents": [
+        "aws"
+      ]
+    },
+    {
+      "name": "azure openai service",
+      "category": "cloud_service",
+      "aliases": [
+        "azure openai"
+      ],
+      "parents": [
+        "azure"
+      ]
+    },
+    {
+      "name": "azure ai foundry",
+      "category": "cloud_service",
+      "aliases": [
+        "ai foundry",
+        "azure ai studio"
+      ],
+      "parents": [
+        "azure"
+      ]
+    },
+    {
+      "name": "azure ai services",
+      "category": "cloud_service",
+      "aliases": [
+        "azure cognitive services",
+        "cognitive services"
+      ],
+      "parents": [
+        "azure"
+      ]
+    },
+    {
+      "name": "azure logic apps",
+      "category": "cloud_service",
+      "aliases": [
+        "logic apps"
+      ],
+      "parents": [
+        "azure"
+      ]
+    },
+    {
+      "name": "azure key vault",
+      "category": "cloud_service",
+      "aliases": [
+        "key vault"
+      ],
+      "parents": [
+        "azure"
+      ]
+    },
+    {
+      "name": "microsoft entra id",
+      "category": "cloud_service",
+      "aliases": [
+        "entra id",
+        "azure active directory",
+        "azure ad"
+      ],
+      "parents": [
+        "azure"
+      ]
+    },
+    {
+      "name": "azure monitor",
+      "category": "cloud_service",
+      "aliases": [],
+      "parents": [
+        "azure"
+      ]
+    },
+    {
+      "name": "application insights",
+      "category": "cloud_service",
+      "aliases": [
+        "app insights"
+      ],
+      "parents": [
+        "azure monitor"
+      ]
+    },
+    {
+      "name": "azure container apps",
+      "category": "cloud_service",
+      "aliases": [
+        "container apps"
+      ],
+      "parents": [
+        "azure"
+      ]
+    },
+    {
+      "name": "azure container registry",
+      "category": "cloud_service",
+      "aliases": [
+        "acr"
+      ],
+      "parents": [
+        "azure"
+      ]
+    },
+    {
+      "name": "azure api management",
+      "category": "cloud_service",
+      "aliases": [
+        "apim"
+      ],
+      "parents": [
+        "azure"
+      ]
+    },
+    {
+      "name": "azure data lake storage",
+      "category": "cloud_service",
+      "aliases": [
+        "adls",
+        "adls gen2",
+        "azure data lake"
+      ],
+      "parents": [
+        "azure"
+      ]
+    },
+    {
+      "name": "microsoft purview",
+      "category": "cloud_service",
+      "aliases": [
+        "azure purview",
+        "purview"
+      ],
+      "parents": [
+        "azure"
+      ]
+    },
+    {
+      "name": "azure stream analytics",
+      "category": "cloud_service",
+      "aliases": [
+        "stream analytics"
+      ],
+      "parents": [
+        "azure"
+      ]
+    },
+    {
+      "name": "azure pipelines",
+      "category": "cloud_service",
+      "aliases": [],
+      "parents": [
+        "azure devops"
+      ]
+    },
+    {
+      "name": "cloud build",
+      "category": "cloud_service",
+      "aliases": [],
+      "parents": [
+        "gcp"
+      ]
+    },
+    {
+      "name": "cloud spanner",
+      "category": "cloud_service",
+      "aliases": [
+        "spanner"
+      ],
+      "parents": [
+        "gcp"
+      ]
+    },
+    {
+      "name": "cloud bigtable",
+      "category": "cloud_service",
+      "aliases": [
+        "bigtable"
+      ],
+      "parents": [
+        "gcp"
+      ]
+    },
+    {
+      "name": "document ai",
+      "category": "cloud_service",
+      "aliases": [],
+      "parents": [
+        "gcp"
+      ]
+    },
+    {
+      "name": "dialogflow",
+      "category": "cloud_service",
+      "aliases": [],
+      "parents": [
+        "gcp"
+      ]
+    },
+    {
+      "name": "artifact registry",
+      "category": "cloud_service",
+      "aliases": [],
+      "parents": [
+        "gcp"
+      ]
+    },
+    {
+      "name": "cloud monitoring",
+      "category": "cloud_service",
+      "aliases": [],
+      "parents": [
+        "gcp"
+      ]
+    },
+    {
+      "name": "cloud iam",
+      "category": "cloud_service",
+      "aliases": [],
+      "parents": [
+        "gcp"
+      ]
+    },
+    {
       "name": "cloud logging",
       "category": "monitoring",
       "aliases": [
@@ -1832,6 +3325,244 @@
       "parents": []
     },
     {
+      "name": "podman",
+      "category": "devops",
+      "aliases": [],
+      "parents": []
+    },
+    {
+      "name": "rancher",
+      "category": "devops",
+      "aliases": [],
+      "parents": [
+        "kubernetes"
+      ]
+    },
+    {
+      "name": "docker compose",
+      "category": "devops",
+      "aliases": [
+        "docker-compose"
+      ],
+      "parents": [
+        "docker"
+      ]
+    },
+    {
+      "name": "docker swarm",
+      "category": "devops",
+      "aliases": [],
+      "parents": [
+        "docker"
+      ]
+    },
+    {
+      "name": "teamcity",
+      "category": "devops",
+      "aliases": [],
+      "parents": []
+    },
+    {
+      "name": "bamboo",
+      "category": "devops",
+      "aliases": [],
+      "parents": []
+    },
+    {
+      "name": "spinnaker",
+      "category": "devops",
+      "aliases": [],
+      "parents": []
+    },
+    {
+      "name": "flux cd",
+      "category": "devops",
+      "aliases": [
+        "fluxcd"
+      ],
+      "parents": [
+        "kubernetes"
+      ]
+    },
+    {
+      "name": "pulumi",
+      "category": "devops",
+      "aliases": [],
+      "parents": []
+    },
+    {
+      "name": "packer",
+      "category": "devops",
+      "aliases": [],
+      "parents": []
+    },
+    {
+      "name": "consul",
+      "category": "devops",
+      "aliases": [],
+      "parents": []
+    },
+    {
+      "name": "nexus repository",
+      "category": "devops",
+      "aliases": [
+        "nexus"
+      ],
+      "parents": []
+    },
+    {
+      "name": "jfrog artifactory",
+      "category": "devops",
+      "aliases": [
+        "artifactory"
+      ],
+      "parents": []
+    },
+    {
+      "name": "maven",
+      "category": "devops",
+      "aliases": [
+        "apache maven"
+      ],
+      "parents": [
+        "java"
+      ]
+    },
+    {
+      "name": "gradle",
+      "category": "devops",
+      "aliases": [],
+      "parents": [
+        "java"
+      ]
+    },
+    {
+      "name": "npm",
+      "category": "devops",
+      "aliases": [],
+      "parents": [
+        "node.js"
+      ]
+    },
+    {
+      "name": "yarn",
+      "category": "devops",
+      "aliases": [],
+      "parents": [
+        "node.js"
+      ]
+    },
+    {
+      "name": "pnpm",
+      "category": "devops",
+      "aliases": [],
+      "parents": [
+        "node.js"
+      ]
+    },
+    {
+      "name": "pip",
+      "category": "devops",
+      "aliases": [],
+      "parents": [
+        "python"
+      ]
+    },
+    {
+      "name": "poetry",
+      "category": "devops",
+      "aliases": [],
+      "parents": [
+        "python"
+      ]
+    },
+    {
+      "name": "uv",
+      "category": "devops",
+      "aliases": [],
+      "parents": [
+        "python"
+      ]
+    },
+    {
+      "name": "bazel",
+      "category": "devops",
+      "aliases": [],
+      "parents": []
+    },
+    {
+      "name": "make",
+      "category": "devops",
+      "aliases": [
+        "makefile"
+      ],
+      "parents": []
+    },
+    {
+      "name": "tomcat",
+      "category": "devops",
+      "aliases": [
+        "apache tomcat"
+      ],
+      "parents": [
+        "java"
+      ]
+    },
+    {
+      "name": "iis",
+      "category": "devops",
+      "aliases": [
+        "internet information services"
+      ],
+      "parents": [
+        "windows server"
+      ]
+    },
+    {
+      "name": "haproxy",
+      "category": "devops",
+      "aliases": [],
+      "parents": []
+    },
+    {
+      "name": "traefik",
+      "category": "devops",
+      "aliases": [],
+      "parents": []
+    },
+    {
+      "name": "kong",
+      "category": "devops",
+      "aliases": [
+        "kong gateway"
+      ],
+      "parents": []
+    },
+    {
+      "name": "istio",
+      "category": "devops",
+      "aliases": [],
+      "parents": [
+        "kubernetes"
+      ]
+    },
+    {
+      "name": "aws cdk",
+      "category": "devops",
+      "aliases": [
+        "cdk"
+      ],
+      "parents": [
+        "aws"
+      ]
+    },
+    {
+      "name": "serverless framework",
+      "category": "devops",
+      "aliases": [],
+      "parents": []
+    },
+    {
       "name": "linux",
       "category": "os",
       "aliases": [],
@@ -1845,6 +3576,57 @@
     },
     {
       "name": "windows server",
+      "category": "os",
+      "aliases": [],
+      "parents": []
+    },
+    {
+      "name": "ubuntu",
+      "category": "os",
+      "aliases": [],
+      "parents": [
+        "linux"
+      ]
+    },
+    {
+      "name": "red hat enterprise linux",
+      "category": "os",
+      "aliases": [
+        "rhel",
+        "red hat"
+      ],
+      "parents": [
+        "linux"
+      ]
+    },
+    {
+      "name": "debian",
+      "category": "os",
+      "aliases": [],
+      "parents": [
+        "linux"
+      ]
+    },
+    {
+      "name": "centos",
+      "category": "os",
+      "aliases": [],
+      "parents": [
+        "linux"
+      ]
+    },
+    {
+      "name": "macos",
+      "category": "os",
+      "aliases": [
+        "mac os"
+      ],
+      "parents": [
+        "unix"
+      ]
+    },
+    {
+      "name": "windows",
       "category": "os",
       "aliases": [],
       "parents": []
@@ -1908,6 +3690,78 @@
       ]
     },
     {
+      "name": "opentelemetry",
+      "category": "monitoring",
+      "aliases": [
+        "otel"
+      ],
+      "parents": []
+    },
+    {
+      "name": "jaeger",
+      "category": "monitoring",
+      "aliases": [],
+      "parents": []
+    },
+    {
+      "name": "zipkin",
+      "category": "monitoring",
+      "aliases": [],
+      "parents": []
+    },
+    {
+      "name": "sentry",
+      "category": "monitoring",
+      "aliases": [],
+      "parents": []
+    },
+    {
+      "name": "pagerduty",
+      "category": "monitoring",
+      "aliases": [],
+      "parents": []
+    },
+    {
+      "name": "dynatrace",
+      "category": "monitoring",
+      "aliases": [],
+      "parents": []
+    },
+    {
+      "name": "appdynamics",
+      "category": "monitoring",
+      "aliases": [],
+      "parents": []
+    },
+    {
+      "name": "nagios",
+      "category": "monitoring",
+      "aliases": [],
+      "parents": []
+    },
+    {
+      "name": "zabbix",
+      "category": "monitoring",
+      "aliases": [],
+      "parents": []
+    },
+    {
+      "name": "grafana loki",
+      "category": "monitoring",
+      "aliases": [
+        "loki"
+      ],
+      "parents": [
+        "grafana"
+      ]
+    },
+    {
+      "name": "graylog",
+      "category": "monitoring",
+      "aliases": [],
+      "parents": []
+    },
+    {
       "name": "sonarqube",
       "category": "tool",
       "aliases": [],
@@ -1948,6 +3802,46 @@
       "category": "version_control",
       "aliases": [
         "svn"
+      ],
+      "parents": []
+    },
+    {
+      "name": "azure repos",
+      "category": "version_control",
+      "aliases": [],
+      "parents": [
+        "azure devops",
+        "git"
+      ]
+    },
+    {
+      "name": "perforce",
+      "category": "version_control",
+      "aliases": [],
+      "parents": []
+    },
+    {
+      "name": "mercurial",
+      "category": "version_control",
+      "aliases": [
+        "hg"
+      ],
+      "parents": []
+    },
+    {
+      "name": "gerrit",
+      "category": "version_control",
+      "aliases": [],
+      "parents": [
+        "git"
+      ]
+    },
+    {
+      "name": "team foundation server",
+      "category": "version_control",
+      "aliases": [
+        "tfs",
+        "tfvc"
       ],
       "parents": []
     },
@@ -2062,6 +3956,181 @@
       "parents": []
     },
     {
+      "name": "vitest",
+      "category": "testing",
+      "aliases": [],
+      "parents": [
+        "javascript"
+      ]
+    },
+    {
+      "name": "rspec",
+      "category": "testing",
+      "aliases": [],
+      "parents": [
+        "ruby"
+      ]
+    },
+    {
+      "name": "phpunit",
+      "category": "testing",
+      "aliases": [],
+      "parents": [
+        "php"
+      ]
+    },
+    {
+      "name": "cucumber",
+      "category": "testing",
+      "aliases": [],
+      "parents": []
+    },
+    {
+      "name": "behave",
+      "category": "testing",
+      "aliases": [],
+      "parents": [
+        "python"
+      ]
+    },
+    {
+      "name": "robot framework",
+      "category": "testing",
+      "aliases": [],
+      "parents": [
+        "python"
+      ]
+    },
+    {
+      "name": "appium",
+      "category": "testing",
+      "aliases": [],
+      "parents": []
+    },
+    {
+      "name": "testcafe",
+      "category": "testing",
+      "aliases": [],
+      "parents": []
+    },
+    {
+      "name": "gatling",
+      "category": "testing",
+      "aliases": [],
+      "parents": []
+    },
+    {
+      "name": "locust",
+      "category": "testing",
+      "aliases": [],
+      "parents": [
+        "python"
+      ]
+    },
+    {
+      "name": "karma",
+      "category": "testing",
+      "aliases": [],
+      "parents": [
+        "javascript"
+      ]
+    },
+    {
+      "name": "jasmine",
+      "category": "testing",
+      "aliases": [],
+      "parents": [
+        "javascript"
+      ]
+    },
+    {
+      "name": "chai",
+      "category": "testing",
+      "aliases": [],
+      "parents": [
+        "javascript"
+      ]
+    },
+    {
+      "name": "moq",
+      "category": "testing",
+      "aliases": [],
+      "parents": [
+        "c#"
+      ]
+    },
+    {
+      "name": "mockito",
+      "category": "testing",
+      "aliases": [],
+      "parents": [
+        "java"
+      ]
+    },
+    {
+      "name": "rest assured",
+      "category": "testing",
+      "aliases": [
+        "restassured"
+      ],
+      "parents": [
+        "java"
+      ]
+    },
+    {
+      "name": "testcontainers",
+      "category": "testing",
+      "aliases": [],
+      "parents": []
+    },
+    {
+      "name": "pact",
+      "category": "testing",
+      "aliases": [],
+      "parents": []
+    },
+    {
+      "name": "allure",
+      "category": "testing",
+      "aliases": [
+        "allure report"
+      ],
+      "parents": []
+    },
+    {
+      "name": "browserstack",
+      "category": "testing",
+      "aliases": [],
+      "parents": []
+    },
+    {
+      "name": "loadrunner",
+      "category": "testing",
+      "aliases": [],
+      "parents": []
+    },
+    {
+      "name": "hp alm",
+      "category": "testing",
+      "aliases": [
+        "quality center",
+        "micro focus alm"
+      ],
+      "parents": []
+    },
+    {
+      "name": "testrail",
+      "category": "testing",
+      "aliases": [],
+      "parents": []
+    },
+    {
+      "name": "insomnia",
+      "category": "testing",
+      "aliases": [],
+      "parents": []
+    },
+    {
       "name": "power bi",
       "category": "bi",
       "aliases": [
@@ -2159,6 +4228,85 @@
     },
     {
       "name": "google sheets",
+      "category": "bi",
+      "aliases": [],
+      "parents": []
+    },
+    {
+      "name": "amazon quicksight",
+      "category": "bi",
+      "aliases": [
+        "quicksight"
+      ],
+      "parents": [
+        "aws"
+      ]
+    },
+    {
+      "name": "domo",
+      "category": "bi",
+      "aliases": [],
+      "parents": []
+    },
+    {
+      "name": "sisense",
+      "category": "bi",
+      "aliases": [],
+      "parents": []
+    },
+    {
+      "name": "thoughtspot",
+      "category": "bi",
+      "aliases": [],
+      "parents": []
+    },
+    {
+      "name": "mode",
+      "category": "bi",
+      "aliases": [
+        "mode analytics"
+      ],
+      "parents": []
+    },
+    {
+      "name": "spotfire",
+      "category": "bi",
+      "aliases": [
+        "tibco spotfire"
+      ],
+      "parents": []
+    },
+    {
+      "name": "sap analytics cloud",
+      "category": "bi",
+      "aliases": [
+        "sac"
+      ],
+      "parents": [
+        "sap"
+      ]
+    },
+    {
+      "name": "oracle analytics cloud",
+      "category": "bi",
+      "aliases": [
+        "oracle analytics"
+      ],
+      "parents": []
+    },
+    {
+      "name": "jasperreports",
+      "category": "bi",
+      "aliases": [
+        "jasper",
+        "jaspersoft"
+      ],
+      "parents": [
+        "java"
+      ]
+    },
+    {
+      "name": "crystal reports",
       "category": "bi",
       "aliases": [],
       "parents": []
@@ -2361,6 +4509,163 @@
       ]
     },
     {
+      "name": "polars",
+      "category": "ml_library",
+      "aliases": [],
+      "parents": [
+        "python"
+      ]
+    },
+    {
+      "name": "pyarrow",
+      "category": "ml_library",
+      "aliases": [
+        "apache arrow",
+        "arrow"
+      ],
+      "parents": [
+        "python"
+      ]
+    },
+    {
+      "name": "prophet",
+      "category": "ml_library",
+      "aliases": [
+        "fbprophet"
+      ],
+      "parents": [
+        "python"
+      ]
+    },
+    {
+      "name": "shap",
+      "category": "ml_library",
+      "aliases": [],
+      "parents": [
+        "python"
+      ]
+    },
+    {
+      "name": "optuna",
+      "category": "ml_library",
+      "aliases": [],
+      "parents": [
+        "python"
+      ]
+    },
+    {
+      "name": "pytorch lightning",
+      "category": "ml_library",
+      "aliases": [
+        "lightning"
+      ],
+      "parents": [
+        "pytorch"
+      ]
+    },
+    {
+      "name": "jax",
+      "category": "ml_library",
+      "aliases": [],
+      "parents": [
+        "python"
+      ]
+    },
+    {
+      "name": "onnx",
+      "category": "ml_library",
+      "aliases": [
+        "onnx runtime"
+      ],
+      "parents": []
+    },
+    {
+      "name": "tensorboard",
+      "category": "ml_library",
+      "aliases": [],
+      "parents": [
+        "tensorflow"
+      ]
+    },
+    {
+      "name": "gensim",
+      "category": "ml_library",
+      "aliases": [],
+      "parents": [
+        "python"
+      ]
+    },
+    {
+      "name": "sentence-transformers",
+      "category": "ml_library",
+      "aliases": [
+        "sentence transformers"
+      ],
+      "parents": [
+        "hugging face transformers"
+      ]
+    },
+    {
+      "name": "h2o",
+      "category": "ml_library",
+      "aliases": [
+        "h2o.ai"
+      ],
+      "parents": []
+    },
+    {
+      "name": "feast",
+      "category": "ml_library",
+      "aliases": [
+        "feast feature store"
+      ],
+      "parents": [
+        "python"
+      ]
+    },
+    {
+      "name": "evidently",
+      "category": "ml_library",
+      "aliases": [
+        "evidently ai"
+      ],
+      "parents": [
+        "python"
+      ]
+    },
+    {
+      "name": "cuda",
+      "category": "ml_library",
+      "aliases": [],
+      "parents": []
+    },
+    {
+      "name": "numba",
+      "category": "ml_library",
+      "aliases": [],
+      "parents": [
+        "python"
+      ]
+    },
+    {
+      "name": "rapids",
+      "category": "ml_library",
+      "aliases": [
+        "cudf"
+      ],
+      "parents": [
+        "cuda"
+      ]
+    },
+    {
+      "name": "yolo",
+      "category": "ml_library",
+      "aliases": [
+        "ultralytics"
+      ],
+      "parents": []
+    },
+    {
       "name": "jupyter",
       "category": "tool",
       "aliases": [
@@ -2469,6 +4774,128 @@
       "parents": []
     },
     {
+      "name": "haystack",
+      "category": "genai_framework",
+      "aliases": [],
+      "parents": [
+        "python"
+      ]
+    },
+    {
+      "name": "dspy",
+      "category": "genai_framework",
+      "aliases": [],
+      "parents": [
+        "python"
+      ]
+    },
+    {
+      "name": "pydantic ai",
+      "category": "genai_framework",
+      "aliases": [
+        "pydantic-ai"
+      ],
+      "parents": [
+        "pydantic"
+      ]
+    },
+    {
+      "name": "openai agents sdk",
+      "category": "genai_framework",
+      "aliases": [
+        "agents sdk"
+      ],
+      "parents": [
+        "openai api"
+      ]
+    },
+    {
+      "name": "google adk",
+      "category": "genai_framework",
+      "aliases": [
+        "agent development kit"
+      ],
+      "parents": [
+        "gcp"
+      ]
+    },
+    {
+      "name": "litellm",
+      "category": "genai_framework",
+      "aliases": [],
+      "parents": [
+        "python"
+      ]
+    },
+    {
+      "name": "openrouter",
+      "category": "genai_framework",
+      "aliases": [],
+      "parents": []
+    },
+    {
+      "name": "groq",
+      "category": "genai_framework",
+      "aliases": [],
+      "parents": []
+    },
+    {
+      "name": "llama.cpp",
+      "category": "genai_framework",
+      "aliases": [
+        "llamacpp"
+      ],
+      "parents": []
+    },
+    {
+      "name": "lm studio",
+      "category": "genai_framework",
+      "aliases": [],
+      "parents": []
+    },
+    {
+      "name": "gemini api",
+      "category": "genai_framework",
+      "aliases": [
+        "google ai studio"
+      ],
+      "parents": [
+        "gcp"
+      ]
+    },
+    {
+      "name": "ragas",
+      "category": "genai_framework",
+      "aliases": [],
+      "parents": []
+    },
+    {
+      "name": "deepeval",
+      "category": "genai_framework",
+      "aliases": [],
+      "parents": []
+    },
+    {
+      "name": "langfuse",
+      "category": "genai_framework",
+      "aliases": [],
+      "parents": []
+    },
+    {
+      "name": "arize phoenix",
+      "category": "genai_framework",
+      "aliases": [
+        "arize"
+      ],
+      "parents": []
+    },
+    {
+      "name": "guardrails ai",
+      "category": "genai_framework",
+      "aliases": [],
+      "parents": []
+    },
+    {
       "name": "model context protocol",
       "category": "protocol",
       "aliases": [
@@ -2512,6 +4939,151 @@
     },
     {
       "name": "windsurf",
+      "category": "ai_tool",
+      "aliases": [],
+      "parents": []
+    },
+    {
+      "name": "chatgpt",
+      "category": "ai_tool",
+      "aliases": [],
+      "parents": []
+    },
+    {
+      "name": "microsoft copilot",
+      "category": "ai_tool",
+      "aliases": [
+        "m365 copilot",
+        "copilot 365"
+      ],
+      "parents": []
+    },
+    {
+      "name": "amazon q developer",
+      "category": "ai_tool",
+      "aliases": [
+        "amazon q"
+      ],
+      "parents": [
+        "aws"
+      ]
+    },
+    {
+      "name": "tabnine",
+      "category": "ai_tool",
+      "aliases": [],
+      "parents": []
+    },
+    {
+      "name": "replit",
+      "category": "ai_tool",
+      "aliases": [],
+      "parents": []
+    },
+    {
+      "name": "v0",
+      "category": "ai_tool",
+      "aliases": [],
+      "parents": []
+    },
+    {
+      "name": "lovable",
+      "category": "ai_tool",
+      "aliases": [],
+      "parents": []
+    },
+    {
+      "name": "bolt.new",
+      "category": "ai_tool",
+      "aliases": [],
+      "parents": []
+    },
+    {
+      "name": "aider",
+      "category": "ai_tool",
+      "aliases": [],
+      "parents": []
+    },
+    {
+      "name": "notebooklm",
+      "category": "ai_tool",
+      "aliases": [],
+      "parents": []
+    },
+    {
+      "name": "perplexity",
+      "category": "ai_tool",
+      "aliases": [],
+      "parents": []
+    },
+    {
+      "name": "midjourney",
+      "category": "ai_tool",
+      "aliases": [],
+      "parents": []
+    },
+    {
+      "name": "dall-e",
+      "category": "ai_tool",
+      "aliases": [
+        "dalle"
+      ],
+      "parents": []
+    },
+    {
+      "name": "elevenlabs",
+      "category": "ai_tool",
+      "aliases": [
+        "eleven labs"
+      ],
+      "parents": []
+    },
+    {
+      "name": "n8n",
+      "category": "ai_tool",
+      "aliases": [],
+      "parents": []
+    },
+    {
+      "name": "zapier",
+      "category": "ai_tool",
+      "aliases": [],
+      "parents": []
+    },
+    {
+      "name": "make.com",
+      "category": "ai_tool",
+      "aliases": [
+        "integromat"
+      ],
+      "parents": []
+    },
+    {
+      "name": "retool",
+      "category": "ai_tool",
+      "aliases": [],
+      "parents": []
+    },
+    {
+      "name": "dify",
+      "category": "ai_tool",
+      "aliases": [],
+      "parents": []
+    },
+    {
+      "name": "flowise",
+      "category": "ai_tool",
+      "aliases": [],
+      "parents": []
+    },
+    {
+      "name": "langflow",
+      "category": "ai_tool",
+      "aliases": [],
+      "parents": []
+    },
+    {
+      "name": "botpress",
       "category": "ai_tool",
       "aliases": [],
       "parents": []
@@ -2592,6 +5164,106 @@
       "parents": []
     },
     {
+      "name": "mqtt",
+      "category": "protocol",
+      "aliases": [],
+      "parents": []
+    },
+    {
+      "name": "amqp",
+      "category": "protocol",
+      "aliases": [],
+      "parents": []
+    },
+    {
+      "name": "tcp/ip",
+      "category": "protocol",
+      "aliases": [
+        "tcp",
+        "tcp ip"
+      ],
+      "parents": []
+    },
+    {
+      "name": "http",
+      "category": "protocol",
+      "aliases": [
+        "https"
+      ],
+      "parents": []
+    },
+    {
+      "name": "ssh",
+      "category": "protocol",
+      "aliases": [],
+      "parents": []
+    },
+    {
+      "name": "sftp",
+      "category": "protocol",
+      "aliases": [
+        "ftp"
+      ],
+      "parents": []
+    },
+    {
+      "name": "ldap",
+      "category": "protocol",
+      "aliases": [],
+      "parents": []
+    },
+    {
+      "name": "smtp",
+      "category": "protocol",
+      "aliases": [],
+      "parents": []
+    },
+    {
+      "name": "webhooks",
+      "category": "protocol",
+      "aliases": [
+        "webhook"
+      ],
+      "parents": []
+    },
+    {
+      "name": "server-sent events",
+      "category": "protocol",
+      "aliases": [
+        "sse"
+      ],
+      "parents": []
+    },
+    {
+      "name": "odata",
+      "category": "protocol",
+      "aliases": [],
+      "parents": []
+    },
+    {
+      "name": "hl7 fhir",
+      "category": "protocol",
+      "aliases": [
+        "fhir",
+        "hl7"
+      ],
+      "parents": []
+    },
+    {
+      "name": "webrtc",
+      "category": "protocol",
+      "aliases": [],
+      "parents": []
+    },
+    {
+      "name": "tls",
+      "category": "protocol",
+      "aliases": [
+        "ssl"
+      ],
+      "parents": []
+    },
+    {
       "name": "json",
       "category": "format",
       "aliases": [],
@@ -2638,6 +5310,46 @@
       "category": "format",
       "aliases": [
         "protocol buffers"
+      ],
+      "parents": []
+    },
+    {
+      "name": "orc",
+      "category": "format",
+      "aliases": [],
+      "parents": []
+    },
+    {
+      "name": "markdown",
+      "category": "format",
+      "aliases": [
+        "md"
+      ],
+      "parents": []
+    },
+    {
+      "name": "toml",
+      "category": "format",
+      "aliases": [],
+      "parents": []
+    },
+    {
+      "name": "xlsx",
+      "category": "format",
+      "aliases": [],
+      "parents": []
+    },
+    {
+      "name": "hdf5",
+      "category": "format",
+      "aliases": [],
+      "parents": []
+    },
+    {
+      "name": "jsonl",
+      "category": "format",
+      "aliases": [
+        "ndjson"
       ],
       "parents": []
     },
@@ -2734,6 +5446,141 @@
       "parents": []
     },
     {
+      "name": "sap hana",
+      "category": "enterprise",
+      "aliases": [
+        "hana"
+      ],
+      "parents": [
+        "sap"
+      ]
+    },
+    {
+      "name": "sap bw",
+      "category": "enterprise",
+      "aliases": [
+        "bw/4hana",
+        "sap business warehouse"
+      ],
+      "parents": [
+        "sap"
+      ]
+    },
+    {
+      "name": "sap s/4hana",
+      "category": "enterprise",
+      "aliases": [
+        "s/4hana",
+        "s4hana"
+      ],
+      "parents": [
+        "sap"
+      ]
+    },
+    {
+      "name": "sap fiori",
+      "category": "enterprise",
+      "aliases": [
+        "fiori"
+      ],
+      "parents": [
+        "sap"
+      ]
+    },
+    {
+      "name": "sap successfactors",
+      "category": "enterprise",
+      "aliases": [
+        "successfactors"
+      ],
+      "parents": [
+        "sap"
+      ]
+    },
+    {
+      "name": "oracle e-business suite",
+      "category": "enterprise",
+      "aliases": [
+        "oracle ebs"
+      ],
+      "parents": []
+    },
+    {
+      "name": "peoplesoft",
+      "category": "enterprise",
+      "aliases": [],
+      "parents": []
+    },
+    {
+      "name": "jd edwards",
+      "category": "enterprise",
+      "aliases": [],
+      "parents": []
+    },
+    {
+      "name": "siebel",
+      "category": "enterprise",
+      "aliases": [],
+      "parents": []
+    },
+    {
+      "name": "netsuite",
+      "category": "enterprise",
+      "aliases": [
+        "oracle netsuite"
+      ],
+      "parents": []
+    },
+    {
+      "name": "odoo",
+      "category": "enterprise",
+      "aliases": [],
+      "parents": [
+        "python"
+      ]
+    },
+    {
+      "name": "dynamics business central",
+      "category": "enterprise",
+      "aliases": [
+        "business central",
+        "dynamics nav"
+      ],
+      "parents": []
+    },
+    {
+      "name": "hubspot",
+      "category": "enterprise",
+      "aliases": [],
+      "parents": []
+    },
+    {
+      "name": "zendesk",
+      "category": "enterprise",
+      "aliases": [],
+      "parents": []
+    },
+    {
+      "name": "veeva",
+      "category": "enterprise",
+      "aliases": [
+        "veeva vault"
+      ],
+      "parents": []
+    },
+    {
+      "name": "active directory",
+      "category": "enterprise",
+      "aliases": [],
+      "parents": []
+    },
+    {
+      "name": "microsoft teams",
+      "category": "enterprise",
+      "aliases": [],
+      "parents": []
+    },
+    {
       "name": "alteryx",
       "category": "tool",
       "aliases": [],
@@ -2774,6 +5621,520 @@
     {
       "name": "figma",
       "category": "tool",
+      "aliases": [],
+      "parents": []
+    },
+    {
+      "name": "visual studio",
+      "category": "tool",
+      "aliases": [],
+      "parents": []
+    },
+    {
+      "name": "visual studio code",
+      "category": "tool",
+      "aliases": [
+        "vs code",
+        "vscode"
+      ],
+      "parents": []
+    },
+    {
+      "name": "intellij idea",
+      "category": "tool",
+      "aliases": [
+        "intellij"
+      ],
+      "parents": []
+    },
+    {
+      "name": "pycharm",
+      "category": "tool",
+      "aliases": [],
+      "parents": []
+    },
+    {
+      "name": "eclipse",
+      "category": "tool",
+      "aliases": [],
+      "parents": []
+    },
+    {
+      "name": "dbeaver",
+      "category": "tool",
+      "aliases": [],
+      "parents": []
+    },
+    {
+      "name": "pgadmin",
+      "category": "tool",
+      "aliases": [],
+      "parents": [
+        "postgresql"
+      ]
+    },
+    {
+      "name": "sql server management studio",
+      "category": "tool",
+      "aliases": [
+        "ssms"
+      ],
+      "parents": [
+        "sql server"
+      ]
+    },
+    {
+      "name": "google colab",
+      "category": "tool",
+      "aliases": [
+        "colab",
+        "colaboratory"
+      ],
+      "parents": [
+        "jupyter"
+      ]
+    },
+    {
+      "name": "notion",
+      "category": "tool",
+      "aliases": [],
+      "parents": []
+    },
+    {
+      "name": "trello",
+      "category": "tool",
+      "aliases": [],
+      "parents": []
+    },
+    {
+      "name": "asana",
+      "category": "tool",
+      "aliases": [],
+      "parents": []
+    },
+    {
+      "name": "monday.com",
+      "category": "tool",
+      "aliases": [
+        "monday"
+      ],
+      "parents": []
+    },
+    {
+      "name": "clickup",
+      "category": "tool",
+      "aliases": [],
+      "parents": []
+    },
+    {
+      "name": "miro",
+      "category": "tool",
+      "aliases": [],
+      "parents": []
+    },
+    {
+      "name": "draw.io",
+      "category": "tool",
+      "aliases": [
+        "diagrams.net"
+      ],
+      "parents": []
+    },
+    {
+      "name": "lucidchart",
+      "category": "tool",
+      "aliases": [],
+      "parents": []
+    },
+    {
+      "name": "slack",
+      "category": "tool",
+      "aliases": [],
+      "parents": []
+    },
+    {
+      "name": "storybook",
+      "category": "tool",
+      "aliases": [],
+      "parents": []
+    },
+    {
+      "name": "adobe xd",
+      "category": "tool",
+      "aliases": [],
+      "parents": []
+    },
+    {
+      "name": "sketch",
+      "category": "tool",
+      "aliases": [],
+      "parents": []
+    },
+    {
+      "name": "canva",
+      "category": "tool",
+      "aliases": [],
+      "parents": []
+    },
+    {
+      "name": "wordpress",
+      "category": "cms",
+      "aliases": [
+        "wp"
+      ],
+      "parents": [
+        "php"
+      ]
+    },
+    {
+      "name": "drupal",
+      "category": "cms",
+      "aliases": [],
+      "parents": [
+        "php"
+      ]
+    },
+    {
+      "name": "joomla",
+      "category": "cms",
+      "aliases": [],
+      "parents": [
+        "php"
+      ]
+    },
+    {
+      "name": "strapi",
+      "category": "cms",
+      "aliases": [],
+      "parents": [
+        "node.js"
+      ]
+    },
+    {
+      "name": "contentful",
+      "category": "cms",
+      "aliases": [],
+      "parents": []
+    },
+    {
+      "name": "sitecore",
+      "category": "cms",
+      "aliases": [],
+      "parents": [
+        ".net"
+      ]
+    },
+    {
+      "name": "adobe experience manager",
+      "category": "cms",
+      "aliases": [
+        "aem"
+      ],
+      "parents": [
+        "java"
+      ]
+    },
+    {
+      "name": "shopify",
+      "category": "ecommerce",
+      "aliases": [],
+      "parents": []
+    },
+    {
+      "name": "magento",
+      "category": "ecommerce",
+      "aliases": [
+        "adobe commerce"
+      ],
+      "parents": [
+        "php"
+      ]
+    },
+    {
+      "name": "vtex",
+      "category": "ecommerce",
+      "aliases": [],
+      "parents": []
+    },
+    {
+      "name": "woocommerce",
+      "category": "ecommerce",
+      "aliases": [],
+      "parents": [
+        "wordpress"
+      ]
+    },
+    {
+      "name": "prestashop",
+      "category": "ecommerce",
+      "aliases": [],
+      "parents": [
+        "php"
+      ]
+    },
+    {
+      "name": "salesforce commerce cloud",
+      "category": "ecommerce",
+      "aliases": [
+        "demandware"
+      ],
+      "parents": [
+        "salesforce"
+      ]
+    },
+    {
+      "name": "tiendanube",
+      "category": "ecommerce",
+      "aliases": [
+        "nuvemshop"
+      ],
+      "parents": []
+    },
+    {
+      "name": "stripe",
+      "category": "payments",
+      "aliases": [],
+      "parents": []
+    },
+    {
+      "name": "mercado pago",
+      "category": "payments",
+      "aliases": [
+        "mercadopago"
+      ],
+      "parents": []
+    },
+    {
+      "name": "paypal",
+      "category": "payments",
+      "aliases": [],
+      "parents": []
+    },
+    {
+      "name": "adyen",
+      "category": "payments",
+      "aliases": [],
+      "parents": []
+    },
+    {
+      "name": "dlocal",
+      "category": "payments",
+      "aliases": [],
+      "parents": []
+    },
+    {
+      "name": "great expectations",
+      "category": "data_quality",
+      "aliases": [],
+      "parents": [
+        "python"
+      ]
+    },
+    {
+      "name": "soda",
+      "category": "data_quality",
+      "aliases": [
+        "soda core"
+      ],
+      "parents": []
+    },
+    {
+      "name": "deequ",
+      "category": "data_quality",
+      "aliases": [],
+      "parents": [
+        "apache spark"
+      ]
+    },
+    {
+      "name": "monte carlo",
+      "category": "data_quality",
+      "aliases": [],
+      "parents": []
+    },
+    {
+      "name": "gpt",
+      "category": "model",
+      "aliases": [
+        "gpt-4",
+        "gpt-4o",
+        "gpt-5",
+        "gpt-3.5",
+        "gpt4"
+      ],
+      "parents": [
+        "openai api"
+      ]
+    },
+    {
+      "name": "claude",
+      "category": "model",
+      "aliases": [
+        "claude sonnet",
+        "claude opus",
+        "claude haiku"
+      ],
+      "parents": [
+        "anthropic api"
+      ]
+    },
+    {
+      "name": "gemini",
+      "category": "model",
+      "aliases": [
+        "gemini pro",
+        "gemini flash",
+        "google gemini"
+      ],
+      "parents": []
+    },
+    {
+      "name": "llama",
+      "category": "model",
+      "aliases": [
+        "llama 2",
+        "llama 3",
+        "meta llama"
+      ],
+      "parents": []
+    },
+    {
+      "name": "mistral",
+      "category": "model",
+      "aliases": [
+        "mixtral"
+      ],
+      "parents": []
+    },
+    {
+      "name": "deepseek",
+      "category": "model",
+      "aliases": [],
+      "parents": []
+    },
+    {
+      "name": "qwen",
+      "category": "model",
+      "aliases": [],
+      "parents": []
+    },
+    {
+      "name": "bert",
+      "category": "model",
+      "aliases": [],
+      "parents": []
+    },
+    {
+      "name": "stable diffusion",
+      "category": "model",
+      "aliases": [],
+      "parents": []
+    },
+    {
+      "name": "whisper",
+      "category": "model",
+      "aliases": [],
+      "parents": []
+    },
+    {
+      "name": "auth0",
+      "category": "security_tool",
+      "aliases": [],
+      "parents": []
+    },
+    {
+      "name": "okta",
+      "category": "security_tool",
+      "aliases": [],
+      "parents": []
+    },
+    {
+      "name": "keycloak",
+      "category": "security_tool",
+      "aliases": [],
+      "parents": []
+    },
+    {
+      "name": "hashicorp vault",
+      "category": "security_tool",
+      "aliases": [
+        "vault"
+      ],
+      "parents": []
+    },
+    {
+      "name": "snyk",
+      "category": "security_tool",
+      "aliases": [],
+      "parents": []
+    },
+    {
+      "name": "owasp zap",
+      "category": "security_tool",
+      "aliases": [
+        "zap"
+      ],
+      "parents": []
+    },
+    {
+      "name": "burp suite",
+      "category": "security_tool",
+      "aliases": [
+        "burp"
+      ],
+      "parents": []
+    },
+    {
+      "name": "checkmarx",
+      "category": "security_tool",
+      "aliases": [],
+      "parents": []
+    },
+    {
+      "name": "fortify",
+      "category": "security_tool",
+      "aliases": [],
+      "parents": []
+    },
+    {
+      "name": "veracode",
+      "category": "security_tool",
+      "aliases": [],
+      "parents": []
+    },
+    {
+      "name": "trivy",
+      "category": "security_tool",
+      "aliases": [],
+      "parents": []
+    },
+    {
+      "name": "wazuh",
+      "category": "security_tool",
+      "aliases": [],
+      "parents": []
+    },
+    {
+      "name": "qualys",
+      "category": "security_tool",
+      "aliases": [],
+      "parents": []
+    },
+    {
+      "name": "nessus",
+      "category": "security_tool",
+      "aliases": [],
+      "parents": []
+    },
+    {
+      "name": "wireshark",
+      "category": "security_tool",
+      "aliases": [],
+      "parents": []
+    },
+    {
+      "name": "metasploit",
+      "category": "security_tool",
       "aliases": [],
       "parents": []
     }
