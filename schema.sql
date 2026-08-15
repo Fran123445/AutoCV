@@ -166,12 +166,19 @@ CREATE TABLE IF NOT EXISTS Project (
 CREATE TABLE IF NOT EXISTS ProjectTechnologies (
     project_id    INTEGER NOT NULL REFERENCES Project(id),
     technology_id INTEGER NOT NULL REFERENCES DimTechnologies(id),
+    descr         TEXT,   -- rol de esta tech en el project: 'state del
+                  -- dashboard', 'cola de jobs async'. Frase corta, no relato:
+                  -- el relato vive en Project.task_desc. Null en deps triviales
+                  -- (igual cuentan como tag para el match, sin narrativa)
     PRIMARY KEY (project_id, technology_id)
 );
 
 CREATE TABLE IF NOT EXISTS ProjectConcepts (
     project_id INTEGER NOT NULL REFERENCES Project(id),
     concept_id INTEGER NOT NULL REFERENCES DimConcepts(id),
+    descr      TEXT,   -- como ProjectTechnologies.descr. Pesa más acá: un tag
+               -- de concepto ('caching', 'machine learning') dice poco sin el
+               -- contexto de cómo se aplicó en este project
     PRIMARY KEY (project_id, concept_id)
 );
 
