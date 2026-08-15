@@ -96,6 +96,17 @@ CREATE TABLE IF NOT EXISTS JobConcepts (
     PRIMARY KEY (job_id, concept_id)
 );
 
+-- Un aviso pide varias carreras como alternativas: 'Ingeniería en Sistemas,
+-- Ciencias de la Computación o afín'. Todas cuentan como aceptables (OR), sin
+-- must-have vs nice-to-have: no hay exp por carrera ni jerarquía entre ellas,
+-- por eso este bridge no lleva las columnas required/min_exp/max_exp de los
+-- otros dos. Sin filas = el aviso no pide ninguna carrera, común en dev.
+CREATE TABLE IF NOT EXISTS JobDegrees (
+    job_id    INTEGER NOT NULL REFERENCES FactJob(id),
+    degree_id INTEGER NOT NULL REFERENCES DimDegree(id),
+    PRIMARY KEY (job_id, degree_id)
+);
+
 -- Lado candidato (el usuario). Multiuser desde el arranque aunque hoy haya uno
 -- solo: user_id atado a todo evita un refactor si mañana entran más candidatos.
 

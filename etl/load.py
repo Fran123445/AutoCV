@@ -91,6 +91,33 @@ def _solve_role_id(connection: sqlite3.Connection, role_name: str | None) -> int
     return row[0]
 
 
+def _solve_degree_id(connection: sqlite3.Connection, degree_name: str | None) -> int | None:
+    """
+    Solves the degree name to its corresponding ID.
+
+    Args:
+        connection (sqlite3.Connection): Open connection to the database.
+        degree_name (str | None): Canonical field of study, or None when the
+            posting required no degree.
+
+    Returns:
+        int | None: The ID of the degree, or None when there is no name.
+
+    Raises:
+        UnknownSeedValue: The name is not in DimDegree.
+    """
+    if degree_name is None:
+        return None
+
+    row = connection.execute(
+        "SELECT id FROM DimDegree WHERE name = ?", (degree_name,)
+    ).fetchone()
+    if row is None:
+        raise UnknownSeedValue(f"degree {degree_name!r} is not in DimDegree")
+
+    return row[0]
+
+
 def _solve_technology_name_id(connection: sqlite3.Connection, technology_name: str) -> int:
     """
     Solves the technology name to its corresponding ID.
@@ -284,6 +311,7 @@ def load(transformed_data: dict, connection: sqlite3.Connection, scrape_date: st
     header = transformed_data["header"]
     role = transformed_data["role"]
     seniority = transformed_data["seniority"]
+    degree = transformed_data["degree"]
 
     with connection:
         company_id = _solve_company_name_id(connection, header["company_name"])
@@ -354,6 +382,21 @@ def load(transformed_data: dict, connection: sqlite3.Connection, scrape_date: st
                     (0, concepts["nice_to_have_concepts"]),
                 )
                 for entry in entries
+            ],
+        )
+
+        # Its own insert rather than _load_bridge: JobDegrees carries none of the
+        # required/min_exp/max_exp columns that helper writes. DO NOTHING covers
+        # a posting that names the same field twice.
+        connection.executemany(
+            """
+            INSERT INTO JobDegrees (job_id, degree_id)
+            VALUES (?, ?)
+            ON CONFLICT(job_id, degree_id) DO NOTHING
+            """,
+            [
+                (job_id, _solve_degree_id(connection, entry["name"]))
+                for entry in degree["degrees"]
             ],
         )
 

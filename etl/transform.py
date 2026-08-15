@@ -2,6 +2,7 @@ from llm.agents.concept_identifier.first_pass import run_first_pass as concepts_
 from llm.agents.concept_identifier.merge import merge_passes as merge_concept_passes
 from llm.agents.concept_identifier.models import ConceptList
 from llm.agents.concept_identifier.second_pass import run_second_pass as concepts_second_pass
+from llm.agents.degree_identifier.classify import classify_degree
 from llm.agents.role_identifier.classify import classify_role
 from llm.agents.seniority_identifier.classify import classify_seniority
 from llm.agents.tech_identifier.first_pass import run_first_pass as tech_first_pass
@@ -74,4 +75,5 @@ def transform(jd_json: dict) -> dict:
         # The only identifier that reads the header: the title settles the role
         # far more often than the description does.
         "role": classify_role(jd_json["header"]["position_name"], job_desc).model_dump(),
+        "degree": classify_degree(job_desc).model_dump(),
     }

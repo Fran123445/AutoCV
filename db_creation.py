@@ -74,6 +74,32 @@ def _load_roles_data(connection: sqlite3.Connection) -> int:
     return len(roles)
 
 
+def _load_degrees_data(connection: sqlite3.Connection) -> int:
+    """
+    Load the degrees data into the DimDegree table.
+
+    Only name and field: 'level' has a column but no seed value, since it
+    describes an instance of education rather than the canonical program.
+    DO UPDATE on field like DimSeniority does on its years, because the name is
+    the identity and re-bucketing a field in the seed should reach a base that
+    already holds the degree.
+
+    Args:
+        connection (sqlite3.Connection): Open connection to the database.
+    """
+    degrees = load_seed("degrees.json", "degrees")
+    connection.executemany(
+        """
+        INSERT INTO DimDegree (name, field)
+        VALUES (?, ?)
+        ON CONFLICT(name) DO UPDATE SET field = excluded.field
+        """,
+        [(degree["name"], degree["field"]) for degree in degrees],
+    )
+
+    return len(degrees)
+
+
 def _load_technologies_data(connection: sqlite3.Connection) -> int:
     """
     Load the technologies data into the DimTechnologies table.
@@ -135,6 +161,7 @@ def run_db_creation():
         seeded = {
             "DimSeniority": _load_seniority_data(connection),
             "DimRole": _load_roles_data(connection),
+            "DimDegree": _load_degrees_data(connection),
             "DimTechnologies": _load_technologies_data(connection),
             "DimConcepts": _load_concepts_data(connection),
         }
