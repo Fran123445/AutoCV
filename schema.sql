@@ -157,7 +157,10 @@ CREATE TABLE IF NOT EXISTS Project (
     user_id       INTEGER NOT NULL REFERENCES FactUser(id),  -- denormalizado: los
                   -- projects personales (experience_id null) igual saben de quién son
     experience_id INTEGER REFERENCES FactExperience(id),     -- null = personal
-    task_desc     TEXT NOT NULL
+    task_desc     TEXT NOT NULL,
+    source_path   TEXT UNIQUE   -- repo del que salió; null = cargado a mano
+                  -- (varios null conviven). Clave de dedupe del ETL, igual que
+                  -- linkedin_job_id en FactJob
 );
 
 -- Bridges de evidencia: qué tech/concepto tocó cada project. Sin proficiency;

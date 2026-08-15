@@ -203,7 +203,9 @@ class RunLogger:
     ):
         """
         Args:
-            stage (str): 'extract', 'transform' or 'load'.
+            stage (str): 'extract', 'transform' or 'load', prefixed with the
+                pipeline on the projects side ('projects_extract' and so on),
+                since both write into the same FactRun table.
             postings_total (int | None): Files the stage found to work on.
             max_concurrency (int | None): Workers, or None when sequential.
         """
@@ -234,8 +236,10 @@ class RunLogger:
                 self.postings_total,
                 self.max_concurrency,
                 # Only the stage that calls the model. On extract these numbers
-                # would be true and still misleading: nothing read them.
-                _config_snapshot() if self.stage == "transform" else None,
+                # would be true and still misleading: nothing read them. Matched
+                # by suffix so the projects pipeline's 'projects_transform'
+                # counts too.
+                _config_snapshot() if self.stage.endswith("transform") else None,
                 _git_commit(),
             ),
         )
@@ -250,13 +254,17 @@ class RunLogger:
         self.connection.execute(
             """
             UPDATE FactRun
-            SET ended_at = ?, status = ?, postings_ok = ?, postings_failed = ?,
-                error = ?
+            SET ended_at = ?, status = ?, postings_total = ?, postings_ok = ?,
+                postings_failed = ?, error = ?
             WHERE id = ?
             """,
             (
                 utc_now(),
                 "failed" if exc_type is not None else "completed",
+                # Rewritten rather than left as inserted: a stage that only
+                # learns its total once it starts working (the projects scan
+                # walks a folder rather than a glob) sets it on the way out.
+                self.postings_total,
                 self.postings_ok,
                 self.postings_failed,
                 repr(exc_value) if exc_value is not None else None,
