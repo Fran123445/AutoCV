@@ -10,24 +10,34 @@ from etl.extract import JobDescriptionNotFound, extract_from_file
 # than over a single posting.
 from etl.transform import transform as transform_job
 from llm.config import MAX_CONCURRENCY
+from run_log import RunLogger, record_job_run
 
 def extract(staging_dir: Path, out_dir: Path):
+    html_paths = sorted(staging_dir.glob("*.html"))
     extracted_count = 0
     skipped = []
 
-    for html_path in sorted(staging_dir.glob("*.html")):
-        print(f"Extracting {html_path}...")
-        try:
-            extracted = extract_from_file(html_path)
-        except JobDescriptionNotFound as error:
-            # One page saved mid-render should not end the batch.
-            skipped.append((html_path, error))
-            continue
+    with RunLogger("extract", postings_total=len(html_paths)) as run_log:
+        for html_path in html_paths:
+            print(f"Extracting {html_path}...")
+            try:
+                # Wrapped even though no model is involved: the run tables are
+                # also where you look up which page failed and when.
+                with record_job_run(html_path.stem):
+                    extracted = extract_from_file(html_path)
 
-        json_path = out_dir / f"{html_path.stem}.json"
-        with json_path.open("w", encoding="utf-8") as f:
-            json.dump(extracted, f, ensure_ascii=False, indent=2)
-        extracted_count += 1
+                    json_path = out_dir / f"{html_path.stem}.json"
+                    with json_path.open("w", encoding="utf-8") as f:
+                        json.dump(extracted, f, ensure_ascii=False, indent=2)
+            except JobDescriptionNotFound as error:
+                # One page saved mid-render should not end the batch.
+                skipped.append((html_path, error))
+                continue
+
+            extracted_count += 1
+
+        run_log.postings_ok = extracted_count
+        run_log.postings_failed = len(skipped)
 
     print(f"\nExtracted {extracted_count}, skipped {len(skipped)}.")
     for html_path, error in skipped:
@@ -45,14 +55,18 @@ def transform_one(json_path: Path, transform_output_dir: Path):
         json_path (Path): The extract output to read.
         transform_output_dir (Path): Where the transformed posting goes.
     """
-    with json_path.open("r", encoding="utf-8") as f:
-        extracted = json.load(f)
+    # Opens the posting's telemetry record and closes it however this ends. The
+    # agent calls find it through a ContextVar, which is per thread, so the
+    # worker running next door writes into its own record.
+    with record_job_run(json_path.stem):
+        with json_path.open("r", encoding="utf-8") as f:
+            extracted = json.load(f)
 
-    transformed = transform_job(extracted)
+        transformed = transform_job(extracted)
 
-    out_path = transform_output_dir / f"{json_path.stem}.json"
-    with out_path.open("w", encoding="utf-8") as f:
-        json.dump(transformed, f, ensure_ascii=False, indent=2)
+        out_path = transform_output_dir / f"{json_path.stem}.json"
+        with out_path.open("w", encoding="utf-8") as f:
+            json.dump(transformed, f, ensure_ascii=False, indent=2)
 
 
 def transform(extract_output_dir: Path, transform_output_dir: Path):
@@ -60,28 +74,47 @@ def transform(extract_output_dir: Path, transform_output_dir: Path):
     transformed_count = 0
     failed = []
 
-    with ThreadPoolExecutor(max_workers=MAX_CONCURRENCY) as pool:
-        futures = {
-            pool.submit(transform_one, json_path, transform_output_dir): json_path
-            for json_path in json_paths
-        }
+    with RunLogger(
+        "transform",
+        postings_total=len(json_paths),
+        max_concurrency=MAX_CONCURRENCY,
+    ) as run_log:
+        with ThreadPoolExecutor(max_workers=MAX_CONCURRENCY) as pool:
+            futures = {
+                pool.submit(transform_one, json_path, transform_output_dir): json_path
+                for json_path in json_paths
+            }
 
-        # Results are handled here on the main thread, so the counter needs no
-        # lock and the progress lines do not interleave. The tradeoff is that
-        # postings now report in completion order, not in filename order.
-        for future in as_completed(futures):
-            json_path = futures[future]
-            try:
-                future.result()
-            except Exception as error:
-                # Deliberately broad. This runs for hours, every call crosses
-                # the network, and one bad posting should not cost the batch.
-                failed.append((json_path, error))
-                print(f"  FAILED {json_path.name}: {error!r}")
-                continue
+            # Results are handled here on the main thread, so the counter needs
+            # no lock and the progress lines do not interleave. The tradeoff is
+            # that postings now report in completion order, not in filename
+            # order. The telemetry rows are written here for the same reason:
+            # sqlite takes one writer, and this thread is it.
+            for future in as_completed(futures):
+                json_path = futures[future]
+                try:
+                    future.result()
+                except Exception as error:
+                    # Deliberately broad. This runs for hours, every call
+                    # crosses the network, and one bad posting should not cost
+                    # the batch.
+                    failed.append((json_path, error))
+                    print(f"  FAILED {json_path.name}: {error!r}")
+                    continue
+                else:
+                    transformed_count += 1
+                    print(
+                        f"Transformed {json_path.name} "
+                        f"[{transformed_count}/{len(json_paths)}]"
+                    )
+                finally:
+                    # Every iteration rather than once at the end: a batch this
+                    # long should not lose the rows of the postings that did
+                    # finish just because a later one killed the process.
+                    run_log.flush()
 
-            transformed_count += 1
-            print(f"Transformed {json_path.name} [{transformed_count}/{len(json_paths)}]")
+        run_log.postings_ok = transformed_count
+        run_log.postings_failed = len(failed)
 
     print(f"\nTransformed {transformed_count}, failed {len(failed)}.")
     for json_path, error in failed:

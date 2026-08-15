@@ -56,5 +56,9 @@ def run_second_pass(job_desc: str, first_pass: TechnologyList) -> SecondPassResu
     )
 
     return SecondPassResult.model_validate(
-        post_chat(prompt, SecondPassResult.model_json_schema())
+        post_chat(
+            prompt,
+            SecondPassResult.model_json_schema(),
+            agent_name="tech_identifier.second_pass",
+        )
     )

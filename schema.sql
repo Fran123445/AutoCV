@@ -87,3 +87,62 @@ CREATE TABLE IF NOT EXISTS JobConcepts (
     max_exp    INTEGER,
     PRIMARY KEY (job_id, concept_id)
 );
+
+-- Observabilidad de corridas
+
+CREATE TABLE IF NOT EXISTS FactRun (
+    id              INTEGER PRIMARY KEY,
+    stage           TEXT NOT NULL,          -- 'extract' | 'transform' | 'load'
+    started_at      TEXT NOT NULL,          -- ISO 8601, como el resto
+    ended_at        TEXT,                   -- null = corriendo, o muerta
+    status          TEXT NOT NULL DEFAULT 'running',
+                    -- 'running' | 'completed' | 'failed'
+    postings_total  INTEGER,
+    postings_ok     INTEGER,
+    postings_failed INTEGER,
+    max_concurrency INTEGER,
+    config_json     TEXT,                   -- snapshot de llm/config.py: model,
+                    -- temperature, timeout, base_url. Un JSON y no columnas
+                    -- sueltas: la config cambia más seguido que el schema
+    git_commit      TEXT,                   -- qué código produjo estos datos
+    error           TEXT
+);
+
+CREATE TABLE IF NOT EXISTS FactJobRun (
+    id          INTEGER PRIMARY KEY,
+    run_id      INTEGER NOT NULL REFERENCES FactRun(id),
+    source_file TEXT NOT NULL,              -- stem del json; en transform
+                -- todavía no existe el FactJob al que apuntar
+    job_id      INTEGER REFERENCES FactJob(id),  -- se completa en load
+    started_at  TEXT NOT NULL,
+    ended_at    TEXT,
+    status      TEXT NOT NULL DEFAULT 'running',
+    error       TEXT                        -- repr de la excepción
+);
+
+CREATE TABLE IF NOT EXISTS FactAgentCall (
+    id                INTEGER PRIMARY KEY,
+    job_run_id        INTEGER NOT NULL REFERENCES FactJobRun(id),
+    agent_name        TEXT NOT NULL,        -- 'tech_identifier.first_pass', ...
+    attempt           INTEGER NOT NULL DEFAULT 1,  -- todavía no hay reintentos,
+                      -- pero sin contador un reintento parece fila duplicada
+    started_at        TEXT NOT NULL,
+    ended_at          TEXT,
+    latency_ms        INTEGER,
+    model_name        TEXT,                 -- el que devolvió el server, no el
+                      -- que pediste: MODEL_NAME está vacío y elige el server
+    temperature       REAL,
+    think             INTEGER,              -- 0/1, lo único que varía por agente
+    prompt_tokens     INTEGER,
+    completion_tokens INTEGER,              -- incluye los de razonamiento:
+                      -- llama-server no los separa en usage
+    prompt_sha1       TEXT,                 -- hash del prompt renderizado; sin
+                      -- esto una corrida vieja y una nueva sólo "dan distinto"
+    http_status       INTEGER,
+    status            TEXT NOT NULL DEFAULT 'running',
+    error             TEXT
+);
+
+CREATE INDEX IF NOT EXISTS idx_jobrun_run   ON FactJobRun(run_id);
+CREATE INDEX IF NOT EXISTS idx_agentcall_jr ON FactAgentCall(job_run_id);
+CREATE INDEX IF NOT EXISTS idx_agentcall_ag ON FactAgentCall(agent_name);

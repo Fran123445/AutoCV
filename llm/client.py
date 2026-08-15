@@ -1,6 +1,9 @@
 import json
+import time
 
 import httpx
+
+from run_log import AgentCall, prompt_fingerprint, record_call, utc_now
 
 from llm.config import (
     API_KEY,
@@ -24,15 +27,22 @@ client = httpx.Client(
 )
 
 
-def post_chat(prompt: str, schema: dict, think: bool = True) -> dict:
+def post_chat(prompt: str, schema: dict, think: bool = True, agent_name: str = "unknown") -> dict:
     """
     Send a prompt to the model and return the parsed JSON content.
+
+    Also records the call against the posting being processed, when there is
+    one. Recording happens here rather than in the agents because this is the
+    only place that sees the timings, the usage figures and the model the
+    server picked.
 
     Args:
         prompt (str): The full prompt to send.
         schema (dict): JSON schema constraining the reply.
         think (bool): Whether to let the model reason before answering. Off for
             the tasks that are a lookup rather than a judgement call.
+        agent_name (str): Who is asking, as 'package.pass'. Only ever read back
+            out of FactAgentCall.
     """
     payload = {
         "messages": [{"role": "user", "content": prompt}],
@@ -52,11 +62,44 @@ def post_chat(prompt: str, schema: dict, think: bool = True) -> dict:
 
     headers = {"Authorization": f"Bearer {API_KEY}"} if API_KEY else None
 
-    response = client.post(CHAT_COMPLETIONS_PATH, json=payload, headers=headers)
+    call = AgentCall(
+        agent_name=agent_name,
+        started_at=utc_now(),
+        temperature=TEMPERATURE,
+        think=think,
+        prompt_sha1=prompt_fingerprint(prompt),
+    )
+    # perf_counter and not the two timestamps: they are rounded to the second,
+    # and a lookup call comes back well inside one.
+    started = time.perf_counter()
+    response = None
 
     try:
-        return json.loads(response.json()["choices"][0]["message"]["content"])
+        response = client.post(CHAT_COMPLETIONS_PATH, json=payload, headers=headers)
+        call.http_status = response.status_code
+
+        body = response.json()
+        # An error reply carries no usage and no choices, so read what is there
+        # before the line that will raise.
+        usage = body.get("usage") or {}
+        call.prompt_tokens = usage.get("prompt_tokens")
+        call.completion_tokens = usage.get("completion_tokens")
+        call.model_name = body.get("model")
+
+        content = json.loads(body["choices"][0]["message"]["content"])
     except Exception as e:
+        call.status = "failed"
+        call.error = repr(e)
         raise ValueError(
-            f"Failed to parse response: {e}. Response content: {response.text}"
+            # response is None when the request never came back at all, which
+            # is what a timeout looks like from here.
+            f"Failed to parse response: {e}. Response content: "
+            f"{response.text if response is not None else '(no response)'}"
         )
+    else:
+        call.status = "completed"
+        return content
+    finally:
+        call.ended_at = utc_now()
+        call.latency_ms = int((time.perf_counter() - started) * 1000)
+        record_call(call)

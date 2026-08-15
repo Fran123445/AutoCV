@@ -42,7 +42,11 @@ def run_first_pass(job_desc: str) -> ConceptList:
     )
 
     result = ConceptList.model_validate(
-        post_chat(prompt, ConceptList.model_json_schema())
+        post_chat(
+            prompt,
+            ConceptList.model_json_schema(),
+            agent_name="concept_identifier.first_pass",
+        )
     )
 
     # Belt and braces over the prompt rule above. Done here rather than at the

@@ -57,5 +57,9 @@ def run_second_pass(job_desc: str, first_pass: ConceptList) -> SecondPassResult:
     )
 
     return SecondPassResult.model_validate(
-        post_chat(prompt, SecondPassResult.model_json_schema())
+        post_chat(
+            prompt,
+            SecondPassResult.model_json_schema(),
+            agent_name="concept_identifier.second_pass",
+        )
     )

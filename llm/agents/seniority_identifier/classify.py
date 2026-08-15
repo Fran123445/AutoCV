@@ -43,5 +43,10 @@ def classify_seniority(job_desc: str) -> Seniority:
     )
 
     return Seniority.model_validate(
-        post_chat(prompt, Seniority.model_json_schema(), think=False)
+        post_chat(
+            prompt,
+            Seniority.model_json_schema(),
+            think=False,
+            agent_name="seniority_identifier.classify",
+        )
     )
