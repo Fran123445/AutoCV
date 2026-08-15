@@ -66,6 +66,7 @@ def transform(jd_json: dict) -> dict:
 
     return {
         "header": jd_json["header"],
+        "scrape_date": jd_json["scrape_date"],
         # Carried through rather than dropped: FactJob.raw_text needs it, and
         # the load stage should not have to reopen the extract output to get it.
         "body": job_desc,

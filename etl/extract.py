@@ -1,3 +1,6 @@
+from datetime import datetime, timezone
+from pathlib import Path
+
 import re
 
 from bs4 import BeautifulSoup
@@ -262,7 +265,17 @@ def extract_from_file(path) -> dict:
     Args:
         path: Path to the saved LinkedIn HTML file.
     """
+    path = Path(path)
     # Explicit encoding: the saved pages are UTF-8, and falling back to a
     # locale default silently mangles the accented anchors above.
-    with open(path, encoding="utf-8") as handle:
-        return extract_from_html(handle.read())
+    with path.open(encoding="utf-8") as handle:
+        extracted = extract_from_html(handle.read())
+
+    # The file's mtime is when the browser wrote the page, which is the moment
+    # it was scraped. Captured here at the one point that still holds the file,
+    # so transform can carry it and load never has to guess. Date precision to
+    # match FactJob.scrape_date and the post_date it is walked back from.
+    mtime = path.stat().st_mtime
+    extracted["scrape_date"] = datetime.fromtimestamp(mtime, tz=timezone.utc).date().isoformat()
+
+    return extracted

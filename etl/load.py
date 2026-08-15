@@ -287,7 +287,7 @@ def _load_bridge(
     )
 
 
-def load(transformed_data: dict, connection: sqlite3.Connection, scrape_date: str) -> int | None:
+def load(transformed_data: dict, connection: sqlite3.Connection) -> int | None:
     """
     Loads the transformed data into the database.
 
@@ -297,10 +297,8 @@ def load(transformed_data: dict, connection: sqlite3.Connection, scrape_date: st
     not walk that back.
 
     Args:
-        transformed_data (dict): The data to load.
-        connection (sqlite3.Connection): Open connection to the database.
-        scrape_date (str): ISO 8601 date the page was saved. Not in the
-            transform output, so the caller has to supply it.
+        transformed_data (dict): The data to load. Carries scrape_date, stamped
+            by extract from the saved page's mtime and passed through transform.
 
     Returns:
         int | None: The FactJob id, or None when the posting was already there.
@@ -312,6 +310,7 @@ def load(transformed_data: dict, connection: sqlite3.Connection, scrape_date: st
     role = transformed_data["role"]
     seniority = transformed_data["seniority"]
     degree = transformed_data["degree"]
+    scrape_date = transformed_data["scrape_date"]
 
     with connection:
         company_id = _solve_company_name_id(connection, header["company_name"])
