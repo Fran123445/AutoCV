@@ -1,16 +1,30 @@
 from pathlib import Path
 
+import re
 import subprocess
 
 from etl.projects.config import (
     CI_WORKFLOW_DIR,
     CONFIG_SIGNAL_NAMES,
+    IMPORT_PATTERNS,
+    IMPORT_SELF_REFERENCES,
+    IMPORT_VENDOR_PREFIXES,
+    IMPORT_VENDOR_SEGMENTS,
     MANIFEST_GLOBS,
     MANIFEST_NAMES,
+    MAX_IMPORT_SCAN_FILES,
     MIN_SOURCE_FILES,
     README_MAX_CHARS,
     SOURCE_EXTENSIONS,
 )
+
+
+# Compiled once at import: the same handful of patterns runs over every file of
+# every project, so recompiling per file would dominate the scan.
+_COMPILED_IMPORT_PATTERNS = {
+    extension: tuple(re.compile(pattern, re.MULTILINE) for pattern in patterns)
+    for extension, patterns in IMPORT_PATTERNS.items()
+}
 
 
 def _tracked_files(project: Path) -> list[str]:
@@ -198,14 +212,123 @@ def _extension_histogram(files: list[str]) -> dict[str, int]:
     return histogram
 
 
+def _normalize_module(raw: str) -> str | None:
+    """
+    Reduce a captured import target to the package it names.
+
+    An import path carries more than the package: "os.path", "react-dom/client"
+    and "std::collections" all name something inside a package rather than a
+    second package. Only the head is kept, except under a registrar prefix,
+    where the head is "com" or "github.com" and says nothing on its own.
+
+    Args:
+        raw (str): The module as captured from the source.
+
+    Returns:
+        str | None: The package name, or None when the import is relative.
+    """
+    module = raw.strip().strip("\"'")
+    # A relative import points back into the project, never at a dependency.
+    if not module or module.startswith((".", "/")):
+        return None
+
+    # An npm scope is half of the package name: "@scope/name" is the package,
+    # anything past it is a path inside that package.
+    if module.startswith("@"):
+        return "/".join(module.split("/")[:2])
+
+    for separator in ("/", "::", "\\", "."):
+        if separator in module:
+            parts = [part for part in module.split(separator) if part]
+            break
+    else:
+        parts, separator = [module], ""
+
+    if not parts:
+        return None
+
+    if parts[0] in IMPORT_VENDOR_PREFIXES:
+        return separator.join(parts[:IMPORT_VENDOR_SEGMENTS])
+
+    return parts[0]
+
+
+def _local_module_names(files: list[str]) -> set[str]:
+    """
+    Collect the names a project's own top-level modules would import as.
+
+    Language-agnostic, which is why it survives while a standard library filter
+    is not worth having: a repo with a models/ package would otherwise report
+    importing "models" as though it were a dependency.
+
+    Args:
+        files (list[str]): Tracked file paths relative to the project root.
+
+    Returns:
+        set[str]: Top-level directory names and root file stems.
+    """
+    names = set(IMPORT_SELF_REFERENCES)
+    for path in files:
+        head, _, tail = path.partition("/")
+        names.add(head if tail else Path(head).stem)
+
+    return names
+
+
+def _scan_imports(project: Path, files: list[str]) -> dict[str, int]:
+    """
+    Count how many files import each third-party package.
+
+    Manifests say what a project declares; this says what it actually uses, and
+    it is the only tech signal a repo without a manifest carries at all. Files
+    whose extension has no pattern are skipped rather than guessed at, so an
+    unhandled language degrades to the manifest-only behaviour instead of
+    producing noise.
+
+    Args:
+        project (Path): The project directory.
+        files (list[str]): Tracked file paths relative to the project root.
+
+    Returns:
+        dict[str, int]: Package name to the number of files importing it.
+    """
+    scannable = sorted(
+        (f for f in files if Path(f).suffix.lower() in _COMPILED_IMPORT_PATTERNS),
+        key=lambda path: (path.count("/"), path),
+    )
+    local = _local_module_names(files)
+
+    counts: dict[str, int] = {}
+    for rel_path in scannable[:MAX_IMPORT_SCAN_FILES]:
+        try:
+            text = (project / rel_path).read_text(encoding="utf-8", errors="replace")
+        except OSError:
+            continue
+
+        # Per file rather than per occurrence: the count answers "how much of
+        # the project touches this", which a single hot module importing it
+        # twenty times would otherwise drown out.
+        in_file = set()
+        for pattern in _COMPILED_IMPORT_PATTERNS[Path(rel_path).suffix.lower()]:
+            for match in pattern.findall(text):
+                module = _normalize_module(match)
+                if module and module not in local:
+                    in_file.add(module)
+
+        for module in in_file:
+            counts[module] = counts.get(module, 0) + 1
+
+    return counts
+
+
 def _gather_signals(projects: list[Path]) -> list[dict]:
     """
     Build the per-project signal dict that the transform stage consumes.
 
     Everything cheap and deterministic: raw manifests, infra/CI markers, an
-    extension histogram, the README, and the tracked file tree. No agent and no
-    code reading here; this is the evidence the agent passes then read, sample
-    and grep over.
+    extension histogram, the imported packages, the README, and the tracked file
+    tree. Source files are opened only to match import lines, never read for
+    meaning; that is the sampling pass's job.
 
     Args:
         projects (list[Path]): The whitelisted project directories.
@@ -223,6 +346,7 @@ def _gather_signals(projects: list[Path]) -> list[dict]:
                 "manifests": _read_manifests(project, _find_manifests(files)),
                 "config_signals": _find_config_signals(files),
                 "ext_histogram": _extension_histogram(files),
+                "imports": _scan_imports(project, files),
                 "readme": _read_readme(project, files),
                 "tree": files,
             }
@@ -248,6 +372,7 @@ def extract(parent_projects_folder: str) -> list[dict]:
             "manifests": {str: str},     # manifest filename -> raw contents
             "config_signals": [str],     # infra/CI marker paths present
             "ext_histogram": {str: int}, # extension -> tracked file count
+            "imports": {str: int},       # package -> files importing it
             "readme": str | None,        # capped README text
             "tree": [str],               # tracked file paths, repo-relative
         }
