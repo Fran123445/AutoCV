@@ -56,7 +56,7 @@ def narrate(technologies: list[str], sample: str) -> ProjectNarrative:
         post_chat(
             prompt,
             ProjectNarrative.model_json_schema(),
-            agent_name="project_narrator.narrate",
+            task_name="project_narrator.narrate",
         )
     )
 

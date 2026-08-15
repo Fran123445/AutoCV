@@ -68,6 +68,6 @@ def describe(
         post_chat(
             prompt,
             model.model_json_schema(),
-            agent_name="project_describer.describe",
+            task_name="project_describer.describe",
         )
     ).model_dump()

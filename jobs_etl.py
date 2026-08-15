@@ -65,7 +65,7 @@ def transform_one(json_path: Path, transform_output_dir: Path):
         transform_output_dir (Path): Where the transformed posting goes.
     """
     # Opens the posting's telemetry record and closes it however this ends. The
-    # agent calls find it through a ContextVar, which is per thread, so the
+    # model calls find it through a ContextVar, which is per thread, so the
     # worker running next door writes into its own record.
     with record_job_run(json_path.stem):
         with json_path.open("r", encoding="utf-8") as f:
@@ -152,7 +152,7 @@ def load(transform_output_dir: Path):
             try:
                 # The same telemetry wrapper transform uses, so a load that
                 # blows up on one posting still leaves a FactJobRun row behind.
-                # No agent calls happen here, so its call list stays empty.
+                # No model calls happen here, so its call list stays empty.
                 with record_job_run(json_path.stem) as job_run:
                     with json_path.open("r", encoding="utf-8") as f:
                         transformed = json.load(f)

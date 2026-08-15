@@ -47,6 +47,6 @@ def classify_seniority(job_desc: str) -> Seniority:
             prompt,
             Seniority.model_json_schema(),
             think=False,
-            agent_name="seniority_identifier.classify",
+            task_name="seniority_identifier.classify",
         )
     )

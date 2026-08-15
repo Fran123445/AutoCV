@@ -16,8 +16,8 @@ ConceptName = Literal[tuple(CONCEPT_NAMES)]
 NAMES_ONLY = render_names(REGISTRY)
 NAMES_WITH_ALIASES = render_with_aliases(REGISTRY)
 
-# Read straight from the seed rather than through the technology agent: both
-# registries are just files, and going through the agent would couple the two
+# Read straight from the seed rather than through the technology task: both
+# registries are just files, and going through the task would couple the two
 # for nothing.
 TECHNOLOGY_SURFACES = {
     surface.casefold()

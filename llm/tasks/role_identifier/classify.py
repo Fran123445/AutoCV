@@ -58,6 +58,6 @@ def classify_role(position_name: str | None, job_desc: str) -> Role:
             prompt,
             Role.model_json_schema(),
             think=False,
-            agent_name="role_identifier.classify",
+            task_name="role_identifier.classify",
         )
     )

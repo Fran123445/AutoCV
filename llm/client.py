@@ -3,7 +3,7 @@ import time
 
 import httpx
 
-from run_log import AgentCall, prompt_fingerprint, record_call, utc_now
+from run_log import LLMCall, prompt_fingerprint, record_call, utc_now
 
 from llm.config import (
     API_KEY,
@@ -27,12 +27,12 @@ client = httpx.Client(
 )
 
 
-def post_chat(prompt: str, schema: dict, think: bool = True, agent_name: str = "unknown") -> dict:
+def post_chat(prompt: str, schema: dict, think: bool = True, task_name: str = "unknown") -> dict:
     """
     Send a prompt to the model and return the parsed JSON content.
 
     Also records the call against the posting being processed, when there is
-    one. Recording happens here rather than in the agents because this is the
+    one. Recording happens here rather than in the tasks because this is the
     only place that sees the timings, the usage figures and the model the
     server picked.
 
@@ -41,8 +41,8 @@ def post_chat(prompt: str, schema: dict, think: bool = True, agent_name: str = "
         schema (dict): JSON schema constraining the reply.
         think (bool): Whether to let the model reason before answering. Off for
             the tasks that are a lookup rather than a judgement call.
-        agent_name (str): Who is asking, as 'package.pass'. Only ever read back
-            out of FactAgentCall.
+        task_name (str): Who is asking, as 'package.pass'. Only ever read back
+            out of FactLLMCall.
     """
     payload = {
         "messages": [{"role": "user", "content": prompt}],
@@ -62,8 +62,8 @@ def post_chat(prompt: str, schema: dict, think: bool = True, agent_name: str = "
 
     headers = {"Authorization": f"Bearer {API_KEY}"} if API_KEY else None
 
-    call = AgentCall(
-        agent_name=agent_name,
+    call = LLMCall(
+        task_name=task_name,
         started_at=utc_now(),
         temperature=TEMPERATURE,
         think=think,

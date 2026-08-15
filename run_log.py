@@ -3,7 +3,7 @@ Run telemetry: what a stage did, posting by posting and call by call.
 
 Two halves that never touch the same objects. The recording half is what the
 worker threads use: a ContextVar holding the current posting's call list, so
-llm.client can log a call without every agent having to pass a run id down.
+llm.client can log a call without every task having to pass a run id down.
 The writing half is RunLogger, which owns the only connection and runs on the
 main thread. Finished postings cross between the two on a queue, because sqlite
 takes one writer and the transform stage has MAX_CONCURRENCY of them.
@@ -50,10 +50,10 @@ def prompt_fingerprint(prompt: str) -> str:
 
 
 @dataclass
-class AgentCall:
-    """One request to the model. Mirrors a FactAgentCall row."""
+class LLMCall:
+    """One request to the model. Mirrors a FactLLMCall row."""
 
-    agent_name: str
+    task_name: str
     started_at: str
     ended_at: str | None = None
     latency_ms: int | None = None
@@ -80,13 +80,13 @@ class JobRun:
     # Filled by the load stage once the posting has a FactJob row. Stays null
     # through extract and transform, where the posting is not in the base yet.
     job_id: int | None = None
-    calls: list[AgentCall] = field(default_factory=list)
+    calls: list[LLMCall] = field(default_factory=list)
 
 
 # Set per posting by record_job_run, read by record_call. A ContextVar and not
 # a plain global because the transform stage runs postings on several threads at
 # once, and each thread starts from its own empty context.
-_CURRENT_CALLS: ContextVar[list[AgentCall] | None] = ContextVar(
+_CURRENT_CALLS: ContextVar[list[LLMCall] | None] = ContextVar(
     "current_calls", default=None
 )
 
@@ -95,15 +95,15 @@ _CURRENT_CALLS: ContextVar[list[AgentCall] | None] = ContextVar(
 _FINISHED_JOB_RUNS: "queue.Queue[JobRun]" = queue.Queue()
 
 
-def record_call(call: AgentCall):
+def record_call(call: LLMCall):
     """
     Attach a finished call to the posting being processed.
 
-    A no-op outside a run, so calling an agent straight from a script or a test
+    A no-op outside a run, so calling a task straight from a script or a test
     still works and simply records nothing.
 
     Args:
-        call (AgentCall): The call to record.
+        call (LLMCall): The call to record.
     """
     calls = _CURRENT_CALLS.get()
     if calls is None:
@@ -323,8 +323,8 @@ class RunLogger:
 
         self.connection.executemany(
             """
-            INSERT INTO FactAgentCall (
-                job_run_id, agent_name, attempt, started_at, ended_at,
+            INSERT INTO FactLLMCall (
+                job_run_id, task_name, attempt, started_at, ended_at,
                 latency_ms, model_name, temperature, think, prompt_tokens,
                 completion_tokens, prompt_sha1, http_status, status, error
             )
@@ -333,7 +333,7 @@ class RunLogger:
             [
                 (
                     job_run_id,
-                    call.agent_name,
+                    call.task_name,
                     call.started_at,
                     call.ended_at,
                     call.latency_ms,

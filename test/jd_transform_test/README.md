@@ -23,7 +23,7 @@ Expected output is model output, produced by running `etl/jobs/transform.py` ove
 
 7 calls per posting:
 
-| Agent | Passes | Reasoning |
+| Task | Passes | Reasoning |
 |---|---|---|
 | `tech_identifier` | first + second | on |
 | `concept_identifier` | first + second | on |

@@ -41,6 +41,6 @@ def run_first_pass(job_desc: str) -> TechnologyList:
         post_chat(
             prompt,
             TechnologyList.model_json_schema(),
-            agent_name="tech_identifier.first_pass",
+            task_name="tech_identifier.first_pass",
         )
     )

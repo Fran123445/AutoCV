@@ -45,6 +45,6 @@ def run_first_pass(signals: dict) -> ProjectTechnologyList:
         post_chat(
             prompt,
             ProjectTechnologyList.model_json_schema(),
-            agent_name="project_tech_identifier.first_pass",
+            task_name="project_tech_identifier.first_pass",
         )
     )

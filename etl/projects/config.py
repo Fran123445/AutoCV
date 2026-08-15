@@ -34,7 +34,7 @@ CONFIG_SIGNAL_NAMES = (
 CI_WORKFLOW_DIR = ".github/workflows"
 
 # Counted for the cull floor and handed to transform as a stack hint (many .rs
-# without a Cargo.toml still means Rust). Kept wide on purpose: a repo the agent
+# without a Cargo.toml still means Rust). Kept wide on purpose: a repo the model
 # should judge is better admitted than dropped over a missing extension.
 SOURCE_EXTENSIONS = frozenset(
     {
@@ -45,7 +45,7 @@ SOURCE_EXTENSIONS = frozenset(
 )
 
 # A repo under this many source files and with no manifest is treated as junk
-# (scratch, config-only, empty scaffold) and never reaches the agent.
+# (scratch, config-only, empty scaffold) and never reaches the model.
 MIN_SOURCE_FILES = 3
 
 # README is narrative fuel for the task_desc pass, not a parse target; cap it so

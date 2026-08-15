@@ -217,10 +217,10 @@ CREATE TABLE IF NOT EXISTS FactJobRun (
     error       TEXT                        -- repr de la excepción
 );
 
-CREATE TABLE IF NOT EXISTS FactAgentCall (
+CREATE TABLE IF NOT EXISTS FactLLMCall (
     id                INTEGER PRIMARY KEY,
     job_run_id        INTEGER NOT NULL REFERENCES FactJobRun(id),
-    agent_name        TEXT NOT NULL,        -- 'tech_identifier.first_pass', ...
+    task_name         TEXT NOT NULL,        -- 'tech_identifier.first_pass', ...
     attempt           INTEGER NOT NULL DEFAULT 1,  -- todavía no hay reintentos,
                       -- pero sin contador un reintento parece fila duplicada
     started_at        TEXT NOT NULL,
@@ -229,7 +229,7 @@ CREATE TABLE IF NOT EXISTS FactAgentCall (
     model_name        TEXT,                 -- el que devolvió el server, no el
                       -- que pediste: MODEL_NAME está vacío y elige el server
     temperature       REAL,
-    think             INTEGER,              -- 0/1, lo único que varía por agente
+    think             INTEGER,              -- 0/1, lo único que varía por tarea
     prompt_tokens     INTEGER,
     completion_tokens INTEGER,              -- incluye los de razonamiento:
                       -- llama-server no los separa en usage
@@ -243,6 +243,6 @@ CREATE TABLE IF NOT EXISTS FactAgentCall (
 CREATE INDEX IF NOT EXISTS idx_experience_user ON FactExperience(user_id);
 CREATE INDEX IF NOT EXISTS idx_project_user     ON Project(user_id);
 CREATE INDEX IF NOT EXISTS idx_project_exp      ON Project(experience_id);
-CREATE INDEX IF NOT EXISTS idx_jobrun_run   ON FactJobRun(run_id);
-CREATE INDEX IF NOT EXISTS idx_agentcall_jr ON FactAgentCall(job_run_id);
-CREATE INDEX IF NOT EXISTS idx_agentcall_ag ON FactAgentCall(agent_name);
+CREATE INDEX IF NOT EXISTS idx_jobrun_run     ON FactJobRun(run_id);
+CREATE INDEX IF NOT EXISTS idx_llmcall_jr     ON FactLLMCall(job_run_id);
+CREATE INDEX IF NOT EXISTS idx_llmcall_task   ON FactLLMCall(task_name);

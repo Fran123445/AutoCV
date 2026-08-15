@@ -52,6 +52,6 @@ def run_second_pass(signals: dict, first_pass: ProjectTechnologyList) -> SecondP
         post_chat(
             prompt,
             SecondPassResult.model_json_schema(),
-            agent_name="project_tech_identifier.second_pass",
+            task_name="project_tech_identifier.second_pass",
         )
     )

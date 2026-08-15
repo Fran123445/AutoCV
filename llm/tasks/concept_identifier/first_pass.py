@@ -45,7 +45,7 @@ def run_first_pass(job_desc: str) -> ConceptList:
         post_chat(
             prompt,
             ConceptList.model_json_schema(),
-            agent_name="concept_identifier.first_pass",
+            task_name="concept_identifier.first_pass",
         )
     )
 

@@ -108,12 +108,12 @@ def _count_source_files(files: list[str]) -> int:
 
 def _filter_irrelevant_projects(parent_projects: Path) -> list[Path]:
     """
-    Keep the child directories worth handing to the agent.
+    Keep the child directories worth handing to the model.
 
     Two cheap, deterministic gates only. Git presence, then a junk floor: a
     manifest or a handful of source files. Anything subtler (an unclear repo
     that clears the floor but may still be throwaway) is left for the transform
-    agent to judge, since that is a call code should not make.
+    stage to judge, since that is a call code should not make.
 
     Args:
         parent_projects (Path): Folder whose immediate subdirectories are the
@@ -138,8 +138,8 @@ def _read_manifests(project: Path, manifest_names: list[str]) -> dict[str, str]:
     """
     Read the raw text of each named manifest at a project's root.
 
-    Raw, not parsed: the dead-dep grep and the tech agent both want the original
-    text, and each ecosystem's format is the agent's problem, not extract's.
+    Raw, not parsed: the dead-dep grep and the tech pass both want the original
+    text, and each ecosystem's format is the pass's problem, not extract's.
 
     Args:
         project (Path): The project directory.
@@ -362,7 +362,7 @@ def extract(parent_projects_folder: str) -> list[dict]:
     """
     Extract the signal dicts for every worthwhile project under a parent folder.
 
-    Deterministic, agent-free stage: it scans the immediate subdirectories of
+    Deterministic, model-free stage: it scans the immediate subdirectories of
     the parent, keeps the git repos that clear the junk floor, and gathers the
     cheap signals the transform stage turns into technologies, concepts and a
     narrative. File lists come from git, so each project's own .gitignore prunes

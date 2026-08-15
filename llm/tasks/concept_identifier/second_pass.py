@@ -60,6 +60,6 @@ def run_second_pass(job_desc: str, first_pass: ConceptList) -> SecondPassResult:
         post_chat(
             prompt,
             SecondPassResult.model_json_schema(),
-            agent_name="concept_identifier.second_pass",
+            task_name="concept_identifier.second_pass",
         )
     )

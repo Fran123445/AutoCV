@@ -88,7 +88,7 @@ def transform_one(json_path: Path, transform_output_dir: Path):
         transform_output_dir (Path): Where the transformed project goes.
     """
     # Opens the project's telemetry record and closes it however this ends. The
-    # agent calls find it through a ContextVar, which is per thread, so the
+    # model calls find it through a ContextVar, which is per thread, so the
     # worker running next door writes into its own record.
     with record_job_run(json_path.stem):
         with json_path.open("r", encoding="utf-8") as f:
@@ -127,7 +127,7 @@ def transform(extract_output_dir: Path, transform_output_dir: Path):
                 try:
                     future.result()
                 except Exception as error:
-                    # Deliberately broad. Three agent passes per project, every
+                    # Deliberately broad. Three model passes per project, every
                     # one across the network, and one bad repo should not cost
                     # the batch.
                     failed.append((json_path, error))
@@ -175,7 +175,7 @@ def load(transform_output_dir: Path):
             try:
                 # The same telemetry wrapper transform uses, so a load that
                 # blows up on one project still leaves a FactJobRun row behind.
-                # No agent calls happen here, so its call list stays empty, and
+                # No model calls happen here, so its call list stays empty, and
                 # job_id stays null: that column is a FactJob foreign key, and
                 # a Project id would not point where it claims to.
                 with record_job_run(json_path.stem):

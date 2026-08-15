@@ -53,6 +53,6 @@ def classify_degree(job_desc: str) -> DegreeRequirement:
             prompt,
             DegreeRequirement.model_json_schema(),
             think=False,
-            agent_name="degree_identifier.classify",
+            task_name="degree_identifier.classify",
         )
     )
