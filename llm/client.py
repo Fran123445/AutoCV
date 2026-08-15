@@ -6,13 +6,22 @@ from llm.config import (
     API_KEY,
     BASE_URL,
     CHAT_COMPLETIONS_PATH,
+    MAX_CONCURRENCY,
     MODEL_NAME,
     TEMPERATURE,
     TIMEOUT,
 )
 
 
-client = httpx.Client(base_url=BASE_URL, timeout=TIMEOUT)
+# Shared across the worker threads rather than one client each, so they reuse
+# connections. httpx.Client is thread safe. The pool is capped at the same
+# number of workers, since a fifth connection to a four slot server would only
+# sit in the server's queue holding a socket open.
+client = httpx.Client(
+    base_url=BASE_URL,
+    timeout=TIMEOUT,
+    limits=httpx.Limits(max_connections=MAX_CONCURRENCY),
+)
 
 
 def post_chat(prompt: str, schema: dict, think: bool = True) -> dict:

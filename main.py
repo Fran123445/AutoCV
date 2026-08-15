@@ -1,4 +1,5 @@
 
+from concurrent.futures import ThreadPoolExecutor, as_completed
 from pathlib import Path
 
 import argparse
@@ -8,6 +9,7 @@ from etl.extract import JobDescriptionNotFound, extract_from_file
 # Aliased: this module has a transform() of its own, over directories rather
 # than over a single posting.
 from etl.transform import transform as transform_job
+from llm.config import MAX_CONCURRENCY
 
 def extract(staging_dir: Path, out_dir: Path):
     extracted_count = 0
@@ -32,30 +34,54 @@ def extract(staging_dir: Path, out_dir: Path):
         print(f"  {html_path.name}: {error}")
 
 
+def transform_one(json_path: Path, transform_output_dir: Path):
+    """
+    Transform a single extracted posting and write it out.
+
+    Runs on a worker thread. Every posting reads and writes its own file, so
+    the threads share nothing but the HTTP client, which is thread safe.
+
+    Args:
+        json_path (Path): The extract output to read.
+        transform_output_dir (Path): Where the transformed posting goes.
+    """
+    with json_path.open("r", encoding="utf-8") as f:
+        extracted = json.load(f)
+
+    transformed = transform_job(extracted)
+
+    out_path = transform_output_dir / f"{json_path.stem}.json"
+    with out_path.open("w", encoding="utf-8") as f:
+        json.dump(transformed, f, ensure_ascii=False, indent=2)
+
+
 def transform(extract_output_dir: Path, transform_output_dir: Path):
     json_paths = sorted(extract_output_dir.glob("*.json"))
     transformed_count = 0
     failed = []
 
-    for json_path in json_paths:
-        try:
-            with json_path.open("r", encoding="utf-8") as f:
-                extracted = json.load(f)
+    with ThreadPoolExecutor(max_workers=MAX_CONCURRENCY) as pool:
+        futures = {
+            pool.submit(transform_one, json_path, transform_output_dir): json_path
+            for json_path in json_paths
+        }
 
-            transformed = transform_job(extracted)
+        # Results are handled here on the main thread, so the counter needs no
+        # lock and the progress lines do not interleave. The tradeoff is that
+        # postings now report in completion order, not in filename order.
+        for future in as_completed(futures):
+            json_path = futures[future]
+            try:
+                future.result()
+            except Exception as error:
+                # Deliberately broad. This runs for hours, every call crosses
+                # the network, and one bad posting should not cost the batch.
+                failed.append((json_path, error))
+                print(f"  FAILED {json_path.name}: {error!r}")
+                continue
 
-            out_path = transform_output_dir / f"{json_path.stem}.json"
-            with out_path.open("w", encoding="utf-8") as f:
-                json.dump(transformed, f, ensure_ascii=False, indent=2)
-        except Exception as error:
-            # Deliberately broad. This runs for hours, every call crosses
-            # the network, and one bad posting should not cost the batch.
-            failed.append((json_path, error))
-            print(f"  FAILED {json_path.name}: {error!r}")
-            continue
-
-        transformed_count += 1
-        print(f"Transformed {json_path.name} [{transformed_count}/{len(json_paths)}]")
+            transformed_count += 1
+            print(f"Transformed {json_path.name} [{transformed_count}/{len(json_paths)}]")
 
     print(f"\nTransformed {transformed_count}, failed {len(failed)}.")
     for json_path, error in failed:
