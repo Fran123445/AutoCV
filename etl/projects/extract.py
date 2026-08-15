@@ -285,12 +285,16 @@ def _scan_imports(project: Path, files: list[str]) -> dict[str, int]:
     unhandled language degrades to the manifest-only behaviour instead of
     producing noise.
 
+    The files behind each package are kept, not just how many: the sampler picks
+    what to show the descr pass by asking which files put a given package to
+    use, and a count alone cannot answer that.
+
     Args:
         project (Path): The project directory.
         files (list[str]): Tracked file paths relative to the project root.
 
     Returns:
-        dict[str, int]: Package name to the number of files importing it.
+        dict[str, list[str]]: Package name to the files importing it.
     """
     scannable = sorted(
         (f for f in files if Path(f).suffix.lower() in _COMPILED_IMPORT_PATTERNS),
@@ -298,16 +302,15 @@ def _scan_imports(project: Path, files: list[str]) -> dict[str, int]:
     )
     local = _local_module_names(files)
 
-    counts: dict[str, int] = {}
+    importers: dict[str, list[str]] = {}
     for rel_path in scannable[:MAX_IMPORT_SCAN_FILES]:
         try:
             text = (project / rel_path).read_text(encoding="utf-8", errors="replace")
         except OSError:
             continue
 
-        # Per file rather than per occurrence: the count answers "how much of
-        # the project touches this", which a single hot module importing it
-        # twenty times would otherwise drown out.
+        # A set per file rather than a running tally: a package imported twenty
+        # times by one module is one file's worth of evidence, not twenty.
         in_file = set()
         for pattern in _COMPILED_IMPORT_PATTERNS[Path(rel_path).suffix.lower()]:
             for match in pattern.findall(text):
@@ -316,9 +319,9 @@ def _scan_imports(project: Path, files: list[str]) -> dict[str, int]:
                     in_file.add(module)
 
         for module in in_file:
-            counts[module] = counts.get(module, 0) + 1
+            importers.setdefault(module, []).append(rel_path)
 
-    return counts
+    return importers
 
 
 def _gather_signals(projects: list[Path]) -> list[dict]:
@@ -372,7 +375,7 @@ def extract(parent_projects_folder: str) -> list[dict]:
             "manifests": {str: str},     # manifest filename -> raw contents
             "config_signals": [str],     # infra/CI marker paths present
             "ext_histogram": {str: int}, # extension -> tracked file count
-            "imports": {str: int},       # package -> files importing it
+            "imports": {str: [str]},     # package -> files importing it
             "readme": str | None,        # capped README text
             "tree": [str],               # tracked file paths, repo-relative
         }

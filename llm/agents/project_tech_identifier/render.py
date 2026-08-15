@@ -61,15 +61,16 @@ def _render_histogram(histogram: dict[str, int]) -> str:
     return ", ".join(f"{ext} x{count}" for ext, count in ordered)
 
 
-def _render_imports(imports: dict[str, int]) -> str:
+def _render_imports(imports: dict[str, list[str]]) -> str:
     """
     Render the imported packages, most widely used first.
 
-    The count is files importing the package, so it separates a dependency the
-    project is built on from one touched in a single script.
+    Counted rather than listed by file: the number separates a dependency the
+    project is built on from one touched in a single script, while the file
+    names themselves are the sampler's business, not the model's.
 
     Args:
-        imports (dict[str, int]): Package to the number of files importing it.
+        imports (dict[str, list[str]]): Package to the files importing it.
 
     Returns:
         str: Comma-separated "package xN" entries.
@@ -77,9 +78,9 @@ def _render_imports(imports: dict[str, int]) -> str:
     if not imports:
         return "(none found: this project's languages have no import scanner)"
 
-    ordered = sorted(imports.items(), key=lambda kv: (-kv[1], kv[0]))
+    ordered = sorted(imports.items(), key=lambda kv: (-len(kv[1]), kv[0]))
 
-    return ", ".join(f"{module} x{count}" for module, count in ordered)
+    return ", ".join(f"{module} x{len(files)}" for module, files in ordered)
 
 
 def _render_tree(tree: list[str]) -> str:

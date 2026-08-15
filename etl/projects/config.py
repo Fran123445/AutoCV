@@ -117,3 +117,37 @@ IMPORT_SELF_REFERENCES = frozenset({"crate", "self", "super", "__future__"})
 # One read per source file, so a monorepo does not turn extract into a crawl.
 # Ordered shallowest first before the cap applies, matching the tree.
 MAX_IMPORT_SCAN_FILES = 300
+
+# Sampling: which source files the narrative and descr passes actually read.
+#
+# The tech pass gets by on declarations, since it only answers "which". Saying
+# how a technology was used, or what the project does, means reading the code,
+# and reading all of it is neither affordable nor necessary.
+
+# Read first whatever the file count. An entry point states the project's shape
+# in one file: what it wires together, what it is for, how it is invoked.
+ENTRYPOINT_NAMES = (
+    "main.py",
+    "__main__.py",
+    "app.py",
+    "cli.py",
+    "run.py",
+    "server.py",
+    "index.js",
+    "index.ts",
+    "main.go",
+    "main.rs",
+    "Program.cs",
+)
+
+# Whole-sample ceiling. Projects here run 26KB to 177KB of source, so this
+# reads a small project entirely and the load-bearing part of a large one.
+MAX_SAMPLE_BYTES = 50_000
+
+# Per-file ceiling, so one generated or vendored monster cannot eat the budget
+# on its own. Truncation is marked in the rendered sample.
+MAX_SAMPLE_FILE_BYTES = 12_000
+
+# Files carrying a given technology. Two is enough to show a pattern of use
+# without spending the budget on one dependency.
+MAX_FILES_PER_TECHNOLOGY = 2
