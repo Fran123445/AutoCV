@@ -5,11 +5,11 @@ from pathlib import Path
 import argparse
 import json
 
-from etl.extract import JobDescriptionNotFound, extract_from_file
-from etl.load import load as load_job
+from etl.jobs.extract import JobDescriptionNotFound, extract_from_file
+from etl.jobs.load import load as load_job
 # Aliased: this module has a transform() of its own, over directories rather
 # than over a single posting.
-from etl.transform import transform as transform_job
+from etl.jobs.transform import transform as transform_job
 from llm.config import MAX_CONCURRENCY
 from run_log import RunLogger, record_job_run
 
