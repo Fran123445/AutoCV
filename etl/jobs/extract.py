@@ -19,7 +19,7 @@ _JOB_ID_RE = re.compile(r"/jobs/view/(\d+)")
 _TITLE_SUFFIX = " | LinkedIn"
 _POSTED_RE = re.compile(
     r"hace\s+(?:más de\s+)?(\d+)\s+"
-    r"(minutos?|horas?|días?|semanas?|mes|meses|años?)"
+    r"(minutos?|horas?|días?|semanas?|meses|mes|años?)"
 )
 _POSTED_ANCHOR_RE = re.compile(r"·\s*(?:Compartido\s+)?hace")
 
