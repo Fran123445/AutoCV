@@ -1,50 +1,49 @@
 # Mi experiencia
+#
+# Ejemplo lleno de `experience.toml`, con una persona inventada. Está para
+# mostrar el nivel de detalle que sirve, sobre todo en los proyectos: comparar
+# un proyecto contado bien contra uno contado en una línea explica más que
+# cualquier instrucción.
+#
+# Este archivo no se procesa. Es documentación.
 
-> Ejemplo lleno de `experience.md`, con una persona inventada. Está para mostrar
-> el nivel de detalle que sirve, sobre todo en los proyectos: comparar un
-> proyecto contado bien contra uno contado en una línea explica más que
-> cualquier instrucción.
->
-> Este archivo no se procesa. Es documentación.
 
----
+# ============================================================================
+# Perfil
+# ============================================================================
 
-## Perfil
+birth_date = "1996-04-12"
 
-- birth_date: 1996-04-12
 
----
+# ============================================================================
+# Educación
+# ============================================================================
 
-## Educación
+[[education]]
+degree = "systems engineering"
+institution = "Universidad Tecnológica Nacional"
+start = "2014-03"
+end = "2020-12"
 
-### Título 1
+[[education]]
+degree = "data science"
+institution = "Universidad de Buenos Aires"
+start = "2022-08"
+end = "current"
 
-- degree: systems engineering
-- institution: Universidad Tecnológica Nacional
-- start: 2014-03
-- end: 2020-12
 
-### Título 2
+# ============================================================================
+# Experiencia
+# ============================================================================
 
-- degree: data science
-- institution: Universidad de Buenos Aires
-- start: 2022-08
-- end: current
-
----
-
-## Experiencia
-
-### Trabajo 1
-
-- company: Mercadolibre
-- role: data engineer
-- seniority: senior
-- start: 2023-02
-- end: current
-
-#### Día a día
-
+[[job]]
+id = "mercadolibre-data-engineer"
+company = "Mercadolibre"
+role = "data engineer"
+seniority = "senior"
+start = "2023-02"
+end = "current"
+day_to_day = '''
 Soy dueño de los pipelines que alimentan el warehouse de logística: todo lo que
 tiene que ver con envíos, desde que se genera la etiqueta hasta que el paquete
 se entrega. Son unos cuarenta DAGs en Airflow, casi todos Python con Spark
@@ -56,11 +55,11 @@ esquema sin avisar y algo se rompe a las tres de la mañana. La mitad de lo que
 hice este año fue en realidad defensa contra eso — contratos de datos, chequeos
 de calidad antes del load, alertas que distinguen "no llegó nada" de "llegó
 raro".
+'''
 
-#### Proyectos
-
-##### Migración del batch nocturno a incremental
-
+[[job.project]]
+id = "batch-nocturno-incremental"
+story = '''
 El batch de envíos era un full refresh: cada noche borraba y reescribía la tabla
 de hechos entera, unos 400 millones de filas. Tardaba entre cinco y siete horas,
 o sea que si fallaba a las 4 AM no había forma de tener los datos listos para
@@ -83,9 +82,11 @@ manejar la consistencia a mano.
 El batch pasó de cinco horas a unos veinte minutos, y la ventana de riesgo
 desapareció: ahora corre cada quince minutos, así que una corrida fallida se
 recupera en la siguiente en vez de comprometer el día.
+'''
 
-##### Contratos de datos entre equipos
-
+[[job.project]]
+id = "contratos-de-datos"
+story = '''
 Cada vez que el equipo de checkout renombraba un campo, se nos rompía un
 pipeline en silencio: no fallaba, cargaba nulls, y nos enterábamos una semana
 después cuando alguien preguntaba por qué un gráfico estaba plano.
@@ -105,19 +106,17 @@ eran casi cero lo pasamos a bloqueante.
 
 Pasamos de unas cuatro roturas silenciosas por trimestre a ninguna en los
 últimos ocho meses.
+'''
 
----
 
-### Trabajo 2
-
-- company: Consultora Baufest
-- role: bi analyst
-- seniority: junior
-- start: 2020-11
-- end: 2023-01
-
-#### Día a día
-
+[[job]]
+id = "baufest-bi-analyst"
+company = "Consultora Baufest"
+role = "bi analyst"
+seniority = "junior"
+start = "2020-11"
+end = "2023-01"
+day_to_day = '''
 Entré haciendo reportes en Power BI para clientes de retail y banca. Era mucho
 SQL sobre bases que no había diseñado yo y que nadie sabía explicar del todo,
 más bastante tiempo sentado con usuarios de negocio tratando de entender qué era
@@ -125,11 +124,11 @@ lo que realmente querían ver, que casi nunca era lo que habían pedido.
 
 Los últimos ocho meses arranqué a tocar los pipelines que llenaban esas bases,
 que es de donde me terminé yendo para el lado de data engineering.
+'''
 
-#### Proyectos
-
-##### Tablero de mora para una financiera
-
+[[job.project]]
+id = "tablero-de-mora"
+story = '''
 El área de riesgo pedía un reporte de mora por cartera y lo recibía en Excel,
 armado a mano por una persona que tardaba dos días completos cada mes. Además
 llegaba tarde: para cuando lo tenían, la decisión de a quién llamar ya había
@@ -148,13 +147,16 @@ medidas.
 El reporte pasó de mensual y a dos días de trabajo, a diario y automático. No
 tengo el número del impacto en recupero, pero el equipo de riesgo empezó a
 llamar a los clientes en la primera semana de atraso en vez de en la cuarta.
+'''
 
----
 
-## Proyectos personales
+# ============================================================================
+# Proyectos personales
+# ============================================================================
 
-### AutoCV
-
+[[personal_project]]
+id = "autocv"
+story = '''
 Postularme a puestos implicaba leer cada aviso, decidir si valía la pena, y
 reescribir el CV para cada uno. Es un trabajo repetitivo que hace bien una
 máquina y mal una persona a las once de la noche.
@@ -176,48 +178,4 @@ entero cuando le alcanzaba con el manifest.
 
 Todavía está en curso. Hoy carga avisos y proyectos de punta a punta; falta el
 lado del candidato y la generación del CV.
-
----
-
-## Skills
-
-### Tecnologías
-
-- python: 5
-- sql: 5
-- spark: 4
-- airflow: 4
-- snowflake: 4
-- dbt: 3
-- power bi: 3
-- dax: 3
-- sql server: 3
-- docker: 3
-- pydantic: 3
-- great expectations: 2
-- kafka: 2
-- terraform: 2
-- tableau: 1
-
-### Conceptos
-
-- etl: 5
-- data modeling: 4
-- dimensional modeling: 4
-- data quality: 4
-- data pipelines: 4
-- incremental loading: 4
-- change data capture: 3
-- data contracts: 3
-- upsert: 3
-- backfilling: 3
-- code review: 3
-- mentoring: 3
-- business intelligence: 3
-- stakeholder management: 3
-- distributed processing: 3
-- data governance: 2
-- ci/cd: 2
-- infrastructure as code: 2
-- prompt engineering: 2
-- structured outputs: 2
+'''

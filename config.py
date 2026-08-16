@@ -37,6 +37,6 @@ PROJECTS_TRANSFORM_DIR = DATA_DIR / "transformed_projects"
 # La plantilla llena, escrita a mano. Deliberadamente fuera de DATA_DIR: todo lo
 # que cuelga de ahí es derivable y descartable, y esto es lo contrario — es
 # fuente, y la única del pipeline que ninguna corrida puede regenerar.
-# templates/experience.md es la copia en blanco, y esa sí está trackeada.
-EXPERIENCE_PATH = Path(os.getenv("AUTOCV_EXPERIENCE_PATH") or ROOT_DIR / "experience.md")
+# templates/experience.toml es la copia en blanco, y esa sí está trackeada.
+EXPERIENCE_PATH = Path(os.getenv("AUTOCV_EXPERIENCE_PATH") or ROOT_DIR / "experience.toml")
 TEMPLATES_DIR = ROOT_DIR / "templates"
