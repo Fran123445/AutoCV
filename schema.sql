@@ -110,9 +110,26 @@ CREATE TABLE IF NOT EXISTS JobDegrees (
 -- Lado candidato (el usuario). Multiuser desde el arranque aunque hoy haya uno
 -- solo: user_id atado a todo evita un refactor si mañana entran más candidatos.
 
+-- Todo lo de acá abajo de birth_date es de render, no de match: ninguna query
+-- de matching va a joinear por un teléfono. Vive igual en la base y no sólo en
+-- experience.toml porque el generador de CV lee de la base, no del TOML.
 CREATE TABLE IF NOT EXISTS FactUser (
     id         INTEGER PRIMARY KEY,
+    full_name  TEXT,
+    email      TEXT,
+    phone      TEXT,
+    location   TEXT,  -- ciudad y país como van en el CV, no dirección postal
     birth_date TEXT   -- ISO 8601
+);
+
+-- Links del CV: github, linkedin, portfolio, blog, etc.
+CREATE TABLE IF NOT EXISTS UserLink (
+    user_id    INTEGER NOT NULL REFERENCES FactUser(id),
+    kind       TEXT NOT NULL,  -- 'github' | 'linkedin' | 'portfolio' | ...
+                               -- abierto a propósito: no hay seed que valga la
+                               -- pena mantener para cuatro valores
+    url        TEXT NOT NULL,
+    PRIMARY KEY (user_id, kind)
 );
 
 CREATE TABLE IF NOT EXISTS UserEducation (
@@ -149,7 +166,13 @@ CREATE TABLE IF NOT EXISTS FactExperience (
     role_id      INTEGER REFERENCES DimRole(id),
     seniority_id INTEGER REFERENCES DimSeniority(id),
     start_date   TEXT,   -- ISO 8601
-    end_date     TEXT    -- null = actual
+    end_date     TEXT,   -- null = actual
+    day_to_day   TEXT    -- narrado, no crudo: el crudo vive en experience.toml.
+                 -- Los tags que salen de esta prosa van a UserTechnologies y
+                 -- UserConcepts, pero los tags alcanzan para matchear y no para
+                 -- escribir. Sin la prosa, un match que no tiene un Project
+                 -- atrás deja al generador de CV con una etiqueta y ninguna
+                 -- histori.
 );
 
 CREATE TABLE IF NOT EXISTS Project (

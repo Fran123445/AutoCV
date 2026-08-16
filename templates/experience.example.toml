@@ -12,7 +12,20 @@
 # Perfil
 # ============================================================================
 
-birth_date = "1996-04-12"
+[profile]
+full_name = "Linus Torvalds"
+email = "torvalds@linux-foundation.org"
+phone = "+1 555 0123"
+location = "Portland, Oregon, Estados Unidos"
+birth_date = "1969-12-28"
+
+[[profile.link]]
+kind = "github"
+url = "https://github.com/torvalds"
+
+[[profile.link]]
+kind = "linkedin"
+url = "https://www.linkedin.com/in/example"
 
 
 # ============================================================================

@@ -29,10 +29,34 @@
 # ============================================================================
 # Perfil
 # ============================================================================
+#
+# Esto no se matchea contra nada: es lo que va impreso en el encabezado del CV.
+# Por eso no hay listas cerradas ni canonicalización acá — sale tal cual lo
+# escribas.
+#
+# `location` es ciudad y país como los pondrías en el CV, no dirección postal.
+# `birth_date` en ISO 8601 (`YYYY-MM-DD`), y sólo porque `FactUser` lo tiene:
+# si no lo querés en la base, dejalo vacío.
 
-# ISO 8601 (`YYYY-MM-DD`). Sólo esto, y sólo porque `FactUser` lo tiene. Si no
-# lo querés en la base, dejalo vacío.
+[profile]
+full_name = ""
+email = ""
+phone = ""
+location = ""
 birth_date = ""
+
+# Un bloque `[[profile.link]]` por link. `kind` es libre (`github`, `linkedin`,
+# `portfolio`, `blog`, lo que sea) y es la clave: uno solo por tipo. El orden en
+# que los escribas es el orden en que salen en el CV, así que no hay ningún
+# campo de posición que llenar. Si no tenés links, borrá los bloques.
+
+[[profile.link]]
+kind = ""
+url = ""
+
+[[profile.link]]
+kind = ""
+url = ""
 
 
 # ============================================================================
