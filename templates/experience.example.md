@@ -1,0 +1,223 @@
+# Mi experiencia
+
+> Ejemplo lleno de `experience.md`, con una persona inventada. Está para mostrar
+> el nivel de detalle que sirve, sobre todo en los proyectos: comparar un
+> proyecto contado bien contra uno contado en una línea explica más que
+> cualquier instrucción.
+>
+> Este archivo no se procesa. Es documentación.
+
+---
+
+## Perfil
+
+- birth_date: 1996-04-12
+
+---
+
+## Educación
+
+### Título 1
+
+- degree: systems engineering
+- institution: Universidad Tecnológica Nacional
+- start: 2014-03
+- end: 2020-12
+
+### Título 2
+
+- degree: data science
+- institution: Universidad de Buenos Aires
+- start: 2022-08
+- end: current
+
+---
+
+## Experiencia
+
+### Trabajo 1
+
+- company: Mercadolibre
+- role: data engineer
+- seniority: senior
+- start: 2023-02
+- end: current
+
+#### Día a día
+
+Soy dueño de los pipelines que alimentan el warehouse de logística: todo lo que
+tiene que ver con envíos, desde que se genera la etiqueta hasta que el paquete
+se entrega. Son unos cuarenta DAGs en Airflow, casi todos Python con Spark
+abajo, escribiendo a Snowflake. Trabajo en un equipo de seis, y desde el año
+pasado soy el que revisa los PRs de los dos que entraron más nuevos.
+
+El problema que aparece siempre es el mismo: los sistemas de origen cambian el
+esquema sin avisar y algo se rompe a las tres de la mañana. La mitad de lo que
+hice este año fue en realidad defensa contra eso — contratos de datos, chequeos
+de calidad antes del load, alertas que distinguen "no llegó nada" de "llegó
+raro".
+
+#### Proyectos
+
+##### Migración del batch nocturno a incremental
+
+El batch de envíos era un full refresh: cada noche borraba y reescribía la tabla
+de hechos entera, unos 400 millones de filas. Tardaba entre cinco y siete horas,
+o sea que si fallaba a las 4 AM no había forma de tener los datos listos para
+cuando el equipo de operaciones entraba a las 8, y eso pasaba dos o tres veces
+por mes.
+
+Lo rearmé como carga incremental con CDC. La parte que hice yo fue el diseño del
+merge y la migración en sí: leer el stream de cambios que ya existía pero nadie
+usaba, resolver el upsert contra la tabla de hechos, y sobre todo el backfill,
+que era lo verdaderamente delicado — había que reconstruir dos años de historia
+sin bajar la tabla que estaba en producción. Lo resolví escribiendo a una tabla
+sombra y haciendo el swap atómico al final. Otro compañero se encargó de
+adaptar los dashboards de Tableau que asumían que la tabla se reescribía entera.
+
+Fue Spark sobre Snowflake, orquestado con Airflow, y los tests de la lógica de
+merge en dbt. Elegí resolver el upsert en Snowflake y no en Spark porque el
+`MERGE` de Snowflake ya es transaccional y hacerlo del lado de Spark implicaba
+manejar la consistencia a mano.
+
+El batch pasó de cinco horas a unos veinte minutos, y la ventana de riesgo
+desapareció: ahora corre cada quince minutos, así que una corrida fallida se
+recupera en la siguiente en vez de comprometer el día.
+
+##### Contratos de datos entre equipos
+
+Cada vez que el equipo de checkout renombraba un campo, se nos rompía un
+pipeline en silencio: no fallaba, cargaba nulls, y nos enterábamos una semana
+después cuando alguien preguntaba por qué un gráfico estaba plano.
+
+Armé un sistema de contratos: cada fuente declara su esquema esperado en un
+YAML, y hay un job que valida el esquema real contra el declarado antes de que
+el dato entre al pipeline. Si no matchea, el pipeline no arranca y se abre un
+ticket automático al equipo dueño de la fuente. Lo escribí en Python con
+Pydantic para la validación y Great Expectations para los chequeos de valores,
+y lo colgué de un pre-hook de Airflow.
+
+La parte difícil no fue técnica sino política — un chequeo que bloquea el
+pipeline de otro equipo necesita que ese equipo esté de acuerdo. Lo saqué
+primero en modo warning durante dos meses, con un reporte semanal de cuántas
+veces habría bloqueado, y recién cuando quedó claro que los falsos positivos
+eran casi cero lo pasamos a bloqueante.
+
+Pasamos de unas cuatro roturas silenciosas por trimestre a ninguna en los
+últimos ocho meses.
+
+---
+
+### Trabajo 2
+
+- company: Consultora Baufest
+- role: bi analyst
+- seniority: junior
+- start: 2020-11
+- end: 2023-01
+
+#### Día a día
+
+Entré haciendo reportes en Power BI para clientes de retail y banca. Era mucho
+SQL sobre bases que no había diseñado yo y que nadie sabía explicar del todo,
+más bastante tiempo sentado con usuarios de negocio tratando de entender qué era
+lo que realmente querían ver, que casi nunca era lo que habían pedido.
+
+Los últimos ocho meses arranqué a tocar los pipelines que llenaban esas bases,
+que es de donde me terminé yendo para el lado de data engineering.
+
+#### Proyectos
+
+##### Tablero de mora para una financiera
+
+El área de riesgo pedía un reporte de mora por cartera y lo recibía en Excel,
+armado a mano por una persona que tardaba dos días completos cada mes. Además
+llegaba tarde: para cuando lo tenían, la decisión de a quién llamar ya había
+que tomarla igual.
+
+Lo rehice como un modelo dimensional en Power BI. Hice la parte de modelado —
+tabla de hechos de saldos con dimensiones de cliente, producto y tiempo — y toda
+la lógica de mora en DAX, que fue lo más complicado porque "mora" significaba
+tres cosas distintas según con quién hablaras y hubo que dejar las tres, bien
+etiquetadas, en vez de elegir una. Un consultor senior me ayudó con la conexión
+al core bancario.
+
+SQL Server como origen, Power Query para la transformación, DAX para las
+medidas.
+
+El reporte pasó de mensual y a dos días de trabajo, a diario y automático. No
+tengo el número del impacto en recupero, pero el equipo de riesgo empezó a
+llamar a los clientes en la primera semana de atraso en vez de en la cuarta.
+
+---
+
+## Proyectos personales
+
+### AutoCV
+
+Postularme a puestos implicaba leer cada aviso, decidir si valía la pena, y
+reescribir el CV para cada uno. Es un trabajo repetitivo que hace bien una
+máquina y mal una persona a las once de la noche.
+
+Construí un sistema que scrapea avisos de LinkedIn, extrae los requisitos con un
+LLM contra un esquema fijo, y los carga en un modelo dimensional en SQLite junto
+con mi propia experiencia y mis repos, para poder hacer el match del lado de la
+base en vez del lado del modelo. Lo hice entero yo. Lo que más me interesó
+resolver fue la parte de extracción: en vez de un agente conversacional grande,
+son tareas chicas y sin estado, cada una con su esquema Pydantic y su eval, así
+una regresión en un prompt se ve como un test que falla y no como una respuesta
+que se siente peor.
+
+Python, SQLite, Pydantic para los esquemas, decodificación restringida contra
+gramáticas generadas de los modelos, y pytest para los evals. Registro cada
+llamada al modelo con tokens y costo en la misma base, que es cómo me di cuenta
+de que el 70% del gasto se iba en una sola tarea que estaba mandando el archivo
+entero cuando le alcanzaba con el manifest.
+
+Todavía está en curso. Hoy carga avisos y proyectos de punta a punta; falta el
+lado del candidato y la generación del CV.
+
+---
+
+## Skills
+
+### Tecnologías
+
+- python: 5
+- sql: 5
+- spark: 4
+- airflow: 4
+- snowflake: 4
+- dbt: 3
+- power bi: 3
+- dax: 3
+- sql server: 3
+- docker: 3
+- pydantic: 3
+- great expectations: 2
+- kafka: 2
+- terraform: 2
+- tableau: 1
+
+### Conceptos
+
+- etl: 5
+- data modeling: 4
+- dimensional modeling: 4
+- data quality: 4
+- data pipelines: 4
+- incremental loading: 4
+- change data capture: 3
+- data contracts: 3
+- upsert: 3
+- backfilling: 3
+- code review: 3
+- mentoring: 3
+- business intelligence: 3
+- stakeholder management: 3
+- distributed processing: 3
+- data governance: 2
+- ci/cd: 2
+- infrastructure as code: 2
+- prompt engineering: 2
+- structured outputs: 2
