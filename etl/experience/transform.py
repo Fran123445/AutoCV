@@ -79,8 +79,53 @@ def _transform_education(experience: Experience) -> list[dict]:
         for education in experience.education
     ]
 
-def _transform_job(experience: Experience):
-    pass
+def _transform_job(experience: Experience) -> list[dict]:
+    """
+    Map each job block onto FactExperience shape, with its projects.
+
+    Company, role and seniority pass through untouched, for the reason the
+    degree does one function up: they are expected already canonical, and an
+    unrecognised one is load's to catch against its dim, not this stage's. The
+    identifiers that read those three off a posting have no work here — the
+    candidate typed the answers.
+
+    What does need reading is the prose, and this is where the file gets
+    expensive: every job costs two model calls and every project three, so a
+    file with four jobs and a dozen projects is a few dozen calls run one after
+    another. Nothing here is concurrent yet.
+
+    Args:
+        experience (Experience): The parsed experience file.
+
+    Returns:
+        list[dict]: id, company, role, seniority, dates, the identified
+            day_to_day and the identified projects, per block. The ids are the
+            file's own and are what load dedupes on, since a job has no
+            linkedin_job_id and a project born here has no source_path.
+    """
+    return [
+        {
+            "id": job.id,
+            "company": job.company,
+            "role": job.role,
+            "seniority": job.seniority,
+            "start_date": _parse_date(job.start),
+            "end_date": _parse_date(job.end),
+            "day_to_day": _transform_job_day_to_day(job.day_to_day),
+            "projects": [
+                {
+                    "id": project.id,
+                    # None when the block carries no story. Left as it is rather
+                    # than dropped: Project.task_desc is NOT NULL, so this is a
+                    # row that cannot be written, and load should say so about a
+                    # project the file does name.
+                    "identified": _transform_job_project(project.story),
+                }
+                for project in job.project
+            ],
+        }
+        for job in experience.job
+    ]
 
 def _transform_job_day_to_day(day_to_day: str | None) -> dict | None:
     """
@@ -160,7 +205,25 @@ def _transform_job_project(story: str | None) -> dict | None:
         "descriptions": descriptions,
     }
 
-def transform(experience: Experience):
-    profile = _transform_profile(experience)
-    education = _transform_education(experience)
-    job = _transform_job(experience)
+def transform(experience: Experience) -> dict:
+    """
+    Transform one experience file into the rows the load stage writes.
+
+    The three blocks are independent of each other and of the order they run
+    in: only the jobs cost anything, and they cost everything. The profile and
+    the education are a rename and a date parse.
+
+    Args:
+        experience (Experience): The parsed experience file.
+
+    Returns:
+        dict: The identified file. profile fills FactUser and UserLink,
+            education fills UserEducation, and jobs fill FactExperience and the
+            Project rows hanging off it, along with the user's technology and
+            concept rollups.
+    """
+    return {
+        "profile": _transform_profile(experience),
+        "education": _transform_education(experience),
+        "jobs": _transform_job(experience),
+    }
