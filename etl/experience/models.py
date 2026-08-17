@@ -118,13 +118,9 @@ class Experience(_Block):
     profile: Profile
     education: list[Education] = []
     job: list[Job] = []
-    personal_project: list[Project] = []
 
     @model_validator(mode="after")
-    def _unique_ids(self) -> "Experience":
+    def _unique_job_ids(self) -> "Experience":
         _reject_duplicate_ids([job.id for job in self.job], "jobs")
-        _reject_duplicate_ids(
-            [project.id for project in self.personal_project], "personal projects"
-        )
 
         return self

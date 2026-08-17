@@ -161,34 +161,3 @@ El reporte pasó de mensual y a dos días de trabajo, a diario y automático. No
 tengo el número del impacto en recupero, pero el equipo de riesgo empezó a
 llamar a los clientes en la primera semana de atraso en vez de en la cuarta.
 '''
-
-
-# ============================================================================
-# Proyectos personales
-# ============================================================================
-
-[[personal_project]]
-id = "autocv"
-story = '''
-Postularme a puestos implicaba leer cada aviso, decidir si valía la pena, y
-reescribir el CV para cada uno. Es un trabajo repetitivo que hace bien una
-máquina y mal una persona a las once de la noche.
-
-Construí un sistema que scrapea avisos de LinkedIn, extrae los requisitos con un
-LLM contra un esquema fijo, y los carga en un modelo dimensional en SQLite junto
-con mi propia experiencia y mis repos, para poder hacer el match del lado de la
-base en vez del lado del modelo. Lo hice entero yo. Lo que más me interesó
-resolver fue la parte de extracción: en vez de un agente conversacional grande,
-son tareas chicas y sin estado, cada una con su esquema Pydantic y su eval, así
-una regresión en un prompt se ve como un test que falla y no como una respuesta
-que se siente peor.
-
-Python, SQLite, Pydantic para los esquemas, decodificación restringida contra
-gramáticas generadas de los modelos, y pytest para los evals. Registro cada
-llamada al modelo con tokens y costo en la misma base, que es cómo me di cuenta
-de que el 70% del gasto se iba en una sola tarea que estaba mandando el archivo
-entero cuando le alcanzaba con el manifest.
-
-Todavía está en curso. Hoy carga avisos y proyectos de punta a punta; falta el
-lado del candidato y la generación del CV.
-'''

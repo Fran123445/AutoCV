@@ -173,22 +173,6 @@ story = '''
 
 
 # ============================================================================
-# Proyectos personales
-# ============================================================================
-#
-# Sólo los que **no** están en un repo que el ETL de projects ya escanea. Los
-# que sí, entran solos con su `source_path` y contarlos acá los duplica.
-#
-# Mismo formato que los de arriba: `id` y las cuatro preguntas en prosa. Entran
-# con `experience_id` null, que es lo que los marca como personales.
-
-[[personal_project]]
-id = ""
-story = '''
-'''
-
-
-# ============================================================================
 # Apéndice — listas cerradas
 # ============================================================================
 #
