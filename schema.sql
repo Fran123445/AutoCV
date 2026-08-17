@@ -162,17 +162,25 @@ CREATE TABLE IF NOT EXISTS UserConcepts (
 CREATE TABLE IF NOT EXISTS FactExperience (
     id           INTEGER PRIMARY KEY,
     user_id      INTEGER NOT NULL REFERENCES FactUser(id),
+    source_id    TEXT,   -- id del bloque en experience.toml: la clave de dedupe
+                 -- del ETL, como linkedin_job_id en FactJob. Un puesto no tiene
+                 -- id natural, y company + role + fechas no alcanza: dos
+                 -- pasajes por el mismo puesto son dos bloques distintos
     company_id   INTEGER REFERENCES DimCompany(id),   -- reusa DimCompany
     role_id      INTEGER REFERENCES DimRole(id),
     seniority_id INTEGER REFERENCES DimSeniority(id),
     start_date   TEXT,   -- ISO 8601
     end_date     TEXT,   -- null = actual
-    day_to_day   TEXT    -- narrado, no crudo: el crudo vive en experience.toml.
+    day_to_day   TEXT,   -- narrado, no crudo: el crudo vive en experience.toml.
                  -- Los tags que salen de esta prosa van a UserTechnologies y
                  -- UserConcepts, pero los tags alcanzan para matchear y no para
                  -- escribir. Sin la prosa, un match que no tiene un Project
                  -- atrás deja al generador de CV con una etiqueta y ninguna
                  -- histori.
+    UNIQUE (user_id, source_id)   -- por usuario y no global: el id sale de un
+           -- archivo que cada candidato escribe solo, y nada impide que dos
+           -- elijan el mismo. Null en filas cargadas a mano, y los null son
+           -- distintos entre sí en sqlite, así que no chocan
 );
 
 CREATE TABLE IF NOT EXISTS Project (
@@ -181,9 +189,14 @@ CREATE TABLE IF NOT EXISTS Project (
                   -- projects personales (experience_id null) igual saben de quién son
     experience_id INTEGER REFERENCES FactExperience(id),     -- null = personal
     task_desc     TEXT NOT NULL,
-    source_path   TEXT UNIQUE   -- repo del que salió; null = cargado a mano
+    source_path   TEXT UNIQUE,  -- repo del que salió; null = cargado a mano
                   -- (varios null conviven). Clave de dedupe del ETL, igual que
                   -- linkedin_job_id en FactJob
+    source_id     TEXT,         -- la otra clave de dedupe: id del bloque en
+                  -- experience.toml, para los projects que nacen de un job.
+                  -- Null en los personales, que no salen de ese archivo
+    UNIQUE (experience_id, source_id)   -- por experiencia y no global: los ids
+           -- del archivo son únicos dentro de cada job, no entre jobs
 );
 
 -- Bridges de evidencia: qué tech/concepto tocó cada project. Sin proficiency;
