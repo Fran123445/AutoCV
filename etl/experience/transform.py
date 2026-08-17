@@ -1,7 +1,9 @@
 import re
 
 from etl.experience.models import Experience
-from llm.tasks.experience.narrator.narrate import narrate
+from llm.tasks.experience.day_to_day_narrator.narrate import narrate as narrate_day_to_day
+from llm.tasks.experience.project_describer.describe import describe
+from llm.tasks.experience.project_narrator.narrate import narrate as narrate_project
 from llm.tasks.experience.tech_identifier.identify import identify_technologies
 
 _DATE_RE = re.compile(r"^\d{4}(-\d{2}(-\d{2})?)?$")
@@ -107,16 +109,56 @@ def _transform_job_day_to_day(day_to_day: str | None) -> dict | None:
     if day_to_day is None:
         return None
 
-    technologies = identify_technologies(day_to_day)
-    narrative = narrate(technologies.technologies, day_to_day)
+    technologies = identify_technologies(day_to_day, "day_to_day")
+    narrative = narrate_day_to_day(technologies.technologies, day_to_day)
 
     return {
         "technologies": technologies.model_dump(),
         "narrative": narrative.model_dump(),
     }
 
-def _transform_job_project(project_desc: str):
-    pass
+def _transform_job_project(story: str | None) -> dict | None:
+    """
+    Identify one project a candidate did at a job, from their account of it.
+
+    Three passes, the same shape the projects pipeline runs over a repository
+    and for the same reasons: the technologies come first because the narrative
+    reads better once they are named, and the descriptions come last because
+    there is nothing to describe until both lists exist. What is missing here is
+    the sampling step, since the evidence is one block of prose the candidate
+    wrote rather than a tree of files to choose from.
+
+    The passes are single, unlike the repository side's two. A review pass
+    recovers entries scattered over a long document, and a story is a few
+    paragraphs.
+
+    Args:
+        story (str | None): The project's story block, as written in
+            experience.toml. None when the block is absent or empty.
+
+    Returns:
+        dict | None: The technologies, the narrative and the per-item
+            descriptions, or None when the file left the block out. Project
+            rows born here carry a null source_path: there is no repository
+            behind them, and the block's id is what load dedupes on.
+    """
+    if story is None:
+        return None
+
+    technologies = identify_technologies(story, "project")
+    narrative = narrate_project(technologies.technologies, story)
+    descriptions = describe(
+        narrative.task_desc,
+        technologies.technologies,
+        narrative.concepts,
+        story,
+    )
+
+    return {
+        "technologies": technologies.model_dump(),
+        "narrative": narrative.model_dump(),
+        "descriptions": descriptions,
+    }
 
 def transform(experience: Experience):
     profile = _transform_profile(experience)

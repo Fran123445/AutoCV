@@ -1,6 +1,5 @@
 from llm.client import post_chat
-
-from .models import build_description_model
+from llm.descriptions import build_description_model
 
 
 # The null case is stated before the writing rules on purpose: the useful answer

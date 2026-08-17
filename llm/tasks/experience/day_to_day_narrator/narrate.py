@@ -1,5 +1,5 @@
 from llm.client import post_chat
-from llm.registries.concepts import NAMES_WITH_ALIASES
+from llm.registries.concepts import NAMES_WITH_ALIASES, resolve_concepts
 from llm.registries.technologies import drop_technologies
 
 from .models import DayToDayNarrative
@@ -64,12 +64,21 @@ def narrate(technologies: list[str], day_to_day: str) -> DayToDayNarrative:
         post_chat(
             prompt,
             DayToDayNarrative.model_json_schema(),
-            task_name="experience.narrator.narrate",
+            task_name="experience.day_to_day_narrator.narrate",
         )
     )
 
     # The grammar keeps the concept list clean, but discarded_concepts is free
     # text and collects technology names however plainly the prompt says not to.
     narrative.discarded_concepts = drop_technologies(narrative.discarded_concepts)
+
+    # And it collects concepts the registry does hold. One pass has no review
+    # behind it to catch that, so the recovery happens against the seed.
+    recovered, narrative.discarded_concepts = resolve_concepts(
+        narrative.discarded_concepts
+    )
+    narrative.concepts.extend(
+        name for name in recovered if name not in narrative.concepts
+    )
 
     return narrative

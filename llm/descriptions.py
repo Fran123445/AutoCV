@@ -1,3 +1,18 @@
+"""
+The response model the describe passes share.
+
+Two pipelines ask the same question of different evidence: what part did each
+technology and concept play in this project. The projects side reads a source
+sample, the experience side reads the candidate's own account, and the prompts
+have almost nothing in common — but the shape of the answer is identical, and
+so is the trick that makes it safe. Only the names the earlier passes found are
+representable, which is what stops a description of a technology the project
+never used, or a rename of one it did.
+
+Lives here rather than in either task package because it holds no prompt and
+belongs to neither pipeline, the same reason the registries do.
+"""
+
 from typing import Literal
 
 from pydantic import BaseModel, Field, create_model
@@ -5,8 +20,6 @@ from pydantic import BaseModel, Field, create_model
 
 # Built per call rather than declared once, because the names allowed here are
 # not a registry: they are what the earlier passes found in this one project.
-# Constraining to those is what stops the model from describing a technology the
-# project does not use, or from renaming one it does.
 
 
 def _entry_model(kind: str, names: list[str]) -> type[BaseModel]:
