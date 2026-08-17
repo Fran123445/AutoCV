@@ -1,2210 +1,2651 @@
 {
-  "description": "Seed registry for DimConcepts. 'name' is the canonical value for DimConcepts.concept_name. 'aliases' are surface forms mapped to it; unlike technologies there is no ConceptAlias table in schema.sql, so they widen prompt matching and are dropped at load time. 'category' has no column either; keep it or drop it at load time. Named products, tools and vendors do not belong here, they live in seeds/technologies.json: this registry holds what a posting asks you to know rather than what it asks you to operate. Spanish surface forms are aliases because the postings are mixed-language while the canonical name stays English.",
+  "description": "Seed registry for DimConcepts. 'name' is the canonical value for DimConcepts.concept_name. 'aliases' are surface forms mapped to it; unlike technologies there is no ConceptAlias table in schema.sql, so they widen prompt matching and are dropped at load time. 'parents' means 'knowing this implies knowing that' (dashboarding implies business intelligence), and loads into ConceptDependency as child_id -> parent_id; the graph is acyclic and a concept may have several parents. 'category' has no column, keep it or drop it at load time. Named products, tools and vendors do not belong here, they live in seeds/technologies.json: this registry holds what a posting asks you to know rather than what it asks you to operate. Spanish surface forms are aliases because the postings are mixed-language while the canonical name stays English.",
   "concepts": [
     {
       "name": "agile",
       "category": "methodology",
-      "aliases": ["metodologias agiles", "metodologías ágiles", "agile methodologies", "metodologia agil", "metodología ágil"]
+      "aliases": ["metodologias agiles", "metodologías ágiles", "agile methodologies", "metodologia agil", "metodología ágil"],
+      "parents": []
     },
     {
       "name": "scrum",
       "category": "methodology",
-      "aliases": []
+      "aliases": [],
+      "parents": ["agile"]
     },
     {
       "name": "kanban",
       "category": "methodology",
-      "aliases": []
+      "aliases": [],
+      "parents": ["agile"]
     },
     {
       "name": "waterfall",
       "category": "methodology",
-      "aliases": ["cascada"]
+      "aliases": ["cascada"],
+      "parents": []
     },
     {
       "name": "lean",
       "category": "methodology",
-      "aliases": []
+      "aliases": [],
+      "parents": []
     },
     {
       "name": "extreme programming",
       "category": "methodology",
-      "aliases": ["xp"]
+      "aliases": ["xp"],
+      "parents": ["agile"]
     },
     {
       "name": "scaled agile framework",
       "category": "methodology",
-      "aliases": ["safe"]
+      "aliases": ["safe"],
+      "parents": ["agile"]
     },
     {
       "name": "design thinking",
       "category": "methodology",
-      "aliases": []
+      "aliases": [],
+      "parents": []
     },
     {
       "name": "scrumban",
       "category": "methodology",
-      "aliases": []
+      "aliases": [],
+      "parents": ["scrum", "kanban"]
     },
     {
       "name": "itil",
       "category": "methodology",
-      "aliases": []
+      "aliases": [],
+      "parents": ["change management"]
     },
     {
       "name": "six sigma",
       "category": "methodology",
-      "aliases": ["lean six sigma"]
+      "aliases": ["lean six sigma"],
+      "parents": ["business process improvement"]
     },
     {
       "name": "prince2",
       "category": "methodology",
-      "aliases": []
+      "aliases": [],
+      "parents": ["project management"]
     },
     {
       "name": "ci/cd",
       "category": "practice",
-      "aliases": ["continuous integration", "continuous delivery", "continuous deployment", "ci/cd pipelines", "integracion continua", "integración continua"]
+      "aliases": ["continuous integration", "continuous delivery", "continuous deployment", "ci/cd pipelines", "integracion continua", "integración continua"],
+      "parents": ["devops"]
     },
     {
       "name": "test driven development",
       "category": "practice",
-      "aliases": ["tdd"]
+      "aliases": ["tdd"],
+      "parents": ["unit testing"]
     },
     {
       "name": "behavior driven development",
       "category": "practice",
-      "aliases": ["bdd"]
+      "aliases": ["bdd"],
+      "parents": ["test driven development"]
     },
     {
       "name": "unit testing",
       "category": "practice",
-      "aliases": ["unit tests", "pruebas unitarias", "tests unitarios"]
+      "aliases": ["unit tests", "pruebas unitarias", "tests unitarios"],
+      "parents": ["quality assurance"]
     },
     {
       "name": "integration testing",
       "category": "practice",
-      "aliases": ["integration tests", "pruebas de integracion", "pruebas de integración"]
+      "aliases": ["integration tests", "pruebas de integracion", "pruebas de integración"],
+      "parents": ["quality assurance"]
     },
     {
       "name": "end to end testing",
       "category": "practice",
-      "aliases": ["e2e testing", "end-to-end testing"]
+      "aliases": ["e2e testing", "end-to-end testing"],
+      "parents": ["quality assurance"]
     },
     {
       "name": "test automation",
       "category": "practice",
-      "aliases": ["automated testing", "automatizacion de pruebas", "automatización de pruebas"]
+      "aliases": ["automated testing", "automatizacion de pruebas", "automatización de pruebas"],
+      "parents": ["quality assurance"]
     },
     {
       "name": "quality assurance",
       "category": "practice",
-      "aliases": ["qa", "aseguramiento de calidad"]
+      "aliases": ["qa", "aseguramiento de calidad"],
+      "parents": []
     },
     {
       "name": "code review",
       "category": "practice",
-      "aliases": ["peer review", "revision de codigo", "revisión de código"]
+      "aliases": ["peer review", "revision de codigo", "revisión de código"],
+      "parents": []
     },
     {
       "name": "pair programming",
       "category": "practice",
-      "aliases": []
+      "aliases": [],
+      "parents": []
     },
     {
       "name": "refactoring",
       "category": "practice",
-      "aliases": ["refactorizacion", "refactorización"]
+      "aliases": ["refactorizacion", "refactorización"],
+      "parents": ["clean code"]
     },
     {
       "name": "clean code",
       "category": "practice",
-      "aliases": ["codigo limpio", "código limpio", "code quality", "calidad de codigo", "calidad de código"]
+      "aliases": ["codigo limpio", "código limpio", "code quality", "calidad de codigo", "calidad de código"],
+      "parents": ["coding standards"]
     },
     {
       "name": "technical documentation",
       "category": "practice",
-      "aliases": ["documentacion tecnica", "documentación técnica", "technical writing"]
+      "aliases": ["documentacion tecnica", "documentación técnica", "technical writing"],
+      "parents": []
     },
     {
       "name": "version control",
       "category": "practice",
-      "aliases": ["control de versiones", "versionado", "branching strategies"]
+      "aliases": ["control de versiones", "versionado", "branching strategies"],
+      "parents": []
     },
     {
       "name": "devops",
       "category": "practice",
-      "aliases": ["cultura devops"]
+      "aliases": ["cultura devops"],
+      "parents": []
     },
     {
       "name": "devsecops",
       "category": "practice",
-      "aliases": []
+      "aliases": [],
+      "parents": ["devops", "application security"]
     },
     {
       "name": "gitops",
       "category": "practice",
-      "aliases": []
+      "aliases": [],
+      "parents": ["devops", "infrastructure as code"]
     },
     {
       "name": "mlops",
       "category": "practice",
-      "aliases": ["ml ops", "machine learning operations"]
+      "aliases": ["ml ops", "machine learning operations"],
+      "parents": ["devops", "machine learning"]
     },
     {
       "name": "dataops",
       "category": "practice",
-      "aliases": []
+      "aliases": [],
+      "parents": ["devops", "data pipelines"]
     },
     {
       "name": "llmops",
       "category": "practice",
-      "aliases": []
+      "aliases": [],
+      "parents": ["mlops", "large language models"]
     },
     {
       "name": "infrastructure as code",
       "category": "practice",
-      "aliases": ["iac", "infraestructura como codigo", "infraestructura como código"]
+      "aliases": ["iac", "infraestructura como codigo", "infraestructura como código"],
+      "parents": ["devops"]
     },
     {
       "name": "site reliability engineering",
       "category": "practice",
-      "aliases": ["sre"]
+      "aliases": ["sre"],
+      "parents": ["devops", "observability"]
     },
     {
       "name": "observability",
       "category": "practice",
-      "aliases": ["observabilidad"]
+      "aliases": ["observabilidad"],
+      "parents": ["monitoring and alerting"]
     },
     {
       "name": "monitoring and alerting",
       "category": "practice",
-      "aliases": ["monitoring", "alerting", "monitoreo", "monitoreo y alertas"]
+      "aliases": ["monitoring", "alerting", "monitoreo", "monitoreo y alertas"],
+      "parents": []
     },
     {
       "name": "logging",
       "category": "practice",
-      "aliases": ["log management", "gestion de logs", "gestión de logs"]
+      "aliases": ["log management", "gestion de logs", "gestión de logs"],
+      "parents": ["observability"]
     },
     {
       "name": "incident management",
       "category": "practice",
-      "aliases": ["incident response", "on-call", "on call", "guardias", "gestion de incidentes", "gestión de incidentes", "respuesta a incidentes"]
+      "aliases": ["incident response", "on-call", "on call", "guardias", "gestion de incidentes", "gestión de incidentes", "respuesta a incidentes"],
+      "parents": []
     },
     {
       "name": "performance optimization",
       "category": "practice",
-      "aliases": ["performance tuning", "optimizacion de performance", "optimización de performance", "performance improvement"]
+      "aliases": ["performance tuning", "optimizacion de performance", "optimización de performance", "performance improvement"],
+      "parents": []
     },
     {
       "name": "troubleshooting",
       "category": "practice",
-      "aliases": ["debugging", "resolucion de problemas", "resolución de problemas", "root cause analysis", "resolucion de incidencias", "depuracion", "depuración", "rca", "analisis de causa raiz", "análisis de causa raíz"]
+      "aliases": ["debugging", "resolucion de problemas", "resolución de problemas", "root cause analysis", "resolucion de incidencias", "depuracion", "depuración", "rca", "analisis de causa raiz", "análisis de causa raíz"],
+      "parents": []
     },
     {
       "name": "capacity planning",
       "category": "practice",
-      "aliases": []
+      "aliases": [],
+      "parents": []
     },
     {
       "name": "disaster recovery",
       "category": "practice",
-      "aliases": ["business continuity", "continuidad del negocio", "backup and recovery", "backups", "respaldo y recuperacion"]
+      "aliases": ["business continuity", "continuidad del negocio", "backup and recovery", "backups", "respaldo y recuperacion"],
+      "parents": []
     },
     {
       "name": "cost optimization",
       "category": "practice",
-      "aliases": ["finops", "optimizacion de costos", "optimización de costos", "cost management"]
+      "aliases": ["finops", "optimizacion de costos", "optimización de costos", "cost management"],
+      "parents": []
     },
     {
       "name": "trunk based development",
       "category": "practice",
-      "aliases": ["trunk-based development"]
+      "aliases": ["trunk-based development"],
+      "parents": ["version control"]
     },
     {
       "name": "feature flags",
       "category": "practice",
-      "aliases": ["feature toggles"]
+      "aliases": ["feature toggles"],
+      "parents": ["release management"]
     },
     {
       "name": "blue green deployment",
       "category": "practice",
-      "aliases": ["blue-green deployment"]
+      "aliases": ["blue-green deployment"],
+      "parents": ["release management"]
     },
     {
       "name": "canary deployment",
       "category": "practice",
-      "aliases": ["canary release"]
+      "aliases": ["canary release"],
+      "parents": ["release management"]
     },
     {
       "name": "chaos engineering",
       "category": "practice",
-      "aliases": []
+      "aliases": [],
+      "parents": ["fault tolerance"]
     },
     {
       "name": "load testing",
       "category": "practice",
-      "aliases": ["pruebas de carga", "stress testing"]
+      "aliases": ["pruebas de carga", "stress testing"],
+      "parents": ["performance testing"]
     },
     {
       "name": "performance testing",
       "category": "practice",
-      "aliases": ["pruebas de performance", "pruebas de rendimiento"]
+      "aliases": ["pruebas de performance", "pruebas de rendimiento"],
+      "parents": ["quality assurance"]
     },
     {
       "name": "regression testing",
       "category": "practice",
-      "aliases": ["pruebas de regresion", "pruebas de regresión"]
+      "aliases": ["pruebas de regresion", "pruebas de regresión"],
+      "parents": ["quality assurance"]
     },
     {
       "name": "smoke testing",
       "category": "practice",
-      "aliases": []
+      "aliases": [],
+      "parents": ["quality assurance"]
     },
     {
       "name": "acceptance testing",
       "category": "practice",
-      "aliases": ["uat", "user acceptance testing", "pruebas de aceptacion"]
+      "aliases": ["uat", "user acceptance testing", "pruebas de aceptacion"],
+      "parents": ["quality assurance"]
     },
     {
       "name": "contract testing",
       "category": "practice",
-      "aliases": []
+      "aliases": [],
+      "parents": ["quality assurance", "api design"]
     },
     {
       "name": "test coverage",
       "category": "practice",
-      "aliases": ["cobertura de tests", "code coverage"]
+      "aliases": ["cobertura de tests", "code coverage"],
+      "parents": ["quality assurance"]
     },
     {
       "name": "static code analysis",
       "category": "practice",
-      "aliases": ["analisis estatico de codigo", "sast"]
+      "aliases": ["analisis estatico de codigo", "sast"],
+      "parents": ["coding standards"]
     },
     {
       "name": "linting",
       "category": "practice",
-      "aliases": ["linters"]
+      "aliases": ["linters"],
+      "parents": ["static code analysis"]
     },
     {
       "name": "profiling",
       "category": "practice",
-      "aliases": []
+      "aliases": [],
+      "parents": ["performance optimization"]
     },
     {
       "name": "semantic versioning",
       "category": "practice",
-      "aliases": ["semver", "versionado semantico"]
+      "aliases": ["semver", "versionado semantico"],
+      "parents": ["release management"]
     },
     {
       "name": "api versioning",
       "category": "practice",
-      "aliases": ["versionado de apis"]
+      "aliases": ["versionado de apis"],
+      "parents": ["api design"]
     },
     {
       "name": "release management",
       "category": "practice",
-      "aliases": ["gestion de releases", "gestión de releases"]
+      "aliases": ["gestion de releases", "gestión de releases"],
+      "parents": []
     },
     {
       "name": "change management",
       "category": "practice",
-      "aliases": ["gestion del cambio", "gestión del cambio"]
+      "aliases": ["gestion del cambio", "gestión del cambio"],
+      "parents": []
     },
     {
       "name": "technical debt management",
       "category": "practice",
-      "aliases": ["technical debt", "deuda tecnica", "deuda técnica"]
+      "aliases": ["technical debt", "deuda tecnica", "deuda técnica"],
+      "parents": ["refactoring"]
     },
     {
       "name": "postmortems",
       "category": "practice",
-      "aliases": ["post mortem", "blameless postmortem"]
+      "aliases": ["post mortem", "blameless postmortem"],
+      "parents": ["incident management"]
     },
     {
       "name": "runbooks",
       "category": "practice",
-      "aliases": ["runbook"]
+      "aliases": ["runbook"],
+      "parents": ["technical documentation"]
     },
     {
       "name": "service level objectives",
       "category": "practice",
-      "aliases": ["slo", "sla", "sli", "acuerdos de nivel de servicio"]
+      "aliases": ["slo", "sla", "sli", "acuerdos de nivel de servicio"],
+      "parents": ["site reliability engineering"]
     },
     {
       "name": "accessibility",
       "category": "practice",
-      "aliases": ["a11y", "accesibilidad", "wcag"]
+      "aliases": ["a11y", "accesibilidad", "wcag"],
+      "parents": []
     },
     {
       "name": "internationalization",
       "category": "practice",
-      "aliases": ["i18n", "internacionalizacion", "localization"]
+      "aliases": ["i18n", "internacionalizacion", "localization"],
+      "parents": []
     },
     {
       "name": "responsive design",
       "category": "practice",
-      "aliases": ["diseño responsive", "responsive web design"]
+      "aliases": ["diseño responsive", "responsive web design"],
+      "parents": []
     },
     {
       "name": "coding standards",
       "category": "practice",
-      "aliases": ["estandares de codigo", "estándares de código", "code standards"]
+      "aliases": ["estandares de codigo", "estándares de código", "code standards"],
+      "parents": []
     },
     {
       "name": "software architecture",
       "category": "architecture",
-      "aliases": ["arquitectura de software"]
+      "aliases": ["arquitectura de software"],
+      "parents": []
     },
     {
       "name": "microservices",
       "category": "architecture",
-      "aliases": ["microservicios", "microservices architecture", "arquitectura de microservicios"]
+      "aliases": ["microservicios", "microservices architecture", "arquitectura de microservicios"],
+      "parents": ["software architecture", "distributed systems"]
     },
     {
       "name": "monolithic architecture",
       "category": "architecture",
-      "aliases": ["monolith", "monolito"]
+      "aliases": ["monolith", "monolito"],
+      "parents": ["software architecture"]
     },
     {
       "name": "serverless",
       "category": "architecture",
-      "aliases": ["serverless architecture", "arquitectura serverless"]
+      "aliases": ["serverless architecture", "arquitectura serverless"],
+      "parents": ["cloud computing"]
     },
     {
       "name": "event driven architecture",
       "category": "architecture",
-      "aliases": ["event-driven architecture", "arquitectura orientada a eventos", "event driven"]
+      "aliases": ["event-driven architecture", "arquitectura orientada a eventos", "event driven"],
+      "parents": ["software architecture"]
     },
     {
       "name": "service oriented architecture",
       "category": "architecture",
-      "aliases": ["soa"]
+      "aliases": ["soa"],
+      "parents": ["software architecture"]
     },
     {
       "name": "clean architecture",
       "category": "architecture",
-      "aliases": []
+      "aliases": [],
+      "parents": ["software architecture"]
     },
     {
       "name": "hexagonal architecture",
       "category": "architecture",
-      "aliases": ["ports and adapters"]
+      "aliases": ["ports and adapters"],
+      "parents": ["clean architecture"]
     },
     {
       "name": "domain driven design",
       "category": "architecture",
-      "aliases": ["ddd", "domain-driven design"]
+      "aliases": ["ddd", "domain-driven design"],
+      "parents": ["software architecture"]
     },
     {
       "name": "model view controller",
       "category": "architecture",
-      "aliases": ["mvc"]
+      "aliases": ["mvc"],
+      "parents": ["design patterns"]
     },
     {
       "name": "design patterns",
       "category": "architecture",
-      "aliases": ["patrones de diseño", "patrones de diseno"]
+      "aliases": ["patrones de diseño", "patrones de diseno"],
+      "parents": ["object oriented programming"]
     },
     {
       "name": "solid principles",
       "category": "architecture",
-      "aliases": ["solid", "principios solid"]
+      "aliases": ["solid", "principios solid"],
+      "parents": ["object oriented programming"]
     },
     {
       "name": "object oriented programming",
       "category": "architecture",
-      "aliases": ["oop", "poo", "programacion orientada a objetos", "programación orientada a objetos"]
+      "aliases": ["oop", "poo", "programacion orientada a objetos", "programación orientada a objetos"],
+      "parents": []
     },
     {
       "name": "functional programming",
       "category": "architecture",
-      "aliases": ["programacion funcional", "programación funcional"]
+      "aliases": ["programacion funcional", "programación funcional"],
+      "parents": []
     },
     {
       "name": "api design",
       "category": "architecture",
-      "aliases": ["api development", "apis", "diseño de apis", "api integration", "integracion de apis", "integración de apis"]
+      "aliases": ["api development", "apis", "diseño de apis", "api integration", "integracion de apis", "integración de apis"],
+      "parents": []
     },
     {
       "name": "message queues",
       "category": "architecture",
-      "aliases": ["messaging", "message brokers", "colas de mensajes", "mensajeria", "mensajería"]
+      "aliases": ["messaging", "message brokers", "colas de mensajes", "mensajeria", "mensajería"],
+      "parents": ["asynchronous programming"]
     },
     {
       "name": "caching",
       "category": "architecture",
-      "aliases": ["cache", "cacheo"]
+      "aliases": ["cache", "cacheo"],
+      "parents": ["performance optimization"]
     },
     {
       "name": "load balancing",
       "category": "architecture",
-      "aliases": ["balanceo de carga"]
+      "aliases": ["balanceo de carga"],
+      "parents": ["scalability"]
     },
     {
       "name": "distributed systems",
       "category": "architecture",
-      "aliases": ["distributed computing", "distributed databases", "sistemas distribuidos", "computacion distribuida", "computación distribuida"]
+      "aliases": ["distributed computing", "distributed databases", "sistemas distribuidos", "computacion distribuida", "computación distribuida"],
+      "parents": []
     },
     {
       "name": "high availability",
       "category": "architecture",
-      "aliases": ["alta disponibilidad"]
+      "aliases": ["alta disponibilidad"],
+      "parents": ["fault tolerance"]
     },
     {
       "name": "scalability",
       "category": "architecture",
-      "aliases": ["escalabilidad", "scaling", "escalamiento"]
+      "aliases": ["escalabilidad", "scaling", "escalamiento"],
+      "parents": []
     },
     {
       "name": "fault tolerance",
       "category": "architecture",
-      "aliases": ["resilience", "resiliency", "tolerancia a fallos", "resiliencia"]
+      "aliases": ["resilience", "resiliency", "tolerancia a fallos", "resiliencia"],
+      "parents": []
     },
     {
       "name": "concurrency",
       "category": "architecture",
-      "aliases": ["concurrencia", "multithreading", "programacion concurrente", "programación concurrente", "threading", "multihilo"]
+      "aliases": ["concurrencia", "multithreading", "programacion concurrente", "programación concurrente", "threading", "multihilo"],
+      "parents": []
     },
     {
       "name": "parallel processing",
       "category": "architecture",
-      "aliases": ["parallelism", "paralelismo", "procesamiento paralelo"]
+      "aliases": ["parallelism", "paralelismo", "procesamiento paralelo"],
+      "parents": ["concurrency"]
     },
     {
       "name": "multi tenancy",
       "category": "architecture",
-      "aliases": ["multitenancy", "multi-tenant"]
+      "aliases": ["multitenancy", "multi-tenant"],
+      "parents": ["software architecture"]
     },
     {
       "name": "api gateway",
       "category": "architecture",
-      "aliases": []
+      "aliases": [],
+      "parents": ["api design"]
     },
     {
       "name": "service mesh",
       "category": "architecture",
-      "aliases": []
+      "aliases": [],
+      "parents": ["microservices"]
     },
     {
       "name": "cqrs",
       "category": "architecture",
-      "aliases": ["command query responsibility segregation"]
+      "aliases": ["command query responsibility segregation"],
+      "parents": ["design patterns"]
     },
     {
       "name": "event sourcing",
       "category": "architecture",
-      "aliases": []
+      "aliases": [],
+      "parents": ["event driven architecture"]
     },
     {
       "name": "saga pattern",
       "category": "architecture",
-      "aliases": []
+      "aliases": [],
+      "parents": ["design patterns", "microservices"]
     },
     {
       "name": "circuit breaker",
       "category": "architecture",
-      "aliases": []
+      "aliases": [],
+      "parents": ["design patterns", "fault tolerance"]
     },
     {
       "name": "idempotency",
       "category": "architecture",
-      "aliases": ["idempotencia"]
+      "aliases": ["idempotencia"],
+      "parents": ["api design"]
     },
     {
       "name": "rate limiting",
       "category": "architecture",
-      "aliases": ["throttling"]
+      "aliases": ["throttling"],
+      "parents": ["api design"]
     },
     {
       "name": "publish subscribe",
       "category": "architecture",
-      "aliases": ["pub/sub pattern", "publicacion suscripcion"]
+      "aliases": ["pub/sub pattern", "publicacion suscripcion"],
+      "parents": ["event driven architecture", "message queues"]
     },
     {
       "name": "layered architecture",
       "category": "architecture",
-      "aliases": ["n-tier", "three tier architecture", "arquitectura en capas"]
+      "aliases": ["n-tier", "three tier architecture", "arquitectura en capas"],
+      "parents": ["software architecture"]
     },
     {
       "name": "modular monolith",
       "category": "architecture",
-      "aliases": ["monolito modular"]
+      "aliases": ["monolito modular"],
+      "parents": ["monolithic architecture"]
     },
     {
       "name": "micro frontends",
       "category": "architecture",
-      "aliases": ["microfrontends"]
+      "aliases": ["microfrontends"],
+      "parents": ["microservices"]
     },
     {
       "name": "monorepo",
       "category": "architecture",
-      "aliases": []
+      "aliases": [],
+      "parents": ["version control"]
     },
     {
       "name": "twelve factor app",
       "category": "architecture",
-      "aliases": ["12 factor", "twelve-factor"]
+      "aliases": ["12 factor", "twelve-factor"],
+      "parents": ["software architecture"]
     },
     {
       "name": "stateless services",
       "category": "architecture",
-      "aliases": ["stateless", "sin estado"]
+      "aliases": ["stateless", "sin estado"],
+      "parents": ["scalability"]
     },
     {
       "name": "dependency injection",
       "category": "architecture",
-      "aliases": ["inyeccion de dependencias", "inversion of control", "ioc"]
+      "aliases": ["inyeccion de dependencias", "inversion of control", "ioc"],
+      "parents": ["design patterns"]
     },
     {
       "name": "asynchronous programming",
       "category": "architecture",
-      "aliases": ["async programming", "programacion asincronica", "programación asincrónica"]
+      "aliases": ["async programming", "programacion asincronica", "programación asincrónica"],
+      "parents": ["concurrency"]
     },
     {
       "name": "memory management",
       "category": "architecture",
-      "aliases": ["gestion de memoria", "garbage collection"]
+      "aliases": ["gestion de memoria", "garbage collection"],
+      "parents": []
     },
     {
       "name": "containerization",
       "category": "cloud_ops",
-      "aliases": ["containers", "contenedores", "contenerizacion", "contenerización"]
+      "aliases": ["containers", "contenedores", "contenerizacion", "contenerización"],
+      "parents": []
     },
     {
       "name": "container orchestration",
       "category": "cloud_ops",
-      "aliases": ["orquestacion de contenedores", "orquestación de contenedores"]
+      "aliases": ["orquestacion de contenedores", "orquestación de contenedores"],
+      "parents": ["containerization"]
     },
     {
       "name": "virtualization",
       "category": "cloud_ops",
-      "aliases": ["virtualizacion", "virtualización"]
+      "aliases": ["virtualizacion", "virtualización"],
+      "parents": []
     },
     {
       "name": "cloud computing",
       "category": "cloud_ops",
-      "aliases": ["cloud", "la nube", "computacion en la nube", "computación en la nube"]
+      "aliases": ["cloud", "la nube", "computacion en la nube", "computación en la nube"],
+      "parents": []
     },
     {
       "name": "cloud migration",
       "category": "cloud_ops",
-      "aliases": ["migracion a la nube", "migración a la nube"]
+      "aliases": ["migracion a la nube", "migración a la nube"],
+      "parents": ["cloud computing"]
     },
     {
       "name": "multi cloud",
       "category": "cloud_ops",
-      "aliases": ["multicloud"]
+      "aliases": ["multicloud"],
+      "parents": ["cloud computing"]
     },
     {
       "name": "hybrid cloud",
       "category": "cloud_ops",
-      "aliases": ["nube hibrida", "nube híbrida"]
+      "aliases": ["nube hibrida", "nube híbrida"],
+      "parents": ["cloud computing"]
     },
     {
       "name": "edge computing",
       "category": "cloud_ops",
-      "aliases": []
+      "aliases": [],
+      "parents": ["distributed systems"]
     },
     {
       "name": "networking",
       "category": "cloud_ops",
-      "aliases": ["computer networks", "redes", "networking fundamentals"]
+      "aliases": ["computer networks", "redes", "networking fundamentals"],
+      "parents": []
     },
     {
       "name": "linux administration",
       "category": "cloud_ops",
-      "aliases": ["administracion de servidores", "administración de servidores", "system administration", "sysadmin", "administracion de sistemas", "administración de sistemas"]
+      "aliases": ["administracion de servidores", "administración de servidores", "system administration", "sysadmin", "administracion de sistemas", "administración de sistemas"],
+      "parents": []
     },
     {
       "name": "autoscaling",
       "category": "cloud_ops",
-      "aliases": ["auto scaling", "escalado automatico", "escalado automático"]
+      "aliases": ["auto scaling", "escalado automatico", "escalado automático"],
+      "parents": ["scalability", "cloud computing"]
     },
     {
       "name": "infrastructure as a service",
       "category": "cloud_ops",
-      "aliases": ["iaas"]
+      "aliases": ["iaas"],
+      "parents": ["cloud computing"]
     },
     {
       "name": "platform as a service",
       "category": "cloud_ops",
-      "aliases": ["paas"]
+      "aliases": ["paas"],
+      "parents": ["cloud computing"]
     },
     {
       "name": "software as a service",
       "category": "cloud_ops",
-      "aliases": ["saas"]
+      "aliases": ["saas"],
+      "parents": ["cloud computing"]
     },
     {
       "name": "cloud cost management",
       "category": "cloud_ops",
-      "aliases": ["gestion de costos cloud"]
+      "aliases": ["gestion de costos cloud"],
+      "parents": ["cloud computing", "cost optimization"]
     },
     {
       "name": "well architected framework",
       "category": "cloud_ops",
-      "aliases": ["well-architected"]
+      "aliases": ["well-architected"],
+      "parents": ["cloud computing", "software architecture"]
     },
     {
       "name": "vpn",
       "category": "cloud_ops",
-      "aliases": ["virtual private network"]
+      "aliases": ["virtual private network"],
+      "parents": ["networking"]
     },
     {
       "name": "dns",
       "category": "cloud_ops",
-      "aliases": ["domain name system"]
+      "aliases": ["domain name system"],
+      "parents": ["networking"]
     },
     {
       "name": "firewalls",
       "category": "cloud_ops",
-      "aliases": ["firewall"]
+      "aliases": ["firewall"],
+      "parents": ["network security"]
     },
     {
       "name": "content delivery network",
       "category": "cloud_ops",
-      "aliases": ["cdn"]
+      "aliases": ["cdn"],
+      "parents": ["networking"]
     },
     {
       "name": "virtual machines",
       "category": "cloud_ops",
-      "aliases": ["vms", "maquinas virtuales", "máquinas virtuales"]
+      "aliases": ["vms", "maquinas virtuales", "máquinas virtuales"],
+      "parents": ["virtualization"]
     },
     {
       "name": "shell scripting",
       "category": "cloud_ops",
-      "aliases": ["bash scripting", "scripting de shell"]
+      "aliases": ["bash scripting", "scripting de shell"],
+      "parents": ["linux administration"]
     },
     {
       "name": "cron jobs",
       "category": "cloud_ops",
-      "aliases": ["cron", "scheduled jobs", "tareas programadas"]
+      "aliases": ["cron", "scheduled jobs", "tareas programadas"],
+      "parents": ["linux administration"]
     },
     {
       "name": "data modeling",
       "category": "data",
-      "aliases": ["data modelling", "modelado de datos"]
+      "aliases": ["data modelling", "modelado de datos"],
+      "parents": []
     },
     {
       "name": "dimensional modeling",
       "category": "data",
-      "aliases": ["star schema", "modelo dimensional", "kimball", "modelado dimensional", "esquema estrella"]
+      "aliases": ["star schema", "modelo dimensional", "kimball", "modelado dimensional", "esquema estrella"],
+      "parents": ["data modeling", "data warehousing"]
     },
     {
       "name": "data warehousing",
       "category": "data",
-      "aliases": ["data warehouse", "datawarehouse", "dwh", "almacen de datos", "almacén de datos"]
+      "aliases": ["data warehouse", "datawarehouse", "dwh", "almacen de datos", "almacén de datos"],
+      "parents": []
     },
     {
       "name": "data lake",
       "category": "data",
-      "aliases": ["datalake"]
+      "aliases": ["datalake"],
+      "parents": ["data architecture"]
     },
     {
       "name": "lakehouse",
       "category": "data",
-      "aliases": ["data lakehouse"]
+      "aliases": ["data lakehouse"],
+      "parents": ["data lake", "data warehousing"]
     },
     {
       "name": "medallion architecture",
       "category": "data",
-      "aliases": ["bronze silver gold"]
+      "aliases": ["bronze silver gold"],
+      "parents": ["lakehouse"]
     },
     {
       "name": "etl",
       "category": "data",
-      "aliases": ["extract transform load", "procesos etl"]
+      "aliases": ["extract transform load", "procesos etl"],
+      "parents": ["data pipelines"]
     },
     {
       "name": "elt",
       "category": "data",
-      "aliases": ["extract load transform"]
+      "aliases": ["extract load transform"],
+      "parents": ["data pipelines"]
     },
     {
       "name": "data pipelines",
       "category": "data",
-      "aliases": ["data pipeline", "pipelines de datos", "data ingestion", "ingesta de datos", "ingestion pipelines"]
+      "aliases": ["data pipeline", "pipelines de datos", "data ingestion", "ingesta de datos", "ingestion pipelines"],
+      "parents": []
     },
     {
       "name": "batch processing",
       "category": "data",
-      "aliases": ["procesamiento por lotes", "procesamiento batch"]
+      "aliases": ["procesamiento por lotes", "procesamiento batch"],
+      "parents": ["data pipelines"]
     },
     {
       "name": "stream processing",
       "category": "data",
-      "aliases": ["streaming", "real time processing", "procesamiento en tiempo real", "tiempo real", "datos en tiempo real"]
+      "aliases": ["streaming", "real time processing", "procesamiento en tiempo real", "tiempo real", "datos en tiempo real"],
+      "parents": ["data pipelines"]
     },
     {
       "name": "change data capture",
       "category": "data",
-      "aliases": ["cdc"]
+      "aliases": ["cdc"],
+      "parents": ["data replication"]
     },
     {
       "name": "data quality",
       "category": "data",
-      "aliases": ["calidad de datos", "data validation", "validacion de datos", "validación de datos"]
+      "aliases": ["calidad de datos", "data validation", "validacion de datos", "validación de datos"],
+      "parents": []
     },
     {
       "name": "data governance",
       "category": "data",
-      "aliases": ["gobierno de datos", "gobernanza de datos"]
+      "aliases": ["gobierno de datos", "gobernanza de datos"],
+      "parents": []
     },
     {
       "name": "data lineage",
       "category": "data",
-      "aliases": ["linaje de datos"]
+      "aliases": ["linaje de datos"],
+      "parents": ["data governance"]
     },
     {
       "name": "master data management",
       "category": "data",
-      "aliases": ["mdm", "gestion de datos maestros", "gestión de datos maestros"]
+      "aliases": ["mdm", "gestion de datos maestros", "gestión de datos maestros"],
+      "parents": ["data governance"]
     },
     {
       "name": "data catalog",
       "category": "data",
-      "aliases": ["catalogo de datos", "catálogo de datos", "metadata management", "gestion de metadatos", "gestión de metadatos"]
+      "aliases": ["catalogo de datos", "catálogo de datos", "metadata management", "gestion de metadatos", "gestión de metadatos"],
+      "parents": ["data governance"]
     },
     {
       "name": "data mesh",
       "category": "data",
-      "aliases": []
+      "aliases": [],
+      "parents": ["data architecture"]
     },
     {
       "name": "data architecture",
       "category": "data",
-      "aliases": ["arquitectura de datos"]
+      "aliases": ["arquitectura de datos"],
+      "parents": []
     },
     {
       "name": "database design",
       "category": "data",
-      "aliases": ["diseño de bases de datos", "diseno de bases de datos", "database administration", "administracion de bases de datos", "administración de bases de datos"]
+      "aliases": ["diseño de bases de datos", "diseno de bases de datos", "database administration", "administracion de bases de datos", "administración de bases de datos"],
+      "parents": ["data modeling"]
     },
     {
       "name": "relational databases",
       "category": "data",
-      "aliases": ["relational database", "bases de datos relacionales", "rdbms", "modelo relacional"]
+      "aliases": ["relational database", "bases de datos relacionales", "rdbms", "modelo relacional"],
+      "parents": ["database design"]
     },
     {
       "name": "nosql",
       "category": "data",
-      "aliases": ["non relational databases", "bases de datos no relacionales", "no sql"]
+      "aliases": ["non relational databases", "bases de datos no relacionales", "no sql"],
+      "parents": ["database design"]
     },
     {
       "name": "vector databases",
       "category": "data",
-      "aliases": ["vector database", "bases de datos vectoriales", "vector stores", "vector store"]
+      "aliases": ["vector database", "bases de datos vectoriales", "vector stores", "vector store"],
+      "parents": ["database design", "vector search"]
     },
     {
       "name": "graph databases",
       "category": "data",
-      "aliases": ["bases de datos de grafos", "graph database"]
+      "aliases": ["bases de datos de grafos", "graph database"],
+      "parents": ["nosql"]
     },
     {
       "name": "time series data",
       "category": "data",
-      "aliases": ["time series", "series temporales", "series de tiempo"]
+      "aliases": ["time series", "series temporales", "series de tiempo"],
+      "parents": []
     },
     {
       "name": "columnar storage",
       "category": "data",
-      "aliases": ["almacenamiento columnar"]
+      "aliases": ["almacenamiento columnar"],
+      "parents": []
     },
     {
       "name": "database normalization",
       "category": "data",
-      "aliases": ["normalization", "denormalization", "normalizacion", "normalización", "desnormalizacion", "desnormalización"]
+      "aliases": ["normalization", "denormalization", "normalizacion", "normalización", "desnormalizacion", "desnormalización"],
+      "parents": ["relational databases"]
     },
     {
       "name": "indexing",
       "category": "data",
-      "aliases": ["indices", "índices", "indexacion", "indexación"]
+      "aliases": ["indices", "índices", "indexacion", "indexación"],
+      "parents": ["database design"]
     },
     {
       "name": "query optimization",
       "category": "data",
-      "aliases": ["sql tuning", "query tuning", "optimizacion de consultas", "optimización de consultas", "optimizacion de queries", "optimización de queries"]
+      "aliases": ["sql tuning", "query tuning", "optimizacion de consultas", "optimización de consultas", "optimizacion de queries", "optimización de queries"],
+      "parents": ["database design", "performance optimization"]
     },
     {
       "name": "partitioning",
       "category": "data",
-      "aliases": ["particionamiento", "particionado"]
+      "aliases": ["particionamiento", "particionado"],
+      "parents": ["database design"]
     },
     {
       "name": "sharding",
       "category": "data",
-      "aliases": []
+      "aliases": [],
+      "parents": ["partitioning", "distributed storage"]
     },
     {
       "name": "distributed storage",
       "category": "data",
-      "aliases": ["almacenamiento distribuido"]
+      "aliases": ["almacenamiento distribuido"],
+      "parents": ["distributed systems"]
     },
     {
       "name": "distributed processing",
       "category": "data",
-      "aliases": ["distributed processing frameworks", "procesamiento distribuido"]
+      "aliases": ["distributed processing frameworks", "procesamiento distribuido"],
+      "parents": ["distributed systems", "parallel processing"]
     },
     {
       "name": "big data",
       "category": "data",
-      "aliases": ["grandes volumenes de datos", "grandes volúmenes de datos"]
+      "aliases": ["grandes volumenes de datos", "grandes volúmenes de datos"],
+      "parents": ["distributed processing"]
     },
     {
       "name": "olap",
       "category": "data",
-      "aliases": ["online analytical processing", "cubos olap"]
+      "aliases": ["online analytical processing", "cubos olap"],
+      "parents": ["data warehousing"]
     },
     {
       "name": "oltp",
       "category": "data",
-      "aliases": ["online transaction processing"]
+      "aliases": ["online transaction processing"],
+      "parents": ["relational databases"]
     },
     {
       "name": "web scraping",
       "category": "data",
-      "aliases": ["scraping", "crawling"]
+      "aliases": ["scraping", "crawling"],
+      "parents": []
     },
     {
       "name": "data cleaning",
       "category": "data",
-      "aliases": ["data wrangling", "limpieza de datos", "data preparation", "preparacion de datos", "preparación de datos"]
+      "aliases": ["data wrangling", "limpieza de datos", "data preparation", "preparacion de datos", "preparación de datos"],
+      "parents": ["data quality"]
     },
     {
       "name": "data integration",
       "category": "data",
-      "aliases": ["integracion de datos", "integración de datos"]
+      "aliases": ["integracion de datos", "integración de datos"],
+      "parents": []
     },
     {
       "name": "data migration",
       "category": "data",
-      "aliases": ["migracion de datos", "migración de datos"]
+      "aliases": ["migracion de datos", "migración de datos"],
+      "parents": []
     },
     {
       "name": "data privacy",
       "category": "data",
-      "aliases": ["privacidad de datos", "data protection", "proteccion de datos", "protección de datos"]
+      "aliases": ["privacidad de datos", "data protection", "proteccion de datos", "protección de datos"],
+      "parents": ["data governance"]
     },
     {
       "name": "snowflake schema",
       "category": "data",
-      "aliases": ["esquema copo de nieve"]
+      "aliases": ["esquema copo de nieve"],
+      "parents": ["dimensional modeling"]
     },
     {
       "name": "slowly changing dimensions",
       "category": "data",
-      "aliases": ["scd", "scd type 2"]
+      "aliases": ["scd", "scd type 2"],
+      "parents": ["dimensional modeling"]
     },
     {
       "name": "data vault",
       "category": "data",
-      "aliases": []
+      "aliases": [],
+      "parents": ["data modeling", "data warehousing"]
     },
     {
       "name": "data profiling",
       "category": "data",
-      "aliases": ["perfilado de datos"]
+      "aliases": ["perfilado de datos"],
+      "parents": ["data quality"]
     },
     {
       "name": "data contracts",
       "category": "data",
-      "aliases": ["contratos de datos"]
+      "aliases": ["contratos de datos"],
+      "parents": ["data governance"]
     },
     {
       "name": "data observability",
       "category": "data",
-      "aliases": ["observabilidad de datos"]
+      "aliases": ["observabilidad de datos"],
+      "parents": ["observability", "data quality"]
     },
     {
       "name": "reverse etl",
       "category": "data",
-      "aliases": []
+      "aliases": [],
+      "parents": ["etl"]
     },
     {
       "name": "data replication",
       "category": "data",
-      "aliases": ["replicacion de datos", "replicación de datos"]
+      "aliases": ["replicacion de datos", "replicación de datos"],
+      "parents": ["data integration"]
     },
     {
       "name": "data virtualization",
       "category": "data",
-      "aliases": ["data federation", "virtualizacion de datos"]
+      "aliases": ["data federation", "virtualizacion de datos"],
+      "parents": ["data integration"]
     },
     {
       "name": "backfilling",
       "category": "data",
-      "aliases": ["backfill", "recarga historica"]
+      "aliases": ["backfill", "recarga historica"],
+      "parents": ["data pipelines"]
     },
     {
       "name": "directed acyclic graph",
       "category": "data",
-      "aliases": ["dag", "dags"]
+      "aliases": ["dag", "dags"],
+      "parents": ["data pipelines"]
     },
     {
       "name": "incremental loading",
       "category": "data",
-      "aliases": ["carga incremental", "incremental load"]
+      "aliases": ["carga incremental", "incremental load"],
+      "parents": ["data pipelines"]
     },
     {
       "name": "upsert",
       "category": "data",
-      "aliases": ["merge statements"]
+      "aliases": ["merge statements"],
+      "parents": ["database design"]
     },
     {
       "name": "window functions",
       "category": "data",
-      "aliases": ["funciones de ventana", "funciones analiticas"]
+      "aliases": ["funciones de ventana", "funciones analiticas"],
+      "parents": ["database design"]
     },
     {
       "name": "stored procedures",
       "category": "data",
-      "aliases": ["procedimientos almacenados"]
+      "aliases": ["procedimientos almacenados"],
+      "parents": ["relational databases"]
     },
     {
       "name": "materialized views",
       "category": "data",
-      "aliases": ["vistas materializadas"]
+      "aliases": ["vistas materializadas"],
+      "parents": ["relational databases", "query optimization"]
     },
     {
       "name": "acid",
       "category": "data",
-      "aliases": ["acid transactions", "propiedades acid"]
+      "aliases": ["acid transactions", "propiedades acid"],
+      "parents": ["relational databases"]
     },
     {
       "name": "cap theorem",
       "category": "data",
-      "aliases": ["teorema cap"]
+      "aliases": ["teorema cap"],
+      "parents": ["distributed systems"]
     },
     {
       "name": "eventual consistency",
       "category": "data",
-      "aliases": ["consistencia eventual"]
+      "aliases": ["consistencia eventual"],
+      "parents": ["distributed systems", "cap theorem"]
     },
     {
       "name": "data retention",
       "category": "data",
-      "aliases": ["retencion de datos", "retention policies"]
+      "aliases": ["retencion de datos", "retention policies"],
+      "parents": ["data governance"]
     },
     {
       "name": "data anonymization",
       "category": "data",
-      "aliases": ["anonimizacion", "anonimización de datos"]
+      "aliases": ["anonimizacion", "anonimización de datos"],
+      "parents": ["data privacy"]
     },
     {
       "name": "pii handling",
       "category": "data",
-      "aliases": ["pii", "datos personales", "informacion personal identificable"]
+      "aliases": ["pii", "datos personales", "informacion personal identificable"],
+      "parents": ["data privacy"]
     },
     {
       "name": "schema evolution",
       "category": "data",
-      "aliases": ["evolucion de esquemas"]
+      "aliases": ["evolucion de esquemas"],
+      "parents": ["data modeling"]
     },
     {
       "name": "semantic layer",
       "category": "data",
-      "aliases": ["metrics layer", "capa semantica"]
+      "aliases": ["metrics layer", "capa semantica"],
+      "parents": ["data modeling", "business intelligence"]
     },
     {
       "name": "feature store",
       "category": "data",
-      "aliases": []
+      "aliases": [],
+      "parents": ["feature engineering", "mlops"]
     },
     {
       "name": "geospatial data",
       "category": "data",
-      "aliases": ["gis", "datos geoespaciales"]
+      "aliases": ["gis", "datos geoespaciales"],
+      "parents": []
     },
     {
       "name": "unstructured data",
       "category": "data",
-      "aliases": ["datos no estructurados"]
+      "aliases": ["datos no estructurados"],
+      "parents": []
     },
     {
       "name": "data labeling",
       "category": "data",
-      "aliases": ["data annotation", "etiquetado de datos"]
+      "aliases": ["data annotation", "etiquetado de datos"],
+      "parents": ["machine learning"]
     },
     {
       "name": "data marts",
       "category": "data",
-      "aliases": ["data mart", "datamart"]
+      "aliases": ["data mart", "datamart"],
+      "parents": ["data warehousing"]
     },
     {
       "name": "data dictionary",
       "category": "data",
-      "aliases": ["diccionario de datos"]
+      "aliases": ["diccionario de datos"],
+      "parents": ["data catalog"]
     },
     {
       "name": "referential integrity",
       "category": "data",
-      "aliases": ["integridad referencial"]
+      "aliases": ["integridad referencial"],
+      "parents": ["relational databases"]
     },
     {
       "name": "data deduplication",
       "category": "data",
-      "aliases": ["deduplicacion", "deduplicación de datos"]
+      "aliases": ["deduplicacion", "deduplicación de datos"],
+      "parents": ["data cleaning"]
     },
     {
       "name": "data reconciliation",
       "category": "data",
-      "aliases": ["conciliacion de datos", "conciliación de datos"]
+      "aliases": ["conciliacion de datos", "conciliación de datos"],
+      "parents": ["data quality"]
     },
     {
       "name": "business intelligence",
       "category": "analytics",
-      "aliases": ["bi", "inteligencia de negocios"]
+      "aliases": ["bi", "inteligencia de negocios"],
+      "parents": []
     },
     {
       "name": "data analysis",
       "category": "analytics",
-      "aliases": ["data analytics", "analisis de datos", "análisis de datos", "analitica de datos", "analítica de datos"]
+      "aliases": ["data analytics", "analisis de datos", "análisis de datos", "analitica de datos", "analítica de datos"],
+      "parents": []
     },
     {
       "name": "exploratory data analysis",
       "category": "analytics",
-      "aliases": ["eda", "analisis exploratorio", "análisis exploratorio"]
+      "aliases": ["eda", "analisis exploratorio", "análisis exploratorio"],
+      "parents": ["data analysis", "statistics"]
     },
     {
       "name": "data visualization",
       "category": "analytics",
-      "aliases": ["visualizacion de datos", "visualización de datos", "dataviz", "data viz"]
+      "aliases": ["visualizacion de datos", "visualización de datos", "dataviz", "data viz"],
+      "parents": []
     },
     {
       "name": "dashboarding",
       "category": "analytics",
-      "aliases": ["dashboards", "tableros", "tableros de control"]
+      "aliases": ["dashboards", "tableros", "tableros de control"],
+      "parents": ["data visualization", "business intelligence"]
     },
     {
       "name": "reporting",
       "category": "analytics",
-      "aliases": ["reportes", "reporteria", "reportería", "informes"]
+      "aliases": ["reportes", "reporteria", "reportería", "informes"],
+      "parents": ["business intelligence"]
     },
     {
       "name": "kpis",
       "category": "analytics",
-      "aliases": ["kpi", "key performance indicators", "metricas de negocio", "métricas de negocio", "indicadores"]
+      "aliases": ["kpi", "key performance indicators", "metricas de negocio", "métricas de negocio", "indicadores"],
+      "parents": ["business intelligence"]
     },
     {
       "name": "statistics",
       "category": "analytics",
-      "aliases": ["statistical analysis", "estadistica", "estadística", "analisis estadistico", "análisis estadístico"]
+      "aliases": ["statistical analysis", "estadistica", "estadística", "analisis estadistico", "análisis estadístico"],
+      "parents": []
     },
     {
       "name": "ab testing",
       "category": "analytics",
-      "aliases": ["a/b testing", "experimentation", "experimentacion", "experimentación", "tests a/b"]
+      "aliases": ["a/b testing", "experimentation", "experimentacion", "experimentación", "tests a/b"],
+      "parents": ["hypothesis testing", "experiment design"]
     },
     {
       "name": "forecasting",
       "category": "analytics",
-      "aliases": ["pronosticos", "pronósticos", "demand forecasting", "prevision de demanda", "previsión de demanda", "pronostico de demanda", "pronóstico de demanda"]
+      "aliases": ["pronosticos", "pronósticos", "demand forecasting", "prevision de demanda", "previsión de demanda", "pronostico de demanda", "pronóstico de demanda"],
+      "parents": ["predictive modeling"]
     },
     {
       "name": "cohort analysis",
       "category": "analytics",
-      "aliases": ["analisis de cohortes", "análisis de cohortes"]
+      "aliases": ["analisis de cohortes", "análisis de cohortes"],
+      "parents": ["data analysis"]
     },
     {
       "name": "data storytelling",
       "category": "analytics",
-      "aliases": ["storytelling with data", "narrativa de datos"]
+      "aliases": ["storytelling with data", "narrativa de datos"],
+      "parents": ["data visualization", "presentation skills"]
     },
     {
       "name": "self service analytics",
       "category": "analytics",
-      "aliases": ["self-service analytics", "analitica de autoservicio", "analítica de autoservicio"]
+      "aliases": ["self-service analytics", "analitica de autoservicio", "analítica de autoservicio"],
+      "parents": ["business intelligence"]
     },
     {
       "name": "funnel analysis",
       "category": "analytics",
-      "aliases": ["analisis de embudo", "análisis de embudo"]
+      "aliases": ["analisis de embudo", "análisis de embudo"],
+      "parents": ["product analytics"]
     },
     {
       "name": "churn analysis",
       "category": "analytics",
-      "aliases": ["churn", "analisis de churn", "abandono de clientes"]
+      "aliases": ["churn", "analisis de churn", "abandono de clientes"],
+      "parents": ["data analysis"]
     },
     {
       "name": "customer segmentation",
       "category": "analytics",
-      "aliases": ["segmentacion de clientes", "segmentación de clientes"]
+      "aliases": ["segmentacion de clientes", "segmentación de clientes"],
+      "parents": ["data analysis"]
     },
     {
       "name": "hypothesis testing",
       "category": "analytics",
-      "aliases": ["pruebas de hipotesis", "pruebas de hipótesis"]
+      "aliases": ["pruebas de hipotesis", "pruebas de hipótesis"],
+      "parents": ["inferential statistics"]
     },
     {
       "name": "descriptive statistics",
       "category": "analytics",
-      "aliases": ["estadistica descriptiva", "estadística descriptiva"]
+      "aliases": ["estadistica descriptiva", "estadística descriptiva"],
+      "parents": ["statistics"]
     },
     {
       "name": "inferential statistics",
       "category": "analytics",
-      "aliases": ["estadistica inferencial", "estadística inferencial"]
+      "aliases": ["estadistica inferencial", "estadística inferencial"],
+      "parents": ["statistics", "probability"]
     },
     {
       "name": "probability",
       "category": "analytics",
-      "aliases": ["probabilidad"]
+      "aliases": ["probabilidad"],
+      "parents": ["statistics"]
     },
     {
       "name": "correlation analysis",
       "category": "analytics",
-      "aliases": ["analisis de correlacion", "correlacion"]
+      "aliases": ["analisis de correlacion", "correlacion"],
+      "parents": ["statistics"]
     },
     {
       "name": "sampling",
       "category": "analytics",
-      "aliases": ["muestreo"]
+      "aliases": ["muestreo"],
+      "parents": ["statistics"]
     },
     {
       "name": "experiment design",
       "category": "analytics",
-      "aliases": ["diseño de experimentos", "doe"]
+      "aliases": ["diseño de experimentos", "doe"],
+      "parents": ["statistics"]
     },
     {
       "name": "causal inference",
       "category": "analytics",
-      "aliases": ["inferencia causal"]
+      "aliases": ["inferencia causal"],
+      "parents": ["inferential statistics"]
     },
     {
       "name": "attribution modeling",
       "category": "analytics",
-      "aliases": ["modelos de atribucion"]
+      "aliases": ["modelos de atribucion"],
+      "parents": ["marketing analytics"]
     },
     {
       "name": "marketing analytics",
       "category": "analytics",
-      "aliases": ["analitica de marketing"]
+      "aliases": ["analitica de marketing"],
+      "parents": ["data analysis"]
     },
     {
       "name": "product analytics",
       "category": "analytics",
-      "aliases": ["analitica de producto"]
+      "aliases": ["analitica de producto"],
+      "parents": ["data analysis"]
     },
     {
       "name": "financial modeling",
       "category": "analytics",
-      "aliases": ["modelado financiero"]
+      "aliases": ["modelado financiero"],
+      "parents": []
     },
     {
       "name": "customer lifetime value",
       "category": "analytics",
-      "aliases": ["ltv", "clv", "valor de vida del cliente"]
+      "aliases": ["ltv", "clv", "valor de vida del cliente"],
+      "parents": ["marketing analytics"]
     },
     {
       "name": "real time analytics",
       "category": "analytics",
-      "aliases": ["analitica en tiempo real", "analítica en tiempo real"]
+      "aliases": ["analitica en tiempo real", "analítica en tiempo real"],
+      "parents": ["data analysis", "stream processing"]
     },
     {
       "name": "embedded analytics",
       "category": "analytics",
-      "aliases": ["analitica embebida"]
+      "aliases": ["analitica embebida"],
+      "parents": ["business intelligence"]
     },
     {
       "name": "report automation",
       "category": "analytics",
-      "aliases": ["automatizacion de reportes", "automatización de reportes"]
+      "aliases": ["automatizacion de reportes", "automatización de reportes"],
+      "parents": ["reporting", "process automation"]
     },
     {
       "name": "budgeting",
       "category": "analytics",
-      "aliases": ["presupuestacion", "presupuestación", "budget planning"]
+      "aliases": ["presupuestacion", "presupuestación", "budget planning"],
+      "parents": ["financial modeling"]
     },
     {
       "name": "machine learning",
       "category": "ml",
-      "aliases": ["ml", "aprendizaje automatico", "aprendizaje automático", "aprendizaje de maquina", "aprendizaje de máquina"]
+      "aliases": ["ml", "aprendizaje automatico", "aprendizaje automático", "aprendizaje de maquina", "aprendizaje de máquina"],
+      "parents": ["artificial intelligence"]
     },
     {
       "name": "artificial intelligence",
       "category": "ml",
-      "aliases": ["ai", "ia", "inteligencia artificial"]
+      "aliases": ["ai", "ia", "inteligencia artificial"],
+      "parents": []
     },
     {
       "name": "deep learning",
       "category": "ml",
-      "aliases": ["aprendizaje profundo"]
+      "aliases": ["aprendizaje profundo"],
+      "parents": ["machine learning", "neural networks"]
     },
     {
       "name": "supervised learning",
       "category": "ml",
-      "aliases": ["aprendizaje supervisado"]
+      "aliases": ["aprendizaje supervisado"],
+      "parents": ["machine learning"]
     },
     {
       "name": "unsupervised learning",
       "category": "ml",
-      "aliases": ["aprendizaje no supervisado"]
+      "aliases": ["aprendizaje no supervisado"],
+      "parents": ["machine learning"]
     },
     {
       "name": "reinforcement learning",
       "category": "ml",
-      "aliases": ["aprendizaje por refuerzo"]
+      "aliases": ["aprendizaje por refuerzo"],
+      "parents": ["machine learning"]
     },
     {
       "name": "natural language processing",
       "category": "ml",
-      "aliases": ["nlp", "procesamiento de lenguaje natural", "pln"]
+      "aliases": ["nlp", "procesamiento de lenguaje natural", "pln"],
+      "parents": ["machine learning"]
     },
     {
       "name": "computer vision",
       "category": "ml",
-      "aliases": ["vision por computadora", "visión por computadora", "vision artificial", "visión artificial"]
+      "aliases": ["vision por computadora", "visión por computadora", "vision artificial", "visión artificial"],
+      "parents": ["machine learning"]
     },
     {
       "name": "speech recognition",
       "category": "ml",
-      "aliases": ["speech to text", "asr", "reconocimiento de voz", "stt", "transcripcion de audio", "transcripción de audio"]
+      "aliases": ["speech to text", "asr", "reconocimiento de voz", "stt", "transcripcion de audio", "transcripción de audio"],
+      "parents": ["machine learning"]
     },
     {
       "name": "recommender systems",
       "category": "ml",
-      "aliases": ["recommendation systems", "sistemas de recomendacion", "sistemas de recomendación"]
+      "aliases": ["recommendation systems", "sistemas de recomendacion", "sistemas de recomendación"],
+      "parents": ["machine learning"]
     },
     {
       "name": "anomaly detection",
       "category": "ml",
-      "aliases": ["deteccion de anomalias", "detección de anomalías", "fraud detection", "deteccion de fraude", "detección de fraude"]
+      "aliases": ["deteccion de anomalias", "detección de anomalías", "fraud detection", "deteccion de fraude", "detección de fraude"],
+      "parents": ["machine learning"]
     },
     {
       "name": "classification",
       "category": "ml",
-      "aliases": ["clasificacion", "clasificación"]
+      "aliases": ["clasificacion", "clasificación"],
+      "parents": ["supervised learning"]
     },
     {
       "name": "regression",
       "category": "ml",
-      "aliases": ["regresion", "regresión"]
+      "aliases": ["regresion", "regresión"],
+      "parents": ["supervised learning"]
     },
     {
       "name": "clustering",
       "category": "ml",
-      "aliases": ["segmentacion", "segmentación", "agrupamiento"]
+      "aliases": ["segmentacion", "segmentación", "agrupamiento"],
+      "parents": ["unsupervised learning"]
     },
     {
       "name": "time series forecasting",
       "category": "ml",
-      "aliases": ["prediccion de series temporales", "predicción de series temporales"]
+      "aliases": ["prediccion de series temporales", "predicción de series temporales"],
+      "parents": ["machine learning", "time series data"]
     },
     {
       "name": "feature engineering",
       "category": "ml",
-      "aliases": ["ingenieria de caracteristicas", "ingeniería de características"]
+      "aliases": ["ingenieria de caracteristicas", "ingeniería de características"],
+      "parents": ["machine learning"]
     },
     {
       "name": "model training",
       "category": "ml",
-      "aliases": ["entrenamiento de modelos", "model development"]
+      "aliases": ["entrenamiento de modelos", "model development"],
+      "parents": ["machine learning"]
     },
     {
       "name": "model evaluation",
       "category": "ml",
-      "aliases": ["model validation", "evaluacion de modelos", "evaluación de modelos", "metricas de modelo", "métricas de modelo"]
+      "aliases": ["model validation", "evaluacion de modelos", "evaluación de modelos", "metricas de modelo", "métricas de modelo"],
+      "parents": ["machine learning"]
     },
     {
       "name": "hyperparameter tuning",
       "category": "ml",
-      "aliases": ["hyperparameter optimization", "ajuste de hiperparametros", "ajuste de hiperparámetros"]
+      "aliases": ["hyperparameter optimization", "ajuste de hiperparametros", "ajuste de hiperparámetros"],
+      "parents": ["model training"]
     },
     {
       "name": "model deployment",
       "category": "ml",
-      "aliases": ["model serving", "despliegue de modelos", "puesta en produccion de modelos", "puesta en producción de modelos", "servido de modelos", "model inference api"]
+      "aliases": ["model serving", "despliegue de modelos", "puesta en produccion de modelos", "puesta en producción de modelos", "servido de modelos", "model inference api"],
+      "parents": ["mlops"]
     },
     {
       "name": "model monitoring",
       "category": "ml",
-      "aliases": ["model drift", "data drift", "monitoreo de modelos", "concept drift", "deriva del modelo"]
+      "aliases": ["model drift", "data drift", "monitoreo de modelos", "concept drift", "deriva del modelo"],
+      "parents": ["mlops", "monitoring and alerting"]
     },
     {
       "name": "neural networks",
       "category": "ml",
-      "aliases": ["redes neuronales", "neural network"]
+      "aliases": ["redes neuronales", "neural network"],
+      "parents": ["machine learning"]
     },
     {
       "name": "convolutional neural networks",
       "category": "ml",
-      "aliases": ["cnn", "cnns", "redes convolucionales"]
+      "aliases": ["cnn", "cnns", "redes convolucionales"],
+      "parents": ["deep learning"]
     },
     {
       "name": "recurrent neural networks",
       "category": "ml",
-      "aliases": ["rnn", "lstm", "redes recurrentes"]
+      "aliases": ["rnn", "lstm", "redes recurrentes"],
+      "parents": ["deep learning"]
     },
     {
       "name": "transformer architecture",
       "category": "ml",
-      "aliases": ["transformer models", "arquitectura transformer"]
+      "aliases": ["transformer models", "arquitectura transformer"],
+      "parents": ["deep learning", "attention mechanism"]
     },
     {
       "name": "transfer learning",
       "category": "ml",
-      "aliases": ["aprendizaje por transferencia"]
+      "aliases": ["aprendizaje por transferencia"],
+      "parents": ["deep learning"]
     },
     {
       "name": "explainable ai",
       "category": "ml",
-      "aliases": ["xai", "explainability", "interpretability", "interpretabilidad", "explicabilidad"]
+      "aliases": ["xai", "explainability", "interpretability", "interpretabilidad", "explicabilidad"],
+      "parents": ["responsible ai", "model evaluation"]
     },
     {
       "name": "responsible ai",
       "category": "ml",
-      "aliases": ["ai ethics", "etica de la ia", "ética de la ia", "ai governance", "gobernanza de la ia"]
+      "aliases": ["ai ethics", "etica de la ia", "ética de la ia", "ai governance", "gobernanza de la ia"],
+      "parents": ["artificial intelligence"]
     },
     {
       "name": "predictive modeling",
       "category": "ml",
-      "aliases": ["predictive analytics", "modelos predictivos", "analitica predictiva", "analítica predictiva"]
+      "aliases": ["predictive analytics", "modelos predictivos", "analitica predictiva", "analítica predictiva"],
+      "parents": ["supervised learning"]
     },
     {
       "name": "mathematical optimization",
       "category": "ml",
-      "aliases": ["operations research", "investigacion operativa", "investigación operativa", "optimizacion matematica", "optimización matemática"]
+      "aliases": ["operations research", "investigacion operativa", "investigación operativa", "optimizacion matematica", "optimización matemática"],
+      "parents": []
     },
     {
       "name": "gradient boosting",
       "category": "ml",
-      "aliases": ["boosting"]
+      "aliases": ["boosting"],
+      "parents": ["ensemble methods"]
     },
     {
       "name": "decision trees",
       "category": "ml",
-      "aliases": ["arboles de decision", "árboles de decisión"]
+      "aliases": ["arboles de decision", "árboles de decisión"],
+      "parents": ["supervised learning"]
     },
     {
       "name": "random forest",
       "category": "ml",
-      "aliases": ["random forests", "bosques aleatorios"]
+      "aliases": ["random forests", "bosques aleatorios"],
+      "parents": ["ensemble methods", "decision trees"]
     },
     {
       "name": "linear regression",
       "category": "ml",
-      "aliases": ["regresion lineal", "regresión lineal"]
+      "aliases": ["regresion lineal", "regresión lineal"],
+      "parents": ["regression"]
     },
     {
       "name": "logistic regression",
       "category": "ml",
-      "aliases": ["regresion logistica", "regresión logística"]
+      "aliases": ["regresion logistica", "regresión logística"],
+      "parents": ["classification"]
     },
     {
       "name": "support vector machines",
       "category": "ml",
-      "aliases": ["svm"]
+      "aliases": ["svm"],
+      "parents": ["supervised learning"]
     },
     {
       "name": "k nearest neighbors",
       "category": "ml",
-      "aliases": ["knn"]
+      "aliases": ["knn"],
+      "parents": ["supervised learning"]
     },
     {
       "name": "naive bayes",
       "category": "ml",
-      "aliases": []
+      "aliases": [],
+      "parents": ["classification", "probability"]
     },
     {
       "name": "dimensionality reduction",
       "category": "ml",
-      "aliases": ["pca", "principal component analysis", "reduccion de dimensionalidad"]
+      "aliases": ["pca", "principal component analysis", "reduccion de dimensionalidad"],
+      "parents": ["unsupervised learning"]
     },
     {
       "name": "cross validation",
       "category": "ml",
-      "aliases": ["validacion cruzada", "validación cruzada"]
+      "aliases": ["validacion cruzada", "validación cruzada"],
+      "parents": ["model evaluation"]
     },
     {
       "name": "overfitting",
       "category": "ml",
-      "aliases": ["sobreajuste", "underfitting"]
+      "aliases": ["sobreajuste", "underfitting"],
+      "parents": ["model evaluation"]
     },
     {
       "name": "regularization",
       "category": "ml",
-      "aliases": ["regularizacion"]
+      "aliases": ["regularizacion"],
+      "parents": ["model training"]
     },
     {
       "name": "bias variance tradeoff",
       "category": "ml",
-      "aliases": ["sesgo varianza"]
+      "aliases": ["sesgo varianza"],
+      "parents": ["model evaluation"]
     },
     {
       "name": "precision and recall",
       "category": "ml",
-      "aliases": ["f1 score", "precision y recall"]
+      "aliases": ["f1 score", "precision y recall"],
+      "parents": ["model evaluation"]
     },
     {
       "name": "roc auc",
       "category": "ml",
-      "aliases": ["auc", "curva roc"]
+      "aliases": ["auc", "curva roc"],
+      "parents": ["model evaluation"]
     },
     {
       "name": "confusion matrix",
       "category": "ml",
-      "aliases": ["matriz de confusion", "matriz de confusión"]
+      "aliases": ["matriz de confusion", "matriz de confusión"],
+      "parents": ["model evaluation"]
     },
     {
       "name": "loss functions",
       "category": "ml",
-      "aliases": ["funciones de perdida"]
+      "aliases": ["funciones de perdida"],
+      "parents": ["model training"]
     },
     {
       "name": "gradient descent",
       "category": "ml",
-      "aliases": ["descenso de gradiente"]
+      "aliases": ["descenso de gradiente"],
+      "parents": ["model training", "mathematical optimization"]
     },
     {
       "name": "backpropagation",
       "category": "ml",
-      "aliases": ["retropropagacion"]
+      "aliases": ["retropropagacion"],
+      "parents": ["neural networks", "gradient descent"]
     },
     {
       "name": "attention mechanism",
       "category": "ml",
-      "aliases": ["mecanismo de atencion", "self attention"]
+      "aliases": ["mecanismo de atencion", "self attention"],
+      "parents": ["deep learning"]
     },
     {
       "name": "tokenization",
       "category": "ml",
-      "aliases": ["tokenizacion", "tokenización"]
+      "aliases": ["tokenizacion", "tokenización"],
+      "parents": ["natural language processing"]
     },
     {
       "name": "data augmentation",
       "category": "ml",
-      "aliases": ["aumento de datos"]
+      "aliases": ["aumento de datos"],
+      "parents": ["model training"]
     },
     {
       "name": "active learning",
       "category": "ml",
-      "aliases": []
+      "aliases": [],
+      "parents": ["machine learning"]
     },
     {
       "name": "self supervised learning",
       "category": "ml",
-      "aliases": ["semi supervised learning", "aprendizaje autosupervisado"]
+      "aliases": ["semi supervised learning", "aprendizaje autosupervisado"],
+      "parents": ["machine learning"]
     },
     {
       "name": "ensemble methods",
       "category": "ml",
-      "aliases": ["ensembles", "metodos de ensamble"]
+      "aliases": ["ensembles", "metodos de ensamble"],
+      "parents": ["machine learning"]
     },
     {
       "name": "model registry",
       "category": "ml",
-      "aliases": ["registro de modelos"]
+      "aliases": ["registro de modelos"],
+      "parents": ["mlops", "model versioning"]
     },
     {
       "name": "model versioning",
       "category": "ml",
-      "aliases": ["versionado de modelos"]
+      "aliases": ["versionado de modelos"],
+      "parents": ["mlops"]
     },
     {
       "name": "batch inference",
       "category": "ml",
-      "aliases": ["inferencia batch"]
+      "aliases": ["inferencia batch"],
+      "parents": ["model deployment"]
     },
     {
       "name": "real time inference",
       "category": "ml",
-      "aliases": ["inferencia en tiempo real", "online inference"]
+      "aliases": ["inferencia en tiempo real", "online inference"],
+      "parents": ["model deployment"]
     },
     {
       "name": "distributed training",
       "category": "ml",
-      "aliases": ["entrenamiento distribuido"]
+      "aliases": ["entrenamiento distribuido"],
+      "parents": ["model training", "distributed processing"]
     },
     {
       "name": "gpu acceleration",
       "category": "ml",
-      "aliases": ["gpu computing", "aceleracion por gpu"]
+      "aliases": ["gpu computing", "aceleracion por gpu"],
+      "parents": []
     },
     {
       "name": "quantization",
       "category": "ml",
-      "aliases": ["cuantizacion"]
+      "aliases": ["cuantizacion"],
+      "parents": ["model deployment"]
     },
     {
       "name": "knowledge distillation",
       "category": "ml",
-      "aliases": ["destilacion de modelos"]
+      "aliases": ["destilacion de modelos"],
+      "parents": ["model training"]
     },
     {
       "name": "edge ai",
       "category": "ml",
-      "aliases": ["edge inference", "ia en el borde"]
+      "aliases": ["edge inference", "ia en el borde"],
+      "parents": ["model deployment", "edge computing"]
     },
     {
       "name": "optical character recognition",
       "category": "ml",
-      "aliases": ["ocr", "reconocimiento optico de caracteres"]
+      "aliases": ["ocr", "reconocimiento optico de caracteres"],
+      "parents": ["computer vision"]
     },
     {
       "name": "object detection",
       "category": "ml",
-      "aliases": ["deteccion de objetos", "detección de objetos"]
+      "aliases": ["deteccion de objetos", "detección de objetos"],
+      "parents": ["computer vision"]
     },
     {
       "name": "image segmentation",
       "category": "ml",
-      "aliases": ["segmentacion de imagenes"]
+      "aliases": ["segmentacion de imagenes"],
+      "parents": ["computer vision"]
     },
     {
       "name": "sentiment analysis",
       "category": "ml",
-      "aliases": ["analisis de sentimiento", "análisis de sentimiento"]
+      "aliases": ["analisis de sentimiento", "análisis de sentimiento"],
+      "parents": ["text classification"]
     },
     {
       "name": "named entity recognition",
       "category": "ml",
-      "aliases": ["ner", "reconocimiento de entidades"]
+      "aliases": ["ner", "reconocimiento de entidades"],
+      "parents": ["natural language processing"]
     },
     {
       "name": "topic modeling",
       "category": "ml",
-      "aliases": ["modelado de topicos"]
+      "aliases": ["modelado de topicos"],
+      "parents": ["natural language processing", "unsupervised learning"]
     },
     {
       "name": "text classification",
       "category": "ml",
-      "aliases": ["clasificacion de texto", "clasificación de texto"]
+      "aliases": ["clasificacion de texto", "clasificación de texto"],
+      "parents": ["natural language processing", "classification"]
     },
     {
       "name": "text summarization",
       "category": "ml",
-      "aliases": ["resumen automatico", "summarization"]
+      "aliases": ["resumen automatico", "summarization"],
+      "parents": ["natural language processing"]
     },
     {
       "name": "machine translation",
       "category": "ml",
-      "aliases": ["traduccion automatica", "traducción automática"]
+      "aliases": ["traduccion automatica", "traducción automática"],
+      "parents": ["natural language processing"]
     },
     {
       "name": "credit scoring",
       "category": "ml",
-      "aliases": ["scoring crediticio", "credit risk modeling"]
+      "aliases": ["scoring crediticio", "credit risk modeling"],
+      "parents": ["predictive modeling"]
     },
     {
       "name": "generative ai",
       "category": "genai",
-      "aliases": ["genai", "gen ai", "ia generativa", "generative artificial intelligence", "inteligencia artificial generativa"]
+      "aliases": ["genai", "gen ai", "ia generativa", "generative artificial intelligence", "inteligencia artificial generativa"],
+      "parents": ["artificial intelligence"]
     },
     {
       "name": "large language models",
       "category": "genai",
-      "aliases": ["llm", "llms", "modelos de lenguaje", "modelos de lenguaje grandes"]
+      "aliases": ["llm", "llms", "modelos de lenguaje", "modelos de lenguaje grandes"],
+      "parents": ["generative ai", "transformer architecture"]
     },
     {
       "name": "retrieval augmented generation",
       "category": "genai",
-      "aliases": ["rag", "retrieval-augmented generation", "generacion aumentada por recuperacion", "generación aumentada por recuperación"]
+      "aliases": ["rag", "retrieval-augmented generation", "generacion aumentada por recuperacion", "generación aumentada por recuperación"],
+      "parents": ["large language models", "semantic search"]
     },
     {
       "name": "prompt engineering",
       "category": "genai",
-      "aliases": ["prompting", "ingenieria de prompts", "ingeniería de prompts", "diseño de prompts"]
+      "aliases": ["prompting", "ingenieria de prompts", "ingeniería de prompts", "diseño de prompts"],
+      "parents": ["large language models"]
     },
     {
       "name": "fine tuning",
       "category": "genai",
-      "aliases": ["fine-tuning", "model fine tuning", "ajuste fino", "instruction tuning"]
+      "aliases": ["fine-tuning", "model fine tuning", "ajuste fino", "instruction tuning"],
+      "parents": ["model training", "transfer learning"]
     },
     {
       "name": "embeddings",
       "category": "genai",
-      "aliases": ["embedding pipelines", "vector embeddings", "embeddings vectoriales"]
+      "aliases": ["embedding pipelines", "vector embeddings", "embeddings vectoriales"],
+      "parents": ["machine learning"]
     },
     {
       "name": "vector search",
       "category": "genai",
-      "aliases": ["similarity search", "busqueda vectorial", "búsqueda vectorial", "busqueda por similitud", "búsqueda por similitud"]
+      "aliases": ["similarity search", "busqueda vectorial", "búsqueda vectorial", "busqueda por similitud", "búsqueda por similitud"],
+      "parents": ["embeddings"]
     },
     {
       "name": "semantic search",
       "category": "genai",
-      "aliases": ["busqueda semantica", "búsqueda semántica"]
+      "aliases": ["busqueda semantica", "búsqueda semántica"],
+      "parents": ["vector search"]
     },
     {
       "name": "ai agents",
       "category": "genai",
-      "aliases": ["agentic ai", "agentes de ia", "multi agent systems", "sistemas multiagente", "agent orchestration", "orquestacion de agentes", "orquestación de agentes", "multi-agent"]
+      "aliases": ["agentic ai", "agentes de ia", "multi agent systems", "sistemas multiagente", "agent orchestration", "orquestacion de agentes", "orquestación de agentes", "multi-agent"],
+      "parents": ["large language models", "tool calling"]
     },
     {
       "name": "chatbots",
       "category": "genai",
-      "aliases": ["conversational ai", "asistentes virtuales", "virtual assistants", "ia conversacional"]
+      "aliases": ["conversational ai", "asistentes virtuales", "virtual assistants", "ia conversacional"],
+      "parents": ["natural language processing"]
     },
     {
       "name": "knowledge graphs",
       "category": "genai",
-      "aliases": ["knowledge graph", "grafos de conocimiento"]
+      "aliases": ["knowledge graph", "grafos de conocimiento"],
+      "parents": ["graph databases"]
     },
     {
       "name": "multimodal models",
       "category": "genai",
-      "aliases": ["multimodal", "modelos multimodales"]
+      "aliases": ["multimodal", "modelos multimodales"],
+      "parents": ["deep learning"]
     },
     {
       "name": "context engineering",
       "category": "genai",
-      "aliases": ["context window management"]
+      "aliases": ["context window management"],
+      "parents": ["prompt engineering"]
     },
     {
       "name": "ai guardrails",
       "category": "genai",
-      "aliases": ["guardrails", "ai safety", "content moderation"]
+      "aliases": ["guardrails", "ai safety", "content moderation"],
+      "parents": ["responsible ai", "large language models"]
     },
     {
       "name": "llm evaluation",
       "category": "genai",
-      "aliases": ["evals", "llm evals", "evaluacion de llms", "evaluación de llms"]
+      "aliases": ["evals", "llm evals", "evaluacion de llms", "evaluación de llms"],
+      "parents": ["large language models", "model evaluation"]
     },
     {
       "name": "agentic workflows",
       "category": "genai",
-      "aliases": ["flujos agenticos", "workflows agenticos"]
+      "aliases": ["flujos agenticos", "workflows agenticos"],
+      "parents": ["ai agents"]
     },
     {
       "name": "tool calling",
       "category": "genai",
-      "aliases": ["function calling", "llamado a herramientas"]
+      "aliases": ["function calling", "llamado a herramientas"],
+      "parents": ["large language models"]
     },
     {
       "name": "structured outputs",
       "category": "genai",
-      "aliases": ["json mode", "salidas estructuradas"]
+      "aliases": ["json mode", "salidas estructuradas"],
+      "parents": ["large language models"]
     },
     {
       "name": "chain of thought",
       "category": "genai",
-      "aliases": ["cot", "cadena de pensamiento"]
+      "aliases": ["cot", "cadena de pensamiento"],
+      "parents": ["prompt engineering"]
     },
     {
       "name": "few shot prompting",
       "category": "genai",
-      "aliases": ["few-shot", "zero shot", "in context learning"]
+      "aliases": ["few-shot", "zero shot", "in context learning"],
+      "parents": ["prompt engineering"]
     },
     {
       "name": "system prompts",
       "category": "genai",
-      "aliases": ["prompt de sistema"]
+      "aliases": ["prompt de sistema"],
+      "parents": ["prompt engineering"]
     },
     {
       "name": "context window",
       "category": "genai",
-      "aliases": ["ventana de contexto"]
+      "aliases": ["ventana de contexto"],
+      "parents": ["large language models"]
     },
     {
       "name": "hallucination mitigation",
       "category": "genai",
-      "aliases": ["hallucinations", "alucinaciones"]
+      "aliases": ["hallucinations", "alucinaciones"],
+      "parents": ["ai guardrails"]
     },
     {
       "name": "grounding",
       "category": "genai",
-      "aliases": []
+      "aliases": [],
+      "parents": ["retrieval augmented generation"]
     },
     {
       "name": "reranking",
       "category": "genai",
-      "aliases": ["re-ranking", "rerank"]
+      "aliases": ["re-ranking", "rerank"],
+      "parents": ["semantic search"]
     },
     {
       "name": "chunking",
       "category": "genai",
-      "aliases": ["text chunking", "chunking de documentos"]
+      "aliases": ["text chunking", "chunking de documentos"],
+      "parents": ["retrieval augmented generation"]
     },
     {
       "name": "hybrid search",
       "category": "genai",
-      "aliases": ["busqueda hibrida", "búsqueda híbrida"]
+      "aliases": ["busqueda hibrida", "búsqueda híbrida"],
+      "parents": ["semantic search"]
     },
     {
       "name": "graph rag",
       "category": "genai",
-      "aliases": ["graphrag"]
+      "aliases": ["graphrag"],
+      "parents": ["retrieval augmented generation", "knowledge graphs"]
     },
     {
       "name": "llm observability",
       "category": "genai",
-      "aliases": ["llm tracing", "observabilidad de llms"]
+      "aliases": ["llm tracing", "observabilidad de llms"],
+      "parents": ["observability", "large language models"]
     },
     {
       "name": "token cost optimization",
       "category": "genai",
-      "aliases": ["optimizacion de tokens", "cost per token"]
+      "aliases": ["optimizacion de tokens", "cost per token"],
+      "parents": ["large language models", "cost optimization"]
     },
     {
       "name": "parameter efficient fine tuning",
       "category": "genai",
-      "aliases": ["lora", "peft", "qlora"]
+      "aliases": ["lora", "peft", "qlora"],
+      "parents": ["fine tuning"]
     },
     {
       "name": "reinforcement learning from human feedback",
       "category": "genai",
-      "aliases": ["rlhf"]
+      "aliases": ["rlhf"],
+      "parents": ["reinforcement learning", "fine tuning"]
     },
     {
       "name": "synthetic data generation",
       "category": "genai",
-      "aliases": ["datos sinteticos", "datos sintéticos"]
+      "aliases": ["datos sinteticos", "datos sintéticos"],
+      "parents": ["generative ai"]
     },
     {
       "name": "human in the loop",
       "category": "genai",
-      "aliases": ["hitl", "humano en el loop"]
+      "aliases": ["hitl", "humano en el loop"],
+      "parents": ["machine learning"]
     },
     {
       "name": "document intelligence",
       "category": "genai",
-      "aliases": ["intelligent document processing", "idp", "procesamiento inteligente de documentos"]
+      "aliases": ["intelligent document processing", "idp", "procesamiento inteligente de documentos"],
+      "parents": ["optical character recognition", "natural language processing"]
     },
     {
       "name": "voice agents",
       "category": "genai",
-      "aliases": ["agentes de voz"]
+      "aliases": ["agentes de voz"],
+      "parents": ["ai agents", "speech recognition"]
     },
     {
       "name": "text to speech",
       "category": "genai",
-      "aliases": ["tts", "sintesis de voz", "síntesis de voz"]
+      "aliases": ["tts", "sintesis de voz", "síntesis de voz"],
+      "parents": ["generative ai"]
     },
     {
       "name": "llm as a judge",
       "category": "genai",
-      "aliases": ["llm-as-a-judge", "llm as judge"]
+      "aliases": ["llm-as-a-judge", "llm as judge"],
+      "parents": ["llm evaluation"]
     },
     {
       "name": "authentication",
       "category": "security",
-      "aliases": ["autenticacion", "autenticación"]
+      "aliases": ["autenticacion", "autenticación"],
+      "parents": []
     },
     {
       "name": "authorization",
       "category": "security",
-      "aliases": ["autorizacion", "autorización", "rbac", "role based access control", "control de acceso", "control de acceso basado en roles"]
+      "aliases": ["autorizacion", "autorización", "rbac", "role based access control", "control de acceso", "control de acceso basado en roles"],
+      "parents": []
     },
     {
       "name": "single sign on",
       "category": "security",
-      "aliases": ["sso", "inicio de sesion unico", "inicio de sesión único"]
+      "aliases": ["sso", "inicio de sesion unico", "inicio de sesión único"],
+      "parents": ["identity and access management"]
     },
     {
       "name": "identity and access management",
       "category": "security",
-      "aliases": ["iam", "gestion de identidades", "gestión de identidades"]
+      "aliases": ["iam", "gestion de identidades", "gestión de identidades"],
+      "parents": ["authentication", "authorization"]
     },
     {
       "name": "encryption",
       "category": "security",
-      "aliases": ["cifrado", "encriptacion", "encriptación"]
+      "aliases": ["cifrado", "encriptacion", "encriptación"],
+      "parents": ["cryptography"]
     },
     {
       "name": "cryptography",
       "category": "security",
-      "aliases": ["criptografia", "criptografía"]
+      "aliases": ["criptografia", "criptografía"],
+      "parents": []
     },
     {
       "name": "application security",
       "category": "security",
-      "aliases": ["appsec", "seguridad de aplicaciones", "secure coding", "desarrollo seguro", "security by design", "codigo seguro"]
+      "aliases": ["appsec", "seguridad de aplicaciones", "secure coding", "desarrollo seguro", "security by design", "codigo seguro"],
+      "parents": ["cybersecurity"]
     },
     {
       "name": "network security",
       "category": "security",
-      "aliases": ["seguridad de redes"]
+      "aliases": ["seguridad de redes"],
+      "parents": ["cybersecurity", "networking"]
     },
     {
       "name": "cybersecurity",
       "category": "security",
-      "aliases": ["ciberseguridad", "information security", "seguridad informatica", "seguridad informática", "infosec"]
+      "aliases": ["ciberseguridad", "information security", "seguridad informatica", "seguridad informática", "infosec"],
+      "parents": []
     },
     {
       "name": "penetration testing",
       "category": "security",
-      "aliases": ["pentesting", "ethical hacking", "hacking etico", "hacking ético"]
+      "aliases": ["pentesting", "ethical hacking", "hacking etico", "hacking ético"],
+      "parents": ["cybersecurity"]
     },
     {
       "name": "vulnerability management",
       "category": "security",
-      "aliases": ["gestion de vulnerabilidades", "gestión de vulnerabilidades"]
+      "aliases": ["gestion de vulnerabilidades", "gestión de vulnerabilidades"],
+      "parents": ["cybersecurity"]
     },
     {
       "name": "secrets management",
       "category": "security",
-      "aliases": ["gestion de secretos", "gestión de secretos"]
+      "aliases": ["gestion de secretos", "gestión de secretos"],
+      "parents": ["application security", "key management"]
     },
     {
       "name": "zero trust",
       "category": "security",
-      "aliases": []
+      "aliases": [],
+      "parents": ["cybersecurity", "identity and access management"]
     },
     {
       "name": "regulatory compliance",
       "category": "security",
-      "aliases": ["compliance", "cumplimiento normativo", "normativas"]
+      "aliases": ["compliance", "cumplimiento normativo", "normativas"],
+      "parents": []
     },
     {
       "name": "gdpr",
       "category": "security",
-      "aliases": ["rgpd"]
+      "aliases": ["rgpd"],
+      "parents": ["regulatory compliance", "data privacy"]
     },
     {
       "name": "iso 27001",
       "category": "security",
-      "aliases": ["iso27001"]
+      "aliases": ["iso27001"],
+      "parents": ["regulatory compliance"]
     },
     {
       "name": "soc 2",
       "category": "security",
-      "aliases": ["soc2"]
+      "aliases": ["soc2"],
+      "parents": ["regulatory compliance"]
     },
     {
       "name": "pci dss",
       "category": "security",
-      "aliases": ["pci"]
+      "aliases": ["pci"],
+      "parents": ["regulatory compliance"]
     },
     {
       "name": "hipaa",
       "category": "security",
-      "aliases": []
+      "aliases": [],
+      "parents": ["regulatory compliance"]
     },
     {
       "name": "owasp top 10",
       "category": "security",
-      "aliases": ["owasp"]
+      "aliases": ["owasp"],
+      "parents": ["application security"]
     },
     {
       "name": "sql injection",
       "category": "security",
-      "aliases": ["sqli", "inyeccion sql", "inyección sql"]
+      "aliases": ["sqli", "inyeccion sql", "inyección sql"],
+      "parents": ["owasp top 10"]
     },
     {
       "name": "cross site scripting",
       "category": "security",
-      "aliases": ["xss"]
+      "aliases": ["xss"],
+      "parents": ["owasp top 10"]
     },
     {
       "name": "cross site request forgery",
       "category": "security",
-      "aliases": ["csrf"]
+      "aliases": ["csrf"],
+      "parents": ["owasp top 10"]
     },
     {
       "name": "threat modeling",
       "category": "security",
-      "aliases": ["modelado de amenazas"]
+      "aliases": ["modelado de amenazas"],
+      "parents": ["cybersecurity"]
     },
     {
       "name": "least privilege",
       "category": "security",
-      "aliases": ["minimo privilegio", "mínimo privilegio"]
+      "aliases": ["minimo privilegio", "mínimo privilegio"],
+      "parents": ["authorization"]
     },
     {
       "name": "multi factor authentication",
       "category": "security",
-      "aliases": ["mfa", "2fa", "doble factor"]
+      "aliases": ["mfa", "2fa", "doble factor"],
+      "parents": ["authentication"]
     },
     {
       "name": "attribute based access control",
       "category": "security",
-      "aliases": ["abac"]
+      "aliases": ["abac"],
+      "parents": ["authorization"]
     },
     {
       "name": "key management",
       "category": "security",
-      "aliases": ["gestion de claves", "gestión de claves"]
+      "aliases": ["gestion de claves", "gestión de claves"],
+      "parents": ["cryptography"]
     },
     {
       "name": "hashing",
       "category": "security",
-      "aliases": ["hash de contraseñas"]
+      "aliases": ["hash de contraseñas"],
+      "parents": ["cryptography"]
     },
     {
       "name": "digital signatures",
       "category": "security",
-      "aliases": ["firma digital"]
+      "aliases": ["firma digital"],
+      "parents": ["cryptography"]
     },
     {
       "name": "siem",
       "category": "security",
-      "aliases": ["security information and event management"]
+      "aliases": ["security information and event management"],
+      "parents": ["security operations center", "monitoring and alerting"]
     },
     {
       "name": "security operations center",
       "category": "security",
-      "aliases": ["soc analyst", "centro de operaciones de seguridad"]
+      "aliases": ["soc analyst", "centro de operaciones de seguridad"],
+      "parents": ["cybersecurity", "incident management"]
     },
     {
       "name": "ddos protection",
       "category": "security",
-      "aliases": ["proteccion ddos", "ddos"]
+      "aliases": ["proteccion ddos", "ddos"],
+      "parents": ["network security"]
     },
     {
       "name": "web application firewall",
       "category": "security",
-      "aliases": ["waf"]
+      "aliases": ["waf"],
+      "parents": ["application security", "firewalls"]
     },
     {
       "name": "patch management",
       "category": "security",
-      "aliases": ["gestion de parches", "gestión de parches"]
+      "aliases": ["gestion de parches", "gestión de parches"],
+      "parents": ["vulnerability management"]
     },
     {
       "name": "security auditing",
       "category": "security",
-      "aliases": ["auditoria de seguridad", "auditoría de seguridad"]
+      "aliases": ["auditoria de seguridad", "auditoría de seguridad"],
+      "parents": ["cybersecurity"]
     },
     {
       "name": "data masking",
       "category": "security",
-      "aliases": ["enmascaramiento de datos"]
+      "aliases": ["enmascaramiento de datos"],
+      "parents": ["data privacy"]
     },
     {
       "name": "prompt injection",
       "category": "security",
-      "aliases": ["inyeccion de prompts", "jailbreaking"]
+      "aliases": ["inyeccion de prompts", "jailbreaking"],
+      "parents": ["application security", "large language models"]
     },
     {
       "name": "nist cybersecurity framework",
       "category": "security",
-      "aliases": ["nist"]
+      "aliases": ["nist"],
+      "parents": ["cybersecurity", "regulatory compliance"]
     },
     {
       "name": "personal data protection law",
       "category": "security",
-      "aliases": ["lgpd", "ley 25.326", "ley de proteccion de datos personales", "habeas data"]
+      "aliases": ["lgpd", "ley 25.326", "ley de proteccion de datos personales", "habeas data"],
+      "parents": ["regulatory compliance", "data privacy"]
     },
     {
       "name": "sarbanes oxley",
       "category": "security",
-      "aliases": ["sox"]
+      "aliases": ["sox"],
+      "parents": ["regulatory compliance"]
     },
     {
       "name": "data structures",
       "category": "fundamentals",
-      "aliases": ["estructuras de datos"]
+      "aliases": ["estructuras de datos"],
+      "parents": []
     },
     {
       "name": "algorithms",
       "category": "fundamentals",
-      "aliases": ["algoritmos"]
+      "aliases": ["algoritmos"],
+      "parents": ["data structures"]
     },
     {
       "name": "algorithmic complexity",
       "category": "fundamentals",
-      "aliases": ["big o", "complejidad algoritmica", "complejidad algorítmica", "notacion big o"]
+      "aliases": ["big o", "complejidad algoritmica", "complejidad algorítmica", "notacion big o"],
+      "parents": ["algorithms"]
     },
     {
       "name": "operating systems",
       "category": "fundamentals",
-      "aliases": ["sistemas operativos"]
+      "aliases": ["sistemas operativos"],
+      "parents": []
     },
     {
       "name": "linear algebra",
       "category": "fundamentals",
-      "aliases": ["algebra lineal", "álgebra lineal"]
+      "aliases": ["algebra lineal", "álgebra lineal"],
+      "parents": []
     },
     {
       "name": "recursion",
       "category": "fundamentals",
-      "aliases": ["recursividad"]
+      "aliases": ["recursividad"],
+      "parents": ["algorithms"]
     },
     {
       "name": "discrete mathematics",
       "category": "fundamentals",
-      "aliases": ["matematica discreta", "matemática discreta"]
+      "aliases": ["matematica discreta", "matemática discreta"],
+      "parents": []
     },
     {
       "name": "calculus",
       "category": "fundamentals",
-      "aliases": ["calculo", "cálculo"]
+      "aliases": ["calculo", "cálculo"],
+      "parents": []
     },
     {
       "name": "graph theory",
       "category": "fundamentals",
-      "aliases": ["teoria de grafos", "teoría de grafos"]
+      "aliases": ["teoria de grafos", "teoría de grafos"],
+      "parents": ["discrete mathematics"]
     },
     {
       "name": "computer architecture",
       "category": "fundamentals",
-      "aliases": ["arquitectura de computadoras"]
+      "aliases": ["arquitectura de computadoras"],
+      "parents": []
     },
     {
       "name": "compilers",
       "category": "fundamentals",
-      "aliases": ["compiladores"]
+      "aliases": ["compiladores"],
+      "parents": []
     },
     {
       "name": "numerical methods",
       "category": "fundamentals",
-      "aliases": ["metodos numericos", "métodos numéricos"]
+      "aliases": ["metodos numericos", "métodos numéricos"],
+      "parents": ["calculus", "linear algebra"]
     },
     {
       "name": "technical leadership",
       "category": "ways_of_working",
-      "aliases": ["liderazgo tecnico", "liderazgo técnico", "tech lead"]
+      "aliases": ["liderazgo tecnico", "liderazgo técnico", "tech lead"],
+      "parents": ["team leadership"]
     },
     {
       "name": "mentoring",
       "category": "ways_of_working",
-      "aliases": ["mentoria", "mentoría", "coaching"]
+      "aliases": ["mentoria", "mentoría", "coaching"],
+      "parents": ["knowledge sharing"]
     },
     {
       "name": "stakeholder management",
       "category": "ways_of_working",
-      "aliases": ["gestion de stakeholders", "gestión de stakeholders", "manejo de stakeholders"]
+      "aliases": ["gestion de stakeholders", "gestión de stakeholders", "manejo de stakeholders"],
+      "parents": []
     },
     {
       "name": "requirements gathering",
       "category": "ways_of_working",
-      "aliases": ["requirements analysis", "relevamiento de requerimientos", "analisis de requerimientos", "análisis de requerimientos", "toma de requerimientos"]
+      "aliases": ["requirements analysis", "relevamiento de requerimientos", "analisis de requerimientos", "análisis de requerimientos", "toma de requerimientos"],
+      "parents": ["stakeholder management"]
     },
     {
       "name": "user stories",
       "category": "ways_of_working",
-      "aliases": ["historias de usuario"]
+      "aliases": ["historias de usuario"],
+      "parents": ["requirements gathering", "agile"]
     },
     {
       "name": "project management",
       "category": "ways_of_working",
-      "aliases": ["gestion de proyectos", "gestión de proyectos"]
+      "aliases": ["gestion de proyectos", "gestión de proyectos"],
+      "parents": []
     },
     {
       "name": "process automation",
       "category": "ways_of_working",
-      "aliases": ["automatizacion de procesos", "automatización de procesos", "rpa", "robotic process automation"]
+      "aliases": ["automatizacion de procesos", "automatización de procesos", "rpa", "robotic process automation"],
+      "parents": []
     },
     {
       "name": "business process improvement",
       "category": "ways_of_working",
-      "aliases": ["mejora de procesos", "process optimization", "optimizacion de procesos", "optimización de procesos"]
+      "aliases": ["mejora de procesos", "process optimization", "optimizacion de procesos", "optimización de procesos"],
+      "parents": []
     },
     {
       "name": "english proficiency",
       "category": "ways_of_working",
-      "aliases": ["advanced english", "ingles avanzado", "inglés avanzado", "ingles fluido", "english fluency", "nivel de ingles", "nivel de inglés"]
+      "aliases": ["advanced english", "ingles avanzado", "inglés avanzado", "ingles fluido", "english fluency", "nivel de ingles", "nivel de inglés"],
+      "parents": []
     },
     {
       "name": "cross functional collaboration",
       "category": "ways_of_working",
-      "aliases": ["trabajo interdisciplinario", "colaboracion interdisciplinaria"]
+      "aliases": ["trabajo interdisciplinario", "colaboracion interdisciplinaria"],
+      "parents": ["teamwork"]
     },
     {
       "name": "client facing communication",
       "category": "ways_of_working",
-      "aliases": ["trato con el cliente", "client facing", "atencion al cliente"]
+      "aliases": ["trato con el cliente", "client facing", "atencion al cliente"],
+      "parents": ["stakeholder management"]
     },
     {
       "name": "presentation skills",
       "category": "ways_of_working",
-      "aliases": ["habilidades de presentacion", "habilidades de presentación"]
+      "aliases": ["habilidades de presentacion", "habilidades de presentación"],
+      "parents": []
     },
     {
       "name": "estimation",
       "category": "ways_of_working",
-      "aliases": ["estimacion de esfuerzo", "estimación de esfuerzo"]
+      "aliases": ["estimacion de esfuerzo", "estimación de esfuerzo"],
+      "parents": ["project management"]
     },
     {
       "name": "backlog management",
       "category": "ways_of_working",
-      "aliases": ["backlog grooming", "refinement", "gestion del backlog"]
+      "aliases": ["backlog grooming", "refinement", "gestion del backlog"],
+      "parents": ["agile"]
     },
     {
       "name": "sprint planning",
       "category": "ways_of_working",
-      "aliases": ["planificacion de sprints"]
+      "aliases": ["planificacion de sprints"],
+      "parents": ["scrum"]
     },
     {
       "name": "retrospectives",
       "category": "ways_of_working",
-      "aliases": ["retrospectivas", "retro"]
+      "aliases": ["retrospectivas", "retro"],
+      "parents": ["scrum"]
     },
     {
       "name": "daily standups",
       "category": "ways_of_working",
-      "aliases": ["daily", "dailies", "reuniones diarias"]
+      "aliases": ["daily", "dailies", "reuniones diarias"],
+      "parents": ["scrum"]
     },
     {
       "name": "okrs",
       "category": "ways_of_working",
-      "aliases": ["objectives and key results"]
+      "aliases": ["objectives and key results"],
+      "parents": []
     },
     {
       "name": "roadmapping",
       "category": "ways_of_working",
-      "aliases": ["roadmap", "hoja de ruta"]
+      "aliases": ["roadmap", "hoja de ruta"],
+      "parents": ["project management"]
     },
     {
       "name": "prioritization",
       "category": "ways_of_working",
-      "aliases": ["priorizacion", "priorización"]
+      "aliases": ["priorizacion", "priorización"],
+      "parents": []
     },
     {
       "name": "team leadership",
       "category": "ways_of_working",
-      "aliases": ["liderazgo de equipos", "liderazgo"]
+      "aliases": ["liderazgo de equipos", "liderazgo"],
+      "parents": []
     },
     {
       "name": "knowledge sharing",
       "category": "ways_of_working",
-      "aliases": ["transferencia de conocimiento", "compartir conocimiento"]
+      "aliases": ["transferencia de conocimiento", "compartir conocimiento"],
+      "parents": []
     },
     {
       "name": "problem solving",
       "category": "ways_of_working",
-      "aliases": []
+      "aliases": [],
+      "parents": []
     },
     {
       "name": "critical thinking",
       "category": "ways_of_working",
-      "aliases": ["pensamiento critico", "pensamiento crítico"]
+      "aliases": ["pensamiento critico", "pensamiento crítico"],
+      "parents": []
     },
     {
       "name": "adaptability",
       "category": "ways_of_working",
-      "aliases": ["adaptabilidad", "flexibilidad"]
+      "aliases": ["adaptabilidad", "flexibilidad"],
+      "parents": []
     },
     {
       "name": "attention to detail",
       "category": "ways_of_working",
-      "aliases": ["atencion al detalle", "atención al detalle"]
+      "aliases": ["atencion al detalle", "atención al detalle"],
+      "parents": []
     },
     {
       "name": "teamwork",
       "category": "ways_of_working",
-      "aliases": ["trabajo en equipo"]
+      "aliases": ["trabajo en equipo"],
+      "parents": []
     },
     {
       "name": "time management",
       "category": "ways_of_working",
-      "aliases": ["gestion del tiempo", "gestión del tiempo", "organizacion"]
+      "aliases": ["gestion del tiempo", "gestión del tiempo", "organizacion"],
+      "parents": []
     },
     {
       "name": "proactivity",
       "category": "ways_of_working",
-      "aliases": ["proactividad", "proactivo"]
+      "aliases": ["proactividad", "proactivo"],
+      "parents": []
     },
     {
       "name": "autonomy",
       "category": "ways_of_working",
-      "aliases": ["autonomia", "autonomía", "trabajo autonomo"]
+      "aliases": ["autonomia", "autonomía", "trabajo autonomo"],
+      "parents": []
     },
     {
       "name": "continuous learning",
       "category": "ways_of_working",
-      "aliases": ["aprendizaje continuo", "ganas de aprender", "autodidacta"]
+      "aliases": ["aprendizaje continuo", "ganas de aprender", "autodidacta"],
+      "parents": []
     },
     {
       "name": "business acumen",
       "category": "ways_of_working",
-      "aliases": ["vision de negocio", "visión de negocio", "entendimiento del negocio"]
+      "aliases": ["vision de negocio", "visión de negocio", "entendimiento del negocio"],
+      "parents": []
     },
     {
       "name": "vendor management",
       "category": "ways_of_working",
-      "aliases": ["gestion de proveedores", "gestión de proveedores"]
+      "aliases": ["gestion de proveedores", "gestión de proveedores"],
+      "parents": []
     }
   ]
 }

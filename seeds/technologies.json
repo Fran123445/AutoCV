@@ -1,5 +1,5 @@
 {
-  "description": "Seed registry for DimTechnologies, TechnologyAlias and TechnologyDependency. 'name' is the canonical value for DimTechnologies.name. 'aliases' are surface forms mapped to it; they are globally unique and never collide with another canonical name. 'parents' means 'knowing this implies knowing that' (react implies javascript), and loads into TechnologyDependency as child_id -> parent_id. 'category' has no column in schema.sql yet; keep it or drop it at load time.",
+  "description": "Seed registry for DimTechnologies, TechnologyAlias and TechnologyDependency. 'name' is the canonical value for DimTechnologies.name. 'aliases' are surface forms mapped to it; they are globally unique and never collide with another canonical name. 'parents' means 'knowing this implies knowing that' (react implies javascript), and loads into TechnologyDependency as child_id -> parent_id. 'concepts' means 'operating this implies knowing that' (sql server implies relational databases), and loads into TechnologyConcept; only implications that always hold, since a false edge inflates every match. 'category' has no column in schema.sql yet; keep it or drop it at load time.",
   "technologies": [
     {
       "name": "python",
@@ -7,7 +7,8 @@
       "aliases": [
         "py"
       ],
-      "parents": []
+      "parents": [],
+      "concepts": []
     },
     {
       "name": "javascript",
@@ -16,7 +17,8 @@
         "js",
         "ecmascript"
       ],
-      "parents": []
+      "parents": [],
+      "concepts": []
     },
     {
       "name": "typescript",
@@ -26,13 +28,17 @@
       ],
       "parents": [
         "javascript"
-      ]
+      ],
+      "concepts": []
     },
     {
       "name": "java",
       "category": "language",
       "aliases": [],
-      "parents": []
+      "parents": [],
+      "concepts": [
+        "object oriented programming"
+      ]
     },
     {
       "name": "c#",
@@ -43,6 +49,9 @@
       ],
       "parents": [
         ".net"
+      ],
+      "concepts": [
+        "object oriented programming"
       ]
     },
     {
@@ -51,13 +60,20 @@
       "aliases": [
         "cpp"
       ],
-      "parents": []
+      "parents": [],
+      "concepts": [
+        "object oriented programming",
+        "memory management"
+      ]
     },
     {
       "name": "c",
       "category": "language",
       "aliases": [],
-      "parents": []
+      "parents": [],
+      "concepts": [
+        "memory management"
+      ]
     },
     {
       "name": "go",
@@ -65,43 +81,66 @@
       "aliases": [
         "golang"
       ],
-      "parents": []
+      "parents": [],
+      "concepts": [
+        "concurrency"
+      ]
     },
     {
       "name": "rust",
       "category": "language",
       "aliases": [],
-      "parents": []
+      "parents": [],
+      "concepts": [
+        "memory management",
+        "concurrency"
+      ]
     },
     {
       "name": "ruby",
       "category": "language",
       "aliases": [],
-      "parents": []
+      "parents": [],
+      "concepts": [
+        "object oriented programming"
+      ]
     },
     {
       "name": "php",
       "category": "language",
       "aliases": [],
-      "parents": []
+      "parents": [],
+      "concepts": [
+        "object oriented programming"
+      ]
     },
     {
       "name": "scala",
       "category": "language",
       "aliases": [],
-      "parents": []
+      "parents": [],
+      "concepts": [
+        "object oriented programming",
+        "functional programming"
+      ]
     },
     {
       "name": "kotlin",
       "category": "language",
       "aliases": [],
-      "parents": []
+      "parents": [],
+      "concepts": [
+        "object oriented programming"
+      ]
     },
     {
       "name": "swift",
       "category": "language",
       "aliases": [],
-      "parents": []
+      "parents": [],
+      "concepts": [
+        "object oriented programming"
+      ]
     },
     {
       "name": "objective-c",
@@ -110,25 +149,39 @@
         "objective c",
         "objc"
       ],
-      "parents": []
+      "parents": [],
+      "concepts": [
+        "object oriented programming"
+      ]
     },
     {
       "name": "r",
       "category": "language",
       "aliases": [],
-      "parents": []
+      "parents": [],
+      "concepts": [
+        "statistics",
+        "data analysis"
+      ]
     },
     {
       "name": "matlab",
       "category": "language",
       "aliases": [],
-      "parents": []
+      "parents": [],
+      "concepts": [
+        "numerical methods"
+      ]
     },
     {
       "name": "sql",
       "category": "language",
       "aliases": [],
-      "parents": []
+      "parents": [],
+      "concepts": [
+        "relational databases",
+        "query optimization"
+      ]
     },
     {
       "name": "pl/sql",
@@ -139,6 +192,10 @@
       "parents": [
         "sql",
         "oracle database"
+      ],
+      "concepts": [
+        "relational databases",
+        "stored procedures"
       ]
     },
     {
@@ -151,6 +208,10 @@
       "parents": [
         "sql",
         "sql server"
+      ],
+      "concepts": [
+        "relational databases",
+        "stored procedures"
       ]
     },
     {
@@ -162,13 +223,20 @@
       ],
       "parents": [
         "linux"
+      ],
+      "concepts": [
+        "shell scripting",
+        "linux administration"
       ]
     },
     {
       "name": "powershell",
       "category": "language",
       "aliases": [],
-      "parents": []
+      "parents": [],
+      "concepts": [
+        "shell scripting"
+      ]
     },
     {
       "name": "vba",
@@ -176,7 +244,10 @@
       "aliases": [
         "visual basic for applications"
       ],
-      "parents": []
+      "parents": [],
+      "concepts": [
+        "process automation"
+      ]
     },
     {
       "name": "visual basic .net",
@@ -187,6 +258,9 @@
       ],
       "parents": [
         ".net"
+      ],
+      "concepts": [
+        "object oriented programming"
       ]
     },
     {
@@ -195,6 +269,10 @@
       "aliases": [],
       "parents": [
         "power bi"
+      ],
+      "concepts": [
+        "business intelligence",
+        "semantic layer"
       ]
     },
     {
@@ -205,73 +283,102 @@
       ],
       "parents": [
         "power bi"
+      ],
+      "concepts": [
+        "etl"
       ]
     },
     {
       "name": "mdx",
       "category": "language",
       "aliases": [],
-      "parents": []
+      "parents": [],
+      "concepts": [
+        "olap"
+      ]
     },
     {
       "name": "perl",
       "category": "language",
       "aliases": [],
-      "parents": []
+      "parents": [],
+      "concepts": []
     },
     {
       "name": "elixir",
       "category": "language",
       "aliases": [],
-      "parents": []
+      "parents": [],
+      "concepts": [
+        "functional programming",
+        "concurrency"
+      ]
     },
     {
       "name": "haskell",
       "category": "language",
       "aliases": [],
-      "parents": []
+      "parents": [],
+      "concepts": [
+        "functional programming"
+      ]
     },
     {
       "name": "dart",
       "category": "language",
       "aliases": [],
-      "parents": []
+      "parents": [],
+      "concepts": [
+        "object oriented programming"
+      ]
     },
     {
       "name": "lua",
       "category": "language",
       "aliases": [],
-      "parents": []
+      "parents": [],
+      "concepts": []
     },
     {
       "name": "groovy",
       "category": "language",
       "aliases": [],
-      "parents": []
+      "parents": [],
+      "concepts": [
+        "object oriented programming"
+      ]
     },
     {
       "name": "solidity",
       "category": "language",
       "aliases": [],
-      "parents": []
+      "parents": [],
+      "concepts": []
     },
     {
       "name": "cobol",
       "category": "language",
       "aliases": [],
-      "parents": []
+      "parents": [],
+      "concepts": []
     },
     {
       "name": "fortran",
       "category": "language",
       "aliases": [],
-      "parents": []
+      "parents": [],
+      "concepts": [
+        "numerical methods"
+      ]
     },
     {
       "name": "delphi",
       "category": "language",
       "aliases": [],
-      "parents": []
+      "parents": [],
+      "concepts": [
+        "object oriented programming"
+      ]
     },
     {
       "name": "abap",
@@ -279,6 +386,9 @@
       "aliases": [],
       "parents": [
         "sap"
+      ],
+      "concepts": [
+        "object oriented programming"
       ]
     },
     {
@@ -287,13 +397,19 @@
       "aliases": [
         "asm"
       ],
-      "parents": []
+      "parents": [],
+      "concepts": [
+        "computer architecture"
+      ]
     },
     {
       "name": "julia",
       "category": "language",
       "aliases": [],
-      "parents": []
+      "parents": [],
+      "concepts": [
+        "numerical methods"
+      ]
     },
     {
       "name": "apex",
@@ -303,6 +419,9 @@
       ],
       "parents": [
         "salesforce"
+      ],
+      "concepts": [
+        "object oriented programming"
       ]
     },
     {
@@ -313,19 +432,29 @@
       ],
       "parents": [
         ".net"
+      ],
+      "concepts": [
+        "functional programming"
       ]
     },
     {
       "name": "clojure",
       "category": "language",
       "aliases": [],
-      "parents": []
+      "parents": [],
+      "concepts": [
+        "functional programming"
+      ]
     },
     {
       "name": "erlang",
       "category": "language",
       "aliases": [],
-      "parents": []
+      "parents": [],
+      "concepts": [
+        "functional programming",
+        "concurrency"
+      ]
     },
     {
       "name": "hcl",
@@ -335,6 +464,9 @@
       ],
       "parents": [
         "terraform"
+      ],
+      "concepts": [
+        "infrastructure as code"
       ]
     },
     {
@@ -343,6 +475,9 @@
       "aliases": [],
       "parents": [
         "azure"
+      ],
+      "concepts": [
+        "infrastructure as code"
       ]
     },
     {
@@ -351,13 +486,19 @@
       "aliases": [],
       "parents": [
         "neo4j"
+      ],
+      "concepts": [
+        "graph databases"
       ]
     },
     {
       "name": "sparql",
       "category": "language",
       "aliases": [],
-      "parents": []
+      "parents": [],
+      "concepts": [
+        "knowledge graphs"
+      ]
     },
     {
       "name": "pl/pgsql",
@@ -367,6 +508,10 @@
       ],
       "parents": [
         "postgresql"
+      ],
+      "concepts": [
+        "relational databases",
+        "stored procedures"
       ]
     },
     {
@@ -375,7 +520,8 @@
       "aliases": [
         "html5"
       ],
-      "parents": []
+      "parents": [],
+      "concepts": []
     },
     {
       "name": "css",
@@ -383,7 +529,10 @@
       "aliases": [
         "css3"
       ],
-      "parents": []
+      "parents": [],
+      "concepts": [
+        "responsive design"
+      ]
     },
     {
       "name": "sass",
@@ -393,7 +542,8 @@
       ],
       "parents": [
         "css"
-      ]
+      ],
+      "concepts": []
     },
     {
       "name": "less",
@@ -401,7 +551,8 @@
       "aliases": [],
       "parents": [
         "css"
-      ]
+      ],
+      "concepts": []
     },
     {
       "name": ".net",
@@ -413,7 +564,8 @@
         "net core",
         "dotnet framework"
       ],
-      "parents": []
+      "parents": [],
+      "concepts": []
     },
     {
       "name": "node.js",
@@ -424,7 +576,8 @@
       ],
       "parents": [
         "javascript"
-      ]
+      ],
+      "concepts": []
     },
     {
       "name": "deno",
@@ -432,7 +585,8 @@
       "aliases": [],
       "parents": [
         "javascript"
-      ]
+      ],
+      "concepts": []
     },
     {
       "name": "bun",
@@ -440,7 +594,8 @@
       "aliases": [],
       "parents": [
         "javascript"
-      ]
+      ],
+      "concepts": []
     },
     {
       "name": "jvm",
@@ -448,7 +603,8 @@
       "aliases": [
         "java virtual machine"
       ],
-      "parents": []
+      "parents": [],
+      "concepts": []
     },
     {
       "name": "webassembly",
@@ -456,7 +612,8 @@
       "aliases": [
         "wasm"
       ],
-      "parents": []
+      "parents": [],
+      "concepts": []
     },
     {
       "name": "react",
@@ -467,7 +624,8 @@
       ],
       "parents": [
         "javascript"
-      ]
+      ],
+      "concepts": []
     },
     {
       "name": "angular",
@@ -477,7 +635,8 @@
       ],
       "parents": [
         "typescript"
-      ]
+      ],
+      "concepts": []
     },
     {
       "name": "angularjs",
@@ -487,7 +646,8 @@
       ],
       "parents": [
         "javascript"
-      ]
+      ],
+      "concepts": []
     },
     {
       "name": "vue",
@@ -498,7 +658,8 @@
       ],
       "parents": [
         "javascript"
-      ]
+      ],
+      "concepts": []
     },
     {
       "name": "svelte",
@@ -508,7 +669,8 @@
       ],
       "parents": [
         "javascript"
-      ]
+      ],
+      "concepts": []
     },
     {
       "name": "next.js",
@@ -518,7 +680,8 @@
       ],
       "parents": [
         "react"
-      ]
+      ],
+      "concepts": []
     },
     {
       "name": "nuxt",
@@ -528,7 +691,8 @@
       ],
       "parents": [
         "vue"
-      ]
+      ],
+      "concepts": []
     },
     {
       "name": "astro",
@@ -536,7 +700,8 @@
       "aliases": [],
       "parents": [
         "javascript"
-      ]
+      ],
+      "concepts": []
     },
     {
       "name": "blazor",
@@ -544,7 +709,8 @@
       "aliases": [],
       "parents": [
         ".net"
-      ]
+      ],
+      "concepts": []
     },
     {
       "name": "remix",
@@ -552,7 +718,8 @@
       "aliases": [],
       "parents": [
         "react"
-      ]
+      ],
+      "concepts": []
     },
     {
       "name": "solid.js",
@@ -562,7 +729,8 @@
       ],
       "parents": [
         "javascript"
-      ]
+      ],
+      "concepts": []
     },
     {
       "name": "ember.js",
@@ -573,7 +741,8 @@
       ],
       "parents": [
         "javascript"
-      ]
+      ],
+      "concepts": []
     },
     {
       "name": "htmx",
@@ -581,7 +750,8 @@
       "aliases": [],
       "parents": [
         "html"
-      ]
+      ],
+      "concepts": []
     },
     {
       "name": "jquery",
@@ -589,7 +759,8 @@
       "aliases": [],
       "parents": [
         "javascript"
-      ]
+      ],
+      "concepts": []
     },
     {
       "name": "redux",
@@ -597,7 +768,8 @@
       "aliases": [],
       "parents": [
         "react"
-      ]
+      ],
+      "concepts": []
     },
     {
       "name": "tailwind css",
@@ -608,6 +780,9 @@
       ],
       "parents": [
         "css"
+      ],
+      "concepts": [
+        "responsive design"
       ]
     },
     {
@@ -616,6 +791,9 @@
       "aliases": [],
       "parents": [
         "css"
+      ],
+      "concepts": [
+        "responsive design"
       ]
     },
     {
@@ -627,7 +805,8 @@
       "parents": [
         "css",
         "react"
-      ]
+      ],
+      "concepts": []
     },
     {
       "name": "css modules",
@@ -635,7 +814,8 @@
       "aliases": [],
       "parents": [
         "css"
-      ]
+      ],
+      "concepts": []
     },
     {
       "name": "material ui",
@@ -645,7 +825,8 @@
       ],
       "parents": [
         "react"
-      ]
+      ],
+      "concepts": []
     },
     {
       "name": "webpack",
@@ -653,7 +834,8 @@
       "aliases": [],
       "parents": [
         "javascript"
-      ]
+      ],
+      "concepts": []
     },
     {
       "name": "vite",
@@ -661,7 +843,8 @@
       "aliases": [],
       "parents": [
         "javascript"
-      ]
+      ],
+      "concepts": []
     },
     {
       "name": "django",
@@ -669,6 +852,11 @@
       "aliases": [],
       "parents": [
         "python"
+      ],
+      "concepts": [
+        "api design",
+        "model view controller",
+        "object oriented programming"
       ]
     },
     {
@@ -679,6 +867,9 @@
       ],
       "parents": [
         "django"
+      ],
+      "concepts": [
+        "api design"
       ]
     },
     {
@@ -687,6 +878,9 @@
       "aliases": [],
       "parents": [
         "python"
+      ],
+      "concepts": [
+        "api design"
       ]
     },
     {
@@ -695,6 +889,10 @@
       "aliases": [],
       "parents": [
         "python"
+      ],
+      "concepts": [
+        "api design",
+        "asynchronous programming"
       ]
     },
     {
@@ -705,6 +903,11 @@
       ],
       "parents": [
         "java"
+      ],
+      "concepts": [
+        "api design",
+        "object oriented programming",
+        "dependency injection"
       ]
     },
     {
@@ -715,6 +918,11 @@
       ],
       "parents": [
         "spring"
+      ],
+      "concepts": [
+        "api design",
+        "dependency injection",
+        "microservices"
       ]
     },
     {
@@ -723,6 +931,9 @@
       "aliases": [],
       "parents": [
         "java"
+      ],
+      "concepts": [
+        "relational databases"
       ]
     },
     {
@@ -731,6 +942,10 @@
       "aliases": [],
       "parents": [
         "java"
+      ],
+      "concepts": [
+        "api design",
+        "microservices"
       ]
     },
     {
@@ -739,6 +954,10 @@
       "aliases": [],
       "parents": [
         "java"
+      ],
+      "concepts": [
+        "api design",
+        "microservices"
       ]
     },
     {
@@ -751,6 +970,11 @@
       ],
       "parents": [
         "c#"
+      ],
+      "concepts": [
+        "api design",
+        "object oriented programming",
+        "dependency injection"
       ]
     },
     {
@@ -762,6 +986,9 @@
       ],
       "parents": [
         "c#"
+      ],
+      "concepts": [
+        "relational databases"
       ]
     },
     {
@@ -770,6 +997,9 @@
       "aliases": [],
       "parents": [
         "javascript"
+      ],
+      "concepts": [
+        "asynchronous programming"
       ]
     },
     {
@@ -778,7 +1008,8 @@
       "aliases": [],
       "parents": [
         "react"
-      ]
+      ],
+      "concepts": []
     },
     {
       "name": "tanstack query",
@@ -788,6 +1019,9 @@
       ],
       "parents": [
         "react"
+      ],
+      "concepts": [
+        "caching"
       ]
     },
     {
@@ -796,7 +1030,8 @@
       "aliases": [],
       "parents": [
         "react"
-      ]
+      ],
+      "concepts": []
     },
     {
       "name": "three.js",
@@ -806,7 +1041,8 @@
       ],
       "parents": [
         "javascript"
-      ]
+      ],
+      "concepts": []
     },
     {
       "name": "d3.js",
@@ -816,6 +1052,9 @@
       ],
       "parents": [
         "javascript"
+      ],
+      "concepts": [
+        "data visualization"
       ]
     },
     {
@@ -826,6 +1065,9 @@
       ],
       "parents": [
         "javascript"
+      ],
+      "concepts": [
+        "data visualization"
       ]
     },
     {
@@ -834,7 +1076,8 @@
       "aliases": [],
       "parents": [
         "javascript"
-      ]
+      ],
+      "concepts": []
     },
     {
       "name": "axios",
@@ -842,7 +1085,8 @@
       "aliases": [],
       "parents": [
         "javascript"
-      ]
+      ],
+      "concepts": []
     },
     {
       "name": "ant design",
@@ -852,7 +1096,8 @@
       ],
       "parents": [
         "react"
-      ]
+      ],
+      "concepts": []
     },
     {
       "name": "chakra ui",
@@ -860,7 +1105,8 @@
       "aliases": [],
       "parents": [
         "react"
-      ]
+      ],
+      "concepts": []
     },
     {
       "name": "shadcn/ui",
@@ -871,7 +1117,8 @@
       "parents": [
         "react",
         "tailwind css"
-      ]
+      ],
+      "concepts": []
     },
     {
       "name": "prisma",
@@ -881,6 +1128,9 @@
       ],
       "parents": [
         "typescript"
+      ],
+      "concepts": [
+        "relational databases"
       ]
     },
     {
@@ -889,6 +1139,9 @@
       "aliases": [],
       "parents": [
         "typescript"
+      ],
+      "concepts": [
+        "relational databases"
       ]
     },
     {
@@ -897,6 +1150,9 @@
       "aliases": [],
       "parents": [
         "node.js"
+      ],
+      "concepts": [
+        "relational databases"
       ]
     },
     {
@@ -905,6 +1161,9 @@
       "aliases": [],
       "parents": [
         "python"
+      ],
+      "concepts": [
+        "relational databases"
       ]
     },
     {
@@ -913,6 +1172,9 @@
       "aliases": [],
       "parents": [
         "sqlalchemy"
+      ],
+      "concepts": [
+        "schema evolution"
       ]
     },
     {
@@ -921,7 +1183,8 @@
       "aliases": [],
       "parents": [
         "python"
-      ]
+      ],
+      "concepts": []
     },
     {
       "name": "celery",
@@ -929,6 +1192,10 @@
       "aliases": [],
       "parents": [
         "python"
+      ],
+      "concepts": [
+        "message queues",
+        "asynchronous programming"
       ]
     },
     {
@@ -939,7 +1206,8 @@
       ],
       "parents": [
         "python"
-      ]
+      ],
+      "concepts": []
     },
     {
       "name": "beautifulsoup",
@@ -950,6 +1218,9 @@
       ],
       "parents": [
         "python"
+      ],
+      "concepts": [
+        "web scraping"
       ]
     },
     {
@@ -958,6 +1229,9 @@
       "aliases": [],
       "parents": [
         "python"
+      ],
+      "concepts": [
+        "web scraping"
       ]
     },
     {
@@ -966,6 +1240,9 @@
       "aliases": [],
       "parents": [
         "python"
+      ],
+      "concepts": [
+        "data visualization"
       ]
     },
     {
@@ -974,6 +1251,9 @@
       "aliases": [],
       "parents": [
         "python"
+      ],
+      "concepts": [
+        "data visualization"
       ]
     },
     {
@@ -984,6 +1264,10 @@
       ],
       "parents": [
         "python"
+      ],
+      "concepts": [
+        "data visualization",
+        "dashboarding"
       ]
     },
     {
@@ -992,6 +1276,9 @@
       "aliases": [],
       "parents": [
         "c#"
+      ],
+      "concepts": [
+        "relational databases"
       ]
     },
     {
@@ -1000,6 +1287,9 @@
       "aliases": [],
       "parents": [
         "c#"
+      ],
+      "concepts": [
+        "design patterns"
       ]
     },
     {
@@ -1008,6 +1298,10 @@
       "aliases": [],
       "parents": [
         "c#"
+      ],
+      "concepts": [
+        "design patterns",
+        "cqrs"
       ]
     },
     {
@@ -1018,7 +1312,8 @@
       ],
       "parents": [
         "java"
-      ]
+      ],
+      "concepts": []
     },
     {
       "name": "jackson",
@@ -1026,7 +1321,8 @@
       "aliases": [],
       "parents": [
         "java"
-      ]
+      ],
+      "concepts": []
     },
     {
       "name": "jpa",
@@ -1036,6 +1332,9 @@
       ],
       "parents": [
         "java"
+      ],
+      "concepts": [
+        "relational databases"
       ]
     },
     {
@@ -1047,6 +1346,9 @@
       ],
       "parents": [
         "node.js"
+      ],
+      "concepts": [
+        "api design"
       ]
     },
     {
@@ -1058,6 +1360,10 @@
       "parents": [
         "node.js",
         "typescript"
+      ],
+      "concepts": [
+        "api design",
+        "dependency injection"
       ]
     },
     {
@@ -1066,6 +1372,10 @@
       "aliases": [],
       "parents": [
         "php"
+      ],
+      "concepts": [
+        "api design",
+        "model view controller"
       ]
     },
     {
@@ -1074,6 +1384,10 @@
       "aliases": [],
       "parents": [
         "php"
+      ],
+      "concepts": [
+        "api design",
+        "model view controller"
       ]
     },
     {
@@ -1085,6 +1399,10 @@
       ],
       "parents": [
         "ruby"
+      ],
+      "concepts": [
+        "api design",
+        "model view controller"
       ]
     },
     {
@@ -1093,6 +1411,9 @@
       "aliases": [],
       "parents": [
         "go"
+      ],
+      "concepts": [
+        "api design"
       ]
     },
     {
@@ -1101,6 +1422,10 @@
       "aliases": [],
       "parents": [
         "elixir"
+      ],
+      "concepts": [
+        "api design",
+        "model view controller"
       ]
     },
     {
@@ -1109,6 +1434,10 @@
       "aliases": [],
       "parents": [
         ".net"
+      ],
+      "concepts": [
+        "api design",
+        "model view controller"
       ]
     },
     {
@@ -1119,6 +1448,9 @@
       ],
       "parents": [
         ".net"
+      ],
+      "concepts": [
+        "api design"
       ]
     },
     {
@@ -1127,6 +1459,10 @@
       "aliases": [],
       "parents": [
         "spring"
+      ],
+      "concepts": [
+        "api design",
+        "model view controller"
       ]
     },
     {
@@ -1135,6 +1471,11 @@
       "aliases": [],
       "parents": [
         "spring"
+      ],
+      "concepts": [
+        "api design",
+        "authentication",
+        "authorization"
       ]
     },
     {
@@ -1145,6 +1486,10 @@
       ],
       "parents": [
         "spring"
+      ],
+      "concepts": [
+        "api design",
+        "relational databases"
       ]
     },
     {
@@ -1153,6 +1498,9 @@
       "aliases": [],
       "parents": [
         "node.js"
+      ],
+      "concepts": [
+        "api design"
       ]
     },
     {
@@ -1163,6 +1511,9 @@
       ],
       "parents": [
         "node.js"
+      ],
+      "concepts": [
+        "api design"
       ]
     },
     {
@@ -1171,6 +1522,10 @@
       "aliases": [],
       "parents": [
         "python"
+      ],
+      "concepts": [
+        "api design",
+        "asynchronous programming"
       ]
     },
     {
@@ -1179,6 +1534,10 @@
       "aliases": [],
       "parents": [
         "php"
+      ],
+      "concepts": [
+        "api design",
+        "model view controller"
       ]
     },
     {
@@ -1187,6 +1546,10 @@
       "aliases": [],
       "parents": [
         "php"
+      ],
+      "concepts": [
+        "api design",
+        "model view controller"
       ]
     },
     {
@@ -1195,7 +1558,8 @@
       "aliases": [],
       "parents": [
         "react"
-      ]
+      ],
+      "concepts": []
     },
     {
       "name": "flutter",
@@ -1203,7 +1567,8 @@
       "aliases": [],
       "parents": [
         "dart"
-      ]
+      ],
+      "concepts": []
     },
     {
       "name": "android",
@@ -1211,7 +1576,8 @@
       "aliases": [
         "android sdk"
       ],
-      "parents": []
+      "parents": [],
+      "concepts": []
     },
     {
       "name": "ios",
@@ -1221,7 +1587,8 @@
       ],
       "parents": [
         "swift"
-      ]
+      ],
+      "concepts": []
     },
     {
       "name": "xamarin",
@@ -1229,7 +1596,8 @@
       "aliases": [],
       "parents": [
         "c#"
-      ]
+      ],
+      "concepts": []
     },
     {
       "name": "ionic",
@@ -1237,7 +1605,8 @@
       "aliases": [],
       "parents": [
         "javascript"
-      ]
+      ],
+      "concepts": []
     },
     {
       "name": "expo",
@@ -1245,7 +1614,8 @@
       "aliases": [],
       "parents": [
         "react native"
-      ]
+      ],
+      "concepts": []
     },
     {
       "name": "swiftui",
@@ -1253,7 +1623,8 @@
       "aliases": [],
       "parents": [
         "swift"
-      ]
+      ],
+      "concepts": []
     },
     {
       "name": "jetpack compose",
@@ -1261,7 +1632,8 @@
       "aliases": [],
       "parents": [
         "kotlin"
-      ]
+      ],
+      "concepts": []
     },
     {
       "name": "kotlin multiplatform",
@@ -1271,7 +1643,8 @@
       ],
       "parents": [
         "kotlin"
-      ]
+      ],
+      "concepts": []
     },
     {
       "name": "cordova",
@@ -1280,13 +1653,15 @@
         "apache cordova",
         "phonegap"
       ],
-      "parents": []
+      "parents": [],
+      "concepts": []
     },
     {
       "name": "capacitor",
       "category": "mobile",
       "aliases": [],
-      "parents": []
+      "parents": [],
+      "concepts": []
     },
     {
       "name": ".net maui",
@@ -1296,7 +1671,8 @@
       ],
       "parents": [
         ".net"
-      ]
+      ],
+      "concepts": []
     },
     {
       "name": "postgresql",
@@ -1308,6 +1684,11 @@
       ],
       "parents": [
         "sql"
+      ],
+      "concepts": [
+        "database design",
+        "relational databases",
+        "acid"
       ]
     },
     {
@@ -1316,6 +1697,11 @@
       "aliases": [],
       "parents": [
         "sql"
+      ],
+      "concepts": [
+        "database design",
+        "relational databases",
+        "acid"
       ]
     },
     {
@@ -1324,6 +1710,11 @@
       "aliases": [],
       "parents": [
         "sql"
+      ],
+      "concepts": [
+        "database design",
+        "relational databases",
+        "acid"
       ]
     },
     {
@@ -1336,6 +1727,12 @@
       ],
       "parents": [
         "sql"
+      ],
+      "concepts": [
+        "database design",
+        "relational databases",
+        "acid",
+        "stored procedures"
       ]
     },
     {
@@ -1347,6 +1744,12 @@
       ],
       "parents": [
         "sql"
+      ],
+      "concepts": [
+        "database design",
+        "relational databases",
+        "acid",
+        "stored procedures"
       ]
     },
     {
@@ -1355,6 +1758,10 @@
       "aliases": [],
       "parents": [
         "sql"
+      ],
+      "concepts": [
+        "database design",
+        "relational databases"
       ]
     },
     {
@@ -1365,6 +1772,10 @@
       ],
       "parents": [
         "sql"
+      ],
+      "concepts": [
+        "database design",
+        "relational databases"
       ]
     },
     {
@@ -1373,6 +1784,11 @@
       "aliases": [],
       "parents": [
         "sql"
+      ],
+      "concepts": [
+        "database design",
+        "relational databases",
+        "distributed systems"
       ]
     },
     {
@@ -1381,6 +1797,11 @@
       "aliases": [],
       "parents": [
         "sql"
+      ],
+      "concepts": [
+        "database design",
+        "olap",
+        "columnar storage"
       ]
     },
     {
@@ -1389,7 +1810,11 @@
       "aliases": [
         "mongo"
       ],
-      "parents": []
+      "parents": [],
+      "concepts": [
+        "database design",
+        "nosql"
+      ]
     },
     {
       "name": "cassandra",
@@ -1397,13 +1822,23 @@
       "aliases": [
         "apache cassandra"
       ],
-      "parents": []
+      "parents": [],
+      "concepts": [
+        "database design",
+        "nosql",
+        "distributed storage"
+      ]
     },
     {
       "name": "redis",
       "category": "database",
       "aliases": [],
-      "parents": []
+      "parents": [],
+      "concepts": [
+        "database design",
+        "nosql",
+        "caching"
+      ]
     },
     {
       "name": "dynamodb",
@@ -1411,6 +1846,10 @@
       "aliases": [],
       "parents": [
         "aws"
+      ],
+      "concepts": [
+        "database design",
+        "nosql"
       ]
     },
     {
@@ -1419,25 +1858,43 @@
       "aliases": [
         "elastic"
       ],
-      "parents": []
+      "parents": [],
+      "concepts": [
+        "database design",
+        "nosql",
+        "indexing"
+      ]
     },
     {
       "name": "opensearch",
       "category": "database",
       "aliases": [],
-      "parents": []
+      "parents": [],
+      "concepts": [
+        "database design",
+        "nosql",
+        "indexing"
+      ]
     },
     {
       "name": "neo4j",
       "category": "database",
       "aliases": [],
-      "parents": []
+      "parents": [],
+      "concepts": [
+        "database design",
+        "graph databases"
+      ]
     },
     {
       "name": "couchbase",
       "category": "database",
       "aliases": [],
-      "parents": []
+      "parents": [],
+      "concepts": [
+        "database design",
+        "nosql"
+      ]
     },
     {
       "name": "firebase",
@@ -1445,6 +1902,10 @@
       "aliases": [],
       "parents": [
         "gcp"
+      ],
+      "concepts": [
+        "database design",
+        "nosql"
       ]
     },
     {
@@ -1455,19 +1916,32 @@
       ],
       "parents": [
         "firebase"
+      ],
+      "concepts": [
+        "database design",
+        "nosql"
       ]
     },
     {
       "name": "influxdb",
       "category": "database",
       "aliases": [],
-      "parents": []
+      "parents": [],
+      "concepts": [
+        "database design",
+        "time series data"
+      ]
     },
     {
       "name": "clickhouse",
       "category": "database",
       "aliases": [],
-      "parents": []
+      "parents": [],
+      "concepts": [
+        "database design",
+        "olap",
+        "columnar storage"
+      ]
     },
     {
       "name": "microsoft access",
@@ -1475,31 +1949,52 @@
       "aliases": [
         "ms access"
       ],
-      "parents": []
+      "parents": [],
+      "concepts": [
+        "database design",
+        "relational databases"
+      ]
     },
     {
       "name": "sybase",
       "category": "database",
       "aliases": [],
-      "parents": []
+      "parents": [],
+      "concepts": [
+        "database design",
+        "relational databases"
+      ]
     },
     {
       "name": "informix",
       "category": "database",
       "aliases": [],
-      "parents": []
+      "parents": [],
+      "concepts": [
+        "database design",
+        "relational databases"
+      ]
     },
     {
       "name": "memcached",
       "category": "database",
       "aliases": [],
-      "parents": []
+      "parents": [],
+      "concepts": [
+        "database design",
+        "caching"
+      ]
     },
     {
       "name": "arangodb",
       "category": "database",
       "aliases": [],
-      "parents": []
+      "parents": [],
+      "concepts": [
+        "database design",
+        "graph databases",
+        "nosql"
+      ]
     },
     {
       "name": "timescaledb",
@@ -1507,6 +2002,11 @@
       "aliases": [],
       "parents": [
         "postgresql"
+      ],
+      "concepts": [
+        "database design",
+        "time series data",
+        "relational databases"
       ]
     },
     {
@@ -1515,7 +2015,12 @@
       "aliases": [
         "memsql"
       ],
-      "parents": []
+      "parents": [],
+      "concepts": [
+        "database design",
+        "relational databases",
+        "olap"
+      ]
     },
     {
       "name": "supabase",
@@ -1523,6 +2028,10 @@
       "aliases": [],
       "parents": [
         "postgresql"
+      ],
+      "concepts": [
+        "database design",
+        "relational databases"
       ]
     },
     {
@@ -1534,6 +2043,10 @@
       ],
       "parents": [
         "azure"
+      ],
+      "concepts": [
+        "database design",
+        "nosql"
       ]
     },
     {
@@ -1544,6 +2057,11 @@
       ],
       "parents": [
         "aws"
+      ],
+      "concepts": [
+        "database design",
+        "relational databases",
+        "acid"
       ]
     },
     {
@@ -1554,25 +2072,44 @@
       ],
       "parents": [
         "mongodb"
+      ],
+      "concepts": [
+        "database design",
+        "nosql"
       ]
     },
     {
       "name": "pinecone",
       "category": "vector_database",
       "aliases": [],
-      "parents": []
+      "parents": [],
+      "concepts": [
+        "vector databases",
+        "vector search",
+        "embeddings"
+      ]
     },
     {
       "name": "weaviate",
       "category": "vector_database",
       "aliases": [],
-      "parents": []
+      "parents": [],
+      "concepts": [
+        "vector databases",
+        "vector search",
+        "embeddings"
+      ]
     },
     {
       "name": "qdrant",
       "category": "vector_database",
       "aliases": [],
-      "parents": []
+      "parents": [],
+      "concepts": [
+        "vector databases",
+        "vector search",
+        "embeddings"
+      ]
     },
     {
       "name": "chroma",
@@ -1580,19 +2117,34 @@
       "aliases": [
         "chromadb"
       ],
-      "parents": []
+      "parents": [],
+      "concepts": [
+        "vector databases",
+        "vector search",
+        "embeddings"
+      ]
     },
     {
       "name": "milvus",
       "category": "vector_database",
       "aliases": [],
-      "parents": []
+      "parents": [],
+      "concepts": [
+        "vector databases",
+        "vector search",
+        "embeddings"
+      ]
     },
     {
       "name": "faiss",
       "category": "vector_database",
       "aliases": [],
-      "parents": []
+      "parents": [],
+      "concepts": [
+        "vector databases",
+        "vector search",
+        "embeddings"
+      ]
     },
     {
       "name": "pgvector",
@@ -1600,6 +2152,12 @@
       "aliases": [],
       "parents": [
         "postgresql"
+      ],
+      "concepts": [
+        "vector databases",
+        "vector search",
+        "embeddings",
+        "relational databases"
       ]
     },
     {
@@ -1611,19 +2169,37 @@
       ],
       "parents": [
         "azure"
+      ],
+      "concepts": [
+        "vector databases",
+        "vector search",
+        "embeddings",
+        "semantic search",
+        "hybrid search"
       ]
     },
     {
       "name": "lancedb",
       "category": "vector_database",
       "aliases": [],
-      "parents": []
+      "parents": [],
+      "concepts": [
+        "vector databases",
+        "vector search",
+        "embeddings"
+      ]
     },
     {
       "name": "vespa",
       "category": "vector_database",
       "aliases": [],
-      "parents": []
+      "parents": [],
+      "concepts": [
+        "vector databases",
+        "vector search",
+        "embeddings",
+        "hybrid search"
+      ]
     },
     {
       "name": "vertex ai vector search",
@@ -1633,13 +2209,23 @@
       ],
       "parents": [
         "vertex ai"
+      ],
+      "concepts": [
+        "vector databases",
+        "vector search",
+        "embeddings"
       ]
     },
     {
       "name": "snowflake",
       "category": "warehouse",
       "aliases": [],
-      "parents": []
+      "parents": [],
+      "concepts": [
+        "data warehousing",
+        "olap",
+        "columnar storage"
+      ]
     },
     {
       "name": "bigquery",
@@ -1649,6 +2235,11 @@
       ],
       "parents": [
         "gcp"
+      ],
+      "concepts": [
+        "data warehousing",
+        "olap",
+        "columnar storage"
       ]
     },
     {
@@ -1659,6 +2250,11 @@
       ],
       "parents": [
         "aws"
+      ],
+      "concepts": [
+        "data warehousing",
+        "olap",
+        "columnar storage"
       ]
     },
     {
@@ -1670,13 +2266,23 @@
       ],
       "parents": [
         "azure"
+      ],
+      "concepts": [
+        "data warehousing",
+        "olap"
       ]
     },
     {
       "name": "databricks",
       "category": "warehouse",
       "aliases": [],
-      "parents": []
+      "parents": [],
+      "concepts": [
+        "data warehousing",
+        "lakehouse",
+        "big data",
+        "distributed processing"
+      ]
     },
     {
       "name": "delta lake",
@@ -1684,19 +2290,33 @@
       "aliases": [],
       "parents": [
         "databricks"
+      ],
+      "concepts": [
+        "data warehousing",
+        "lakehouse",
+        "acid"
       ]
     },
     {
       "name": "teradata",
       "category": "warehouse",
       "aliases": [],
-      "parents": []
+      "parents": [],
+      "concepts": [
+        "data warehousing",
+        "olap"
+      ]
     },
     {
       "name": "vertica",
       "category": "warehouse",
       "aliases": [],
-      "parents": []
+      "parents": [],
+      "concepts": [
+        "data warehousing",
+        "olap",
+        "columnar storage"
+      ]
     },
     {
       "name": "apache iceberg",
@@ -1704,7 +2324,12 @@
       "aliases": [
         "iceberg"
       ],
-      "parents": []
+      "parents": [],
+      "concepts": [
+        "data warehousing",
+        "lakehouse",
+        "schema evolution"
+      ]
     },
     {
       "name": "apache hudi",
@@ -1712,7 +2337,12 @@
       "aliases": [
         "hudi"
       ],
-      "parents": []
+      "parents": [],
+      "concepts": [
+        "data warehousing",
+        "lakehouse",
+        "incremental loading"
+      ]
     },
     {
       "name": "microsoft fabric",
@@ -1722,6 +2352,11 @@
       ],
       "parents": [
         "azure"
+      ],
+      "concepts": [
+        "data warehousing",
+        "lakehouse",
+        "data pipelines"
       ]
     },
     {
@@ -1730,6 +2365,10 @@
       "aliases": [],
       "parents": [
         "microsoft fabric"
+      ],
+      "concepts": [
+        "data warehousing",
+        "data lake"
       ]
     },
     {
@@ -1738,6 +2377,12 @@
       "aliases": [],
       "parents": [
         "databricks"
+      ],
+      "concepts": [
+        "data warehousing",
+        "data governance",
+        "data catalog",
+        "data lineage"
       ]
     },
     {
@@ -1748,6 +2393,11 @@
       ],
       "parents": [
         "databricks"
+      ],
+      "concepts": [
+        "data warehousing",
+        "data pipelines",
+        "incremental loading"
       ]
     },
     {
@@ -1756,6 +2406,11 @@
       "aliases": [],
       "parents": [
         "databricks"
+      ],
+      "concepts": [
+        "data warehousing",
+        "olap",
+        "query optimization"
       ]
     },
     {
@@ -1764,13 +2419,20 @@
       "aliases": [],
       "parents": [
         "snowflake"
+      ],
+      "concepts": [
+        "data warehousing"
       ]
     },
     {
       "name": "dremio",
       "category": "warehouse",
       "aliases": [],
-      "parents": []
+      "parents": [],
+      "concepts": [
+        "data warehousing",
+        "data virtualization"
+      ]
     },
     {
       "name": "starburst",
@@ -1778,6 +2440,11 @@
       "aliases": [],
       "parents": [
         "trino"
+      ],
+      "concepts": [
+        "data warehousing",
+        "data virtualization",
+        "query optimization"
       ]
     },
     {
@@ -1786,7 +2453,11 @@
       "aliases": [
         "spark"
       ],
-      "parents": []
+      "parents": [],
+      "concepts": [
+        "big data",
+        "distributed processing"
+      ]
     },
     {
       "name": "pyspark",
@@ -1795,6 +2466,10 @@
       "parents": [
         "apache spark",
         "python"
+      ],
+      "concepts": [
+        "big data",
+        "distributed processing"
       ]
     },
     {
@@ -1803,7 +2478,12 @@
       "aliases": [
         "apache hadoop"
       ],
-      "parents": []
+      "parents": [],
+      "concepts": [
+        "big data",
+        "distributed processing",
+        "distributed storage"
+      ]
     },
     {
       "name": "hive",
@@ -1813,6 +2493,11 @@
       ],
       "parents": [
         "hadoop"
+      ],
+      "concepts": [
+        "big data",
+        "distributed processing",
+        "data warehousing"
       ]
     },
     {
@@ -1821,6 +2506,11 @@
       "aliases": [],
       "parents": [
         "hadoop"
+      ],
+      "concepts": [
+        "big data",
+        "distributed processing",
+        "distributed storage"
       ]
     },
     {
@@ -1829,6 +2519,11 @@
       "aliases": [],
       "parents": [
         "hadoop"
+      ],
+      "concepts": [
+        "big data",
+        "distributed processing",
+        "parallel processing"
       ]
     },
     {
@@ -1837,7 +2532,12 @@
       "aliases": [
         "flink"
       ],
-      "parents": []
+      "parents": [],
+      "concepts": [
+        "big data",
+        "distributed processing",
+        "stream processing"
+      ]
     },
     {
       "name": "apache beam",
@@ -1845,19 +2545,37 @@
       "aliases": [
         "beam"
       ],
-      "parents": []
+      "parents": [],
+      "concepts": [
+        "big data",
+        "distributed processing",
+        "batch processing",
+        "stream processing"
+      ]
     },
     {
       "name": "presto",
       "category": "big_data",
       "aliases": [],
-      "parents": []
+      "parents": [],
+      "concepts": [
+        "big data",
+        "distributed processing",
+        "query optimization",
+        "data virtualization"
+      ]
     },
     {
       "name": "trino",
       "category": "big_data",
       "aliases": [],
-      "parents": []
+      "parents": [],
+      "concepts": [
+        "big data",
+        "distributed processing",
+        "query optimization",
+        "data virtualization"
+      ]
     },
     {
       "name": "dask",
@@ -1865,6 +2583,11 @@
       "aliases": [],
       "parents": [
         "python"
+      ],
+      "concepts": [
+        "big data",
+        "distributed processing",
+        "parallel processing"
       ]
     },
     {
@@ -1875,6 +2598,11 @@
       ],
       "parents": [
         "hadoop"
+      ],
+      "concepts": [
+        "big data",
+        "distributed processing",
+        "olap"
       ]
     },
     {
@@ -1885,6 +2613,11 @@
       ],
       "parents": [
         "hadoop"
+      ],
+      "concepts": [
+        "big data",
+        "distributed processing",
+        "etl"
       ]
     },
     {
@@ -1895,6 +2628,11 @@
       ],
       "parents": [
         "hadoop"
+      ],
+      "concepts": [
+        "big data",
+        "distributed processing",
+        "etl"
       ]
     },
     {
@@ -1905,6 +2643,11 @@
       ],
       "parents": [
         "hadoop"
+      ],
+      "concepts": [
+        "big data",
+        "distributed processing",
+        "directed acyclic graph"
       ]
     },
     {
@@ -1913,7 +2656,12 @@
       "aliases": [
         "storm"
       ],
-      "parents": []
+      "parents": [],
+      "concepts": [
+        "big data",
+        "distributed processing",
+        "stream processing"
+      ]
     },
     {
       "name": "apache zookeeper",
@@ -1921,7 +2669,12 @@
       "aliases": [
         "zookeeper"
       ],
-      "parents": []
+      "parents": [],
+      "concepts": [
+        "big data",
+        "distributed processing",
+        "distributed systems"
+      ]
     },
     {
       "name": "spark sql",
@@ -1929,6 +2682,11 @@
       "aliases": [],
       "parents": [
         "apache spark"
+      ],
+      "concepts": [
+        "big data",
+        "distributed processing",
+        "query optimization"
       ]
     },
     {
@@ -1939,6 +2697,11 @@
       ],
       "parents": [
         "apache spark"
+      ],
+      "concepts": [
+        "big data",
+        "distributed processing",
+        "stream processing"
       ]
     },
     {
@@ -1947,13 +2710,23 @@
       "aliases": [
         "kafka"
       ],
-      "parents": []
+      "parents": [],
+      "concepts": [
+        "stream processing",
+        "message queues",
+        "event driven architecture",
+        "publish subscribe"
+      ]
     },
     {
       "name": "rabbitmq",
       "category": "streaming",
       "aliases": [],
-      "parents": []
+      "parents": [],
+      "concepts": [
+        "message queues",
+        "event driven architecture"
+      ]
     },
     {
       "name": "pub/sub",
@@ -1964,6 +2737,12 @@
       ],
       "parents": [
         "gcp"
+      ],
+      "concepts": [
+        "stream processing",
+        "message queues",
+        "event driven architecture",
+        "publish subscribe"
       ]
     },
     {
@@ -1974,6 +2753,12 @@
       ],
       "parents": [
         "aws"
+      ],
+      "concepts": [
+        "stream processing",
+        "message queues",
+        "event driven architecture",
+        "real time analytics"
       ]
     },
     {
@@ -1984,6 +2769,10 @@
       ],
       "parents": [
         "aws"
+      ],
+      "concepts": [
+        "message queues",
+        "event driven architecture"
       ]
     },
     {
@@ -1994,13 +2783,23 @@
       ],
       "parents": [
         "azure"
+      ],
+      "concepts": [
+        "stream processing",
+        "message queues",
+        "event driven architecture",
+        "publish subscribe"
       ]
     },
     {
       "name": "activemq",
       "category": "streaming",
       "aliases": [],
-      "parents": []
+      "parents": [],
+      "concepts": [
+        "message queues",
+        "event driven architecture"
+      ]
     },
     {
       "name": "confluent",
@@ -2011,6 +2810,12 @@
       ],
       "parents": [
         "apache kafka"
+      ],
+      "concepts": [
+        "stream processing",
+        "message queues",
+        "event driven architecture",
+        "publish subscribe"
       ]
     },
     {
@@ -2019,6 +2824,12 @@
       "aliases": [],
       "parents": [
         "apache kafka"
+      ],
+      "concepts": [
+        "stream processing",
+        "message queues",
+        "event driven architecture",
+        "data integration"
       ]
     },
     {
@@ -2027,6 +2838,11 @@
       "aliases": [],
       "parents": [
         "apache kafka"
+      ],
+      "concepts": [
+        "stream processing",
+        "message queues",
+        "event driven architecture"
       ]
     },
     {
@@ -2037,6 +2853,12 @@
       ],
       "parents": [
         "apache kafka"
+      ],
+      "concepts": [
+        "stream processing",
+        "message queues",
+        "event driven architecture",
+        "query optimization"
       ]
     },
     {
@@ -2045,13 +2867,25 @@
       "aliases": [
         "pulsar"
       ],
-      "parents": []
+      "parents": [],
+      "concepts": [
+        "stream processing",
+        "message queues",
+        "event driven architecture",
+        "publish subscribe"
+      ]
     },
     {
       "name": "redpanda",
       "category": "streaming",
       "aliases": [],
-      "parents": []
+      "parents": [],
+      "concepts": [
+        "stream processing",
+        "message queues",
+        "event driven architecture",
+        "publish subscribe"
+      ]
     },
     {
       "name": "debezium",
@@ -2059,6 +2893,12 @@
       "aliases": [],
       "parents": [
         "apache kafka"
+      ],
+      "concepts": [
+        "stream processing",
+        "message queues",
+        "event driven architecture",
+        "change data capture"
       ]
     },
     {
@@ -2070,6 +2910,12 @@
       "parents": [
         "aws",
         "apache kafka"
+      ],
+      "concepts": [
+        "stream processing",
+        "message queues",
+        "event driven architecture",
+        "publish subscribe"
       ]
     },
     {
@@ -2080,6 +2926,10 @@
       ],
       "parents": [
         "aws"
+      ],
+      "concepts": [
+        "publish subscribe",
+        "message queues"
       ]
     },
     {
@@ -2090,6 +2940,10 @@
       ],
       "parents": [
         "azure"
+      ],
+      "concepts": [
+        "message queues",
+        "event driven architecture"
       ]
     },
     {
@@ -2100,6 +2954,10 @@
       ],
       "parents": [
         "python"
+      ],
+      "concepts": [
+        "data pipelines",
+        "directed acyclic graph"
       ]
     },
     {
@@ -2109,6 +2967,10 @@
       "parents": [
         "gcp",
         "apache airflow"
+      ],
+      "concepts": [
+        "data pipelines",
+        "directed acyclic graph"
       ]
     },
     {
@@ -2117,6 +2979,10 @@
       "aliases": [],
       "parents": [
         "python"
+      ],
+      "concepts": [
+        "data pipelines",
+        "directed acyclic graph"
       ]
     },
     {
@@ -2125,6 +2991,10 @@
       "aliases": [],
       "parents": [
         "python"
+      ],
+      "concepts": [
+        "data pipelines",
+        "directed acyclic graph"
       ]
     },
     {
@@ -2133,6 +3003,10 @@
       "aliases": [],
       "parents": [
         "python"
+      ],
+      "concepts": [
+        "data pipelines",
+        "directed acyclic graph"
       ]
     },
     {
@@ -2141,7 +3015,12 @@
       "aliases": [
         "control m"
       ],
-      "parents": []
+      "parents": [],
+      "concepts": [
+        "data pipelines",
+        "directed acyclic graph",
+        "batch processing"
+      ]
     },
     {
       "name": "argo workflows",
@@ -2149,13 +3028,21 @@
       "aliases": [],
       "parents": [
         "kubernetes"
+      ],
+      "concepts": [
+        "data pipelines",
+        "directed acyclic graph"
       ]
     },
     {
       "name": "temporal",
       "category": "orchestration",
       "aliases": [],
-      "parents": []
+      "parents": [],
+      "concepts": [
+        "asynchronous programming",
+        "saga pattern"
+      ]
     },
     {
       "name": "mage",
@@ -2163,19 +3050,32 @@
       "aliases": [
         "mage.ai"
       ],
-      "parents": []
+      "parents": [],
+      "concepts": [
+        "data pipelines",
+        "directed acyclic graph"
+      ]
     },
     {
       "name": "kestra",
       "category": "orchestration",
       "aliases": [],
-      "parents": []
+      "parents": [],
+      "concepts": [
+        "data pipelines",
+        "directed acyclic graph"
+      ]
     },
     {
       "name": "autosys",
       "category": "orchestration",
       "aliases": [],
-      "parents": []
+      "parents": [],
+      "concepts": [
+        "data pipelines",
+        "directed acyclic graph",
+        "batch processing"
+      ]
     },
     {
       "name": "dbt",
@@ -2185,13 +3085,26 @@
       ],
       "parents": [
         "sql"
+      ],
+      "concepts": [
+        "etl",
+        "data pipelines",
+        "data integration",
+        "elt",
+        "data modeling",
+        "dimensional modeling"
       ]
     },
     {
       "name": "talend",
       "category": "etl",
       "aliases": [],
-      "parents": []
+      "parents": [],
+      "concepts": [
+        "etl",
+        "data pipelines",
+        "data integration"
+      ]
     },
     {
       "name": "informatica",
@@ -2199,13 +3112,23 @@
       "aliases": [
         "informatica powercenter"
       ],
-      "parents": []
+      "parents": [],
+      "concepts": [
+        "etl",
+        "data pipelines",
+        "data integration"
+      ]
     },
     {
       "name": "pentaho",
       "category": "etl",
       "aliases": [],
-      "parents": []
+      "parents": [],
+      "concepts": [
+        "etl",
+        "data pipelines",
+        "data integration"
+      ]
     },
     {
       "name": "ssis",
@@ -2215,6 +3138,11 @@
       ],
       "parents": [
         "sql server"
+      ],
+      "concepts": [
+        "etl",
+        "data pipelines",
+        "data integration"
       ]
     },
     {
@@ -2225,6 +3153,11 @@
       ],
       "parents": [
         "sql server"
+      ],
+      "concepts": [
+        "olap",
+        "dimensional modeling",
+        "semantic layer"
       ]
     },
     {
@@ -2235,6 +3168,10 @@
       ],
       "parents": [
         "sql server"
+      ],
+      "concepts": [
+        "reporting",
+        "report automation"
       ]
     },
     {
@@ -2245,6 +3182,12 @@
       ],
       "parents": [
         "azure"
+      ],
+      "concepts": [
+        "etl",
+        "data pipelines",
+        "data integration",
+        "batch processing"
       ]
     },
     {
@@ -2255,19 +3198,37 @@
       ],
       "parents": [
         "aws"
+      ],
+      "concepts": [
+        "etl",
+        "data pipelines",
+        "data integration",
+        "batch processing"
       ]
     },
     {
       "name": "fivetran",
       "category": "etl",
       "aliases": [],
-      "parents": []
+      "parents": [],
+      "concepts": [
+        "etl",
+        "data pipelines",
+        "data integration",
+        "elt"
+      ]
     },
     {
       "name": "airbyte",
       "category": "etl",
       "aliases": [],
-      "parents": []
+      "parents": [],
+      "concepts": [
+        "etl",
+        "data pipelines",
+        "data integration",
+        "elt"
+      ]
     },
     {
       "name": "apache nifi",
@@ -2275,7 +3236,13 @@
       "aliases": [
         "nifi"
       ],
-      "parents": []
+      "parents": [],
+      "concepts": [
+        "etl",
+        "data pipelines",
+        "data integration",
+        "stream processing"
+      ]
     },
     {
       "name": "google dataflow",
@@ -2286,6 +3253,13 @@
       "parents": [
         "gcp",
         "apache beam"
+      ],
+      "concepts": [
+        "etl",
+        "data pipelines",
+        "data integration",
+        "stream processing",
+        "batch processing"
       ]
     },
     {
@@ -2297,6 +3271,12 @@
       "parents": [
         "gcp",
         "apache spark"
+      ],
+      "concepts": [
+        "etl",
+        "data pipelines",
+        "data integration",
+        "big data"
       ]
     },
     {
@@ -2307,6 +3287,11 @@
       ],
       "parents": [
         "gcp"
+      ],
+      "concepts": [
+        "etl",
+        "data pipelines",
+        "data integration"
       ]
     },
     {
@@ -2315,7 +3300,12 @@
       "aliases": [
         "datastage"
       ],
-      "parents": []
+      "parents": [],
+      "concepts": [
+        "etl",
+        "data pipelines",
+        "data integration"
+      ]
     },
     {
       "name": "oracle data integrator",
@@ -2323,7 +3313,12 @@
       "aliases": [
         "odi"
       ],
-      "parents": []
+      "parents": [],
+      "concepts": [
+        "etl",
+        "data pipelines",
+        "data integration"
+      ]
     },
     {
       "name": "sap data services",
@@ -2333,6 +3328,11 @@
       ],
       "parents": [
         "sap"
+      ],
+      "concepts": [
+        "etl",
+        "data pipelines",
+        "data integration"
       ]
     },
     {
@@ -2342,7 +3342,14 @@
         "mule esb",
         "anypoint platform"
       ],
-      "parents": []
+      "parents": [],
+      "concepts": [
+        "etl",
+        "data pipelines",
+        "data integration",
+        "service oriented architecture",
+        "api design"
+      ]
     },
     {
       "name": "boomi",
@@ -2350,7 +3357,14 @@
       "aliases": [
         "dell boomi"
       ],
-      "parents": []
+      "parents": [],
+      "concepts": [
+        "etl",
+        "data pipelines",
+        "data integration",
+        "service oriented architecture",
+        "api design"
+      ]
     },
     {
       "name": "apache camel",
@@ -2360,25 +3374,49 @@
       ],
       "parents": [
         "java"
+      ],
+      "concepts": [
+        "etl",
+        "data pipelines",
+        "data integration",
+        "service oriented architecture",
+        "api design"
       ]
     },
     {
       "name": "matillion",
       "category": "etl",
       "aliases": [],
-      "parents": []
+      "parents": [],
+      "concepts": [
+        "etl",
+        "data pipelines",
+        "data integration"
+      ]
     },
     {
       "name": "meltano",
       "category": "etl",
       "aliases": [],
-      "parents": []
+      "parents": [],
+      "concepts": [
+        "etl",
+        "data pipelines",
+        "data integration",
+        "elt"
+      ]
     },
     {
       "name": "stitch",
       "category": "etl",
       "aliases": [],
-      "parents": []
+      "parents": [],
+      "concepts": [
+        "etl",
+        "data pipelines",
+        "data integration",
+        "elt"
+      ]
     },
     {
       "name": "aws",
@@ -2386,7 +3424,11 @@
       "aliases": [
         "amazon web services"
       ],
-      "parents": []
+      "parents": [],
+      "concepts": [
+        "cloud computing",
+        "infrastructure as a service"
+      ]
     },
     {
       "name": "azure",
@@ -2394,7 +3436,11 @@
       "aliases": [
         "microsoft azure"
       ],
-      "parents": []
+      "parents": [],
+      "concepts": [
+        "cloud computing",
+        "infrastructure as a service"
+      ]
     },
     {
       "name": "gcp",
@@ -2403,7 +3449,11 @@
         "google cloud",
         "google cloud platform"
       ],
-      "parents": []
+      "parents": [],
+      "concepts": [
+        "cloud computing",
+        "infrastructure as a service"
+      ]
     },
     {
       "name": "oracle cloud",
@@ -2411,67 +3461,112 @@
       "aliases": [
         "oci"
       ],
-      "parents": []
+      "parents": [],
+      "concepts": [
+        "cloud computing",
+        "infrastructure as a service"
+      ]
     },
     {
       "name": "ibm cloud",
       "category": "cloud",
       "aliases": [],
-      "parents": []
+      "parents": [],
+      "concepts": [
+        "cloud computing",
+        "infrastructure as a service"
+      ]
     },
     {
       "name": "digitalocean",
       "category": "cloud",
       "aliases": [],
-      "parents": []
+      "parents": [],
+      "concepts": [
+        "cloud computing",
+        "infrastructure as a service"
+      ]
     },
     {
       "name": "heroku",
       "category": "cloud",
       "aliases": [],
-      "parents": []
+      "parents": [],
+      "concepts": [
+        "cloud computing",
+        "platform as a service"
+      ]
     },
     {
       "name": "vercel",
       "category": "cloud",
       "aliases": [],
-      "parents": []
+      "parents": [],
+      "concepts": [
+        "cloud computing",
+        "platform as a service"
+      ]
     },
     {
       "name": "netlify",
       "category": "cloud",
       "aliases": [],
-      "parents": []
+      "parents": [],
+      "concepts": [
+        "cloud computing",
+        "platform as a service"
+      ]
     },
     {
       "name": "cloudflare",
       "category": "cloud",
       "aliases": [],
-      "parents": []
+      "parents": [],
+      "concepts": [
+        "cloud computing",
+        "content delivery network",
+        "networking"
+      ]
     },
     {
       "name": "render",
       "category": "cloud",
       "aliases": [],
-      "parents": []
+      "parents": [],
+      "concepts": [
+        "cloud computing",
+        "platform as a service"
+      ]
     },
     {
       "name": "railway",
       "category": "cloud",
       "aliases": [],
-      "parents": []
+      "parents": [],
+      "concepts": [
+        "cloud computing",
+        "platform as a service"
+      ]
     },
     {
       "name": "fly.io",
       "category": "cloud",
       "aliases": [],
-      "parents": []
+      "parents": [],
+      "concepts": [
+        "cloud computing",
+        "platform as a service"
+      ]
     },
     {
       "name": "alibaba cloud",
       "category": "cloud",
       "aliases": [],
-      "parents": []
+      "parents": [],
+      "concepts": [
+        "cloud computing",
+        "infrastructure as a service"
+      ]
     },
     {
       "name": "amazon s3",
@@ -2481,6 +3576,11 @@
       ],
       "parents": [
         "aws"
+      ],
+      "concepts": [
+        "cloud computing",
+        "distributed storage",
+        "data lake"
       ]
     },
     {
@@ -2491,6 +3591,11 @@
       ],
       "parents": [
         "aws"
+      ],
+      "concepts": [
+        "cloud computing",
+        "virtual machines",
+        "infrastructure as a service"
       ]
     },
     {
@@ -2499,6 +3604,10 @@
       "aliases": [],
       "parents": [
         "aws"
+      ],
+      "concepts": [
+        "cloud computing",
+        "serverless"
       ]
     },
     {
@@ -2509,6 +3618,10 @@
       ],
       "parents": [
         "aws"
+      ],
+      "concepts": [
+        "cloud computing",
+        "container orchestration"
       ]
     },
     {
@@ -2520,6 +3633,10 @@
       "parents": [
         "aws",
         "kubernetes"
+      ],
+      "concepts": [
+        "cloud computing",
+        "container orchestration"
       ]
     },
     {
@@ -2530,6 +3647,10 @@
       ],
       "parents": [
         "aws"
+      ],
+      "concepts": [
+        "cloud computing",
+        "relational databases"
       ]
     },
     {
@@ -2540,6 +3661,11 @@
       ],
       "parents": [
         "aws"
+      ],
+      "concepts": [
+        "cloud computing",
+        "query optimization",
+        "data lake"
       ]
     },
     {
@@ -2551,6 +3677,11 @@
       "parents": [
         "aws",
         "apache spark"
+      ],
+      "concepts": [
+        "cloud computing",
+        "big data",
+        "distributed processing"
       ]
     },
     {
@@ -2561,6 +3692,12 @@
       ],
       "parents": [
         "aws"
+      ],
+      "concepts": [
+        "cloud computing",
+        "machine learning",
+        "mlops",
+        "model deployment"
       ]
     },
     {
@@ -2569,6 +3706,10 @@
       "aliases": [],
       "parents": [
         "aws"
+      ],
+      "concepts": [
+        "cloud computing",
+        "infrastructure as code"
       ]
     },
     {
@@ -2579,6 +3720,10 @@
       ],
       "parents": [
         "aws"
+      ],
+      "concepts": [
+        "cloud computing",
+        "directed acyclic graph"
       ]
     },
     {
@@ -2587,6 +3732,10 @@
       "aliases": [],
       "parents": [
         "azure"
+      ],
+      "concepts": [
+        "cloud computing",
+        "serverless"
       ]
     },
     {
@@ -2597,6 +3746,10 @@
       ],
       "parents": [
         "azure"
+      ],
+      "concepts": [
+        "cloud computing",
+        "platform as a service"
       ]
     },
     {
@@ -2605,6 +3758,11 @@
       "aliases": [],
       "parents": [
         "azure"
+      ],
+      "concepts": [
+        "cloud computing",
+        "ci/cd",
+        "devops"
       ]
     },
     {
@@ -2615,6 +3773,10 @@
       ],
       "parents": [
         "azure"
+      ],
+      "concepts": [
+        "cloud computing",
+        "distributed storage"
       ]
     },
     {
@@ -2626,6 +3788,10 @@
       "parents": [
         "azure",
         "sql server"
+      ],
+      "concepts": [
+        "cloud computing",
+        "relational databases"
       ]
     },
     {
@@ -2635,6 +3801,12 @@
       "parents": [
         "azure",
         "databricks"
+      ],
+      "concepts": [
+        "cloud computing",
+        "lakehouse",
+        "big data",
+        "distributed processing"
       ]
     },
     {
@@ -2645,6 +3817,11 @@
       ],
       "parents": [
         "azure"
+      ],
+      "concepts": [
+        "cloud computing",
+        "machine learning",
+        "mlops"
       ]
     },
     {
@@ -2656,6 +3833,10 @@
       "parents": [
         "azure",
         "kubernetes"
+      ],
+      "concepts": [
+        "cloud computing",
+        "container orchestration"
       ]
     },
     {
@@ -2667,6 +3848,10 @@
       ],
       "parents": [
         "gcp"
+      ],
+      "concepts": [
+        "cloud computing",
+        "serverless"
       ]
     },
     {
@@ -2677,6 +3862,11 @@
       ],
       "parents": [
         "gcp"
+      ],
+      "concepts": [
+        "cloud computing",
+        "containerization",
+        "serverless"
       ]
     },
     {
@@ -2688,6 +3878,10 @@
       ],
       "parents": [
         "gcp"
+      ],
+      "concepts": [
+        "cloud computing",
+        "distributed storage"
       ]
     },
     {
@@ -2696,6 +3890,10 @@
       "aliases": [],
       "parents": [
         "gcp"
+      ],
+      "concepts": [
+        "cloud computing",
+        "relational databases"
       ]
     },
     {
@@ -2704,6 +3902,10 @@
       "aliases": [],
       "parents": [
         "gcp"
+      ],
+      "concepts": [
+        "cloud computing",
+        "cron jobs"
       ]
     },
     {
@@ -2712,6 +3914,11 @@
       "aliases": [],
       "parents": [
         "gcp"
+      ],
+      "concepts": [
+        "cloud computing",
+        "machine learning",
+        "mlops"
       ]
     },
     {
@@ -2722,6 +3929,10 @@
       ],
       "parents": [
         "vertex ai"
+      ],
+      "concepts": [
+        "cloud computing",
+        "feature store"
       ]
     },
     {
@@ -2732,6 +3943,10 @@
       ],
       "parents": [
         "vertex ai"
+      ],
+      "concepts": [
+        "cloud computing",
+        "ai agents"
       ]
     },
     {
@@ -2742,6 +3957,11 @@
       ],
       "parents": [
         "bigquery"
+      ],
+      "concepts": [
+        "cloud computing",
+        "machine learning",
+        "data warehousing"
       ]
     },
     {
@@ -2750,6 +3970,11 @@
       "aliases": [],
       "parents": [
         "gcp"
+      ],
+      "concepts": [
+        "cloud computing",
+        "machine learning",
+        "hyperparameter tuning"
       ]
     },
     {
@@ -2761,6 +3986,10 @@
       "parents": [
         "gcp",
         "kubernetes"
+      ],
+      "concepts": [
+        "cloud computing",
+        "container orchestration"
       ]
     },
     {
@@ -2771,6 +4000,11 @@
       ],
       "parents": [
         "aws"
+      ],
+      "concepts": [
+        "cloud computing",
+        "monitoring and alerting",
+        "observability"
       ]
     },
     {
@@ -2781,6 +4015,10 @@
       ],
       "parents": [
         "aws"
+      ],
+      "concepts": [
+        "cloud computing",
+        "identity and access management"
       ]
     },
     {
@@ -2789,6 +4027,10 @@
       "aliases": [],
       "parents": [
         "aws"
+      ],
+      "concepts": [
+        "cloud computing",
+        "api gateway"
       ]
     },
     {
@@ -2799,6 +4041,10 @@
       ],
       "parents": [
         "aws"
+      ],
+      "concepts": [
+        "cloud computing",
+        "content delivery network"
       ]
     },
     {
@@ -2809,6 +4055,11 @@
       ],
       "parents": [
         "aws"
+      ],
+      "concepts": [
+        "cloud computing",
+        "containerization",
+        "serverless"
       ]
     },
     {
@@ -2819,6 +4070,10 @@
       ],
       "parents": [
         "aws"
+      ],
+      "concepts": [
+        "cloud computing",
+        "dns"
       ]
     },
     {
@@ -2827,6 +4082,10 @@
       "aliases": [],
       "parents": [
         "aws"
+      ],
+      "concepts": [
+        "cloud computing",
+        "secrets management"
       ]
     },
     {
@@ -2837,6 +4096,10 @@
       ],
       "parents": [
         "aws"
+      ],
+      "concepts": [
+        "cloud computing",
+        "caching"
       ]
     },
     {
@@ -2847,6 +4110,10 @@
       ],
       "parents": [
         "aws"
+      ],
+      "concepts": [
+        "cloud computing",
+        "networking"
       ]
     },
     {
@@ -2857,6 +4124,10 @@
       ],
       "parents": [
         "aws"
+      ],
+      "concepts": [
+        "cloud computing",
+        "event driven architecture"
       ]
     },
     {
@@ -2867,6 +4138,11 @@
       ],
       "parents": [
         "aws"
+      ],
+      "concepts": [
+        "cloud computing",
+        "data migration",
+        "data replication"
       ]
     },
     {
@@ -2877,6 +4153,10 @@
       ],
       "parents": [
         "aws"
+      ],
+      "concepts": [
+        "cloud computing",
+        "ci/cd"
       ]
     },
     {
@@ -2887,6 +4167,10 @@
       ],
       "parents": [
         "aws"
+      ],
+      "concepts": [
+        "cloud computing",
+        "ci/cd"
       ]
     },
     {
@@ -2897,6 +4181,9 @@
       ],
       "parents": [
         "aws"
+      ],
+      "concepts": [
+        "cloud computing"
       ]
     },
     {
@@ -2908,6 +4195,11 @@
       ],
       "parents": [
         "aws"
+      ],
+      "concepts": [
+        "cloud computing",
+        "large language models",
+        "generative ai"
       ]
     },
     {
@@ -2918,6 +4210,10 @@
       ],
       "parents": [
         "aws"
+      ],
+      "concepts": [
+        "cloud computing",
+        "natural language processing"
       ]
     },
     {
@@ -2928,6 +4224,10 @@
       ],
       "parents": [
         "aws"
+      ],
+      "concepts": [
+        "cloud computing",
+        "computer vision"
       ]
     },
     {
@@ -2938,6 +4238,11 @@
       ],
       "parents": [
         "aws"
+      ],
+      "concepts": [
+        "cloud computing",
+        "optical character recognition",
+        "document intelligence"
       ]
     },
     {
@@ -2948,6 +4253,10 @@
       ],
       "parents": [
         "aws"
+      ],
+      "concepts": [
+        "cloud computing",
+        "speech recognition"
       ]
     },
     {
@@ -2958,6 +4267,10 @@
       ],
       "parents": [
         "aws"
+      ],
+      "concepts": [
+        "cloud computing",
+        "chatbots"
       ]
     },
     {
@@ -2968,6 +4281,10 @@
       ],
       "parents": [
         "aws"
+      ],
+      "concepts": [
+        "cloud computing",
+        "semantic search"
       ]
     },
     {
@@ -2978,6 +4295,11 @@
       ],
       "parents": [
         "azure"
+      ],
+      "concepts": [
+        "cloud computing",
+        "large language models",
+        "generative ai"
       ]
     },
     {
@@ -2989,6 +4311,11 @@
       ],
       "parents": [
         "azure"
+      ],
+      "concepts": [
+        "cloud computing",
+        "large language models",
+        "generative ai"
       ]
     },
     {
@@ -3000,6 +4327,10 @@
       ],
       "parents": [
         "azure"
+      ],
+      "concepts": [
+        "cloud computing",
+        "artificial intelligence"
       ]
     },
     {
@@ -3010,6 +4341,10 @@
       ],
       "parents": [
         "azure"
+      ],
+      "concepts": [
+        "cloud computing",
+        "process automation"
       ]
     },
     {
@@ -3020,6 +4355,11 @@
       ],
       "parents": [
         "azure"
+      ],
+      "concepts": [
+        "cloud computing",
+        "secrets management",
+        "key management"
       ]
     },
     {
@@ -3032,6 +4372,11 @@
       ],
       "parents": [
         "azure"
+      ],
+      "concepts": [
+        "cloud computing",
+        "identity and access management",
+        "single sign on"
       ]
     },
     {
@@ -3040,6 +4385,11 @@
       "aliases": [],
       "parents": [
         "azure"
+      ],
+      "concepts": [
+        "cloud computing",
+        "monitoring and alerting",
+        "observability"
       ]
     },
     {
@@ -3050,6 +4400,11 @@
       ],
       "parents": [
         "azure monitor"
+      ],
+      "concepts": [
+        "cloud computing",
+        "observability",
+        "logging"
       ]
     },
     {
@@ -3060,6 +4415,10 @@
       ],
       "parents": [
         "azure"
+      ],
+      "concepts": [
+        "cloud computing",
+        "containerization"
       ]
     },
     {
@@ -3070,6 +4429,10 @@
       ],
       "parents": [
         "azure"
+      ],
+      "concepts": [
+        "cloud computing",
+        "containerization"
       ]
     },
     {
@@ -3080,6 +4443,10 @@
       ],
       "parents": [
         "azure"
+      ],
+      "concepts": [
+        "cloud computing",
+        "api gateway"
       ]
     },
     {
@@ -3092,6 +4459,11 @@
       ],
       "parents": [
         "azure"
+      ],
+      "concepts": [
+        "cloud computing",
+        "data lake",
+        "distributed storage"
       ]
     },
     {
@@ -3103,6 +4475,12 @@
       ],
       "parents": [
         "azure"
+      ],
+      "concepts": [
+        "cloud computing",
+        "data governance",
+        "data catalog",
+        "data lineage"
       ]
     },
     {
@@ -3113,6 +4491,11 @@
       ],
       "parents": [
         "azure"
+      ],
+      "concepts": [
+        "cloud computing",
+        "stream processing",
+        "real time analytics"
       ]
     },
     {
@@ -3121,6 +4504,10 @@
       "aliases": [],
       "parents": [
         "azure devops"
+      ],
+      "concepts": [
+        "cloud computing",
+        "ci/cd"
       ]
     },
     {
@@ -3129,6 +4516,10 @@
       "aliases": [],
       "parents": [
         "gcp"
+      ],
+      "concepts": [
+        "cloud computing",
+        "ci/cd"
       ]
     },
     {
@@ -3139,6 +4530,11 @@
       ],
       "parents": [
         "gcp"
+      ],
+      "concepts": [
+        "cloud computing",
+        "relational databases",
+        "distributed systems"
       ]
     },
     {
@@ -3149,6 +4545,10 @@
       ],
       "parents": [
         "gcp"
+      ],
+      "concepts": [
+        "cloud computing",
+        "nosql"
       ]
     },
     {
@@ -3157,6 +4557,11 @@
       "aliases": [],
       "parents": [
         "gcp"
+      ],
+      "concepts": [
+        "cloud computing",
+        "document intelligence",
+        "optical character recognition"
       ]
     },
     {
@@ -3165,6 +4570,10 @@
       "aliases": [],
       "parents": [
         "gcp"
+      ],
+      "concepts": [
+        "cloud computing",
+        "chatbots"
       ]
     },
     {
@@ -3173,6 +4582,10 @@
       "aliases": [],
       "parents": [
         "gcp"
+      ],
+      "concepts": [
+        "cloud computing",
+        "containerization"
       ]
     },
     {
@@ -3181,6 +4594,11 @@
       "aliases": [],
       "parents": [
         "gcp"
+      ],
+      "concepts": [
+        "cloud computing",
+        "monitoring and alerting",
+        "observability"
       ]
     },
     {
@@ -3189,6 +4607,10 @@
       "aliases": [],
       "parents": [
         "gcp"
+      ],
+      "concepts": [
+        "cloud computing",
+        "identity and access management"
       ]
     },
     {
@@ -3199,13 +4621,22 @@
       ],
       "parents": [
         "gcp"
+      ],
+      "concepts": [
+        "monitoring and alerting",
+        "observability",
+        "logging"
       ]
     },
     {
       "name": "docker",
       "category": "devops",
       "aliases": [],
-      "parents": []
+      "parents": [],
+      "concepts": [
+        "devops",
+        "containerization"
+      ]
     },
     {
       "name": "kubernetes",
@@ -3213,37 +4644,61 @@
       "aliases": [
         "k8s"
       ],
-      "parents": []
+      "parents": [],
+      "concepts": [
+        "devops",
+        "container orchestration"
+      ]
     },
     {
       "name": "terraform",
       "category": "devops",
       "aliases": [],
-      "parents": []
+      "parents": [],
+      "concepts": [
+        "devops",
+        "infrastructure as code"
+      ]
     },
     {
       "name": "ansible",
       "category": "devops",
       "aliases": [],
-      "parents": []
+      "parents": [],
+      "concepts": [
+        "devops",
+        "infrastructure as code"
+      ]
     },
     {
       "name": "puppet",
       "category": "devops",
       "aliases": [],
-      "parents": []
+      "parents": [],
+      "concepts": [
+        "devops",
+        "infrastructure as code"
+      ]
     },
     {
       "name": "chef",
       "category": "devops",
       "aliases": [],
-      "parents": []
+      "parents": [],
+      "concepts": [
+        "devops",
+        "infrastructure as code"
+      ]
     },
     {
       "name": "jenkins",
       "category": "devops",
       "aliases": [],
-      "parents": []
+      "parents": [],
+      "concepts": [
+        "devops",
+        "ci/cd"
+      ]
     },
     {
       "name": "github actions",
@@ -3253,6 +4708,10 @@
       ],
       "parents": [
         "github"
+      ],
+      "concepts": [
+        "devops",
+        "ci/cd"
       ]
     },
     {
@@ -3263,19 +4722,31 @@
       ],
       "parents": [
         "gitlab"
+      ],
+      "concepts": [
+        "devops",
+        "ci/cd"
       ]
     },
     {
       "name": "circleci",
       "category": "devops",
       "aliases": [],
-      "parents": []
+      "parents": [],
+      "concepts": [
+        "devops",
+        "ci/cd"
+      ]
     },
     {
       "name": "travis ci",
       "category": "devops",
       "aliases": [],
-      "parents": []
+      "parents": [],
+      "concepts": [
+        "devops",
+        "ci/cd"
+      ]
     },
     {
       "name": "argo cd",
@@ -3285,6 +4756,11 @@
       ],
       "parents": [
         "kubernetes"
+      ],
+      "concepts": [
+        "devops",
+        "gitops",
+        "ci/cd"
       ]
     },
     {
@@ -3293,6 +4769,10 @@
       "aliases": [],
       "parents": [
         "kubernetes"
+      ],
+      "concepts": [
+        "devops",
+        "container orchestration"
       ]
     },
     {
@@ -3301,19 +4781,32 @@
       "aliases": [],
       "parents": [
         "kubernetes"
+      ],
+      "concepts": [
+        "devops",
+        "container orchestration"
       ]
     },
     {
       "name": "vagrant",
       "category": "devops",
       "aliases": [],
-      "parents": []
+      "parents": [],
+      "concepts": [
+        "devops",
+        "virtualization"
+      ]
     },
     {
       "name": "nginx",
       "category": "devops",
       "aliases": [],
-      "parents": []
+      "parents": [],
+      "concepts": [
+        "devops",
+        "load balancing",
+        "networking"
+      ]
     },
     {
       "name": "apache http server",
@@ -3322,13 +4815,21 @@
         "httpd",
         "apache2"
       ],
-      "parents": []
+      "parents": [],
+      "concepts": [
+        "devops",
+        "networking"
+      ]
     },
     {
       "name": "podman",
       "category": "devops",
       "aliases": [],
-      "parents": []
+      "parents": [],
+      "concepts": [
+        "devops",
+        "containerization"
+      ]
     },
     {
       "name": "rancher",
@@ -3336,6 +4837,10 @@
       "aliases": [],
       "parents": [
         "kubernetes"
+      ],
+      "concepts": [
+        "devops",
+        "container orchestration"
       ]
     },
     {
@@ -3346,6 +4851,10 @@
       ],
       "parents": [
         "docker"
+      ],
+      "concepts": [
+        "devops",
+        "containerization"
       ]
     },
     {
@@ -3354,25 +4863,42 @@
       "aliases": [],
       "parents": [
         "docker"
+      ],
+      "concepts": [
+        "devops",
+        "container orchestration"
       ]
     },
     {
       "name": "teamcity",
       "category": "devops",
       "aliases": [],
-      "parents": []
+      "parents": [],
+      "concepts": [
+        "devops",
+        "ci/cd"
+      ]
     },
     {
       "name": "bamboo",
       "category": "devops",
       "aliases": [],
-      "parents": []
+      "parents": [],
+      "concepts": [
+        "devops",
+        "ci/cd"
+      ]
     },
     {
       "name": "spinnaker",
       "category": "devops",
       "aliases": [],
-      "parents": []
+      "parents": [],
+      "concepts": [
+        "devops",
+        "ci/cd",
+        "release management"
+      ]
     },
     {
       "name": "flux cd",
@@ -3382,25 +4908,42 @@
       ],
       "parents": [
         "kubernetes"
+      ],
+      "concepts": [
+        "devops",
+        "gitops",
+        "ci/cd"
       ]
     },
     {
       "name": "pulumi",
       "category": "devops",
       "aliases": [],
-      "parents": []
+      "parents": [],
+      "concepts": [
+        "devops",
+        "infrastructure as code"
+      ]
     },
     {
       "name": "packer",
       "category": "devops",
       "aliases": [],
-      "parents": []
+      "parents": [],
+      "concepts": [
+        "devops",
+        "infrastructure as code"
+      ]
     },
     {
       "name": "consul",
       "category": "devops",
       "aliases": [],
-      "parents": []
+      "parents": [],
+      "concepts": [
+        "devops",
+        "service mesh"
+      ]
     },
     {
       "name": "nexus repository",
@@ -3408,7 +4951,11 @@
       "aliases": [
         "nexus"
       ],
-      "parents": []
+      "parents": [],
+      "concepts": [
+        "devops",
+        "release management"
+      ]
     },
     {
       "name": "jfrog artifactory",
@@ -3416,7 +4963,11 @@
       "aliases": [
         "artifactory"
       ],
-      "parents": []
+      "parents": [],
+      "concepts": [
+        "devops",
+        "release management"
+      ]
     },
     {
       "name": "maven",
@@ -3426,7 +4977,8 @@
       ],
       "parents": [
         "java"
-      ]
+      ],
+      "concepts": []
     },
     {
       "name": "gradle",
@@ -3434,7 +4986,8 @@
       "aliases": [],
       "parents": [
         "java"
-      ]
+      ],
+      "concepts": []
     },
     {
       "name": "npm",
@@ -3442,7 +4995,8 @@
       "aliases": [],
       "parents": [
         "node.js"
-      ]
+      ],
+      "concepts": []
     },
     {
       "name": "yarn",
@@ -3450,7 +5004,8 @@
       "aliases": [],
       "parents": [
         "node.js"
-      ]
+      ],
+      "concepts": []
     },
     {
       "name": "pnpm",
@@ -3458,7 +5013,8 @@
       "aliases": [],
       "parents": [
         "node.js"
-      ]
+      ],
+      "concepts": []
     },
     {
       "name": "pip",
@@ -3466,7 +5022,8 @@
       "aliases": [],
       "parents": [
         "python"
-      ]
+      ],
+      "concepts": []
     },
     {
       "name": "poetry",
@@ -3474,7 +5031,8 @@
       "aliases": [],
       "parents": [
         "python"
-      ]
+      ],
+      "concepts": []
     },
     {
       "name": "uv",
@@ -3482,13 +5040,15 @@
       "aliases": [],
       "parents": [
         "python"
-      ]
+      ],
+      "concepts": []
     },
     {
       "name": "bazel",
       "category": "devops",
       "aliases": [],
-      "parents": []
+      "parents": [],
+      "concepts": []
     },
     {
       "name": "make",
@@ -3496,7 +5056,8 @@
       "aliases": [
         "makefile"
       ],
-      "parents": []
+      "parents": [],
+      "concepts": []
     },
     {
       "name": "tomcat",
@@ -3506,7 +5067,8 @@
       ],
       "parents": [
         "java"
-      ]
+      ],
+      "concepts": []
     },
     {
       "name": "iis",
@@ -3516,19 +5078,28 @@
       ],
       "parents": [
         "windows server"
-      ]
+      ],
+      "concepts": []
     },
     {
       "name": "haproxy",
       "category": "devops",
       "aliases": [],
-      "parents": []
+      "parents": [],
+      "concepts": [
+        "devops",
+        "load balancing"
+      ]
     },
     {
       "name": "traefik",
       "category": "devops",
       "aliases": [],
-      "parents": []
+      "parents": [],
+      "concepts": [
+        "devops",
+        "load balancing"
+      ]
     },
     {
       "name": "kong",
@@ -3536,7 +5107,11 @@
       "aliases": [
         "kong gateway"
       ],
-      "parents": []
+      "parents": [],
+      "concepts": [
+        "devops",
+        "api gateway"
+      ]
     },
     {
       "name": "istio",
@@ -3544,6 +5119,10 @@
       "aliases": [],
       "parents": [
         "kubernetes"
+      ],
+      "concepts": [
+        "devops",
+        "service mesh"
       ]
     },
     {
@@ -3554,31 +5133,45 @@
       ],
       "parents": [
         "aws"
+      ],
+      "concepts": [
+        "devops",
+        "infrastructure as code"
       ]
     },
     {
       "name": "serverless framework",
       "category": "devops",
       "aliases": [],
-      "parents": []
+      "parents": [],
+      "concepts": [
+        "devops",
+        "serverless",
+        "infrastructure as code"
+      ]
     },
     {
       "name": "linux",
       "category": "os",
       "aliases": [],
-      "parents": []
+      "parents": [],
+      "concepts": [
+        "linux administration"
+      ]
     },
     {
       "name": "unix",
       "category": "os",
       "aliases": [],
-      "parents": []
+      "parents": [],
+      "concepts": []
     },
     {
       "name": "windows server",
       "category": "os",
       "aliases": [],
-      "parents": []
+      "parents": [],
+      "concepts": []
     },
     {
       "name": "ubuntu",
@@ -3586,6 +5179,9 @@
       "aliases": [],
       "parents": [
         "linux"
+      ],
+      "concepts": [
+        "linux administration"
       ]
     },
     {
@@ -3597,6 +5193,9 @@
       ],
       "parents": [
         "linux"
+      ],
+      "concepts": [
+        "linux administration"
       ]
     },
     {
@@ -3605,6 +5204,9 @@
       "aliases": [],
       "parents": [
         "linux"
+      ],
+      "concepts": [
+        "linux administration"
       ]
     },
     {
@@ -3613,6 +5215,9 @@
       "aliases": [],
       "parents": [
         "linux"
+      ],
+      "concepts": [
+        "linux administration"
       ]
     },
     {
@@ -3623,31 +5228,46 @@
       ],
       "parents": [
         "unix"
-      ]
+      ],
+      "concepts": []
     },
     {
       "name": "windows",
       "category": "os",
       "aliases": [],
-      "parents": []
+      "parents": [],
+      "concepts": []
     },
     {
       "name": "prometheus",
       "category": "monitoring",
       "aliases": [],
-      "parents": []
+      "parents": [],
+      "concepts": [
+        "monitoring and alerting",
+        "observability"
+      ]
     },
     {
       "name": "grafana",
       "category": "monitoring",
       "aliases": [],
-      "parents": []
+      "parents": [],
+      "concepts": [
+        "monitoring and alerting",
+        "observability",
+        "data visualization"
+      ]
     },
     {
       "name": "datadog",
       "category": "monitoring",
       "aliases": [],
-      "parents": []
+      "parents": [],
+      "concepts": [
+        "monitoring and alerting",
+        "observability"
+      ]
     },
     {
       "name": "new relic",
@@ -3655,13 +5275,23 @@
       "aliases": [
         "newrelic"
       ],
-      "parents": []
+      "parents": [],
+      "concepts": [
+        "monitoring and alerting",
+        "observability"
+      ]
     },
     {
       "name": "splunk",
       "category": "monitoring",
       "aliases": [],
-      "parents": []
+      "parents": [],
+      "concepts": [
+        "monitoring and alerting",
+        "observability",
+        "logging",
+        "siem"
+      ]
     },
     {
       "name": "kibana",
@@ -3669,6 +5299,12 @@
       "aliases": [],
       "parents": [
         "elasticsearch"
+      ],
+      "concepts": [
+        "monitoring and alerting",
+        "observability",
+        "logging",
+        "data visualization"
       ]
     },
     {
@@ -3677,6 +5313,11 @@
       "aliases": [],
       "parents": [
         "elasticsearch"
+      ],
+      "concepts": [
+        "monitoring and alerting",
+        "observability",
+        "logging"
       ]
     },
     {
@@ -3687,6 +5328,11 @@
       ],
       "parents": [
         "elasticsearch"
+      ],
+      "concepts": [
+        "monitoring and alerting",
+        "observability",
+        "logging"
       ]
     },
     {
@@ -3695,55 +5341,93 @@
       "aliases": [
         "otel"
       ],
-      "parents": []
+      "parents": [],
+      "concepts": [
+        "monitoring and alerting",
+        "observability"
+      ]
     },
     {
       "name": "jaeger",
       "category": "monitoring",
       "aliases": [],
-      "parents": []
+      "parents": [],
+      "concepts": [
+        "monitoring and alerting",
+        "observability"
+      ]
     },
     {
       "name": "zipkin",
       "category": "monitoring",
       "aliases": [],
-      "parents": []
+      "parents": [],
+      "concepts": [
+        "monitoring and alerting",
+        "observability"
+      ]
     },
     {
       "name": "sentry",
       "category": "monitoring",
       "aliases": [],
-      "parents": []
+      "parents": [],
+      "concepts": [
+        "monitoring and alerting",
+        "observability",
+        "incident management"
+      ]
     },
     {
       "name": "pagerduty",
       "category": "monitoring",
       "aliases": [],
-      "parents": []
+      "parents": [],
+      "concepts": [
+        "monitoring and alerting",
+        "observability",
+        "incident management"
+      ]
     },
     {
       "name": "dynatrace",
       "category": "monitoring",
       "aliases": [],
-      "parents": []
+      "parents": [],
+      "concepts": [
+        "monitoring and alerting",
+        "observability"
+      ]
     },
     {
       "name": "appdynamics",
       "category": "monitoring",
       "aliases": [],
-      "parents": []
+      "parents": [],
+      "concepts": [
+        "monitoring and alerting",
+        "observability"
+      ]
     },
     {
       "name": "nagios",
       "category": "monitoring",
       "aliases": [],
-      "parents": []
+      "parents": [],
+      "concepts": [
+        "monitoring and alerting",
+        "observability"
+      ]
     },
     {
       "name": "zabbix",
       "category": "monitoring",
       "aliases": [],
-      "parents": []
+      "parents": [],
+      "concepts": [
+        "monitoring and alerting",
+        "observability"
+      ]
     },
     {
       "name": "grafana loki",
@@ -3753,25 +5437,42 @@
       ],
       "parents": [
         "grafana"
+      ],
+      "concepts": [
+        "monitoring and alerting",
+        "observability",
+        "logging"
       ]
     },
     {
       "name": "graylog",
       "category": "monitoring",
       "aliases": [],
-      "parents": []
+      "parents": [],
+      "concepts": [
+        "monitoring and alerting",
+        "observability",
+        "logging"
+      ]
     },
     {
       "name": "sonarqube",
       "category": "tool",
       "aliases": [],
-      "parents": []
+      "parents": [],
+      "concepts": [
+        "static code analysis",
+        "test coverage"
+      ]
     },
     {
       "name": "git",
       "category": "version_control",
       "aliases": [],
-      "parents": []
+      "parents": [],
+      "concepts": [
+        "version control"
+      ]
     },
     {
       "name": "github",
@@ -3779,6 +5480,10 @@
       "aliases": [],
       "parents": [
         "git"
+      ],
+      "concepts": [
+        "version control",
+        "code review"
       ]
     },
     {
@@ -3787,6 +5492,11 @@
       "aliases": [],
       "parents": [
         "git"
+      ],
+      "concepts": [
+        "version control",
+        "code review",
+        "ci/cd"
       ]
     },
     {
@@ -3795,6 +5505,10 @@
       "aliases": [],
       "parents": [
         "git"
+      ],
+      "concepts": [
+        "version control",
+        "code review"
       ]
     },
     {
@@ -3803,7 +5517,10 @@
       "aliases": [
         "svn"
       ],
-      "parents": []
+      "parents": [],
+      "concepts": [
+        "version control"
+      ]
     },
     {
       "name": "azure repos",
@@ -3812,13 +5529,20 @@
       "parents": [
         "azure devops",
         "git"
+      ],
+      "concepts": [
+        "version control",
+        "code review"
       ]
     },
     {
       "name": "perforce",
       "category": "version_control",
       "aliases": [],
-      "parents": []
+      "parents": [],
+      "concepts": [
+        "version control"
+      ]
     },
     {
       "name": "mercurial",
@@ -3826,7 +5550,10 @@
       "aliases": [
         "hg"
       ],
-      "parents": []
+      "parents": [],
+      "concepts": [
+        "version control"
+      ]
     },
     {
       "name": "gerrit",
@@ -3834,6 +5561,10 @@
       "aliases": [],
       "parents": [
         "git"
+      ],
+      "concepts": [
+        "version control",
+        "code review"
       ]
     },
     {
@@ -3843,7 +5574,10 @@
         "tfs",
         "tfvc"
       ],
-      "parents": []
+      "parents": [],
+      "concepts": [
+        "version control"
+      ]
     },
     {
       "name": "pytest",
@@ -3851,6 +5585,11 @@
       "aliases": [],
       "parents": [
         "python"
+      ],
+      "concepts": [
+        "quality assurance",
+        "test automation",
+        "unit testing"
       ]
     },
     {
@@ -3859,6 +5598,11 @@
       "aliases": [],
       "parents": [
         "python"
+      ],
+      "concepts": [
+        "quality assurance",
+        "test automation",
+        "unit testing"
       ]
     },
     {
@@ -3867,6 +5611,11 @@
       "aliases": [],
       "parents": [
         "java"
+      ],
+      "concepts": [
+        "quality assurance",
+        "test automation",
+        "unit testing"
       ]
     },
     {
@@ -3875,6 +5624,11 @@
       "aliases": [],
       "parents": [
         "java"
+      ],
+      "concepts": [
+        "quality assurance",
+        "test automation",
+        "unit testing"
       ]
     },
     {
@@ -3883,6 +5637,11 @@
       "aliases": [],
       "parents": [
         "javascript"
+      ],
+      "concepts": [
+        "quality assurance",
+        "test automation",
+        "unit testing"
       ]
     },
     {
@@ -3891,6 +5650,11 @@
       "aliases": [],
       "parents": [
         "javascript"
+      ],
+      "concepts": [
+        "quality assurance",
+        "test automation",
+        "unit testing"
       ]
     },
     {
@@ -3899,25 +5663,45 @@
       "aliases": [],
       "parents": [
         "javascript"
+      ],
+      "concepts": [
+        "quality assurance",
+        "test automation",
+        "end to end testing"
       ]
     },
     {
       "name": "playwright",
       "category": "testing",
       "aliases": [],
-      "parents": []
+      "parents": [],
+      "concepts": [
+        "quality assurance",
+        "test automation",
+        "end to end testing"
+      ]
     },
     {
       "name": "selenium",
       "category": "testing",
       "aliases": [],
-      "parents": []
+      "parents": [],
+      "concepts": [
+        "quality assurance",
+        "test automation",
+        "end to end testing"
+      ]
     },
     {
       "name": "postman",
       "category": "testing",
       "aliases": [],
-      "parents": []
+      "parents": [],
+      "concepts": [
+        "quality assurance",
+        "test automation",
+        "api design"
+      ]
     },
     {
       "name": "jmeter",
@@ -3925,13 +5709,25 @@
       "aliases": [
         "apache jmeter"
       ],
-      "parents": []
+      "parents": [],
+      "concepts": [
+        "quality assurance",
+        "test automation",
+        "load testing",
+        "performance testing"
+      ]
     },
     {
       "name": "k6",
       "category": "testing",
       "aliases": [],
-      "parents": []
+      "parents": [],
+      "concepts": [
+        "quality assurance",
+        "test automation",
+        "load testing",
+        "performance testing"
+      ]
     },
     {
       "name": "nunit",
@@ -3939,6 +5735,11 @@
       "aliases": [],
       "parents": [
         "c#"
+      ],
+      "concepts": [
+        "quality assurance",
+        "test automation",
+        "unit testing"
       ]
     },
     {
@@ -3947,13 +5748,23 @@
       "aliases": [],
       "parents": [
         "c#"
+      ],
+      "concepts": [
+        "quality assurance",
+        "test automation",
+        "unit testing"
       ]
     },
     {
       "name": "soapui",
       "category": "testing",
       "aliases": [],
-      "parents": []
+      "parents": [],
+      "concepts": [
+        "quality assurance",
+        "test automation",
+        "api design"
+      ]
     },
     {
       "name": "vitest",
@@ -3961,6 +5772,11 @@
       "aliases": [],
       "parents": [
         "javascript"
+      ],
+      "concepts": [
+        "quality assurance",
+        "test automation",
+        "unit testing"
       ]
     },
     {
@@ -3969,6 +5785,11 @@
       "aliases": [],
       "parents": [
         "ruby"
+      ],
+      "concepts": [
+        "quality assurance",
+        "test automation",
+        "unit testing"
       ]
     },
     {
@@ -3977,13 +5798,24 @@
       "aliases": [],
       "parents": [
         "php"
+      ],
+      "concepts": [
+        "quality assurance",
+        "test automation",
+        "unit testing"
       ]
     },
     {
       "name": "cucumber",
       "category": "testing",
       "aliases": [],
-      "parents": []
+      "parents": [],
+      "concepts": [
+        "quality assurance",
+        "test automation",
+        "behavior driven development",
+        "acceptance testing"
+      ]
     },
     {
       "name": "behave",
@@ -3991,6 +5823,12 @@
       "aliases": [],
       "parents": [
         "python"
+      ],
+      "concepts": [
+        "quality assurance",
+        "test automation",
+        "behavior driven development",
+        "acceptance testing"
       ]
     },
     {
@@ -3999,25 +5837,46 @@
       "aliases": [],
       "parents": [
         "python"
+      ],
+      "concepts": [
+        "quality assurance",
+        "test automation",
+        "acceptance testing"
       ]
     },
     {
       "name": "appium",
       "category": "testing",
       "aliases": [],
-      "parents": []
+      "parents": [],
+      "concepts": [
+        "quality assurance",
+        "test automation",
+        "end to end testing"
+      ]
     },
     {
       "name": "testcafe",
       "category": "testing",
       "aliases": [],
-      "parents": []
+      "parents": [],
+      "concepts": [
+        "quality assurance",
+        "test automation",
+        "end to end testing"
+      ]
     },
     {
       "name": "gatling",
       "category": "testing",
       "aliases": [],
-      "parents": []
+      "parents": [],
+      "concepts": [
+        "quality assurance",
+        "test automation",
+        "load testing",
+        "performance testing"
+      ]
     },
     {
       "name": "locust",
@@ -4025,6 +5884,12 @@
       "aliases": [],
       "parents": [
         "python"
+      ],
+      "concepts": [
+        "quality assurance",
+        "test automation",
+        "load testing",
+        "performance testing"
       ]
     },
     {
@@ -4033,6 +5898,11 @@
       "aliases": [],
       "parents": [
         "javascript"
+      ],
+      "concepts": [
+        "quality assurance",
+        "test automation",
+        "unit testing"
       ]
     },
     {
@@ -4041,6 +5911,11 @@
       "aliases": [],
       "parents": [
         "javascript"
+      ],
+      "concepts": [
+        "quality assurance",
+        "test automation",
+        "unit testing"
       ]
     },
     {
@@ -4049,6 +5924,11 @@
       "aliases": [],
       "parents": [
         "javascript"
+      ],
+      "concepts": [
+        "quality assurance",
+        "test automation",
+        "unit testing"
       ]
     },
     {
@@ -4057,6 +5937,11 @@
       "aliases": [],
       "parents": [
         "c#"
+      ],
+      "concepts": [
+        "quality assurance",
+        "test automation",
+        "unit testing"
       ]
     },
     {
@@ -4065,6 +5950,11 @@
       "aliases": [],
       "parents": [
         "java"
+      ],
+      "concepts": [
+        "quality assurance",
+        "test automation",
+        "unit testing"
       ]
     },
     {
@@ -4075,19 +5965,34 @@
       ],
       "parents": [
         "java"
+      ],
+      "concepts": [
+        "quality assurance",
+        "test automation",
+        "api design"
       ]
     },
     {
       "name": "testcontainers",
       "category": "testing",
       "aliases": [],
-      "parents": []
+      "parents": [],
+      "concepts": [
+        "quality assurance",
+        "test automation",
+        "integration testing"
+      ]
     },
     {
       "name": "pact",
       "category": "testing",
       "aliases": [],
-      "parents": []
+      "parents": [],
+      "concepts": [
+        "quality assurance",
+        "test automation",
+        "contract testing"
+      ]
     },
     {
       "name": "allure",
@@ -4095,19 +6000,33 @@
       "aliases": [
         "allure report"
       ],
-      "parents": []
+      "parents": [],
+      "concepts": [
+        "quality assurance"
+      ]
     },
     {
       "name": "browserstack",
       "category": "testing",
       "aliases": [],
-      "parents": []
+      "parents": [],
+      "concepts": [
+        "quality assurance",
+        "test automation",
+        "end to end testing"
+      ]
     },
     {
       "name": "loadrunner",
       "category": "testing",
       "aliases": [],
-      "parents": []
+      "parents": [],
+      "concepts": [
+        "quality assurance",
+        "test automation",
+        "load testing",
+        "performance testing"
+      ]
     },
     {
       "name": "hp alm",
@@ -4116,19 +6035,30 @@
         "quality center",
         "micro focus alm"
       ],
-      "parents": []
+      "parents": [],
+      "concepts": [
+        "quality assurance"
+      ]
     },
     {
       "name": "testrail",
       "category": "testing",
       "aliases": [],
-      "parents": []
+      "parents": [],
+      "concepts": [
+        "quality assurance"
+      ]
     },
     {
       "name": "insomnia",
       "category": "testing",
       "aliases": [],
-      "parents": []
+      "parents": [],
+      "concepts": [
+        "quality assurance",
+        "test automation",
+        "api design"
+      ]
     },
     {
       "name": "power bi",
@@ -4137,13 +6067,29 @@
         "powerbi",
         "pbi"
       ],
-      "parents": []
+      "parents": [],
+      "concepts": [
+        "business intelligence",
+        "dashboarding",
+        "reporting",
+        "data visualization",
+        "dimensional modeling",
+        "semantic layer",
+        "self service analytics"
+      ]
     },
     {
       "name": "tableau",
       "category": "bi",
       "aliases": [],
-      "parents": []
+      "parents": [],
+      "concepts": [
+        "business intelligence",
+        "dashboarding",
+        "reporting",
+        "data visualization",
+        "self service analytics"
+      ]
     },
     {
       "name": "looker",
@@ -4151,6 +6097,13 @@
       "aliases": [],
       "parents": [
         "gcp"
+      ],
+      "concepts": [
+        "business intelligence",
+        "dashboarding",
+        "reporting",
+        "data visualization",
+        "semantic layer"
       ]
     },
     {
@@ -4162,6 +6115,12 @@
       ],
       "parents": [
         "gcp"
+      ],
+      "concepts": [
+        "business intelligence",
+        "dashboarding",
+        "reporting",
+        "data visualization"
       ]
     },
     {
@@ -4171,13 +6130,27 @@
         "qlikview",
         "qlik sense"
       ],
-      "parents": []
+      "parents": [],
+      "concepts": [
+        "business intelligence",
+        "dashboarding",
+        "reporting",
+        "data visualization",
+        "self service analytics"
+      ]
     },
     {
       "name": "microstrategy",
       "category": "bi",
       "aliases": [],
-      "parents": []
+      "parents": [],
+      "concepts": [
+        "business intelligence",
+        "dashboarding",
+        "reporting",
+        "data visualization",
+        "semantic layer"
+      ]
     },
     {
       "name": "cognos",
@@ -4185,7 +6158,14 @@
       "aliases": [
         "ibm cognos"
       ],
-      "parents": []
+      "parents": [],
+      "concepts": [
+        "business intelligence",
+        "dashboarding",
+        "reporting",
+        "data visualization",
+        "semantic layer"
+      ]
     },
     {
       "name": "sap businessobjects",
@@ -4196,13 +6176,27 @@
       ],
       "parents": [
         "sap"
+      ],
+      "concepts": [
+        "business intelligence",
+        "dashboarding",
+        "reporting",
+        "data visualization",
+        "semantic layer"
       ]
     },
     {
       "name": "metabase",
       "category": "bi",
       "aliases": [],
-      "parents": []
+      "parents": [],
+      "concepts": [
+        "business intelligence",
+        "dashboarding",
+        "reporting",
+        "data visualization",
+        "self service analytics"
+      ]
     },
     {
       "name": "apache superset",
@@ -4210,13 +6204,27 @@
       "aliases": [
         "superset"
       ],
-      "parents": []
+      "parents": [],
+      "concepts": [
+        "business intelligence",
+        "dashboarding",
+        "reporting",
+        "data visualization",
+        "self service analytics"
+      ]
     },
     {
       "name": "redash",
       "category": "bi",
       "aliases": [],
-      "parents": []
+      "parents": [],
+      "concepts": [
+        "business intelligence",
+        "dashboarding",
+        "reporting",
+        "data visualization",
+        "self service analytics"
+      ]
     },
     {
       "name": "microsoft excel",
@@ -4224,13 +6232,21 @@
       "aliases": [
         "excel"
       ],
-      "parents": []
+      "parents": [],
+      "concepts": [
+        "data analysis",
+        "reporting"
+      ]
     },
     {
       "name": "google sheets",
       "category": "bi",
       "aliases": [],
-      "parents": []
+      "parents": [],
+      "concepts": [
+        "data analysis",
+        "reporting"
+      ]
     },
     {
       "name": "amazon quicksight",
@@ -4240,25 +6256,51 @@
       ],
       "parents": [
         "aws"
+      ],
+      "concepts": [
+        "business intelligence",
+        "dashboarding",
+        "reporting",
+        "data visualization"
       ]
     },
     {
       "name": "domo",
       "category": "bi",
       "aliases": [],
-      "parents": []
+      "parents": [],
+      "concepts": [
+        "business intelligence",
+        "dashboarding",
+        "reporting",
+        "data visualization"
+      ]
     },
     {
       "name": "sisense",
       "category": "bi",
       "aliases": [],
-      "parents": []
+      "parents": [],
+      "concepts": [
+        "business intelligence",
+        "dashboarding",
+        "reporting",
+        "data visualization",
+        "embedded analytics"
+      ]
     },
     {
       "name": "thoughtspot",
       "category": "bi",
       "aliases": [],
-      "parents": []
+      "parents": [],
+      "concepts": [
+        "business intelligence",
+        "dashboarding",
+        "reporting",
+        "data visualization",
+        "self service analytics"
+      ]
     },
     {
       "name": "mode",
@@ -4266,7 +6308,14 @@
       "aliases": [
         "mode analytics"
       ],
-      "parents": []
+      "parents": [],
+      "concepts": [
+        "business intelligence",
+        "dashboarding",
+        "reporting",
+        "data visualization",
+        "self service analytics"
+      ]
     },
     {
       "name": "spotfire",
@@ -4274,7 +6323,13 @@
       "aliases": [
         "tibco spotfire"
       ],
-      "parents": []
+      "parents": [],
+      "concepts": [
+        "business intelligence",
+        "dashboarding",
+        "reporting",
+        "data visualization"
+      ]
     },
     {
       "name": "sap analytics cloud",
@@ -4284,6 +6339,12 @@
       ],
       "parents": [
         "sap"
+      ],
+      "concepts": [
+        "business intelligence",
+        "dashboarding",
+        "reporting",
+        "data visualization"
       ]
     },
     {
@@ -4292,7 +6353,13 @@
       "aliases": [
         "oracle analytics"
       ],
-      "parents": []
+      "parents": [],
+      "concepts": [
+        "business intelligence",
+        "dashboarding",
+        "reporting",
+        "data visualization"
+      ]
     },
     {
       "name": "jasperreports",
@@ -4303,13 +6370,27 @@
       ],
       "parents": [
         "java"
+      ],
+      "concepts": [
+        "business intelligence",
+        "dashboarding",
+        "reporting",
+        "data visualization",
+        "report automation"
       ]
     },
     {
       "name": "crystal reports",
       "category": "bi",
       "aliases": [],
-      "parents": []
+      "parents": [],
+      "concepts": [
+        "business intelligence",
+        "dashboarding",
+        "reporting",
+        "data visualization",
+        "report automation"
+      ]
     },
     {
       "name": "pandas",
@@ -4317,6 +6398,10 @@
       "aliases": [],
       "parents": [
         "python"
+      ],
+      "concepts": [
+        "data analysis",
+        "data cleaning"
       ]
     },
     {
@@ -4325,6 +6410,9 @@
       "aliases": [],
       "parents": [
         "python"
+      ],
+      "concepts": [
+        "linear algebra"
       ]
     },
     {
@@ -4333,6 +6421,10 @@
       "aliases": [],
       "parents": [
         "python"
+      ],
+      "concepts": [
+        "numerical methods",
+        "statistics"
       ]
     },
     {
@@ -4344,6 +6436,12 @@
       ],
       "parents": [
         "python"
+      ],
+      "concepts": [
+        "machine learning",
+        "supervised learning",
+        "unsupervised learning",
+        "model evaluation"
       ]
     },
     {
@@ -4352,6 +6450,11 @@
       "aliases": [],
       "parents": [
         "python"
+      ],
+      "concepts": [
+        "machine learning",
+        "deep learning",
+        "neural networks"
       ]
     },
     {
@@ -4360,6 +6463,11 @@
       "aliases": [],
       "parents": [
         "tensorflow"
+      ],
+      "concepts": [
+        "machine learning",
+        "deep learning",
+        "neural networks"
       ]
     },
     {
@@ -4370,6 +6478,11 @@
       ],
       "parents": [
         "python"
+      ],
+      "concepts": [
+        "machine learning",
+        "deep learning",
+        "neural networks"
       ]
     },
     {
@@ -4378,6 +6491,10 @@
       "aliases": [],
       "parents": [
         "python"
+      ],
+      "concepts": [
+        "machine learning",
+        "gradient boosting"
       ]
     },
     {
@@ -4386,6 +6503,10 @@
       "aliases": [],
       "parents": [
         "python"
+      ],
+      "concepts": [
+        "machine learning",
+        "gradient boosting"
       ]
     },
     {
@@ -4394,6 +6515,10 @@
       "aliases": [],
       "parents": [
         "python"
+      ],
+      "concepts": [
+        "machine learning",
+        "gradient boosting"
       ]
     },
     {
@@ -4402,6 +6527,9 @@
       "aliases": [],
       "parents": [
         "python"
+      ],
+      "concepts": [
+        "data visualization"
       ]
     },
     {
@@ -4410,6 +6538,9 @@
       "aliases": [],
       "parents": [
         "matplotlib"
+      ],
+      "concepts": [
+        "data visualization"
       ]
     },
     {
@@ -4418,6 +6549,9 @@
       "aliases": [],
       "parents": [
         "python"
+      ],
+      "concepts": [
+        "data visualization"
       ]
     },
     {
@@ -4426,6 +6560,10 @@
       "aliases": [],
       "parents": [
         "python"
+      ],
+      "concepts": [
+        "statistics",
+        "inferential statistics"
       ]
     },
     {
@@ -4434,6 +6572,10 @@
       "aliases": [],
       "parents": [
         "python"
+      ],
+      "concepts": [
+        "machine learning",
+        "computer vision"
       ]
     },
     {
@@ -4442,6 +6584,10 @@
       "aliases": [],
       "parents": [
         "python"
+      ],
+      "concepts": [
+        "machine learning",
+        "natural language processing"
       ]
     },
     {
@@ -4450,6 +6596,10 @@
       "aliases": [],
       "parents": [
         "python"
+      ],
+      "concepts": [
+        "machine learning",
+        "natural language processing"
       ]
     },
     {
@@ -4460,6 +6610,11 @@
       ],
       "parents": [
         "python"
+      ],
+      "concepts": [
+        "machine learning",
+        "transformer architecture",
+        "natural language processing"
       ]
     },
     {
@@ -4468,13 +6623,22 @@
       "aliases": [
         "huggingface"
       ],
-      "parents": []
+      "parents": [],
+      "concepts": [
+        "machine learning",
+        "model registry"
+      ]
     },
     {
       "name": "mlflow",
       "category": "ml_library",
       "aliases": [],
-      "parents": []
+      "parents": [],
+      "concepts": [
+        "machine learning",
+        "mlops",
+        "model registry"
+      ]
     },
     {
       "name": "kubeflow",
@@ -4482,6 +6646,10 @@
       "aliases": [],
       "parents": [
         "kubernetes"
+      ],
+      "concepts": [
+        "machine learning",
+        "mlops"
       ]
     },
     {
@@ -4490,7 +6658,12 @@
       "aliases": [
         "data version control"
       ],
-      "parents": []
+      "parents": [],
+      "concepts": [
+        "machine learning",
+        "mlops",
+        "model versioning"
+      ]
     },
     {
       "name": "weights & biases",
@@ -4498,7 +6671,12 @@
       "aliases": [
         "wandb"
       ],
-      "parents": []
+      "parents": [],
+      "concepts": [
+        "machine learning",
+        "mlops",
+        "model monitoring"
+      ]
     },
     {
       "name": "ray",
@@ -4506,6 +6684,11 @@
       "aliases": [],
       "parents": [
         "python"
+      ],
+      "concepts": [
+        "machine learning",
+        "distributed training",
+        "distributed processing"
       ]
     },
     {
@@ -4514,6 +6697,9 @@
       "aliases": [],
       "parents": [
         "python"
+      ],
+      "concepts": [
+        "data analysis"
       ]
     },
     {
@@ -4525,6 +6711,9 @@
       ],
       "parents": [
         "python"
+      ],
+      "concepts": [
+        "columnar storage"
       ]
     },
     {
@@ -4535,6 +6724,10 @@
       ],
       "parents": [
         "python"
+      ],
+      "concepts": [
+        "machine learning",
+        "time series forecasting"
       ]
     },
     {
@@ -4543,6 +6736,10 @@
       "aliases": [],
       "parents": [
         "python"
+      ],
+      "concepts": [
+        "machine learning",
+        "explainable ai"
       ]
     },
     {
@@ -4551,6 +6748,10 @@
       "aliases": [],
       "parents": [
         "python"
+      ],
+      "concepts": [
+        "machine learning",
+        "hyperparameter tuning"
       ]
     },
     {
@@ -4561,6 +6762,11 @@
       ],
       "parents": [
         "pytorch"
+      ],
+      "concepts": [
+        "machine learning",
+        "deep learning",
+        "model training"
       ]
     },
     {
@@ -4569,6 +6775,10 @@
       "aliases": [],
       "parents": [
         "python"
+      ],
+      "concepts": [
+        "machine learning",
+        "deep learning"
       ]
     },
     {
@@ -4577,7 +6787,11 @@
       "aliases": [
         "onnx runtime"
       ],
-      "parents": []
+      "parents": [],
+      "concepts": [
+        "machine learning",
+        "model deployment"
+      ]
     },
     {
       "name": "tensorboard",
@@ -4585,6 +6799,10 @@
       "aliases": [],
       "parents": [
         "tensorflow"
+      ],
+      "concepts": [
+        "machine learning",
+        "model monitoring"
       ]
     },
     {
@@ -4593,6 +6811,11 @@
       "aliases": [],
       "parents": [
         "python"
+      ],
+      "concepts": [
+        "machine learning",
+        "natural language processing",
+        "topic modeling"
       ]
     },
     {
@@ -4603,6 +6826,10 @@
       ],
       "parents": [
         "hugging face transformers"
+      ],
+      "concepts": [
+        "machine learning",
+        "embeddings"
       ]
     },
     {
@@ -4611,7 +6838,11 @@
       "aliases": [
         "h2o.ai"
       ],
-      "parents": []
+      "parents": [],
+      "concepts": [
+        "machine learning",
+        "model training"
+      ]
     },
     {
       "name": "feast",
@@ -4621,6 +6852,10 @@
       ],
       "parents": [
         "python"
+      ],
+      "concepts": [
+        "machine learning",
+        "feature store"
       ]
     },
     {
@@ -4631,13 +6866,21 @@
       ],
       "parents": [
         "python"
+      ],
+      "concepts": [
+        "machine learning",
+        "model monitoring"
       ]
     },
     {
       "name": "cuda",
       "category": "ml_library",
       "aliases": [],
-      "parents": []
+      "parents": [],
+      "concepts": [
+        "gpu acceleration",
+        "parallel processing"
+      ]
     },
     {
       "name": "numba",
@@ -4645,6 +6888,9 @@
       "aliases": [],
       "parents": [
         "python"
+      ],
+      "concepts": [
+        "performance optimization"
       ]
     },
     {
@@ -4655,6 +6901,10 @@
       ],
       "parents": [
         "cuda"
+      ],
+      "concepts": [
+        "machine learning",
+        "gpu acceleration"
       ]
     },
     {
@@ -4663,7 +6913,11 @@
       "aliases": [
         "ultralytics"
       ],
-      "parents": []
+      "parents": [],
+      "concepts": [
+        "machine learning",
+        "object detection"
+      ]
     },
     {
       "name": "jupyter",
@@ -4674,6 +6928,9 @@
       ],
       "parents": [
         "python"
+      ],
+      "concepts": [
+        "data analysis"
       ]
     },
     {
@@ -4684,6 +6941,9 @@
       ],
       "parents": [
         "python"
+      ],
+      "concepts": [
+        "data analysis"
       ]
     },
     {
@@ -4692,6 +6952,12 @@
       "aliases": [],
       "parents": [
         "python"
+      ],
+      "concepts": [
+        "generative ai",
+        "large language models",
+        "ai agents",
+        "retrieval augmented generation"
       ]
     },
     {
@@ -4700,6 +6966,12 @@
       "aliases": [],
       "parents": [
         "langchain"
+      ],
+      "concepts": [
+        "generative ai",
+        "large language models",
+        "agentic workflows",
+        "ai agents"
       ]
     },
     {
@@ -4708,6 +6980,12 @@
       "aliases": [],
       "parents": [
         "langchain"
+      ],
+      "concepts": [
+        "generative ai",
+        "large language models",
+        "llm observability",
+        "llm evaluation"
       ]
     },
     {
@@ -4718,13 +6996,23 @@
       ],
       "parents": [
         "python"
+      ],
+      "concepts": [
+        "generative ai",
+        "large language models",
+        "retrieval augmented generation"
       ]
     },
     {
       "name": "semantic kernel",
       "category": "genai_framework",
       "aliases": [],
-      "parents": []
+      "parents": [],
+      "concepts": [
+        "generative ai",
+        "large language models",
+        "ai agents"
+      ]
     },
     {
       "name": "crewai",
@@ -4735,6 +7023,12 @@
       ],
       "parents": [
         "python"
+      ],
+      "concepts": [
+        "generative ai",
+        "large language models",
+        "ai agents",
+        "agentic workflows"
       ]
     },
     {
@@ -4743,6 +7037,12 @@
       "aliases": [],
       "parents": [
         "python"
+      ],
+      "concepts": [
+        "generative ai",
+        "large language models",
+        "ai agents",
+        "agentic workflows"
       ]
     },
     {
@@ -4751,7 +7051,13 @@
       "aliases": [
         "openai"
       ],
-      "parents": []
+      "parents": [],
+      "concepts": [
+        "generative ai",
+        "large language models",
+        "tool calling",
+        "structured outputs"
+      ]
     },
     {
       "name": "anthropic api",
@@ -4759,19 +7065,36 @@
       "aliases": [
         "claude api"
       ],
-      "parents": []
+      "parents": [],
+      "concepts": [
+        "generative ai",
+        "large language models",
+        "tool calling",
+        "structured outputs"
+      ]
     },
     {
       "name": "ollama",
       "category": "genai_framework",
       "aliases": [],
-      "parents": []
+      "parents": [],
+      "concepts": [
+        "generative ai",
+        "large language models",
+        "model deployment"
+      ]
     },
     {
       "name": "vllm",
       "category": "genai_framework",
       "aliases": [],
-      "parents": []
+      "parents": [],
+      "concepts": [
+        "generative ai",
+        "large language models",
+        "model deployment",
+        "real time inference"
+      ]
     },
     {
       "name": "haystack",
@@ -4779,6 +7102,12 @@
       "aliases": [],
       "parents": [
         "python"
+      ],
+      "concepts": [
+        "generative ai",
+        "large language models",
+        "retrieval augmented generation",
+        "semantic search"
       ]
     },
     {
@@ -4787,6 +7116,11 @@
       "aliases": [],
       "parents": [
         "python"
+      ],
+      "concepts": [
+        "generative ai",
+        "large language models",
+        "prompt engineering"
       ]
     },
     {
@@ -4797,6 +7131,12 @@
       ],
       "parents": [
         "pydantic"
+      ],
+      "concepts": [
+        "generative ai",
+        "large language models",
+        "ai agents",
+        "structured outputs"
       ]
     },
     {
@@ -4807,6 +7147,12 @@
       ],
       "parents": [
         "openai api"
+      ],
+      "concepts": [
+        "generative ai",
+        "large language models",
+        "ai agents",
+        "agentic workflows"
       ]
     },
     {
@@ -4817,6 +7163,12 @@
       ],
       "parents": [
         "gcp"
+      ],
+      "concepts": [
+        "generative ai",
+        "large language models",
+        "ai agents",
+        "agentic workflows"
       ]
     },
     {
@@ -4825,19 +7177,32 @@
       "aliases": [],
       "parents": [
         "python"
+      ],
+      "concepts": [
+        "generative ai",
+        "large language models"
       ]
     },
     {
       "name": "openrouter",
       "category": "genai_framework",
       "aliases": [],
-      "parents": []
+      "parents": [],
+      "concepts": [
+        "generative ai",
+        "large language models"
+      ]
     },
     {
       "name": "groq",
       "category": "genai_framework",
       "aliases": [],
-      "parents": []
+      "parents": [],
+      "concepts": [
+        "generative ai",
+        "large language models",
+        "real time inference"
+      ]
     },
     {
       "name": "llama.cpp",
@@ -4845,13 +7210,24 @@
       "aliases": [
         "llamacpp"
       ],
-      "parents": []
+      "parents": [],
+      "concepts": [
+        "generative ai",
+        "large language models",
+        "model deployment",
+        "quantization"
+      ]
     },
     {
       "name": "lm studio",
       "category": "genai_framework",
       "aliases": [],
-      "parents": []
+      "parents": [],
+      "concepts": [
+        "generative ai",
+        "large language models",
+        "model deployment"
+      ]
     },
     {
       "name": "gemini api",
@@ -4861,25 +7237,46 @@
       ],
       "parents": [
         "gcp"
+      ],
+      "concepts": [
+        "generative ai",
+        "large language models",
+        "tool calling",
+        "structured outputs"
       ]
     },
     {
       "name": "ragas",
       "category": "genai_framework",
       "aliases": [],
-      "parents": []
+      "parents": [],
+      "concepts": [
+        "generative ai",
+        "large language models",
+        "llm evaluation"
+      ]
     },
     {
       "name": "deepeval",
       "category": "genai_framework",
       "aliases": [],
-      "parents": []
+      "parents": [],
+      "concepts": [
+        "generative ai",
+        "large language models",
+        "llm evaluation"
+      ]
     },
     {
       "name": "langfuse",
       "category": "genai_framework",
       "aliases": [],
-      "parents": []
+      "parents": [],
+      "concepts": [
+        "generative ai",
+        "large language models",
+        "llm observability"
+      ]
     },
     {
       "name": "arize phoenix",
@@ -4887,13 +7284,23 @@
       "aliases": [
         "arize"
       ],
-      "parents": []
+      "parents": [],
+      "concepts": [
+        "generative ai",
+        "large language models",
+        "llm observability"
+      ]
     },
     {
       "name": "guardrails ai",
       "category": "genai_framework",
       "aliases": [],
-      "parents": []
+      "parents": [],
+      "concepts": [
+        "generative ai",
+        "large language models",
+        "ai guardrails"
+      ]
     },
     {
       "name": "model context protocol",
@@ -4901,19 +7308,32 @@
       "aliases": [
         "mcp"
       ],
-      "parents": []
+      "parents": [],
+      "concepts": [
+        "tool calling",
+        "ai agents"
+      ]
     },
     {
       "name": "claude code",
       "category": "ai_tool",
       "aliases": [],
-      "parents": []
+      "parents": [],
+      "concepts": [
+        "large language models",
+        "generative ai",
+        "ai agents"
+      ]
     },
     {
       "name": "cursor",
       "category": "ai_tool",
       "aliases": [],
-      "parents": []
+      "parents": [],
+      "concepts": [
+        "large language models",
+        "generative ai"
+      ]
     },
     {
       "name": "github copilot",
@@ -4923,31 +7343,53 @@
       ],
       "parents": [
         "github"
+      ],
+      "concepts": [
+        "large language models",
+        "generative ai"
       ]
     },
     {
       "name": "codex",
       "category": "ai_tool",
       "aliases": [],
-      "parents": []
+      "parents": [],
+      "concepts": [
+        "large language models",
+        "generative ai",
+        "ai agents"
+      ]
     },
     {
       "name": "antigravity",
       "category": "ai_tool",
       "aliases": [],
-      "parents": []
+      "parents": [],
+      "concepts": [
+        "large language models",
+        "generative ai",
+        "ai agents"
+      ]
     },
     {
       "name": "windsurf",
       "category": "ai_tool",
       "aliases": [],
-      "parents": []
+      "parents": [],
+      "concepts": [
+        "large language models",
+        "generative ai"
+      ]
     },
     {
       "name": "chatgpt",
       "category": "ai_tool",
       "aliases": [],
-      "parents": []
+      "parents": [],
+      "concepts": [
+        "large language models",
+        "generative ai"
+      ]
     },
     {
       "name": "microsoft copilot",
@@ -4956,7 +7398,11 @@
         "m365 copilot",
         "copilot 365"
       ],
-      "parents": []
+      "parents": [],
+      "concepts": [
+        "large language models",
+        "generative ai"
+      ]
     },
     {
       "name": "amazon q developer",
@@ -4966,61 +7412,95 @@
       ],
       "parents": [
         "aws"
+      ],
+      "concepts": [
+        "large language models",
+        "generative ai"
       ]
     },
     {
       "name": "tabnine",
       "category": "ai_tool",
       "aliases": [],
-      "parents": []
+      "parents": [],
+      "concepts": [
+        "large language models",
+        "generative ai"
+      ]
     },
     {
       "name": "replit",
       "category": "ai_tool",
       "aliases": [],
-      "parents": []
+      "parents": [],
+      "concepts": [
+        "generative ai"
+      ]
     },
     {
       "name": "v0",
       "category": "ai_tool",
       "aliases": [],
-      "parents": []
+      "parents": [],
+      "concepts": [
+        "generative ai"
+      ]
     },
     {
       "name": "lovable",
       "category": "ai_tool",
       "aliases": [],
-      "parents": []
+      "parents": [],
+      "concepts": [
+        "generative ai"
+      ]
     },
     {
       "name": "bolt.new",
       "category": "ai_tool",
       "aliases": [],
-      "parents": []
+      "parents": [],
+      "concepts": [
+        "generative ai"
+      ]
     },
     {
       "name": "aider",
       "category": "ai_tool",
       "aliases": [],
-      "parents": []
+      "parents": [],
+      "concepts": [
+        "large language models",
+        "generative ai",
+        "ai agents"
+      ]
     },
     {
       "name": "notebooklm",
       "category": "ai_tool",
       "aliases": [],
-      "parents": []
+      "parents": [],
+      "concepts": [
+        "retrieval augmented generation"
+      ]
     },
     {
       "name": "perplexity",
       "category": "ai_tool",
       "aliases": [],
-      "parents": []
+      "parents": [],
+      "concepts": [
+        "semantic search"
+      ]
     },
     {
       "name": "midjourney",
       "category": "ai_tool",
       "aliases": [],
-      "parents": []
+      "parents": [],
+      "concepts": [
+        "generative ai"
+      ]
     },
     {
       "name": "dall-e",
@@ -5028,7 +7508,10 @@
       "aliases": [
         "dalle"
       ],
-      "parents": []
+      "parents": [],
+      "concepts": [
+        "generative ai"
+      ]
     },
     {
       "name": "elevenlabs",
@@ -5036,19 +7519,29 @@
       "aliases": [
         "eleven labs"
       ],
-      "parents": []
+      "parents": [],
+      "concepts": [
+        "text to speech"
+      ]
     },
     {
       "name": "n8n",
       "category": "ai_tool",
       "aliases": [],
-      "parents": []
+      "parents": [],
+      "concepts": [
+        "process automation",
+        "agentic workflows"
+      ]
     },
     {
       "name": "zapier",
       "category": "ai_tool",
       "aliases": [],
-      "parents": []
+      "parents": [],
+      "concepts": [
+        "process automation"
+      ]
     },
     {
       "name": "make.com",
@@ -5056,37 +7549,56 @@
       "aliases": [
         "integromat"
       ],
-      "parents": []
+      "parents": [],
+      "concepts": [
+        "process automation"
+      ]
     },
     {
       "name": "retool",
       "category": "ai_tool",
       "aliases": [],
-      "parents": []
+      "parents": [],
+      "concepts": []
     },
     {
       "name": "dify",
       "category": "ai_tool",
       "aliases": [],
-      "parents": []
+      "parents": [],
+      "concepts": [
+        "ai agents",
+        "large language models"
+      ]
     },
     {
       "name": "flowise",
       "category": "ai_tool",
       "aliases": [],
-      "parents": []
+      "parents": [],
+      "concepts": [
+        "ai agents",
+        "large language models"
+      ]
     },
     {
       "name": "langflow",
       "category": "ai_tool",
       "aliases": [],
-      "parents": []
+      "parents": [],
+      "concepts": [
+        "ai agents",
+        "large language models"
+      ]
     },
     {
       "name": "botpress",
       "category": "ai_tool",
       "aliases": [],
-      "parents": []
+      "parents": [],
+      "concepts": [
+        "chatbots"
+      ]
     },
     {
       "name": "rest",
@@ -5096,25 +7608,38 @@
         "restful",
         "rest apis"
       ],
-      "parents": []
+      "parents": [],
+      "concepts": [
+        "api design"
+      ]
     },
     {
       "name": "graphql",
       "category": "protocol",
       "aliases": [],
-      "parents": []
+      "parents": [],
+      "concepts": [
+        "api design"
+      ]
     },
     {
       "name": "grpc",
       "category": "protocol",
       "aliases": [],
-      "parents": []
+      "parents": [],
+      "concepts": [
+        "api design"
+      ]
     },
     {
       "name": "soap",
       "category": "protocol",
       "aliases": [],
-      "parents": []
+      "parents": [],
+      "concepts": [
+        "api design",
+        "service oriented architecture"
+      ]
     },
     {
       "name": "websockets",
@@ -5122,7 +7647,10 @@
       "aliases": [
         "websocket"
       ],
-      "parents": []
+      "parents": [],
+      "concepts": [
+        "asynchronous programming"
+      ]
     },
     {
       "name": "oauth2",
@@ -5131,7 +7659,11 @@
         "oauth",
         "oauth 2.0"
       ],
-      "parents": []
+      "parents": [],
+      "concepts": [
+        "authentication",
+        "authorization"
+      ]
     },
     {
       "name": "openid connect",
@@ -5139,7 +7671,11 @@
       "aliases": [
         "oidc"
       ],
-      "parents": []
+      "parents": [],
+      "concepts": [
+        "authentication",
+        "single sign on"
+      ]
     },
     {
       "name": "jwt",
@@ -5147,13 +7683,20 @@
       "aliases": [
         "json web token"
       ],
-      "parents": []
+      "parents": [],
+      "concepts": [
+        "authentication"
+      ]
     },
     {
       "name": "saml",
       "category": "protocol",
       "aliases": [],
-      "parents": []
+      "parents": [],
+      "concepts": [
+        "authentication",
+        "single sign on"
+      ]
     },
     {
       "name": "openapi",
@@ -5161,19 +7704,29 @@
       "aliases": [
         "swagger"
       ],
-      "parents": []
+      "parents": [],
+      "concepts": [
+        "api design",
+        "technical documentation"
+      ]
     },
     {
       "name": "mqtt",
       "category": "protocol",
       "aliases": [],
-      "parents": []
+      "parents": [],
+      "concepts": [
+        "publish subscribe"
+      ]
     },
     {
       "name": "amqp",
       "category": "protocol",
       "aliases": [],
-      "parents": []
+      "parents": [],
+      "concepts": [
+        "message queues"
+      ]
     },
     {
       "name": "tcp/ip",
@@ -5182,7 +7735,10 @@
         "tcp",
         "tcp ip"
       ],
-      "parents": []
+      "parents": [],
+      "concepts": [
+        "networking"
+      ]
     },
     {
       "name": "http",
@@ -5190,13 +7746,20 @@
       "aliases": [
         "https"
       ],
-      "parents": []
+      "parents": [],
+      "concepts": [
+        "networking"
+      ]
     },
     {
       "name": "ssh",
       "category": "protocol",
       "aliases": [],
-      "parents": []
+      "parents": [],
+      "concepts": [
+        "networking",
+        "linux administration"
+      ]
     },
     {
       "name": "sftp",
@@ -5204,19 +7767,28 @@
       "aliases": [
         "ftp"
       ],
-      "parents": []
+      "parents": [],
+      "concepts": [
+        "networking"
+      ]
     },
     {
       "name": "ldap",
       "category": "protocol",
       "aliases": [],
-      "parents": []
+      "parents": [],
+      "concepts": [
+        "identity and access management"
+      ]
     },
     {
       "name": "smtp",
       "category": "protocol",
       "aliases": [],
-      "parents": []
+      "parents": [],
+      "concepts": [
+        "networking"
+      ]
     },
     {
       "name": "webhooks",
@@ -5224,7 +7796,10 @@
       "aliases": [
         "webhook"
       ],
-      "parents": []
+      "parents": [],
+      "concepts": [
+        "event driven architecture"
+      ]
     },
     {
       "name": "server-sent events",
@@ -5232,13 +7807,19 @@
       "aliases": [
         "sse"
       ],
-      "parents": []
+      "parents": [],
+      "concepts": [
+        "asynchronous programming"
+      ]
     },
     {
       "name": "odata",
       "category": "protocol",
       "aliases": [],
-      "parents": []
+      "parents": [],
+      "concepts": [
+        "api design"
+      ]
     },
     {
       "name": "hl7 fhir",
@@ -5247,13 +7828,15 @@
         "fhir",
         "hl7"
       ],
-      "parents": []
+      "parents": [],
+      "concepts": []
     },
     {
       "name": "webrtc",
       "category": "protocol",
       "aliases": [],
-      "parents": []
+      "parents": [],
+      "concepts": []
     },
     {
       "name": "tls",
@@ -5261,19 +7844,25 @@
       "aliases": [
         "ssl"
       ],
-      "parents": []
+      "parents": [],
+      "concepts": [
+        "encryption",
+        "cryptography"
+      ]
     },
     {
       "name": "json",
       "category": "format",
       "aliases": [],
-      "parents": []
+      "parents": [],
+      "concepts": []
     },
     {
       "name": "xml",
       "category": "format",
       "aliases": [],
-      "parents": []
+      "parents": [],
+      "concepts": []
     },
     {
       "name": "yaml",
@@ -5281,13 +7870,15 @@
       "aliases": [
         "yml"
       ],
-      "parents": []
+      "parents": [],
+      "concepts": []
     },
     {
       "name": "csv",
       "category": "format",
       "aliases": [],
-      "parents": []
+      "parents": [],
+      "concepts": []
     },
     {
       "name": "parquet",
@@ -5295,7 +7886,10 @@
       "aliases": [
         "apache parquet"
       ],
-      "parents": []
+      "parents": [],
+      "concepts": [
+        "columnar storage"
+      ]
     },
     {
       "name": "avro",
@@ -5303,7 +7897,10 @@
       "aliases": [
         "apache avro"
       ],
-      "parents": []
+      "parents": [],
+      "concepts": [
+        "schema evolution"
+      ]
     },
     {
       "name": "protobuf",
@@ -5311,13 +7908,19 @@
       "aliases": [
         "protocol buffers"
       ],
-      "parents": []
+      "parents": [],
+      "concepts": [
+        "schema evolution"
+      ]
     },
     {
       "name": "orc",
       "category": "format",
       "aliases": [],
-      "parents": []
+      "parents": [],
+      "concepts": [
+        "columnar storage"
+      ]
     },
     {
       "name": "markdown",
@@ -5325,25 +7928,29 @@
       "aliases": [
         "md"
       ],
-      "parents": []
+      "parents": [],
+      "concepts": []
     },
     {
       "name": "toml",
       "category": "format",
       "aliases": [],
-      "parents": []
+      "parents": [],
+      "concepts": []
     },
     {
       "name": "xlsx",
       "category": "format",
       "aliases": [],
-      "parents": []
+      "parents": [],
+      "concepts": []
     },
     {
       "name": "hdf5",
       "category": "format",
       "aliases": [],
-      "parents": []
+      "parents": [],
+      "concepts": []
     },
     {
       "name": "jsonl",
@@ -5351,13 +7958,15 @@
       "aliases": [
         "ndjson"
       ],
-      "parents": []
+      "parents": [],
+      "concepts": []
     },
     {
       "name": "sap",
       "category": "enterprise",
       "aliases": [],
-      "parents": []
+      "parents": [],
+      "concepts": []
     },
     {
       "name": "sap ariba",
@@ -5367,13 +7976,19 @@
       ],
       "parents": [
         "sap"
+      ],
+      "concepts": [
+        "vendor management"
       ]
     },
     {
       "name": "coupa",
       "category": "enterprise",
       "aliases": [],
-      "parents": []
+      "parents": [],
+      "concepts": [
+        "vendor management"
+      ]
     },
     {
       "name": "gep smart",
@@ -5381,31 +7996,43 @@
       "aliases": [
         "gep"
       ],
-      "parents": []
+      "parents": [],
+      "concepts": [
+        "vendor management"
+      ]
     },
     {
       "name": "zycus",
       "category": "enterprise",
       "aliases": [],
-      "parents": []
+      "parents": [],
+      "concepts": [
+        "vendor management"
+      ]
     },
     {
       "name": "salesforce",
       "category": "enterprise",
       "aliases": [],
-      "parents": []
+      "parents": [],
+      "concepts": []
     },
     {
       "name": "servicenow",
       "category": "enterprise",
       "aliases": [],
-      "parents": []
+      "parents": [],
+      "concepts": [
+        "incident management",
+        "itil"
+      ]
     },
     {
       "name": "workday",
       "category": "enterprise",
       "aliases": [],
-      "parents": []
+      "parents": [],
+      "concepts": []
     },
     {
       "name": "dynamics 365",
@@ -5413,19 +8040,24 @@
       "aliases": [
         "microsoft dynamics"
       ],
-      "parents": []
+      "parents": [],
+      "concepts": []
     },
     {
       "name": "sharepoint",
       "category": "enterprise",
       "aliases": [],
-      "parents": []
+      "parents": [],
+      "concepts": []
     },
     {
       "name": "power automate",
       "category": "enterprise",
       "aliases": [],
-      "parents": []
+      "parents": [],
+      "concepts": [
+        "process automation"
+      ]
     },
     {
       "name": "power apps",
@@ -5433,7 +8065,10 @@
       "aliases": [
         "powerapps"
       ],
-      "parents": []
+      "parents": [],
+      "concepts": [
+        "process automation"
+      ]
     },
     {
       "name": "osisoft pi",
@@ -5443,7 +8078,10 @@
         "aveva pi",
         "pi system"
       ],
-      "parents": []
+      "parents": [],
+      "concepts": [
+        "time series data"
+      ]
     },
     {
       "name": "sap hana",
@@ -5453,6 +8091,10 @@
       ],
       "parents": [
         "sap"
+      ],
+      "concepts": [
+        "relational databases",
+        "olap"
       ]
     },
     {
@@ -5464,6 +8106,9 @@
       ],
       "parents": [
         "sap"
+      ],
+      "concepts": [
+        "data warehousing"
       ]
     },
     {
@@ -5475,7 +8120,8 @@
       ],
       "parents": [
         "sap"
-      ]
+      ],
+      "concepts": []
     },
     {
       "name": "sap fiori",
@@ -5485,7 +8131,8 @@
       ],
       "parents": [
         "sap"
-      ]
+      ],
+      "concepts": []
     },
     {
       "name": "sap successfactors",
@@ -5495,7 +8142,8 @@
       ],
       "parents": [
         "sap"
-      ]
+      ],
+      "concepts": []
     },
     {
       "name": "oracle e-business suite",
@@ -5503,25 +8151,29 @@
       "aliases": [
         "oracle ebs"
       ],
-      "parents": []
+      "parents": [],
+      "concepts": []
     },
     {
       "name": "peoplesoft",
       "category": "enterprise",
       "aliases": [],
-      "parents": []
+      "parents": [],
+      "concepts": []
     },
     {
       "name": "jd edwards",
       "category": "enterprise",
       "aliases": [],
-      "parents": []
+      "parents": [],
+      "concepts": []
     },
     {
       "name": "siebel",
       "category": "enterprise",
       "aliases": [],
-      "parents": []
+      "parents": [],
+      "concepts": []
     },
     {
       "name": "netsuite",
@@ -5529,7 +8181,8 @@
       "aliases": [
         "oracle netsuite"
       ],
-      "parents": []
+      "parents": [],
+      "concepts": []
     },
     {
       "name": "odoo",
@@ -5537,7 +8190,8 @@
       "aliases": [],
       "parents": [
         "python"
-      ]
+      ],
+      "concepts": []
     },
     {
       "name": "dynamics business central",
@@ -5546,19 +8200,24 @@
         "business central",
         "dynamics nav"
       ],
-      "parents": []
+      "parents": [],
+      "concepts": []
     },
     {
       "name": "hubspot",
       "category": "enterprise",
       "aliases": [],
-      "parents": []
+      "parents": [],
+      "concepts": [
+        "marketing analytics"
+      ]
     },
     {
       "name": "zendesk",
       "category": "enterprise",
       "aliases": [],
-      "parents": []
+      "parents": [],
+      "concepts": []
     },
     {
       "name": "veeva",
@@ -5566,37 +8225,54 @@
       "aliases": [
         "veeva vault"
       ],
-      "parents": []
+      "parents": [],
+      "concepts": []
     },
     {
       "name": "active directory",
       "category": "enterprise",
       "aliases": [],
-      "parents": []
+      "parents": [],
+      "concepts": [
+        "identity and access management"
+      ]
     },
     {
       "name": "microsoft teams",
       "category": "enterprise",
       "aliases": [],
-      "parents": []
+      "parents": [],
+      "concepts": []
     },
     {
       "name": "alteryx",
       "category": "tool",
       "aliases": [],
-      "parents": []
+      "parents": [],
+      "concepts": [
+        "etl",
+        "data analysis"
+      ]
     },
     {
       "name": "knime",
       "category": "tool",
       "aliases": [],
-      "parents": []
+      "parents": [],
+      "concepts": [
+        "etl",
+        "data analysis"
+      ]
     },
     {
       "name": "sas",
       "category": "tool",
       "aliases": [],
-      "parents": []
+      "parents": [],
+      "concepts": [
+        "statistics",
+        "data analysis"
+      ]
     },
     {
       "name": "spss",
@@ -5604,31 +8280,44 @@
       "aliases": [
         "ibm spss"
       ],
-      "parents": []
+      "parents": [],
+      "concepts": [
+        "statistics",
+        "data analysis"
+      ]
     },
     {
       "name": "jira",
       "category": "tool",
       "aliases": [],
-      "parents": []
+      "parents": [],
+      "concepts": [
+        "project management"
+      ]
     },
     {
       "name": "confluence",
       "category": "tool",
       "aliases": [],
-      "parents": []
+      "parents": [],
+      "concepts": [
+        "technical documentation",
+        "knowledge sharing"
+      ]
     },
     {
       "name": "figma",
       "category": "tool",
       "aliases": [],
-      "parents": []
+      "parents": [],
+      "concepts": []
     },
     {
       "name": "visual studio",
       "category": "tool",
       "aliases": [],
-      "parents": []
+      "parents": [],
+      "concepts": []
     },
     {
       "name": "visual studio code",
@@ -5637,7 +8326,8 @@
         "vs code",
         "vscode"
       ],
-      "parents": []
+      "parents": [],
+      "concepts": []
     },
     {
       "name": "intellij idea",
@@ -5645,25 +8335,31 @@
       "aliases": [
         "intellij"
       ],
-      "parents": []
+      "parents": [],
+      "concepts": []
     },
     {
       "name": "pycharm",
       "category": "tool",
       "aliases": [],
-      "parents": []
+      "parents": [],
+      "concepts": []
     },
     {
       "name": "eclipse",
       "category": "tool",
       "aliases": [],
-      "parents": []
+      "parents": [],
+      "concepts": []
     },
     {
       "name": "dbeaver",
       "category": "tool",
       "aliases": [],
-      "parents": []
+      "parents": [],
+      "concepts": [
+        "relational databases"
+      ]
     },
     {
       "name": "pgadmin",
@@ -5671,6 +8367,9 @@
       "aliases": [],
       "parents": [
         "postgresql"
+      ],
+      "concepts": [
+        "relational databases"
       ]
     },
     {
@@ -5681,6 +8380,9 @@
       ],
       "parents": [
         "sql server"
+      ],
+      "concepts": [
+        "relational databases"
       ]
     },
     {
@@ -5692,25 +8394,38 @@
       ],
       "parents": [
         "jupyter"
+      ],
+      "concepts": [
+        "data analysis"
       ]
     },
     {
       "name": "notion",
       "category": "tool",
       "aliases": [],
-      "parents": []
+      "parents": [],
+      "concepts": [
+        "technical documentation"
+      ]
     },
     {
       "name": "trello",
       "category": "tool",
       "aliases": [],
-      "parents": []
+      "parents": [],
+      "concepts": [
+        "project management",
+        "kanban"
+      ]
     },
     {
       "name": "asana",
       "category": "tool",
       "aliases": [],
-      "parents": []
+      "parents": [],
+      "concepts": [
+        "project management"
+      ]
     },
     {
       "name": "monday.com",
@@ -5718,19 +8433,26 @@
       "aliases": [
         "monday"
       ],
-      "parents": []
+      "parents": [],
+      "concepts": [
+        "project management"
+      ]
     },
     {
       "name": "clickup",
       "category": "tool",
       "aliases": [],
-      "parents": []
+      "parents": [],
+      "concepts": [
+        "project management"
+      ]
     },
     {
       "name": "miro",
       "category": "tool",
       "aliases": [],
-      "parents": []
+      "parents": [],
+      "concepts": []
     },
     {
       "name": "draw.io",
@@ -5738,43 +8460,50 @@
       "aliases": [
         "diagrams.net"
       ],
-      "parents": []
+      "parents": [],
+      "concepts": []
     },
     {
       "name": "lucidchart",
       "category": "tool",
       "aliases": [],
-      "parents": []
+      "parents": [],
+      "concepts": []
     },
     {
       "name": "slack",
       "category": "tool",
       "aliases": [],
-      "parents": []
+      "parents": [],
+      "concepts": []
     },
     {
       "name": "storybook",
       "category": "tool",
       "aliases": [],
-      "parents": []
+      "parents": [],
+      "concepts": []
     },
     {
       "name": "adobe xd",
       "category": "tool",
       "aliases": [],
-      "parents": []
+      "parents": [],
+      "concepts": []
     },
     {
       "name": "sketch",
       "category": "tool",
       "aliases": [],
-      "parents": []
+      "parents": [],
+      "concepts": []
     },
     {
       "name": "canva",
       "category": "tool",
       "aliases": [],
-      "parents": []
+      "parents": [],
+      "concepts": []
     },
     {
       "name": "wordpress",
@@ -5784,7 +8513,8 @@
       ],
       "parents": [
         "php"
-      ]
+      ],
+      "concepts": []
     },
     {
       "name": "drupal",
@@ -5792,7 +8522,8 @@
       "aliases": [],
       "parents": [
         "php"
-      ]
+      ],
+      "concepts": []
     },
     {
       "name": "joomla",
@@ -5800,7 +8531,8 @@
       "aliases": [],
       "parents": [
         "php"
-      ]
+      ],
+      "concepts": []
     },
     {
       "name": "strapi",
@@ -5808,13 +8540,19 @@
       "aliases": [],
       "parents": [
         "node.js"
+      ],
+      "concepts": [
+        "api design"
       ]
     },
     {
       "name": "contentful",
       "category": "cms",
       "aliases": [],
-      "parents": []
+      "parents": [],
+      "concepts": [
+        "api design"
+      ]
     },
     {
       "name": "sitecore",
@@ -5822,7 +8560,8 @@
       "aliases": [],
       "parents": [
         ".net"
-      ]
+      ],
+      "concepts": []
     },
     {
       "name": "adobe experience manager",
@@ -5832,13 +8571,15 @@
       ],
       "parents": [
         "java"
-      ]
+      ],
+      "concepts": []
     },
     {
       "name": "shopify",
       "category": "ecommerce",
       "aliases": [],
-      "parents": []
+      "parents": [],
+      "concepts": []
     },
     {
       "name": "magento",
@@ -5848,13 +8589,15 @@
       ],
       "parents": [
         "php"
-      ]
+      ],
+      "concepts": []
     },
     {
       "name": "vtex",
       "category": "ecommerce",
       "aliases": [],
-      "parents": []
+      "parents": [],
+      "concepts": []
     },
     {
       "name": "woocommerce",
@@ -5862,7 +8605,8 @@
       "aliases": [],
       "parents": [
         "wordpress"
-      ]
+      ],
+      "concepts": []
     },
     {
       "name": "prestashop",
@@ -5870,7 +8614,8 @@
       "aliases": [],
       "parents": [
         "php"
-      ]
+      ],
+      "concepts": []
     },
     {
       "name": "salesforce commerce cloud",
@@ -5880,7 +8625,8 @@
       ],
       "parents": [
         "salesforce"
-      ]
+      ],
+      "concepts": []
     },
     {
       "name": "tiendanube",
@@ -5888,13 +8634,15 @@
       "aliases": [
         "nuvemshop"
       ],
-      "parents": []
+      "parents": [],
+      "concepts": []
     },
     {
       "name": "stripe",
       "category": "payments",
       "aliases": [],
-      "parents": []
+      "parents": [],
+      "concepts": []
     },
     {
       "name": "mercado pago",
@@ -5902,25 +8650,29 @@
       "aliases": [
         "mercadopago"
       ],
-      "parents": []
+      "parents": [],
+      "concepts": []
     },
     {
       "name": "paypal",
       "category": "payments",
       "aliases": [],
-      "parents": []
+      "parents": [],
+      "concepts": []
     },
     {
       "name": "adyen",
       "category": "payments",
       "aliases": [],
-      "parents": []
+      "parents": [],
+      "concepts": []
     },
     {
       "name": "dlocal",
       "category": "payments",
       "aliases": [],
-      "parents": []
+      "parents": [],
+      "concepts": []
     },
     {
       "name": "great expectations",
@@ -5928,6 +8680,10 @@
       "aliases": [],
       "parents": [
         "python"
+      ],
+      "concepts": [
+        "data quality",
+        "data profiling"
       ]
     },
     {
@@ -5936,7 +8692,11 @@
       "aliases": [
         "soda core"
       ],
-      "parents": []
+      "parents": [],
+      "concepts": [
+        "data quality",
+        "data profiling"
+      ]
     },
     {
       "name": "deequ",
@@ -5944,13 +8704,22 @@
       "aliases": [],
       "parents": [
         "apache spark"
+      ],
+      "concepts": [
+        "data quality",
+        "data profiling"
       ]
     },
     {
       "name": "monte carlo",
       "category": "data_quality",
       "aliases": [],
-      "parents": []
+      "parents": [],
+      "concepts": [
+        "data quality",
+        "data profiling",
+        "data observability"
+      ]
     },
     {
       "name": "gpt",
@@ -5964,6 +8733,10 @@
       ],
       "parents": [
         "openai api"
+      ],
+      "concepts": [
+        "large language models",
+        "generative ai"
       ]
     },
     {
@@ -5976,6 +8749,10 @@
       ],
       "parents": [
         "anthropic api"
+      ],
+      "concepts": [
+        "large language models",
+        "generative ai"
       ]
     },
     {
@@ -5986,7 +8763,11 @@
         "gemini flash",
         "google gemini"
       ],
-      "parents": []
+      "parents": [],
+      "concepts": [
+        "large language models",
+        "generative ai"
+      ]
     },
     {
       "name": "llama",
@@ -5996,7 +8777,11 @@
         "llama 3",
         "meta llama"
       ],
-      "parents": []
+      "parents": [],
+      "concepts": [
+        "large language models",
+        "generative ai"
+      ]
     },
     {
       "name": "mistral",
@@ -6004,55 +8789,96 @@
       "aliases": [
         "mixtral"
       ],
-      "parents": []
+      "parents": [],
+      "concepts": [
+        "large language models",
+        "generative ai"
+      ]
     },
     {
       "name": "deepseek",
       "category": "model",
       "aliases": [],
-      "parents": []
+      "parents": [],
+      "concepts": [
+        "large language models",
+        "generative ai"
+      ]
     },
     {
       "name": "qwen",
       "category": "model",
       "aliases": [],
-      "parents": []
+      "parents": [],
+      "concepts": [
+        "large language models",
+        "generative ai"
+      ]
     },
     {
       "name": "bert",
       "category": "model",
       "aliases": [],
-      "parents": []
+      "parents": [],
+      "concepts": [
+        "natural language processing",
+        "transformer architecture"
+      ]
     },
     {
       "name": "stable diffusion",
       "category": "model",
       "aliases": [],
-      "parents": []
+      "parents": [],
+      "concepts": [
+        "generative ai",
+        "computer vision"
+      ]
     },
     {
       "name": "whisper",
       "category": "model",
       "aliases": [],
-      "parents": []
+      "parents": [],
+      "concepts": [
+        "speech recognition"
+      ]
     },
     {
       "name": "auth0",
       "category": "security_tool",
       "aliases": [],
-      "parents": []
+      "parents": [],
+      "concepts": [
+        "cybersecurity",
+        "authentication",
+        "identity and access management",
+        "single sign on"
+      ]
     },
     {
       "name": "okta",
       "category": "security_tool",
       "aliases": [],
-      "parents": []
+      "parents": [],
+      "concepts": [
+        "cybersecurity",
+        "authentication",
+        "identity and access management",
+        "single sign on"
+      ]
     },
     {
       "name": "keycloak",
       "category": "security_tool",
       "aliases": [],
-      "parents": []
+      "parents": [],
+      "concepts": [
+        "cybersecurity",
+        "authentication",
+        "identity and access management",
+        "single sign on"
+      ]
     },
     {
       "name": "hashicorp vault",
@@ -6060,13 +8886,23 @@
       "aliases": [
         "vault"
       ],
-      "parents": []
+      "parents": [],
+      "concepts": [
+        "cybersecurity",
+        "secrets management",
+        "key management"
+      ]
     },
     {
       "name": "snyk",
       "category": "security_tool",
       "aliases": [],
-      "parents": []
+      "parents": [],
+      "concepts": [
+        "cybersecurity",
+        "vulnerability management",
+        "static code analysis"
+      ]
     },
     {
       "name": "owasp zap",
@@ -6074,7 +8910,11 @@
       "aliases": [
         "zap"
       ],
-      "parents": []
+      "parents": [],
+      "concepts": [
+        "cybersecurity",
+        "penetration testing"
+      ]
     },
     {
       "name": "burp suite",
@@ -6082,61 +8922,105 @@
       "aliases": [
         "burp"
       ],
-      "parents": []
+      "parents": [],
+      "concepts": [
+        "cybersecurity",
+        "penetration testing"
+      ]
     },
     {
       "name": "checkmarx",
       "category": "security_tool",
       "aliases": [],
-      "parents": []
+      "parents": [],
+      "concepts": [
+        "cybersecurity",
+        "static code analysis",
+        "application security"
+      ]
     },
     {
       "name": "fortify",
       "category": "security_tool",
       "aliases": [],
-      "parents": []
+      "parents": [],
+      "concepts": [
+        "cybersecurity",
+        "static code analysis",
+        "application security"
+      ]
     },
     {
       "name": "veracode",
       "category": "security_tool",
       "aliases": [],
-      "parents": []
+      "parents": [],
+      "concepts": [
+        "cybersecurity",
+        "static code analysis",
+        "application security"
+      ]
     },
     {
       "name": "trivy",
       "category": "security_tool",
       "aliases": [],
-      "parents": []
+      "parents": [],
+      "concepts": [
+        "cybersecurity",
+        "vulnerability management"
+      ]
     },
     {
       "name": "wazuh",
       "category": "security_tool",
       "aliases": [],
-      "parents": []
+      "parents": [],
+      "concepts": [
+        "cybersecurity",
+        "siem"
+      ]
     },
     {
       "name": "qualys",
       "category": "security_tool",
       "aliases": [],
-      "parents": []
+      "parents": [],
+      "concepts": [
+        "cybersecurity",
+        "vulnerability management"
+      ]
     },
     {
       "name": "nessus",
       "category": "security_tool",
       "aliases": [],
-      "parents": []
+      "parents": [],
+      "concepts": [
+        "cybersecurity",
+        "vulnerability management"
+      ]
     },
     {
       "name": "wireshark",
       "category": "security_tool",
       "aliases": [],
-      "parents": []
+      "parents": [],
+      "concepts": [
+        "cybersecurity",
+        "network security",
+        "networking"
+      ]
     },
     {
       "name": "metasploit",
       "category": "security_tool",
       "aliases": [],
-      "parents": []
+      "parents": [],
+      "concepts": [
+        "cybersecurity",
+        "penetration testing"
+      ]
     }
   ]
 }
