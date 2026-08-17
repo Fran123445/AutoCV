@@ -2,7 +2,7 @@ import sqlite3
 
 import pytest
 
-from etl.jobs.load import _solve_seniority_id
+from etl.dims import solve_seniority_id
 
 
 def label_of(connection: sqlite3.Connection, seniority_id: int | None) -> str | None:
@@ -24,14 +24,14 @@ def label_of(connection: sqlite3.Connection, seniority_id: int | None) -> str | 
 
 
 # --------------------------------------------------------------------------
-# _solve_seniority_id, when the posting names a level
+# solve_seniority_id, when the posting names a level
 # --------------------------------------------------------------------------
 
 @pytest.mark.parametrize(
     "label", ["trainee", "junior", "ssr", "senior", "lead"]
 )
 def test_a_named_level_resolves_to_its_own_row(seeded_db, label):
-    solved = _solve_seniority_id(seeded_db, label, None)
+    solved = solve_seniority_id(seeded_db, label, None)
 
     assert label_of(seeded_db, solved) == label
 
@@ -42,13 +42,13 @@ def test_the_label_wins_over_the_years(seeded_db):
     says "Senior" and then asks for 1 year of experience is describing the role
     it wants, badly, and the word is still what it called the role.
     """
-    solved = _solve_seniority_id(seeded_db, "senior", 1)
+    solved = solve_seniority_id(seeded_db, "senior", 1)
 
     assert label_of(seeded_db, solved) == "senior"
 
 
 # --------------------------------------------------------------------------
-# _solve_seniority_id, when the posting only states years
+# solve_seniority_id, when the posting only states years
 # --------------------------------------------------------------------------
 
 @pytest.mark.parametrize("min_experience, expected", [
@@ -84,13 +84,13 @@ def test_the_label_wins_over_the_years(seeded_db):
 def test_years_fall_back_to_the_label_covering_them(
     seeded_db, min_experience, expected
 ):
-    solved = _solve_seniority_id(seeded_db, None, min_experience)
+    solved = solve_seniority_id(seeded_db, None, min_experience)
 
     assert label_of(seeded_db, solved) == expected
 
 # --------------------------------------------------------------------------
-# _solve_seniority_id, when the posting states neither
+# solve_seniority_id, when the posting states neither
 # --------------------------------------------------------------------------
 
 def test_neither_a_label_nor_years_is_none(seeded_db):
-    assert _solve_seniority_id(seeded_db, None, None) is None
+    assert solve_seniority_id(seeded_db, None, None) is None

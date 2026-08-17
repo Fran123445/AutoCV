@@ -1,78 +1,12 @@
 import sqlite3
 
-# The dimensions are shared with the job side and seeded once, so the lookups
-# are too rather than written twice.
-from etl.jobs.load import (
-    UnknownSeedValue,
-    _solve_concept_name_id as solve_concept_name_id,
-    _solve_technology_name_id as solve_technology_name_id,
+from etl.candidate import (
+    DEFAULT_USER_ID,
+    descriptions_by_name,
+    load_project_bridge,
+    solve_user_id,
 )
-
-
-# Multiuser schema, one user in practice. The row carries nothing but a
-# birth_date nobody fills, so it is created on demand instead of seeded.
-DEFAULT_USER_ID = 1
-
-
-def _solve_user_id(connection: sqlite3.Connection, user_id: int) -> int:
-    """
-    Makes sure the user the project hangs off exists.
-
-    Args:
-        connection (sqlite3.Connection): Open connection to the database.
-        user_id (int): The user the projects belong to.
-
-    Returns:
-        int: The same id, now guaranteed to satisfy the foreign key.
-    """
-    connection.execute(
-        "INSERT INTO FactUser (id) VALUES (?) ON CONFLICT(id) DO NOTHING",
-        (user_id,),
-    )
-
-    return user_id
-
-
-def _descriptions_by_name(descriptions: dict, kind: str) -> dict[str, str | None]:
-    """
-    Index one kind of description by the name it describes.
-
-    Args:
-        descriptions (dict): The describer's output. Missing a key entirely when
-            that kind had nothing to describe.
-        kind (str): 'technologies' or 'concepts'.
-
-    Returns:
-        dict[str, str | None]: Canonical name to its phrase, or to None.
-    """
-    return {entry["name"]: entry["descr"] for entry in descriptions.get(kind, [])}
-
-
-def _load_bridge(
-    connection: sqlite3.Connection,
-    table: str,
-    column: str,
-    project_id: int,
-    entries: list[tuple[int, str | None]],
-):
-    """
-    Insert one project's rows into ProjectTechnologies or ProjectConcepts.
-
-    Args:
-        connection (sqlite3.Connection): Open connection to the database.
-        table (str): Bridge table name.
-        column (str): Column holding the dimension id on that table.
-        project_id (int): Project id the rows hang off.
-        entries (list[tuple[int, str | None]]): Dimension id and its phrase.
-    """
-    connection.executemany(
-        f"""
-        INSERT INTO {table} (project_id, {column}, descr)
-        VALUES (?, ?, ?)
-        ON CONFLICT(project_id, {column}) DO NOTHING
-        """,
-        [(project_id, dimension_id, descr) for dimension_id, descr in entries],
-    )
+from etl.dims import solve_concept_name_id, solve_technology_name_id
 
 
 def load(
@@ -113,7 +47,7 @@ def load(
             ON CONFLICT(source_path) DO NOTHING
             """,
             (
-                _solve_user_id(connection, user_id),
+                solve_user_id(connection, user_id),
                 narrative["task_desc"],
                 transformed_data["path"],
             ),
@@ -126,8 +60,8 @@ def load(
 
         project_id = cursor.lastrowid
 
-        technology_descriptions = _descriptions_by_name(descriptions, "technologies")
-        _load_bridge(
+        technology_descriptions = descriptions_by_name(descriptions, "technologies")
+        load_project_bridge(
             connection,
             "ProjectTechnologies",
             "technology_id",
@@ -141,8 +75,8 @@ def load(
             ],
         )
 
-        concept_descriptions = _descriptions_by_name(descriptions, "concepts")
-        _load_bridge(
+        concept_descriptions = descriptions_by_name(descriptions, "concepts")
+        load_project_bridge(
             connection,
             "ProjectConcepts",
             "concept_id",

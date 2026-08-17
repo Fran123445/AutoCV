@@ -1,22 +1,13 @@
 import sqlite3
 
-# The dimensions are shared with the other two pipelines and seeded once, so the
-# lookups are too rather than written a third time. The project bridges come from
-# the projects side for the same reason: a project born of a job writes the same
-# two tables with the same columns as one read off a repository.
-from etl.jobs.load import (
-    UnknownSeedValue,
-    _solve_company_name_id as solve_company_name_id,
-    _solve_concept_name_id as solve_concept_name_id,
-    _solve_degree_id as solve_degree_id,
-    _solve_role_id as solve_role_id,
-    _solve_seniority_id as solve_seniority_id,
-    _solve_technology_name_id as solve_technology_name_id,
-)
-from etl.projects.load import (
-    DEFAULT_USER_ID,
-    _descriptions_by_name as descriptions_by_name,
-    _load_bridge as load_project_bridge,
+from etl.candidate import DEFAULT_USER_ID, descriptions_by_name, load_project_bridge
+from etl.dims import (
+    solve_company_name_id,
+    solve_concept_name_id,
+    solve_degree_id,
+    solve_role_id,
+    solve_seniority_id,
+    solve_technology_name_id,
 )
 
 
