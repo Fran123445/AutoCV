@@ -28,8 +28,27 @@ def _parse_date(raw_date: str | None) -> str | None:
         raise ValueError(f"invalid date: {raw_date!r}")
     return raw_date
 
-def _transform_profile(experience: Experience):
-    pass
+def _transform_profile(experience: Experience) -> dict:
+    """
+    Map the profile block onto FactUser + UserLink shape.
+
+    Args:
+        experience (Experience): The parsed experience file.
+
+    Returns:
+        dict: full_name, email, phone, location, birth_date, and links
+            (kind/url pairs) for FactUser and UserLink.
+    """
+    profile = experience.profile
+
+    return {
+        "full_name": profile.full_name,
+        "email": profile.email,
+        "phone": profile.phone,
+        "location": profile.location,
+        "birth_date": _parse_date(profile.birth_date),
+        "links": [{"kind": link.kind, "url": link.url} for link in profile.link],
+    }
 
 def _transform_education(experience: Experience):
     pass
