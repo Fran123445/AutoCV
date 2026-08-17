@@ -50,8 +50,30 @@ def _transform_profile(experience: Experience) -> dict:
         "links": [{"kind": link.kind, "url": link.url} for link in profile.link],
     }
 
-def _transform_education(experience: Experience):
-    pass
+def _transform_education(experience: Experience) -> list[dict]:
+    """
+    Map each education block onto UserEducation shape.
+
+    DimDegree is seeded from seeds/degrees.json rather than classified here:
+    the degree name is expected already canonical and passes through as-is.
+    An unrecognised one is not this stage's problem to catch — load resolves
+    it against DimDegree and raises UnknownSeedValue there.
+
+    Args:
+        experience (Experience): The parsed experience file.
+
+    Returns:
+        list[dict]: degree, institution, start_date, end_date per block.
+    """
+    return [
+        {
+            "degree": education.degree,
+            "institution": education.institution,
+            "start_date": _parse_date(education.start),
+            "end_date": _parse_date(education.end),
+        }
+        for education in experience.education
+    ]
 
 def _transform_job(experience: Experience):
     pass
