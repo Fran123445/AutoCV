@@ -1,16 +1,13 @@
 """
 The response model the describe passes share.
 
-Two pipelines ask the same question of different evidence: what part did each
-technology and concept play in this project. The projects side reads a source
-sample, the experience side reads the candidate's own account, and the prompts
-have almost nothing in common — but the shape of the answer is identical, and
-so is the trick that makes it safe. Only the names the earlier passes found are
-representable, which is what stops a description of a technology the project
-never used, or a rename of one it did.
-
-Lives here rather than in either task package because it holds no prompt and
-belongs to neither pipeline, the same reason the registries do.
+Two pipelines ask the same question of different evidence — a source sample
+for projects, the candidate's own account for experience — but the shape of
+the answer, and the trick that makes it safe, is identical: only names the
+earlier passes found are representable, so a description can't invent a
+technology or rename one that was used. Lives here rather than in either task
+package because it belongs to neither pipeline, the same reason the
+registries do.
 """
 
 from typing import Literal

@@ -5,18 +5,12 @@ from llm.registries.technologies import drop_technologies
 from .models import JobProjectNarrative
 
 
-# The rule on numbers is the opposite of the projects narrator's, for the same
-# reason it is inverted in the day_to_day narrator: that pass reads source code,
-# where a figure the model produces was invented by definition, and this one
-# reads testimony, where "de cinco horas a unos veinte minutos" is the claim of
-# the only person who can make it.
-#
-# The rule with no counterpart on either side is attribution. A repository has
-# no author to disagree with, and a day_to_day describes a role rather than a
-# piece of work; a project story is where a candidate writes down what they did
-# and what a colleague did, in the same paragraph, and a description that
-# quietly folds the second into the first is the one way this pass can turn an
-# honest account into a false CV.
+# The numbers rule mirrors the day_to_day narrator's and inverts the projects
+# narrator's, since this pass reads testimony rather than source code. It also
+# carries a rule neither of those has: attribution. A project story is where a
+# candidate writes down what they did and what a colleague did, in the same
+# paragraph, and a description that quietly folds the second into the first is
+# the one way this pass can turn an honest account into a false CV.
 PROMPT_TEMPLATE = """You are describing a project a candidate worked on at a job, from the account they wrote of it themselves, so their CV can draw on it later. You are given the technologies already identified in it. Report what the project was and which concepts it demonstrates.
 
 Rules for task_desc:

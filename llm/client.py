@@ -26,13 +26,10 @@ def get_client() -> httpx.Client:
     The shared HTTP client, built on first use.
 
     One client across the worker threads rather than one each, so they reuse
-    connections. httpx.Client is thread safe. The pool is capped at the same
-    number of workers, since a fifth connection to a four slot server would only
-    sit in the server's queue holding a socket open.
-
-    Built lazily so importing a task does not open a connection pool, and so a
-    caller that sets the environment or swaps this module's client does so
-    before anything binds to a base URL.
+    connections; httpx.Client is thread safe. The pool is capped at the same
+    number of workers, since a further connection would only queue at the
+    server anyway. Built lazily so importing a task does not open a pool
+    before a caller has had the chance to set the environment or swap it.
     """
     global _client
 
@@ -65,10 +62,9 @@ def post_chat(prompt: str, schema: dict, think: bool = True, task_name: str = "u
         schema (dict): JSON schema constraining the reply.
         think (bool): Whether to let the model reason before answering. Off for
             the tasks that are a lookup rather than a judgement call.
-        task_name (str): Who is asking, as 'pipeline.package.pass'. The pipeline
-            prefix is what keeps the technology pass of a posting apart from the
-            one over a repo: both are called tech_identifier. Only ever read
-            back out of FactLLMCall.
+        task_name (str): Who is asking, as 'pipeline.package.pass'. The
+            pipeline prefix disambiguates identical pass names across
+            pipelines, e.g. tech_identifier for a posting vs. a repo.
     """
     payload = {
         "messages": [{"role": "user", "content": prompt}],

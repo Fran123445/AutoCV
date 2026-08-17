@@ -53,21 +53,10 @@ MIN_SOURCE_FILES = 3
 README_MAX_CHARS = 20_000
 
 # What a project imports, keyed by the extension of the file doing the
-# importing. Manifests only cover what a project *declares*, and a repo without
-# one is otherwise invisible: nothing but filenames reaches the model. Imports
-# cover what it actually *uses*, which is also the stronger claim for a CV.
-#
-# Keyed by extension rather than applied blindly because the syntax is the one
-# thing that really does vary by language. An extension with no pattern is
-# simply not scanned, so adding a language here can never worsen the ones
-# already handled.
-#
-# Each pattern captures the module in group 1. They are deliberately loose: a
-# false positive costs one line in the prompt and lands in
-# discarded_technologies, while a false negative loses a technology outright.
-# Standard library modules are kept on purpose. "sqlite3", "json" and "csv" name
-# technologies the project genuinely uses, and anything outside the registry is
-# unrepresentable to the model anyway, so filtering them would only lose signal.
+# importing: manifests cover only what a project *declares*, while imports
+# capture what it actually *uses*. Patterns are deliberately loose (a false
+# positive just lands in discarded_technologies) and standard library modules
+# are kept on purpose, since filtering them would only lose signal a CV wants.
 IMPORT_PATTERNS = {
     ".py": (
         r"^\s*import\s+([\w.]+)",

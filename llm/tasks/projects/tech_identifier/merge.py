@@ -12,9 +12,6 @@ def merge_passes(
     below answers a promise made by the review prompt: change the wording there
     and this has to move with it.
 
-    Simpler than the job side's merge, since a flat list has no required versus
-    nice-to-have placement to arbitrate: a name is either already there or new.
-
     Args:
         first_pass (ProjectTechnologyList): What the first pass reported.
         second_pass (SecondPassResult): What the review recovered.

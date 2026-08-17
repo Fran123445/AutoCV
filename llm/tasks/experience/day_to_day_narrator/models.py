@@ -7,10 +7,6 @@ class DayToDayNarrative(BaseModel):
     """
     What FactExperience.day_to_day is written from.
 
-    Shaped like the projects side's ProjectNarrative and for the same reason:
-    the prose loads a column the CV generator reads, the concepts are evidence
-    tags on the same reading, and one pass over the account answers both.
-
     The prose is the half that matters most here. A job with no Project block
     behind it reaches the generator as a role, a company and a set of tags, and
     tags are enough to match a posting but not enough to write a line about.

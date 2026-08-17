@@ -7,11 +7,6 @@ from .models import DegreeRequirement
 # One pass rather than two. The list is short and named in one place in the
 # posting, so there is nothing for a review pass to recover: unlike the tech and
 # concept passes, a degree is not scattered across the description.
-#
-# The field of study is what gets reported, never the level: the base stores
-# which careers a posting asks for, and a posting almost never fixes bachelor vs
-# master anyway. So "título de grado en Ingeniería en Sistemas" is systems
-# engineering, and the "grado" part is dropped on the floor.
 PROMPT_TEMPLATE = """You are a degree identifier. Read the job description delimited below and report every field of study the posting accepts for the candidate.
 
 In the allowed list, parentheses hold alternative spellings of the same field: "systems engineering (ingenieria en sistemas, licenciatura en sistemas)" means a posting asking for "Ingeniería en Sistemas" requires systems engineering.

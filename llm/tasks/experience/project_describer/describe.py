@@ -2,14 +2,9 @@ from llm.client import post_chat
 from llm.descriptions import build_description_model
 
 
-# The null cases are stated before the writing rules on purpose, the same as on
-# the projects side: the useful answer for a language or a serialization format
-# is no answer, and a model given only instructions on how to write will write
-# something for every entry.
-#
-# The null case this pass has and that one does not is attribution. A source
-# sample cannot tell you who wrote it, so the projects describer only has to
-# decide whether a technology is used at all; here the account names the
+# Null cases are stated before the writing rules on purpose, same as the
+# projects describer. The one null case unique to this pass is attribution: a
+# source sample can't tell you who wrote it, but here the account names the
 # colleague who handled a piece of the work, and a phrase describing that piece
 # would put it on the candidate's CV.
 PROMPT_TEMPLATE = """You are recording the part each technology and concept played in a project a candidate worked on at a job, so their CV can draw on it later. You are given what the project was, the items to describe, and the account the candidate wrote of it themselves.

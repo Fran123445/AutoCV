@@ -83,16 +83,9 @@ def _transform_job(experience: Experience) -> list[dict]:
     """
     Map each job block onto FactExperience shape, with its projects.
 
-    Company, role and seniority pass through untouched, for the reason the
-    degree does one function up: they are expected already canonical, and an
-    unrecognised one is load's to catch against its dim, not this stage's. The
-    identifiers that read those three off a posting have no work here — the
-    candidate typed the answers.
-
-    What does need reading is the prose, and this is where the file gets
-    expensive: every job costs two model calls and every project three, so a
-    file with four jobs and a dozen projects is a few dozen calls run one after
-    another. Nothing here is concurrent yet.
+    Company, role and seniority pass through untouched: they are expected
+    already canonical, and an unrecognised one is load's to catch against its
+    dim, not this stage's.
 
     Args:
         experience (Experience): The parsed experience file.
@@ -115,10 +108,8 @@ def _transform_job(experience: Experience) -> list[dict]:
             "projects": [
                 {
                     "id": project.id,
-                    # None when the block carries no story. Left as it is rather
-                    # than dropped: Project.task_desc is NOT NULL, so this is a
-                    # row that cannot be written, and load should say so about a
-                    # project the file does name.
+                    # Kept even when None (not dropped): Project.task_desc is
+                    # NOT NULL, so load must reject this row itself.
                     "identified": _transform_job_project(project.story),
                 }
                 for project in job.project
@@ -131,15 +122,10 @@ def _transform_job_day_to_day(day_to_day: str | None) -> dict | None:
     """
     Identify and rewrite what one job consisted of day to day.
 
-    Two passes rather than one, for a reason that is about prompt size and not
-    about the reading: the technology names run to 13 KB with their aliases and
-    the concept names to 26 KB, and a single prompt carrying both would bury the
-    account it is meant to be about. The technologies go first because the
-    rewrite reads better once they are named.
-
-    Both passes are single, unlike the jobs and projects sides. A review pass
-    recovers entries scattered over a long document, and this block is two
-    paragraphs.
+    Two passes rather than one: the technology names run to 13 KB with their
+    aliases and the concept names to 26 KB, and a single prompt carrying both
+    would bury the account it is meant to be about. Technologies go first
+    because the rewrite reads better once they are named.
 
     Args:
         day_to_day (str | None): The job's day_to_day block, as written in
@@ -166,16 +152,12 @@ def _transform_job_project(story: str | None) -> dict | None:
     """
     Identify one project a candidate did at a job, from their account of it.
 
-    Three passes, the same shape the projects pipeline runs over a repository
-    and for the same reasons: the technologies come first because the narrative
-    reads better once they are named, and the descriptions come last because
-    there is nothing to describe until both lists exist. What is missing here is
-    the sampling step, since the evidence is one block of prose the candidate
-    wrote rather than a tree of files to choose from.
-
-    The passes are single, unlike the repository side's two. A review pass
-    recovers entries scattered over a long document, and a story is a few
-    paragraphs.
+    Three passes, the same shape the projects pipeline runs over a repository:
+    technologies come first because the narrative reads better once they are
+    named, and descriptions come last because there is nothing to describe
+    until both lists exist. What's missing here is the sampling step, since
+    the evidence is one block of prose rather than a tree of files to choose
+    from.
 
     Args:
         story (str | None): The project's story block, as written in

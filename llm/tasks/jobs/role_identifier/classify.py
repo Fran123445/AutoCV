@@ -4,9 +4,7 @@ from llm.registries.roles import NAMES_WITH_ALIASES
 from .models import Role
 
 
-# One pass rather than two, for the same reason as the seniority identifier:
-# there is a single answer here, and a review pass would re-litigate a
-# judgement rather than extend a list.
+# One pass rather than two, for the same reason as the seniority identifier.
 #
 # The title arrives separately because it is the strongest signal by far, and
 # burying it in the description leaves the model to find it again.

@@ -280,14 +280,9 @@ def _scan_imports(project: Path, files: list[str]) -> dict[str, int]:
     Count how many files import each third-party package.
 
     Manifests say what a project declares; this says what it actually uses, and
-    it is the only tech signal a repo without a manifest carries at all. Files
-    whose extension has no pattern are skipped rather than guessed at, so an
-    unhandled language degrades to the manifest-only behaviour instead of
-    producing noise.
-
-    The files behind each package are kept, not just how many: the sampler picks
-    what to show the descr pass by asking which files put a given package to
-    use, and a count alone cannot answer that.
+    it is the only tech signal a repo without a manifest carries at all. The
+    files behind each package are kept, not just how many, since the sampler
+    needs to know which files put a given package to use.
 
     Args:
         project (Path): The project directory.
