@@ -1,6 +1,8 @@
 import re
 
 from etl.experience.models import Experience
+from llm.tasks.experience.narrator.narrate import narrate
+from llm.tasks.experience.tech_identifier.identify import identify_technologies
 
 _DATE_RE = re.compile(r"^\d{4}(-\d{2}(-\d{2})?)?$")
 
@@ -78,8 +80,40 @@ def _transform_education(experience: Experience) -> list[dict]:
 def _transform_job(experience: Experience):
     pass
 
-def _transform_job_day_to_day(day_to_day: str):
-    pass
+def _transform_job_day_to_day(day_to_day: str | None) -> dict | None:
+    """
+    Identify and rewrite what one job consisted of day to day.
+
+    Two passes rather than one, for a reason that is about prompt size and not
+    about the reading: the technology names run to 13 KB with their aliases and
+    the concept names to 26 KB, and a single prompt carrying both would bury the
+    account it is meant to be about. The technologies go first because the
+    rewrite reads better once they are named.
+
+    Both passes are single, unlike the jobs and projects sides. A review pass
+    recovers entries scattered over a long document, and this block is two
+    paragraphs.
+
+    Args:
+        day_to_day (str | None): The job's day_to_day block, as written in
+            experience.toml. None when the block is absent or empty.
+
+    Returns:
+        dict | None: The technologies worked with and the narrative, or None
+            when the file left the block out. The tags load into
+            UserTechnologies and UserConcepts, the prose into
+            FactExperience.day_to_day.
+    """
+    if day_to_day is None:
+        return None
+
+    technologies = identify_technologies(day_to_day)
+    narrative = narrate(technologies.technologies, day_to_day)
+
+    return {
+        "technologies": technologies.model_dump(),
+        "narrative": narrative.model_dump(),
+    }
 
 def _transform_job_project(project_desc: str):
     pass
