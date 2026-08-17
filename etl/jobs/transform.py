@@ -1,14 +1,14 @@
-from llm.tasks.concept_identifier.first_pass import run_first_pass as concepts_first_pass
-from llm.tasks.concept_identifier.merge import merge_passes as merge_concept_passes
-from llm.tasks.concept_identifier.models import ConceptList
-from llm.tasks.concept_identifier.second_pass import run_second_pass as concepts_second_pass
-from llm.tasks.degree_identifier.classify import classify_degree
-from llm.tasks.role_identifier.classify import classify_role
-from llm.tasks.seniority_identifier.classify import classify_seniority
-from llm.tasks.tech_identifier.first_pass import run_first_pass as tech_first_pass
-from llm.tasks.tech_identifier.merge import merge_passes as merge_tech_passes
-from llm.tasks.tech_identifier.models import TechnologyList
-from llm.tasks.tech_identifier.second_pass import run_second_pass as tech_second_pass
+from llm.tasks.jobs.concept_identifier.first_pass import run_first_pass as concepts_first_pass
+from llm.tasks.jobs.concept_identifier.merge import merge_passes as merge_concept_passes
+from llm.tasks.jobs.concept_identifier.models import ConceptList
+from llm.tasks.jobs.concept_identifier.second_pass import run_second_pass as concepts_second_pass
+from llm.tasks.jobs.degree_identifier.classify import classify_degree
+from llm.tasks.jobs.role_identifier.classify import classify_role
+from llm.tasks.jobs.seniority_identifier.classify import classify_seniority
+from llm.tasks.jobs.tech_identifier.first_pass import run_first_pass as tech_first_pass
+from llm.tasks.jobs.tech_identifier.merge import merge_passes as merge_tech_passes
+from llm.tasks.jobs.tech_identifier.models import TechnologyList
+from llm.tasks.jobs.tech_identifier.second_pass import run_second_pass as tech_second_pass
 
 
 def _identify_technologies(job_desc: str) -> TechnologyList:

@@ -19,18 +19,8 @@ from etl.projects.config import (
     MAX_SAMPLE_BYTES,
     MAX_SAMPLE_FILE_BYTES,
 )
-from llm.seeds import load_seed
+from llm.registries.technologies import SURFACE_TO_NAME
 
-
-# Maps every spelling of a technology back to its canonical name, so an import
-# of "torch" can be recognised as the evidence behind "pytorch". Built from the
-# same seed the identifier's registry reads, which is what keeps the two from
-# disagreeing about what "torch" means.
-_SURFACE_TO_TECHNOLOGY = {
-    surface.casefold(): technology["name"]
-    for technology in load_seed("technologies.json", "technologies")
-    for surface in (technology["name"], *technology["aliases"])
-}
 
 _MODULE_SEPARATORS = re.compile(r"[_-]")
 
@@ -55,19 +45,19 @@ def _resolve_module(module: str) -> str | None:
         str | None: The canonical technology name, or None when nothing matches.
     """
     key = module.casefold()
-    if key in _SURFACE_TO_TECHNOLOGY:
-        return _SURFACE_TO_TECHNOLOGY[key]
+    if key in SURFACE_TO_NAME:
+        return SURFACE_TO_NAME[key]
 
     # Version suffixes: sqlite3, psycopg2, python3.
     unversioned = key.rstrip("0123456789.")
-    if unversioned != key and unversioned in _SURFACE_TO_TECHNOLOGY:
-        return _SURFACE_TO_TECHNOLOGY[unversioned]
+    if unversioned != key and unversioned in SURFACE_TO_NAME:
+        return SURFACE_TO_NAME[unversioned]
 
     parts = _MODULE_SEPARATORS.split(key)
     for length in range(len(parts) - 1, 0, -1):
         candidate = "_".join(parts[:length])
-        if candidate in _SURFACE_TO_TECHNOLOGY:
-            return _SURFACE_TO_TECHNOLOGY[candidate]
+        if candidate in SURFACE_TO_NAME:
+            return SURFACE_TO_NAME[candidate]
 
     return None
 

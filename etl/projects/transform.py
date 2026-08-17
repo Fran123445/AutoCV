@@ -1,11 +1,11 @@
 from etl.projects.sample import build_sample
-from llm.tasks.project_describer.describe import describe
-from llm.tasks.project_narrator.models import ProjectNarrative
-from llm.tasks.project_narrator.narrate import narrate
-from llm.tasks.project_tech_identifier.first_pass import run_first_pass as tech_first_pass
-from llm.tasks.project_tech_identifier.merge import merge_passes as merge_tech_passes
-from llm.tasks.project_tech_identifier.models import ProjectTechnologyList
-from llm.tasks.project_tech_identifier.second_pass import run_second_pass as tech_second_pass
+from llm.tasks.projects.describer.describe import describe
+from llm.tasks.projects.narrator.models import ProjectNarrative
+from llm.tasks.projects.narrator.narrate import narrate
+from llm.tasks.projects.tech_identifier.first_pass import run_first_pass as tech_first_pass
+from llm.tasks.projects.tech_identifier.merge import merge_passes as merge_tech_passes
+from llm.tasks.projects.tech_identifier.models import ProjectTechnologyList
+from llm.tasks.projects.tech_identifier.second_pass import run_second_pass as tech_second_pass
 
 
 def _identify_technologies(signals: dict) -> ProjectTechnologyList:

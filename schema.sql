@@ -243,7 +243,7 @@ CREATE TABLE IF NOT EXISTS FactJobRun (
 CREATE TABLE IF NOT EXISTS FactLLMCall (
     id                INTEGER PRIMARY KEY,
     job_run_id        INTEGER NOT NULL REFERENCES FactJobRun(id),
-    task_name         TEXT NOT NULL,        -- 'tech_identifier.first_pass', ...
+    task_name         TEXT NOT NULL,        -- 'jobs.tech_identifier.first_pass', ...
     attempt           INTEGER NOT NULL DEFAULT 1,  -- todavía no hay reintentos,
                       -- pero sin contador un reintento parece fila duplicada
     started_at        TEXT NOT NULL,

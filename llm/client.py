@@ -65,8 +65,10 @@ def post_chat(prompt: str, schema: dict, think: bool = True, task_name: str = "u
         schema (dict): JSON schema constraining the reply.
         think (bool): Whether to let the model reason before answering. Off for
             the tasks that are a lookup rather than a judgement call.
-        task_name (str): Who is asking, as 'package.pass'. Only ever read back
-            out of FactLLMCall.
+        task_name (str): Who is asking, as 'pipeline.package.pass'. The pipeline
+            prefix is what keeps the technology pass of a posting apart from the
+            one over a repo: both are called tech_identifier. Only ever read
+            back out of FactLLMCall.
     """
     payload = {
         "messages": [{"role": "user", "content": prompt}],
