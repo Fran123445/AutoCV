@@ -116,6 +116,8 @@ def _load_concepts_data(connection: sqlite3.Connection) -> int:
     """
     Load the concepts data into the DimConcepts table.
 
+    Only the canonical names; 'parents' is a second pass, like the technologies.
+
     Args:
         connection (sqlite3.Connection): Open connection to the database.
     """
@@ -132,14 +134,124 @@ def _load_concepts_data(connection: sqlite3.Connection) -> int:
     return len(concepts)
 
 
+def _name_to_id(connection: sqlite3.Connection, table: str, name_column: str) -> dict[str, int]:
+    """
+    Map every canonical name in a dimension to its id.
+
+    Read back from the base and not from the seed, since the ids are assigned by
+    sqlite and a name already inserted by an earlier run keeps the id it had.
+
+    Args:
+        connection (sqlite3.Connection): Open connection to the database.
+        table (str): Dimension table to read.
+        name_column (str): Column holding the canonical name.
+    """
+    rows = connection.execute(f"SELECT {name_column}, id FROM {table}").fetchall()
+
+    return {name: row_id for name, row_id in rows}
+
+
+def _replace_edges(
+    connection: sqlite3.Connection,
+    table: str,
+    columns: tuple[str, str],
+    edges: list[tuple[int, int]],
+) -> int:
+    """
+    Rewrite a bridge table from the seed, dropping whatever it held before.
+
+    The only place the base deletes anything. It is safe here and nowhere else:
+    these three tables are derived from the seed and no row points at them, so
+    an edge the seed no longer draws has nothing left holding it up. Without
+    this, retuning an implication only ever adds: dropping 'jira implies agile'
+    from the seed would leave the edge matching jobs forever.
+
+    Args:
+        connection (sqlite3.Connection): Open connection to the database.
+        table (str): Bridge table to rewrite.
+        columns (tuple[str, str]): Its two columns, in insert order.
+        edges (list[tuple[int, int]]): Every edge the seed draws.
+    """
+    left, right = columns
+    connection.execute(f"DELETE FROM {table}")
+    connection.executemany(
+        f"INSERT INTO {table} ({left}, {right}) VALUES (?, ?)",
+        edges,
+    )
+
+    return len(edges)
+
+
+def _load_technology_dependencies(connection: sqlite3.Connection) -> int:
+    """
+    Load the 'parents' of every technology into TechnologyDependency.
+
+    Args:
+        connection (sqlite3.Connection): Open connection to the database.
+    """
+    technologies = load_seed("technologies.json", "technologies")
+    technology_ids = _name_to_id(connection, "DimTechnologies", "name")
+    edges = [
+        (technology_ids[technology["name"]], technology_ids[parent])
+        for technology in technologies
+        for parent in technology["parents"]
+    ]
+
+    return _replace_edges(
+        connection, "TechnologyDependency", ("child_id", "parent_id"), edges
+    )
+
+
+def _load_concept_dependencies(connection: sqlite3.Connection) -> int:
+    """
+    Load the 'parents' of every concept into ConceptDependency.
+
+    Args:
+        connection (sqlite3.Connection): Open connection to the database.
+    """
+    concepts = load_seed("concepts.json", "concepts")
+    concept_ids = _name_to_id(connection, "DimConcepts", "concept_name")
+    edges = [
+        (concept_ids[concept["name"]], concept_ids[parent])
+        for concept in concepts
+        for parent in concept["parents"]
+    ]
+
+    return _replace_edges(
+        connection, "ConceptDependency", ("child_id", "parent_id"), edges
+    )
+
+
+def _load_technology_concepts(connection: sqlite3.Connection) -> int:
+    """
+    Load the 'concepts' of every technology into TechnologyConcept.
+
+    Args:
+        connection (sqlite3.Connection): Open connection to the database.
+    """
+    technologies = load_seed("technologies.json", "technologies")
+    technology_ids = _name_to_id(connection, "DimTechnologies", "name")
+    concept_ids = _name_to_id(connection, "DimConcepts", "concept_name")
+    edges = [
+        (technology_ids[technology["name"]], concept_ids[concept])
+        for technology in technologies
+        for concept in technology["concepts"]
+    ]
+
+    return _replace_edges(
+        connection, "TechnologyConcept", ("technology_id", "concept_id"), edges
+    )
+
+
 def run_db_creation():
     """
     Run the database creation process, including creating the schema and any necessary initial data.
 
     Idempotent from end to end: schema.sql creates only what is missing and
     every insert resolves its conflict, so this is safe to run on a base that
-    already holds scraped jobs. Nothing is ever deleted, since a name dropped
-    from a seed may still be referenced by a FactJob row.
+    already holds scraped jobs. No dimension row is ever deleted, since a name
+    dropped from a seed may still be referenced by a FactJob row; the three
+    bridges are the exception, and _replace_edges says why.
     """
     DB_PATH.parent.mkdir(parents=True, exist_ok=True)
 
@@ -156,6 +268,11 @@ def run_db_creation():
             "DimDegree": _load_degrees_data(connection),
             "DimTechnologies": _load_technologies_data(connection),
             "DimConcepts": _load_concepts_data(connection),
+            # Después de las dos dims: una arista nombra un hijo que el seed
+            # todavía no alcanzó, y TechnologyConcept cruza las dos tablas.
+            "TechnologyDependency": _load_technology_dependencies(connection),
+            "ConceptDependency": _load_concept_dependencies(connection),
+            "TechnologyConcept": _load_technology_concepts(connection),
         }
 
         connection.commit()

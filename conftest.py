@@ -1,10 +1,13 @@
 from db_creation import (
     _create_schema,
+    _load_concept_dependencies,
     _load_concepts_data,
     _load_degrees_data,
     _load_roles_data,
     _load_seniority_data,
     _load_technologies_data,
+    _load_technology_concepts,
+    _load_technology_dependencies,
 )
 
 import sqlite3
@@ -39,6 +42,9 @@ def seeded_db(db):
     _load_degrees_data(db)
     _load_technologies_data(db)
     _load_concepts_data(db)
+    _load_technology_dependencies(db)
+    _load_concept_dependencies(db)
+    _load_technology_concepts(db)
 
     db.commit()
 

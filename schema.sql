@@ -41,6 +41,22 @@ CREATE TABLE IF NOT EXISTS DimConcepts (
     concept_name TEXT NOT NULL UNIQUE  -- 'agile', 'machine learning', 'data structures', ...
 );
 
+CREATE TABLE IF NOT EXISTS ConceptDependency (
+    child_id  INTEGER NOT NULL REFERENCES DimConcepts(id),  -- 'dashboarding'
+    parent_id INTEGER NOT NULL REFERENCES DimConcepts(id),  -- implica 'business intelligence'
+    PRIMARY KEY (child_id, parent_id)
+);
+
+-- El aviso pide el paraguas ('relational databases') y el candidato declara la
+-- herramienta ('sql server'): sin este puente el match da 0 en algo que sabe.
+-- Sólo implicaciones ciertas: 'power bi' implica business intelligence, no
+-- implica machine learning porque alguien lo use para un modelo.
+CREATE TABLE IF NOT EXISTS TechnologyConcept (
+    technology_id INTEGER NOT NULL REFERENCES DimTechnologies(id),
+    concept_id    INTEGER NOT NULL REFERENCES DimConcepts(id),
+    PRIMARY KEY (technology_id, concept_id)
+);
+
 CREATE TABLE IF NOT EXISTS DimDegree (
     id     INTEGER PRIMARY KEY,
     name   TEXT NOT NULL UNIQUE,  -- canónico: 'computer science', 'information systems engineering', ...

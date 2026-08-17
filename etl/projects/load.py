@@ -4,6 +4,7 @@ from etl.candidate import (
     DEFAULT_USER_ID,
     descriptions_by_name,
     load_project_bridge,
+    load_user_bridge,
     solve_user_id,
 )
 from etl.dims import solve_concept_name_id, solve_technology_name_id
@@ -23,6 +24,11 @@ def load(
     linkedin_job_id. experience_id is left null, which is what marks a project
     as personal.
 
+    The rollup into the user bridges runs before that dedupe and not after: a
+    repo whose tags never reached UserTechnologies is exactly the repo that is
+    already loaded, so skipping it would keep the gap open forever. Writing it
+    twice costs nothing, both inserts resolve their conflict.
+
     Args:
         transformed_data (dict): The data to load, as etl.projects.transform
             produced it.
@@ -40,6 +46,21 @@ def load(
     descriptions = transformed_data["descriptions"]
 
     with connection:
+        solve_user_id(connection, user_id)
+
+        technology_ids = [
+            solve_technology_name_id(connection, name) for name in technologies
+        ]
+        concept_ids = [
+            solve_concept_name_id(connection, name) for name in narrative["concepts"]
+        ]
+        load_user_bridge(
+            connection, "UserTechnologies", "technology_id", user_id, technology_ids
+        )
+        load_user_bridge(
+            connection, "UserConcepts", "concept_id", user_id, concept_ids
+        )
+
         cursor = connection.execute(
             """
             INSERT INTO Project (user_id, task_desc, source_path)
@@ -47,7 +68,7 @@ def load(
             ON CONFLICT(source_path) DO NOTHING
             """,
             (
-                solve_user_id(connection, user_id),
+                user_id,
                 narrative["task_desc"],
                 transformed_data["path"],
             ),
@@ -67,11 +88,8 @@ def load(
             "technology_id",
             project_id,
             [
-                (
-                    solve_technology_name_id(connection, name),
-                    technology_descriptions.get(name),
-                )
-                for name in technologies
+                (technology_id, technology_descriptions.get(name))
+                for name, technology_id in zip(technologies, technology_ids)
             ],
         )
 
@@ -82,11 +100,8 @@ def load(
             "concept_id",
             project_id,
             [
-                (
-                    solve_concept_name_id(connection, name),
-                    concept_descriptions.get(name),
-                )
-                for name in narrative["concepts"]
+                (concept_id, concept_descriptions.get(name))
+                for name, concept_id in zip(narrative["concepts"], concept_ids)
             ],
         )
 

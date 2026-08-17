@@ -1,6 +1,11 @@
 import sqlite3
 
-from etl.candidate import DEFAULT_USER_ID, descriptions_by_name, load_project_bridge
+from etl.candidate import (
+    DEFAULT_USER_ID,
+    descriptions_by_name,
+    load_project_bridge,
+    load_user_bridge,
+)
 from etl.dims import (
     solve_company_name_id,
     solve_concept_name_id,
@@ -286,36 +291,6 @@ def _rollup_names(jobs: list[dict]) -> tuple[list[str], list[str]]:
     return sorted(technologies), sorted(concepts)
 
 
-def _load_user_bridge(
-    connection: sqlite3.Connection,
-    table: str,
-    column: str,
-    user_id: int,
-    dimension_ids: list[int],
-):
-    """
-    Insert the rollup rows into UserTechnologies or UserConcepts.
-
-    Args:
-        connection (sqlite3.Connection): Open connection to the database.
-        table (str): Bridge table name.
-        column (str): Column holding the dimension id on that table.
-        user_id (int): The user the rows hang off.
-        dimension_ids (list[int]): Resolved ids, already deduped.
-    """
-    connection.executemany(
-        # proficiency is left null and never overwritten: the schema calls it
-        # the candidate's own claim about their level, and the file makes no
-        # such claim. A value set by hand in the base survives a re-run.
-        f"""
-        INSERT INTO {table} (user_id, {column}, proficiency)
-        VALUES (?, ?, NULL)
-        ON CONFLICT(user_id, {column}) DO NOTHING
-        """,
-        [(user_id, dimension_id) for dimension_id in dimension_ids],
-    )
-
-
 def load(
     transformed_data: dict,
     connection: sqlite3.Connection,
@@ -364,14 +339,14 @@ def load(
                 counts["projects_loaded" if project_id else "projects_skipped"] += 1
 
         technologies, concepts = _rollup_names(jobs)
-        _load_user_bridge(
+        load_user_bridge(
             connection,
             "UserTechnologies",
             "technology_id",
             user_id,
             [solve_technology_name_id(connection, name) for name in technologies],
         )
-        _load_user_bridge(
+        load_user_bridge(
             connection,
             "UserConcepts",
             "concept_id",

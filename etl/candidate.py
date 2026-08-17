@@ -79,3 +79,39 @@ def load_project_bridge(
         """,
         [(project_id, dimension_id, descr) for dimension_id, descr in entries],
     )
+
+
+def load_user_bridge(
+    connection: sqlite3.Connection,
+    table: str,
+    column: str,
+    user_id: int,
+    dimension_ids: list[int],
+):
+    """
+    Insert the rollup rows into UserTechnologies or UserConcepts.
+
+    Shared for the same reason the project bridge is: a tag reaches the
+    candidate from a repository the projects pipeline walked or from a story
+    the experience file tells, and either way it is the same claim. The schema
+    wants a project's tags contained in the user's, so every loader that writes
+    a project bridge writes this one too.
+
+    Args:
+        connection (sqlite3.Connection): Open connection to the database.
+        table (str): Bridge table name.
+        column (str): Column holding the dimension id on that table.
+        user_id (int): The user the rows hang off.
+        dimension_ids (list[int]): Resolved ids, already deduped.
+    """
+    connection.executemany(
+        # proficiency is left null and never overwritten: the schema calls it
+        # the candidate's own claim about their level, and neither pipeline
+        # makes such a claim. A value set by hand in the base survives a re-run.
+        f"""
+        INSERT INTO {table} (user_id, {column}, proficiency)
+        VALUES (?, ?, NULL)
+        ON CONFLICT(user_id, {column}) DO NOTHING
+        """,
+        [(user_id, dimension_id) for dimension_id in dimension_ids],
+    )
