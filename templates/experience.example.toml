@@ -33,7 +33,7 @@ url = "https://www.linkedin.com/in/example"
 # ============================================================================
 
 [[education]]
-degree = "systems engineering"
+degree = "information systems engineering"
 institution = "Universidad Tecnológica Nacional"
 start = "2014-03"
 end = "2020-12"

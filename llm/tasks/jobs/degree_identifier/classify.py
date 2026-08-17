@@ -9,12 +9,12 @@ from .models import DegreeRequirement
 # concept passes, a degree is not scattered across the description.
 PROMPT_TEMPLATE = """You are a degree identifier. Read the job description delimited below and report every field of study the posting accepts for the candidate.
 
-In the allowed list, parentheses hold alternative spellings of the same field: "systems engineering (ingenieria en sistemas, licenciatura en sistemas)" means a posting asking for "Ingeniería en Sistemas" requires systems engineering.
+In the allowed list, parentheses hold alternative spellings of the same field: "information systems engineering (ingenieria en sistemas, licenciatura en sistemas)" means a posting asking for "Ingeniería en Sistemas" requires information systems engineering.
 
 Rules:
 - Use only names from the allowed list. Never invent one and never reword one.
 - Postings usually list several careers as alternatives: "Ingeniería en Sistemas, Ciencias de la Computación o afines". Report all of them, one entry per field, since holding any one satisfies the posting.
-- Report the field of study, never the level: "título de grado en Ingeniería en Sistemas" and "estudiante avanzado de Ingeniería en Sistemas" are both systems engineering.
+- Report the field of study, never the level: "título de grado en Ingeniería en Sistemas" and "estudiante avanzado de Ingeniería en Sistemas" are both information systems engineering.
 - When the posting asks for a broad category such as "carrera de Ingeniería" or "carreras afines a Ingeniería" without naming a specialty, report engineering.
 - degrees: empty when the posting requires no degree at all, which is common: many postings ask only for experience. Do not invent a requirement from the technologies or the seniority.
 - Ignore degrees that belong to somebody else, such as the background of the team you would join.
