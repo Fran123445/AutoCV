@@ -33,6 +33,8 @@ JOBS_EXTRACT_DIR = DATA_DIR / "extracted_descs"
 JOBS_TRANSFORM_DIR = DATA_DIR / "transformed_descs"
 PROJECTS_EXTRACT_DIR = DATA_DIR / "extracted_projects"
 PROJECTS_TRANSFORM_DIR = DATA_DIR / "transformed_projects"
+# No extract counterpart: the experience file is already the structured artifact.
+EXPERIENCE_TRANSFORM_DIR = DATA_DIR / "transformed_experience"
 
 # La plantilla llena, escrita a mano. Deliberadamente fuera de DATA_DIR: todo lo
 # que cuelga de ahí es derivable y descartable, y esto es lo contrario — es
