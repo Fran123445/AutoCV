@@ -1,18 +1,24 @@
 from pydantic import BaseModel, ConfigDict, Field
 
 
-class JobPosting(BaseModel):
-    """One row of FactJob with its tagged technologies and concepts."""
+class EvidenceTag(BaseModel):
+    """A technology or concept reached from a project's direct tags."""
 
     model_config = ConfigDict(extra="forbid")
 
     id: int
+    # Zero means that the project was tagged with this dimension directly.
+    # Larger values mean that it was reached by walking dependency edges.
+    depth: int = Field(ge=0)
 
-    company_name: str | None = None
-    position_name: str | None = None
-    typical_min_exp: int | None = None
 
-    required_technology_ids: set[int] = Field(default_factory=set)
-    optional_technology_ids: set[int] = Field(default_factory=set)
-    required_concept_ids: set[int] = Field(default_factory=set)
-    optional_concept_ids: set[int] = Field(default_factory=set)
+class ProjectEvidence(BaseModel):
+    """The skills and concepts a project can provide evidence for."""
+
+    model_config = ConfigDict(extra="forbid")
+
+    id: int
+    experience_id: int | None = None
+
+    technologies: list[EvidenceTag] = Field(default_factory=list)
+    concepts: list[EvidenceTag] = Field(default_factory=list)
