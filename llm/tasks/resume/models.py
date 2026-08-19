@@ -1,4 +1,4 @@
-"""Structured context passed to the resume-writing LLM."""
+"""Structured context passed to the resume-writing LLM, and what it returns."""
 
 from pydantic import BaseModel, ConfigDict, Field
 
@@ -42,3 +42,39 @@ class ResumePromptContext(_PromptBlock):
     experience: list[ResumePromptExperience] = Field(default_factory=list)
     work_projects: list[ResumePromptProject] = Field(default_factory=list)
     personal_projects: list[ResumePromptProject] = Field(default_factory=list)
+
+
+class ResumeWorkBullets(BaseModel):
+    """The bullets written for one position in the work history."""
+
+    source_experience_id: int = Field(
+        description="The position these bullets belong to, taken from the id given with it."
+    )
+    bullets: list[str] = Field(
+        description="What the candidate did in this position, one claim per bullet, in English and in the third person."
+    )
+
+
+class ResumePersonalBullets(BaseModel):
+    """The bullets written for one personal project."""
+
+    source_project_id: int = Field(
+        description="The project these bullets belong to, taken from the id given with it."
+    )
+    bullets: list[str] = Field(
+        description="What the project is and what the candidate built on it, one claim per bullet, in English and in the third person."
+    )
+
+
+class ResumeResponse(BaseModel):
+    """What the resume-writing pass returns."""
+
+    summary: str = Field(
+        description="The candidate's fit for the job description, in three or four sentences, in English and in the third person, without naming the candidate."
+    )
+    work_bullets: list[ResumeWorkBullets] = Field(
+        default_factory=list, description="One entry per position given."
+    )
+    personal_bullets: list[ResumePersonalBullets] = Field(
+        default_factory=list, description="One entry per personal project given."
+    )
