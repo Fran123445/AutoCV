@@ -9,6 +9,8 @@ from .models import (
     ResumeResponse,
     ResumeWorkBullets,
 )
+from .render import render_candidate
+from .write import write_resume
 
 __all__ = [
     "ResumePersonalBullets",
@@ -18,4 +20,6 @@ __all__ = [
     "ResumePromptTag",
     "ResumeResponse",
     "ResumeWorkBullets",
+    "render_candidate",
+    "write_resume",
 ]
