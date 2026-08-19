@@ -83,16 +83,38 @@ def transform_one(json_path: Path, transform_output_dir: Path):
             json.dump(transformed, f, ensure_ascii=False, indent=2)
 
 
+def _pending_transform_paths(
+    extract_output_dir: Path, transform_output_dir: Path
+) -> tuple[list[Path], list[Path]]:
+    """Return extracted postings that still need transforming and the rest."""
+    pending = []
+    skipped = []
+
+    for json_path in sorted(extract_output_dir.glob("*.json")):
+        out_path = transform_output_dir / json_path.name
+        if out_path.is_file():
+            skipped.append(json_path)
+        else:
+            pending.append(json_path)
+
+    return pending, skipped
+
+
 def transform(extract_output_dir: Path, transform_output_dir: Path):
-    json_paths = sorted(extract_output_dir.glob("*.json"))
+    json_paths, skipped_paths = _pending_transform_paths(
+        extract_output_dir, transform_output_dir
+    )
     transformed_count = 0
     failed = []
 
     with RunLogger(
         "transform",
-        postings_total=len(json_paths),
+        postings_total=len(json_paths) + len(skipped_paths),
         max_concurrency=MAX_CONCURRENCY,
     ) as run_log:
+        for json_path in skipped_paths:
+            print(f"Skipped {json_path.name} (already transformed)")
+
         with ThreadPoolExecutor(max_workers=MAX_CONCURRENCY) as pool:
             futures = {
                 pool.submit(transform_one, json_path, transform_output_dir): json_path
@@ -130,7 +152,10 @@ def transform(extract_output_dir: Path, transform_output_dir: Path):
         run_log.postings_ok = transformed_count
         run_log.postings_failed = len(failed)
 
-    print(f"\nTransformed {transformed_count}, failed {len(failed)}.")
+    print(
+        f"\nTransformed {transformed_count}, skipped {len(skipped_paths)}, "
+        f"failed {len(failed)}."
+    )
     for json_path, error in failed:
         print(f"  {json_path.name}: {error!r}")
 
