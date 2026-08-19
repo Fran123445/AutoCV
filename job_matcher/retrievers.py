@@ -5,6 +5,8 @@ normalized bridge tables into structures that the later matching stage can
 compare without issuing one query per project or requirement.
 """
 
+from datetime import date
+
 import sqlite3
 from collections import defaultdict, deque
 
@@ -172,6 +174,63 @@ def get_project_evidence(
         )
 
     return evidence
+
+
+def get_experiences(connection: sqlite3.Connection, user_id: int) -> list[dict]:
+    """Retrieve the candidate's work-history rows.
+
+    Args:
+        connection (sqlite3.Connection): Open connection to the database.
+        user_id (int): The candidate whose experience should be retrieved.
+
+    Returns:
+        list[dict]: Work history ordered by experience id.
+    """
+    rows = connection.execute(
+        """
+        SELECT
+            fe.id,
+            fe.company_id,
+            dc.company_name,
+            fe.role_id,
+            dr.role_name,
+            fe.seniority_id,
+            ds.label,
+            fe.start_date,
+            fe.end_date,
+            fe.day_to_day
+        FROM FactExperience fe
+        LEFT JOIN DimCompany dc ON dc.id = fe.company_id
+        LEFT JOIN DimRole dr ON dr.id = fe.role_id
+        LEFT JOIN DimSeniority ds ON ds.id = fe.seniority_id
+        WHERE fe.user_id = ?
+        ORDER BY fe.id
+        """,
+        (user_id,),
+    ).fetchall()
+
+    return [
+        {
+            "id": experience_id,
+            "company_id": company_id,
+            "role_id": role_id,
+            "seniority_id": seniority_id,
+            "seniority_label": seniority_label,
+            "start_date": start_date,
+            "end_date": date.today().isoformat() if end_date is None else end_date,
+            "day_to_day": day_to_day,
+        }
+        for (
+            experience_id,
+            company_id,
+            role_id,
+            seniority_id,
+            seniority_label,
+            start_date,
+            end_date,
+            day_to_day,
+        ) in rows
+    ]
 
 
 def _requirements_by_kind(
