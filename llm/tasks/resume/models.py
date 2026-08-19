@@ -23,14 +23,21 @@ class ResumePromptExperience(_PromptBlock):
     day_to_day: str | None = None
 
 
+class ResumePromptTag(_PromptBlock):
+    """One technology or concept a project is evidence for."""
+
+    name: str
+    descr: str | None = None
+
+
 class ResumePromptProject(_PromptBlock):
     """One project supplied as context to the LLM."""
 
     source_project_id: int
     description: str
     source_experience_id: int | None = None
-    technologies: list[str] = Field(default_factory=list)
-    concepts: list[str] = Field(default_factory=list)
+    technologies: list[ResumePromptTag] = Field(default_factory=list)
+    concepts: list[ResumePromptTag] = Field(default_factory=list)
 
 
 class ResumePromptContext(_PromptBlock):
