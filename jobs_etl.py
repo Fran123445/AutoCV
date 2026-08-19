@@ -23,7 +23,11 @@ from llm.config import MAX_CONCURRENCY
 from run_log import RunLogger, record_job_run
 
 def extract(staging_dir: Path, out_dir: Path):
-    html_paths = sorted(staging_dir.glob("*.html"))
+    html_paths = sorted(
+        path
+        for path in staging_dir.iterdir()
+        if path.suffix.lower() in (".html", ".mhtml")
+    )
     extracted_count = 0
     skipped = []
 
