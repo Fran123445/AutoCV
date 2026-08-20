@@ -38,6 +38,7 @@ EXPERIENCE_TRANSFORM_DIR = DATA_DIR / "transformed_experience"
 
 RESUMES_WRITE_DIR = DATA_DIR / "written_resumes"
 RESUMES_RENDER_DIR = DATA_DIR / "rendered_resumes"
+RESUMES_PDF_DIR = DATA_DIR / "printed_resumes"
 
 # La plantilla llena, escrita a mano. Deliberadamente fuera de DATA_DIR: todo lo
 # que cuelga de ahí es derivable y descartable, y esto es lo contrario — es

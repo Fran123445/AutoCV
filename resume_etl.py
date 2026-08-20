@@ -6,16 +6,16 @@ and the one that reads the base rather than fills it. There is no batch and no
 source folder: the unit is one candidate against one posting, named on the
 command line, which is why both ids are required rather than defaulted.
 
-The two stages split where the cost is. Writing calls the model, rendering does
-not, so a template or stylesheet edit is re-rendered from the written document
-instead of paying for the CV a second time to look at it.
+The stages split where the cost is. Writing calls the model and the two after
+it do not, so a template or stylesheet edit is re-rendered and reprinted from
+the written document instead of paying for the CV a second time to look at it.
 """
 
 from pathlib import Path
 
 import argparse
 
-from config import RESUMES_RENDER_DIR, RESUMES_WRITE_DIR
+from config import RESUMES_PDF_DIR, RESUMES_RENDER_DIR, RESUMES_WRITE_DIR
 from resume_generator.generator import generate_resume
 from resume_generator.models import ResumeDocument
 from resume_generator.render import render_html
@@ -107,7 +107,48 @@ def render(user_id: int, job_id: int, write_output_dir: Path, render_output_dir:
     print(f"\nRendered {json_path.name} into {out_path}.")
 
 
-STAGES = ("write", "render")
+def pdf(user_id: int, job_id: int, render_output_dir: Path, pdf_output_dir: Path):
+    """
+    Print a rendered resume page as a PDF.
+
+    Args:
+        user_id (int): Candidate the CV is for.
+        job_id (int): Posting the CV was written against.
+        render_output_dir (Path): Where the render stage left its page.
+        pdf_output_dir (Path): Where the PDF goes.
+    """
+    # Imported here rather than beside the others so that the stages before
+    # this one keep running on a machine with no WeasyPrint and no Pango
+    # installed. Printing is the only stage that needs either.
+    from resume_generator.pdf import render_pdf
+
+    stem = artifact_stem(user_id, job_id)
+    html_path = render_output_dir / f"{stem}.html"
+
+    with RunLogger("resume_pdf", postings_total=1) as run_log:
+        print(f"Printing {html_path}...")
+        try:
+            # Wrapped like the render stage and for the same reasons: no model
+            # is called, so the call list stays empty, and job_id stays null
+            # because nothing here reads FactJob either.
+            with record_job_run(stem):
+                printed = render_pdf(html_path.read_text(encoding="utf-8"))
+
+                out_path = pdf_output_dir / f"{stem}.pdf"
+                out_path.write_bytes(printed.pdf)
+        except Exception:
+            run_log.postings_failed = 1
+            raise
+
+        run_log.postings_ok = 1
+
+    print(
+        f"\nPrinted {html_path.name} into {out_path} "
+        f"over {printed.page_count} page(s)."
+    )
+
+
+STAGES = ("write", "render", "pdf")
 
 
 def parse_args():
@@ -152,6 +193,10 @@ def main():
     if "render" in stages:
         RESUMES_RENDER_DIR.mkdir(parents=True, exist_ok=True)
         render(args.user_id, args.job_id, RESUMES_WRITE_DIR, RESUMES_RENDER_DIR)
+
+    if "pdf" in stages:
+        RESUMES_PDF_DIR.mkdir(parents=True, exist_ok=True)
+        pdf(args.user_id, args.job_id, RESUMES_RENDER_DIR, RESUMES_PDF_DIR)
 
 
 if __name__ == "__main__":
