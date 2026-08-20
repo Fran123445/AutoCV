@@ -3,6 +3,12 @@
 The models in this module describe a resume after evidence has been selected
 and before a renderer turns it into HTML, PDF, or another artifact.  They are
 deliberately independent from the database schema and from any one template.
+
+Every field here is one a renderer prints or keys on.  What the pipeline used
+to reach a field — the tags behind a bullet, the taxonomy name for a position,
+the id of the block in experience.toml — stays on the database and on the
+prompt models, since a document carrying it would only invite a template to
+print it.
 """
 
 from pydantic import BaseModel, ConfigDict, Field
@@ -38,27 +44,20 @@ class ResumeLanguage(_ResumeBlock):
     level: str | None = None
 
 
-class ResumeBullet(_ResumeBlock):
-    """One resume bullet and the evidence used to produce it."""
+class ResumeSkillGroup(_ResumeBlock):
+    """One labelled row of the skills block."""
 
-    text: str
-    source_project_id: int | None = None
-    source_experience_id: int | None = None
-    technologies: list[str] = Field(default_factory=list)
-    concepts: list[str] = Field(default_factory=list)
+    label: str
+    items: list[str] = Field(default_factory=list)
 
 
 class ResumeProject(_ResumeBlock):
-    """A selected project, either personal or attached to a position."""
+    """A personal project selected for this resume."""
 
-    title: str | None = None
-    description: str
-    bullets: list[ResumeBullet] = Field(default_factory=list)
+    title: str
+    bullets: list[str] = Field(default_factory=list)
     technologies: list[str] = Field(default_factory=list)
-    concepts: list[str] = Field(default_factory=list)
     source_project_id: int | None = None
-    source_experience_id: int | None = None
-    source_id: str | None = None
 
 
 class ResumeExperience(_ResumeBlock):
@@ -67,12 +66,10 @@ class ResumeExperience(_ResumeBlock):
     company: str
     role: str
     job_title: str | None = None
-    seniority: str | None = None
     start_date: str | None = None
     end_date: str | None = None
-    bullets: list[ResumeBullet] = Field(default_factory=list)
+    bullets: list[str] = Field(default_factory=list)
     source_experience_id: int | None = None
-    source_id: str | None = None
 
 
 class ResumeEducation(_ResumeBlock):
@@ -89,7 +86,8 @@ class ResumeDocument(_ResumeBlock):
     """Complete renderer-independent representation of a generated resume."""
 
     profile: ResumeProfile
-    summary: str | None = None
+    summary: list[str] = Field(default_factory=list)
+    skills: list[ResumeSkillGroup] = Field(default_factory=list)
     experience: list[ResumeExperience] = Field(default_factory=list)
     projects: list[ResumeProject] = Field(default_factory=list)
     education: list[ResumeEducation] = Field(default_factory=list)
