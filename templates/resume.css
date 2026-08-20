@@ -1,0 +1,135 @@
+/*
+  Print-first stylesheet for templates/resume.html.
+
+  Sizes are in points, not pixels: this page is laid out for paper, and the
+  browser preview is the incidental use. Anything that keeps a block whole
+  across a page break lives here too, since the PDF pass adds no styling of
+  its own.
+*/
+
+@page {
+  size: Letter;
+  margin: 0.5in 0.6in;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: Calibri, Carlito, "Helvetica Neue", Arial, sans-serif;
+  font-size: 10.5pt;
+  line-height: 1.35;
+  color: #1a1a1a;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+/* Header */
+
+h1 {
+  font-size: 21pt;
+  font-weight: 600;
+  letter-spacing: 0.4pt;
+}
+
+.contact {
+  margin-top: 3pt;
+  font-size: 9.5pt;
+  color: #444;
+}
+
+/* Separators are drawn between the items that survived, so an absent phone or
+   location leaves no dangling pipe. */
+.contact span + span::before {
+  content: "|";
+  margin: 0 5pt;
+  color: #aaa;
+}
+
+/* Sections */
+
+section {
+  margin-top: 12pt;
+}
+
+h2 {
+  font-size: 10.5pt;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1pt;
+  padding-bottom: 2pt;
+  border-bottom: 0.75pt solid #1a1a1a;
+  /* A heading alone at the foot of a page reads as a section that lost its
+     contents, so it is pulled onto the next page with them. */
+  break-after: avoid;
+}
+
+section > p {
+  margin-top: 5pt;
+  text-align: justify;
+}
+
+.skill-group {
+  text-align: left;
+}
+
+/* Entries */
+
+.entry {
+  margin-top: 8pt;
+  /* One job or project is a unit: it is never split across two pages. */
+  break-inside: avoid;
+}
+
+.entry-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 12pt;
+}
+
+h3 {
+  font-size: 11pt;
+  font-weight: 600;
+}
+
+.dates,
+.technologies {
+  font-size: 9.5pt;
+  color: #555;
+  white-space: nowrap;
+}
+
+/* The technology list is the one right-hand column that may be long enough to
+   need wrapping rather than crowding the title out. */
+.technologies {
+  white-space: normal;
+  text-align: right;
+}
+
+.entry-detail {
+  font-size: 10pt;
+  color: #444;
+}
+
+ul {
+  margin-top: 3pt;
+  padding-left: 14pt;
+}
+
+li {
+  margin-top: 2pt;
+  text-align: justify;
+}
+
+.languages span + span::before {
+  content: "|";
+  margin: 0 6pt;
+  color: #aaa;
+}

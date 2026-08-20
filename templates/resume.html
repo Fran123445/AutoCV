@@ -1,0 +1,131 @@
+{#
+  Resume layout, rendered from a ResumeDocument and shared by both artifacts:
+  the HTML file is this template's output, and the PDF is that same output
+  printed. There is no second layout to keep in sync.
+
+  Expected render context:
+    document   -- resume_generator.models.ResumeDocument
+    stylesheet -- contents of templates/resume.css, inlined below so the page
+                  carries its own styling and the PDF pass fetches nothing.
+                  Printed unescaped: it is a repo file rather than candidate
+                  data, and escaping it would break every rule holding a `>`
+                  or a quoted string, since a <style> body never decodes
+                  entities
+    span       -- callable(start, end) -> "Jan 2024 - Present", registered as a
+                  global because dates arrive as "YYYY-MM" or "YYYY-MM-DD"
+                  strings and Jinja has no business parsing them
+
+  Every section other than the header is optional: a candidate with no personal
+  projects should not get an empty PROJECTS heading.
+#}
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>{{ document.profile.full_name }}</title>
+<style>{{ stylesheet | safe }}</style>
+</head>
+<body>
+
+<header>
+  <h1>{{ document.profile.full_name }}</h1>
+  {% set profile = document.profile %}
+  <p class="contact">
+    {% if profile.location %}<span>{{ profile.location }}</span>{% endif %}
+    {% if profile.email %}<span><a href="mailto:{{ profile.email }}">{{ profile.email }}</a></span>{% endif %}
+    {% if profile.phone %}<span>{{ profile.phone }}</span>{% endif %}
+    {# The href keeps the scheme so the link works; the printed text drops it. #}
+    {% for link in profile.links %}
+      <span><a href="{{ link.url }}">{{ link.url | replace('https://', '') | replace('http://', '') }}</a></span>
+    {% endfor %}
+  </p>
+</header>
+
+{% if document.summary %}
+<section>
+  <h2>Summary</h2>
+  {% for paragraph in document.summary %}
+    <p>{{ paragraph }}</p>
+  {% endfor %}
+</section>
+{% endif %}
+
+{% if document.skills %}
+<section>
+  <h2>Skills</h2>
+  {% for group in document.skills %}
+    <p class="skill-group"><strong>{{ group.label }}:</strong> {{ group.items | join(', ') }}</p>
+  {% endfor %}
+</section>
+{% endif %}
+
+{% if document.experience %}
+<section>
+  <h2>Experience</h2>
+  {% for entry in document.experience %}
+    <article class="entry">
+      <div class="entry-head">
+        <h3>{{ entry.job_title or entry.role }} &middot; {{ entry.company }}</h3>
+        <span class="dates">{{ span(entry.start_date, entry.end_date) }}</span>
+      </div>
+      {% if entry.bullets %}
+        <ul>
+          {% for bullet in entry.bullets %}<li>{{ bullet }}</li>{% endfor %}
+        </ul>
+      {% endif %}
+    </article>
+  {% endfor %}
+</section>
+{% endif %}
+
+{% if document.projects %}
+<section>
+  <h2>Personal Projects</h2>
+  {% for project in document.projects %}
+    <article class="entry">
+      <div class="entry-head">
+        <h3>{{ project.title }}</h3>
+        {% if project.technologies %}
+          <span class="technologies">{{ project.technologies | join(', ') }}</span>
+        {% endif %}
+      </div>
+      {% if project.bullets %}
+        <ul>
+          {% for bullet in project.bullets %}<li>{{ bullet }}</li>{% endfor %}
+        </ul>
+      {% endif %}
+    </article>
+  {% endfor %}
+</section>
+{% endif %}
+
+{% if document.education %}
+<section>
+  <h2>Education</h2>
+  {% for entry in document.education %}
+    <article class="entry">
+      <div class="entry-head">
+        <h3>{{ entry.degree }}</h3>
+        <span class="dates">{{ span(entry.start_date, entry.end_date) }}</span>
+      </div>
+      <p class="entry-detail">
+        {{ entry.institution or '' }}{% if entry.gpa %} &middot; GPA {{ entry.gpa }}{% endif %}
+      </p>
+    </article>
+  {% endfor %}
+</section>
+{% endif %}
+
+{% if document.languages %}
+<section>
+  <h2>Languages</h2>
+  <p class="languages">
+    {% for language in document.languages %}
+      <span><strong>{{ language.name }}</strong>{% if language.level %} — {{ language.level }}{% endif %}</span>
+    {% endfor %}
+  </p>
+</section>
+{% endif %}
+
+</body>
+</html>
