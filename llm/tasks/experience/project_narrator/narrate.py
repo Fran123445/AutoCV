@@ -14,7 +14,9 @@ from .models import JobProjectNarrative
 PROMPT_TEMPLATE = """You are describing a project a candidate worked on at a job, from the account they wrote of it themselves, so their CV can draw on it later. You are given the technologies already identified in it. Report what the project was and which concepts it demonstrates.
 
 Rules for task_desc:
-- Three or four sentences. Say what problem the project solved, what was built and how, and what came of it. Third person, no marketing language, and do not open by naming the project.
+- Say what problem the project solved, what was built and how, and what came of it. Third person, no marketing language, and do not open by naming the project.
+- Eight to twelve sentences for an account with that much in it, fewer only when the account itself is thin. This description is the whole of what anything downstream will ever see of the account, so a detail dropped here is dropped from every CV written from it afterwards. Length is not the cost. Losing the mechanism is.
+- Keep the mechanism at the level the account gives it: what was compared against what, what the data was keyed or joined on, how much was sampled, what tolerance or threshold was applied, what shape the output took, what ran against what. These specifics are the reason this pass exists, and a description that keeps only the shape of the task has thrown away the part worth reading.
 - Write in English, whatever language the account is written in.
 - Describe the candidate's own share of the work. An account of a project usually says who did what: "otro companero se encargo de adaptar los dashboards" is somebody else's work, and it does not belong in this description however central it was to the project. Say what the project was, then what they did in it.
 - The account is testimony, not evidence read off a system: the candidate is the only authority on their own work. Scale, durations, frequencies and outcomes they state are facts, and they should survive into the description rather than be smoothed away.

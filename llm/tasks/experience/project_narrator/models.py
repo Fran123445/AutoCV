@@ -16,7 +16,7 @@ class JobProjectNarrative(BaseModel):
     """
 
     task_desc: str = Field(
-        description="What the project was and what the candidate did on it, in three or four sentences, in English and in the third person, without naming the project."
+        description="What the project was and what the candidate did on it, keeping the mechanism and the figures the account gives, in English and in the third person, without naming the project."
     )
     concepts: list[ConceptName] = Field(
         description="The concepts the account shows the candidate practising on this project, taken verbatim from the allowed list."
