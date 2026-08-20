@@ -67,12 +67,13 @@ def _transform_education(experience: Experience) -> list[dict]:
         experience (Experience): The parsed experience file.
 
     Returns:
-        list[dict]: degree, institution, start_date, end_date per block.
+        list[dict]: degree, institution, gpa, start_date, end_date per block.
     """
     return [
         {
             "degree": education.degree,
             "institution": education.institution,
+            "gpa": education.gpa,
             "start_date": _parse_date(education.start),
             "end_date": _parse_date(education.end),
         }
@@ -85,13 +86,15 @@ def _transform_job(experience: Experience) -> list[dict]:
 
     Company, role and seniority pass through untouched: they are expected
     already canonical, and an unrecognised one is load's to catch against its
-    dim, not this stage's.
+    dim, not this stage's. The title passes through for the opposite reason:
+    it is what the candidate was actually called, matches no dim, and is the
+    only one of the two that a CV can print.
 
     Args:
         experience (Experience): The parsed experience file.
 
     Returns:
-        list[dict]: id, company, role, seniority, dates, the identified
+        list[dict]: id, company, title, role, seniority, dates, the identified
             day_to_day and the identified projects, per block. The ids are the
             file's own and are what load dedupes on, since a job has no
             linkedin_job_id and a project born here has no source_path.
@@ -100,6 +103,7 @@ def _transform_job(experience: Experience) -> list[dict]:
         {
             "id": job.id,
             "company": job.company,
+            "title": job.title,
             "role": job.role,
             "seniority": job.seniority,
             "start_date": _parse_date(job.start),

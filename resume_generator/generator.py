@@ -55,7 +55,7 @@ def _build_education(
 
     education = connection.execute(
         """
-        SELECT d.name, ue.institution, ue.start_date, ue.end_date
+        SELECT d.name, ue.institution, ue.gpa, ue.start_date, ue.end_date
         FROM UserEducation AS ue
         JOIN DimDegree AS d ON d.id = ue.degree_id
         WHERE ue.user_id = ?
@@ -73,10 +73,11 @@ def _build_education(
         ResumeEducation(
             degree=degree,
             institution=institution,
+            gpa=gpa,
             start_date=start_date,
             end_date=end_date,
         )
-        for degree, institution, start_date, end_date in education
+        for degree, institution, gpa, start_date, end_date in education
     ]
 
 

@@ -17,6 +17,7 @@ class ResumePromptExperience(_PromptBlock):
     source_experience_id: int
     company: str
     role: str
+    job_title: str | None = None
     seniority: str | None = None
     start_date: str | None = None
     end_date: str | None = None

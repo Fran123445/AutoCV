@@ -59,6 +59,7 @@ class ResumeExperience(_ResumeBlock):
 
     company: str
     role: str
+    job_title: str | None = None
     seniority: str | None = None
     start_date: str | None = None
     end_date: str | None = None
@@ -72,6 +73,7 @@ class ResumeEducation(_ResumeBlock):
 
     degree: str
     institution: str | None = None
+    gpa: str | None = None
     start_date: str | None = None
     end_date: str | None = None
 

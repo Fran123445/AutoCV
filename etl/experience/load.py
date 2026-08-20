@@ -104,9 +104,10 @@ def _load_education(connection: sqlite3.Connection, education: list[dict], user_
         # primary key covers that column and nulls do not conflict in sqlite;
         # defaulting it to '' would be worse, collapsing two schools into one.
         """
-        INSERT INTO UserEducation (user_id, degree_id, institution, start_date, end_date)
-        VALUES (?, ?, ?, ?, ?)
+        INSERT INTO UserEducation (user_id, degree_id, institution, gpa, start_date, end_date)
+        VALUES (?, ?, ?, ?, ?, ?)
         ON CONFLICT(user_id, degree_id, institution) DO UPDATE SET
+            gpa = excluded.gpa,
             start_date = excluded.start_date,
             end_date = excluded.end_date
         """,
@@ -115,6 +116,7 @@ def _load_education(connection: sqlite3.Connection, education: list[dict], user_
                 user_id,
                 solve_degree_id(connection, block["degree"]),
                 block["institution"],
+                block["gpa"],
                 block["start_date"],
                 block["end_date"],
             )
@@ -148,10 +150,12 @@ def _load_experience(
     cursor = connection.execute(
         """
         INSERT INTO FactExperience (
-            user_id, source_id, company_id, role_id, seniority_id, start_date,
-            end_date, day_to_day
+            user_id, source_id, company_id, role_id, job_title, seniority_id,
+            start_date, end_date, day_to_day
         )
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+        -- Not an upsert: rowcount below is what says whether this inserted,
+        -- and an update sets it to 1 too.
         ON CONFLICT(user_id, source_id) DO NOTHING
         """,
         (
@@ -159,6 +163,7 @@ def _load_experience(
             job["id"],
             solve_company_name_id(connection, job["company"]),
             solve_role_id(connection, job["role"]),
+            job["title"],
             # No years to fall back on: the file states a label or states
             # nothing, and the job's own dates are not a claim about seniority.
             solve_seniority_id(connection, job["seniority"], None),

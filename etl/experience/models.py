@@ -88,6 +88,7 @@ class Profile(_Block):
 class Education(_Block):
     degree: Text = None
     institution: Text = None
+    gpa: Text = None
     start: Text = None
     end: Text = None
 
@@ -100,6 +101,7 @@ class Project(_Block):
 class Job(_Block):
     id: Identifier
     company: Text = None
+    title: Text = None
     role: Text = None
     seniority: Text = None
     start: Text = None

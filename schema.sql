@@ -152,6 +152,8 @@ CREATE TABLE IF NOT EXISTS UserEducation (
     user_id     INTEGER NOT NULL REFERENCES FactUser(id),
     degree_id   INTEGER NOT NULL REFERENCES DimDegree(id),
     institution TEXT,
+    gpa         TEXT,   -- como se imprime, con su escala: '8.48 / 10', '3.7/4.0'.
+                -- TEXT y no REAL para mantener la escala
     start_date  TEXT,   -- ISO 8601
     end_date    TEXT,   -- null = en curso
     PRIMARY KEY (user_id, degree_id, institution)
@@ -183,7 +185,8 @@ CREATE TABLE IF NOT EXISTS FactExperience (
                  -- id natural, y company + role + fechas no alcanza: dos
                  -- pasajes por el mismo puesto son dos bloques distintos
     company_id   INTEGER REFERENCES DimCompany(id),   -- reusa DimCompany
-    role_id      INTEGER REFERENCES DimRole(id),
+    role_id      INTEGER REFERENCES DimRole(id), -- categoria dentro de la taxonomia cerrada
+    job_title    TEXT,   -- el título real del puesto, como lo imprime el CV.
     seniority_id INTEGER REFERENCES DimSeniority(id),
     start_date   TEXT,   -- ISO 8601
     end_date     TEXT,   -- null = actual

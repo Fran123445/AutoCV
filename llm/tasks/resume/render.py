@@ -129,7 +129,9 @@ def _render_experience(
         [
             f"--- experience {experience.source_experience_id} ---",
             f"company: {experience.company}",
-            f"role: {experience.role}",
+            f"job title: {experience.job_title or '(not given)'}",
+            # The taxonomy's name for the position, not the printed one above.
+            f"role category: {experience.role}",
             f"seniority: {experience.seniority or '(not given)'}",
             f"dates: {_render_dates(experience.start_date, experience.end_date)}",
             f"tenure: {f'{experience.tenure_months} months' if experience.tenure_months else '(not given)'}",
@@ -164,6 +166,7 @@ def _render_education(education: list[ResumeEducation]) -> str:
     return "\n".join(
         f"* {entry.degree}, {entry.institution or '(institution not given)'} "
         f"({_render_dates(entry.start_date, entry.end_date)})"
+        + (f", grade point average {entry.gpa}" if entry.gpa else "")
         for entry in education
     )
 

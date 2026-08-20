@@ -66,17 +66,23 @@ url = ""
 # Un bloque `[[education]]` por título. Copiá el bloque las veces que haga
 # falta. Si no estudiaste formalmente, borrá los bloques.
 #
-# `degree` sale de la lista del apéndice, verbatim.
+# `degree` sale de la lista del apéndice, verbatim: es la categoría con la que se
+# matchea contra los avisos, no el nombre que va impreso.
+#
+# `gpa` es display puro, escrito como lo querés ver en el CV y con la escala
+# incluida (`8.48 / 10`, `3.7/4.0`): sin la escala el número no dice nada.
 
 [[education]]
 degree = ""
 institution = ""
+gpa = ""
 start = ""
 end = ""
 
 [[education]]
 degree = ""
 institution = ""
+gpa = ""
 start = ""
 end = ""
 
@@ -97,10 +103,17 @@ end = ""
 # `role` y `seniority` salen verbatim de las listas del apéndice. Si ninguna
 # opción encaja, escribí la tuya igual: el transform la marca como `unmatched`
 # en vez de forzarla, y eso es una señal útil de que a los seeds les falta algo.
+#
+# `title` es otra cosa que `role`, y las dos hacen falta. `role` es la categoría
+# de la taxonomía (`bi dev`) y existe para comparar tu puesto contra un aviso;
+# `title` es el título real que tenías y es lo único de los dos que se puede
+# imprimir. Copiá el del contrato o el de LinkedIn, con sus mayúsculas.
+# Vacío hace que se use el generico de la dim.
 
 [[job]]
 id = ""
 company = ""
+title = ""
 role = ""
 seniority = ""
 start = ""
@@ -159,6 +172,7 @@ story = '''
 [[job]]
 id = ""
 company = ""
+title = ""
 role = ""
 seniority = ""
 start = ""
