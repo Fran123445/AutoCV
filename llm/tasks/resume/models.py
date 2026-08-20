@@ -2,7 +2,7 @@
 
 from pydantic import BaseModel, ConfigDict, Field
 
-from resume_generator.models import ResumeEducation, ResumeLanguage, ResumeProfile
+from resume_generator.models import ResumeEducation, ResumeLanguage
 
 
 class _PromptBlock(BaseModel):
@@ -47,7 +47,6 @@ class ResumePromptContext(_PromptBlock):
     """Structured candidate and job data rendered into an LLM prompt."""
 
     job_description: str
-    profile: ResumeProfile
     education: list[ResumeEducation] = Field(default_factory=list)
     languages: list[ResumeLanguage] = Field(default_factory=list)
     experience: list[ResumePromptExperience] = Field(default_factory=list)
