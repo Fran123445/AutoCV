@@ -12,6 +12,7 @@ from llm.tasks.resume.models import (
 )
 from llm.tasks.resume.write import write_resume
 
+from .dates import parse_date
 from .models import (
     ResumeDocument,
     ResumeEducation,
@@ -24,26 +25,15 @@ from .models import (
 )
 
 
-def _parse_date(stamp: str | None) -> date | None:
-    """Read a stored date, which may be a month or a full day."""
-
-    if not stamp:
-        return None
-
-    parts = stamp.split("-")
-
-    return date(int(parts[0]), int(parts[1]), int(parts[2]) if len(parts) > 2 else 1)
-
-
 def _tenure_months(start: str | None, end: str | None) -> int | None:
     """Whole months between two stored dates, counting an absent end as today."""
 
-    first = _parse_date(start)
+    first = parse_date(start)
 
     if first is None:
         return None
 
-    last = _parse_date(end) or date.today()
+    last = parse_date(end) or date.today()
 
     return max((last.year - first.year) * 12 + last.month - first.month, 0)
 
