@@ -9,56 +9,119 @@ command line, which is why both ids are required rather than defaulted.
 The stages split where the cost is. Writing calls the model and the two after
 it do not, so a template or stylesheet edit is re-rendered and reprinted from
 the written document instead of paying for the CV a second time to look at it.
+
+All three write into one folder per posting, named for it, so that a CV and the
+page and the PDF made from it sit together rather than three stage folders apart.
 """
 
 from pathlib import Path
 
 import argparse
+import re
+import sqlite3
 
-from config import RESUMES_PDF_DIR, RESUMES_RENDER_DIR, RESUMES_WRITE_DIR
+from config import RESUMES_DIR
 from resume_generator.generator import generate_resume
 from resume_generator.models import ResumeDocument
 from resume_generator.render import render_html
 from run_log import RunLogger, record_job_run
 
 
-def artifact_stem(user_id: int, job_id: int) -> str:
+DOCUMENT_NAME = "resume.json"
+PAGE_NAME = "resume.html"
+PDF_NAME = "resume.pdf"
+
+# Reserved on Windows, and a path separator on every platform. Control
+# characters go with them: legal on Linux, and unopenable everywhere else.
+_UNUSABLE = re.compile(r'[<>:"/\\|?*\x00-\x1f]')
+_WHITESPACE = re.compile(r"\s+")
+# Per segment rather than over the whole name, so that a long company does not
+# eat the position it is printed next to.
+SEGMENT_LIMIT = 60
+
+
+def _path_segment(value: str) -> str:
     """
-    Name both artifacts of one candidate against one posting.
+    Turn one part of a posting's name into something a filesystem will take.
 
     Args:
-        user_id (int): Candidate the CV is for.
-        job_id (int): Posting the CV is written against.
+        value (str): A company or position name as it appears in the JD.
 
     Returns:
-        str: The stem both stages write under and log their rows under. The
-            file names on the other three pipelines come from a source file;
-            this pipeline has no file to take one from, so the pair of ids is
-            the name.
+        str: The name with the unusable characters replaced and the length
+            capped. Lossy on purpose: these segments are there to be read, and
+            the id in front of them is what identifies the posting.
     """
-    return f"u{user_id}_j{job_id}"
+    segment = _UNUSABLE.sub("-", value)
+
+    return _WHITESPACE.sub(" ", segment).strip()[:SEGMENT_LIMIT]
 
 
-def write(user_id: int, job_id: int, write_output_dir: Path):
+def posting_dir(connection: sqlite3.Connection, job_id: int, resumes_dir: Path) -> Path:
+    """
+    Name the folder every artifact of one posting is written into.
+
+    Args:
+        connection (sqlite3.Connection): Open connection to the candidate base.
+        job_id (int): Posting the resume is written against.
+        resumes_dir (Path): Root the per-posting folders live under.
+
+    Returns:
+        Path: The folder. Every stage derives it the same way rather than being
+            handed it, so renaming a folder by hand only hides it from the run
+            that would have reused it.
+
+    Raises:
+        ValueError: If no posting has that id. Raised here rather than left to
+            the stage, since a resume for a posting that is not in the base
+            would have nothing to be written against anyway.
+    """
+    row = connection.execute(
+        """
+        SELECT company.company_name, job.position_name
+        FROM FactJob AS job
+        LEFT JOIN DimCompany AS company ON company.id = job.company_id
+        WHERE job.id = ?
+        """,
+        (job_id,),
+    ).fetchone()
+
+    if row is None:
+        raise ValueError(f"No posting with id {job_id}.")
+
+    # Joined rather than formatted, because company_id is nullable: a posting
+    # that never got one is named without it instead of with a gap where it
+    # would have gone.
+    segments = [str(job_id)] + [_path_segment(value) for value in row if value]
+
+    # Trailing dots and spaces are dropped silently on Windows, so a folder
+    # created under one name would be looked for under another next stage. The
+    # id in front also keeps the name off the reserved device names: 'CON' is
+    # unusable as a folder, '7 - CON' is not.
+    return resumes_dir / " - ".join(filter(None, segments)).rstrip(" .")
+
+
+def write(user_id: int, job_id: int, resumes_dir: Path):
     """
     Write the resume document and save it.
 
     Args:
         user_id (int): Candidate the CV is for.
         job_id (int): Posting the CV is written against.
-        write_output_dir (Path): Where the written document goes.
+        resumes_dir (Path): Root the per-posting folders live under.
     """
-    stem = artifact_stem(user_id, job_id)
-
     with RunLogger("resume_write", postings_total=1) as run_log:
+        out_dir = posting_dir(run_log.connection, job_id, resumes_dir)
+        out_dir.mkdir(parents=True, exist_ok=True)
+
         print(f"Writing a resume for user {user_id} against job {job_id}...")
         try:
-            with record_job_run(stem) as job_run:
+            with record_job_run(out_dir.name) as job_run:
                 document = generate_resume(run_log.connection, user_id, job_id)
 
                 job_run.job_id = job_id
 
-                out_path = write_output_dir / f"{stem}.json"
+                out_path = out_dir / DOCUMENT_NAME
                 out_path.write_text(
                     document.model_dump_json(indent=2), encoding="utf-8"
                 )
@@ -71,32 +134,31 @@ def write(user_id: int, job_id: int, write_output_dir: Path):
     print(f"\nWrote the resume for user {user_id} against job {job_id} to {out_path}.")
 
 
-def render(user_id: int, job_id: int, write_output_dir: Path, render_output_dir: Path):
+def render(user_id: int, job_id: int, resumes_dir: Path):
     """
     Render a written resume document as HTML.
 
     Args:
         user_id (int): Candidate the CV is for.
         job_id (int): Posting the CV was written against.
-        write_output_dir (Path): Where the write stage left its JSON.
-        render_output_dir (Path): Where the page goes.
+        resumes_dir (Path): Root the per-posting folders live under.
     """
-    stem = artifact_stem(user_id, job_id)
-    json_path = write_output_dir / f"{stem}.json"
-
     with RunLogger("resume_render", postings_total=1) as run_log:
+        out_dir = posting_dir(run_log.connection, job_id, resumes_dir)
+        json_path = out_dir / DOCUMENT_NAME
+
         print(f"Rendering {json_path}...")
         try:
             # The same telemetry wrapper the model-calling stage uses, so its
-            # call list stays empty. job_id stays null too: nothing here reads
-            # FactJob, and a stale document would point the column at a posting
-            # this run never saw.
-            with record_job_run(stem):
+            # call list stays empty. job_id stays null: the document on disk may
+            # have been written against an older version of the posting, and the
+            # column would point at one this run never read.
+            with record_job_run(out_dir.name):
                 document = ResumeDocument.model_validate_json(
                     json_path.read_text(encoding="utf-8")
                 )
 
-                out_path = render_output_dir / f"{stem}.html"
+                out_path = out_dir / PAGE_NAME
                 out_path.write_text(render_html(document), encoding="utf-8")
         except Exception:
             run_log.postings_failed = 1
@@ -107,34 +169,31 @@ def render(user_id: int, job_id: int, write_output_dir: Path, render_output_dir:
     print(f"\nRendered {json_path.name} into {out_path}.")
 
 
-def pdf(user_id: int, job_id: int, render_output_dir: Path, pdf_output_dir: Path):
+def pdf(user_id: int, job_id: int, resumes_dir: Path):
     """
     Print a rendered resume page as a PDF.
 
     Args:
         user_id (int): Candidate the CV is for.
         job_id (int): Posting the CV was written against.
-        render_output_dir (Path): Where the render stage left its page.
-        pdf_output_dir (Path): Where the PDF goes.
+        resumes_dir (Path): Root the per-posting folders live under.
     """
     # Imported here rather than beside the others so that the stages before
     # this one keep running on a machine with no WeasyPrint and no Pango
     # installed. Printing is the only stage that needs either.
     from resume_generator.pdf import render_pdf
 
-    stem = artifact_stem(user_id, job_id)
-    html_path = render_output_dir / f"{stem}.html"
-
     with RunLogger("resume_pdf", postings_total=1) as run_log:
+        out_dir = posting_dir(run_log.connection, job_id, resumes_dir)
+        html_path = out_dir / PAGE_NAME
+
         print(f"Printing {html_path}...")
         try:
-            # Wrapped like the render stage and for the same reasons: no model
-            # is called, so the call list stays empty, and job_id stays null
-            # because nothing here reads FactJob either.
-            with record_job_run(stem):
+            # Wrapped like the render stage and null for the same reason.
+            with record_job_run(out_dir.name):
                 printed = render_pdf(html_path.read_text(encoding="utf-8"))
 
-                out_path = pdf_output_dir / f"{stem}.pdf"
+                out_path = out_dir / PDF_NAME
                 out_path.write_bytes(printed.pdf)
         except Exception:
             run_log.postings_failed = 1
@@ -187,16 +246,13 @@ def main():
     stages = args.stages
 
     if "write" in stages:
-        RESUMES_WRITE_DIR.mkdir(parents=True, exist_ok=True)
-        write(args.user_id, args.job_id, RESUMES_WRITE_DIR)
+        write(args.user_id, args.job_id, RESUMES_DIR)
 
     if "render" in stages:
-        RESUMES_RENDER_DIR.mkdir(parents=True, exist_ok=True)
-        render(args.user_id, args.job_id, RESUMES_WRITE_DIR, RESUMES_RENDER_DIR)
+        render(args.user_id, args.job_id, RESUMES_DIR)
 
     if "pdf" in stages:
-        RESUMES_PDF_DIR.mkdir(parents=True, exist_ok=True)
-        pdf(args.user_id, args.job_id, RESUMES_RENDER_DIR, RESUMES_PDF_DIR)
+        pdf(args.user_id, args.job_id, RESUMES_DIR)
 
 
 if __name__ == "__main__":

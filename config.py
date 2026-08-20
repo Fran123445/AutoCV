@@ -36,9 +36,7 @@ PROJECTS_TRANSFORM_DIR = DATA_DIR / "transformed_projects"
 # No extract counterpart: the experience file is already the structured artifact.
 EXPERIENCE_TRANSFORM_DIR = DATA_DIR / "transformed_experience"
 
-RESUMES_WRITE_DIR = DATA_DIR / "written_resumes"
-RESUMES_RENDER_DIR = DATA_DIR / "rendered_resumes"
-RESUMES_PDF_DIR = DATA_DIR / "printed_resumes"
+RESUMES_DIR = DATA_DIR / "resume"
 
 # La plantilla llena, escrita a mano. Deliberadamente fuera de DATA_DIR: todo lo
 # que cuelga de ahí es derivable y descartable, y esto es lo contrario — es
