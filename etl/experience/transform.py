@@ -80,6 +80,28 @@ def _transform_education(experience: Experience) -> list[dict]:
         for education in experience.education
     ]
 
+def _transform_language(experience: Experience) -> list[dict]:
+    """
+    Map each language block onto UserLanguage shape.
+
+    Nothing to canonicalise: there is no dim behind these and the level is
+    written the way the CV should print it, so the block passes through under
+    the column names. A block with no name is dropped here rather than at load,
+    since UserLanguage.name is the key and a blank one is a line the candidate
+    left in the template.
+
+    Args:
+        experience (Experience): The parsed experience file.
+
+    Returns:
+        list[dict]: name and level per named block.
+    """
+    return [
+        {"name": language.name, "level": language.level}
+        for language in experience.language
+        if language.name is not None
+    ]
+
 def _transform_job(experience: Experience) -> list[dict]:
     """
     Map each job block onto FactExperience shape, with its projects.
@@ -195,21 +217,23 @@ def transform(experience: Experience) -> dict:
     """
     Transform one experience file into the rows the load stage writes.
 
-    The three blocks are independent of each other and of the order they run
-    in: only the jobs cost anything, and they cost everything. The profile and
-    the education are a rename and a date parse.
+    The blocks are independent of each other and of the order they run in:
+    only the jobs cost anything, and they cost everything. The profile is a
+    rename and a date parse, the education adds nothing to that, and the
+    languages are a rename alone.
 
     Args:
         experience (Experience): The parsed experience file.
 
     Returns:
         dict: The identified file. profile fills FactUser and UserLink,
-            education fills UserEducation, and jobs fill FactExperience and the
-            Project rows hanging off it, along with the user's technology and
-            concept rollups.
+            education fills UserEducation, languages fill UserLanguage, and
+            jobs fill FactExperience and the Project rows hanging off it, along
+            with the user's technology and concept rollups.
     """
     return {
         "profile": _transform_profile(experience),
         "education": _transform_education(experience),
+        "languages": _transform_language(experience),
         "jobs": _transform_job(experience),
     }

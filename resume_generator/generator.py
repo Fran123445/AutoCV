@@ -2,7 +2,13 @@
 
 import sqlite3
 
-from .models import ResumeDocument, ResumeEducation, ResumeLink, ResumeProfile
+from .models import (
+    ResumeDocument,
+    ResumeEducation,
+    ResumeLanguage,
+    ResumeLink,
+    ResumeProfile,
+)
 
 
 def _build_profile(
@@ -81,6 +87,27 @@ def _build_education(
     ]
 
 
+def _build_languages(
+    connection: sqlite3.Connection,
+    user_id: int,
+) -> list[ResumeLanguage]:
+    """Build language entries from the candidate's stored languages."""
+
+    # Load order, which is the order they were written in the file: a candidate
+    # lists their native language first, and alphabetical would bury it.
+    languages = connection.execute(
+        """
+        SELECT name, level
+        FROM UserLanguage
+        WHERE user_id = ?
+        ORDER BY rowid
+        """,
+        (user_id,),
+    ).fetchall()
+
+    return [ResumeLanguage(name=name, level=level) for name, level in languages]
+
+
 def generate_resume(
     connection: sqlite3.Connection,
     user_id: int,
@@ -104,4 +131,5 @@ def generate_resume(
     return ResumeDocument(
         profile=_build_profile(connection, user_id),
         education=_build_education(connection, user_id),
+        languages=_build_languages(connection, user_id),
     )

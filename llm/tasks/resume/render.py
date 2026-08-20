@@ -8,7 +8,7 @@ returns its bullets keyed by them, so a position it cannot name is a position
 it cannot write for.
 """
 
-from resume_generator.models import ResumeEducation
+from resume_generator.models import ResumeEducation, ResumeLanguage
 
 from .models import (
     ResumePromptContext,
@@ -171,6 +171,30 @@ def _render_education(education: list[ResumeEducation]) -> str:
     )
 
 
+def _render_languages(languages: list[ResumeLanguage]) -> str:
+    """
+    Render the spoken languages, one per line.
+
+    Printed on the CV verbatim from the record, so like the education these are
+    here to inform the summary rather than to be written back. Worth the lines
+    anyway: a posting that asks for a language is asking about a requirement the
+    candidate either meets or does not.
+
+    Args:
+        languages (list[ResumeLanguage]): The languages, already ordered.
+
+    Returns:
+        str: One line per language, or a marker when there are none.
+    """
+    if not languages:
+        return "(none given)"
+
+    return "\n".join(
+        f"* {language.name}: {language.level}" if language.level else f"* {language.name}"
+        for language in languages
+    )
+
+
 def _render_skills(skills: list[str]) -> str:
     """
     Render everything the candidate is on record as knowing.
@@ -222,6 +246,7 @@ def render_candidate(context: ResumePromptContext) -> str:
     sections = [
         f"[skills on record]\n{_render_skills(context.skills)}",
         f"[education]\n{_render_education(context.education)}",
+        f"[languages spoken]\n{_render_languages(context.languages)}",
         f"[work history]\n{experience or '(none given)'}",
         f"[personal projects]\n{personal or '(none given)'}",
     ]

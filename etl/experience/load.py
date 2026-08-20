@@ -125,6 +125,30 @@ def _load_education(connection: sqlite3.Connection, education: list[dict], user_
     )
 
 
+def _load_language(connection: sqlite3.Connection, languages: list[dict], user_id: int):
+    """
+    Write the spoken languages.
+
+    Level updates on conflict, like the profile and the education dates: a
+    language whose level moved is an edit to the file, not a second language.
+    Dropping one from the file leaves its row behind, which is the same bargain
+    the rest of the candidate side makes — nothing here deletes.
+
+    Args:
+        connection (sqlite3.Connection): Open connection to the database.
+        languages (list[dict]): The language blocks, transformed.
+        user_id (int): The user they belong to.
+    """
+    connection.executemany(
+        """
+        INSERT INTO UserLanguage (user_id, name, level)
+        VALUES (?, ?, ?)
+        ON CONFLICT(user_id, name) DO UPDATE SET level = excluded.level
+        """,
+        [(user_id, language["name"], language["level"]) for language in languages],
+    )
+
+
 def _load_experience(
     connection: sqlite3.Connection, job: dict, user_id: int
 ) -> tuple[int, bool]:
@@ -316,8 +340,9 @@ def load(
         user_id (int): The user the file describes.
 
     Returns:
-        dict: What landed and what was already there, by kind. The profile and
-            the education are not counted: they are written on every run.
+        dict: What landed and what was already there, by kind. The profile,
+            the education and the languages are not counted: they are written
+            on every run.
 
     Raises:
         MissingProjectStory: A project block has no story written in it.
@@ -334,6 +359,7 @@ def load(
     with connection:
         _load_profile(connection, transformed_data["profile"], user_id)
         _load_education(connection, transformed_data["education"], user_id)
+        _load_language(connection, transformed_data["languages"], user_id)
 
         for job in jobs:
             experience_id, inserted = _load_experience(connection, job, user_id)

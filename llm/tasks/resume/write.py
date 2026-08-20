@@ -28,6 +28,7 @@ Rules for skills:
 - Three to six rows, each a label and its items. Choose labels that fit this candidate against this posting rather than working from a fixed set, and put the row the posting cares about most first.
 - Draw only on the skills list and on what the record shows the candidate using. Leave out anything the posting has no use for: the list given to you is everything they have ever touched, not everything worth printing.
 - Where a term has a common short and long form, print both once, long form first, since the posting may be searched for either: "Extract Transform Load (ETL)", "software development life cycle (SDLC)". Do not do this to terms that only ever appear one way.
+- Leave the spoken languages out of the block: they are printed in their own section, straight from the record. A row labelled Languages is programming languages.
 - Group tightly enough that the label means something. A row called Other, or a row mixing languages with methodologies, is a row wasted.
 
 Rules for work_bullets:

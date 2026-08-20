@@ -93,6 +93,11 @@ class Education(_Block):
     end: Text = None
 
 
+class Language(_Block):
+    name: Text = None
+    level: Text = None
+
+
 class Project(_Block):
     id: Identifier
     story: Text = None
@@ -119,6 +124,7 @@ class Job(_Block):
 class Experience(_Block):
     profile: Profile
     education: list[Education] = []
+    language: list[Language] = []
     job: list[Job] = []
 
     @model_validator(mode="after")

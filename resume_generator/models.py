@@ -31,6 +31,13 @@ class ResumeProfile(_ResumeBlock):
     links: list[ResumeLink] = Field(default_factory=list)
 
 
+class ResumeLanguage(_ResumeBlock):
+    """One spoken language and how well the candidate speaks it."""
+
+    name: str
+    level: str | None = None
+
+
 class ResumeBullet(_ResumeBlock):
     """One resume bullet and the evidence used to produce it."""
 
@@ -86,3 +93,4 @@ class ResumeDocument(_ResumeBlock):
     experience: list[ResumeExperience] = Field(default_factory=list)
     projects: list[ResumeProject] = Field(default_factory=list)
     education: list[ResumeEducation] = Field(default_factory=list)
+    languages: list[ResumeLanguage] = Field(default_factory=list)

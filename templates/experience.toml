@@ -88,6 +88,27 @@ end = ""
 
 
 # ============================================================================
+# Idiomas
+# ============================================================================
+#
+# Un bloque `[[language]]` por idioma, en el orden en que los quieras impresos
+# (el nativo primero). Si no querés la sección, borrá los bloques.
+#
+# Igual que el perfil, esto no se matchea contra nada: `name` y `level` salen
+# impresos tal cual, sin lista cerrada. Escribí el nivel como lo querés ver
+# ("Nativo", "C1", "B2 (Intermedio alto)"), y en el idioma en que va a salir el
+# CV. `name` es la clave: uno solo por idioma.
+
+[[language]]
+name = ""
+level = ""
+
+[[language]]
+name = ""
+level = ""
+
+
+# ============================================================================
 # Experiencia
 # ============================================================================
 #

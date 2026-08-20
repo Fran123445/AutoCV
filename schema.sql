@@ -159,6 +159,16 @@ CREATE TABLE IF NOT EXISTS UserEducation (
     PRIMARY KEY (user_id, degree_id, institution)
 );
 
+-- Idiomas hablados. Sin dim y sin nivel canónico, como UserLink: no se matchea
+-- contra nada (FactJob.language es el idioma del aviso, no un requisito), así
+-- que name y level salen impresos tal cual se escribieron.
+CREATE TABLE IF NOT EXISTS UserLanguage (
+    user_id INTEGER NOT NULL REFERENCES FactUser(id),
+    name    TEXT NOT NULL,  -- 'English', 'Spanish', ... como va en el CV
+    level   TEXT,           -- como se imprime: 'Native', 'C1', 'B2 (Upper-intermediate)'
+    PRIMARY KEY (user_id, name)
+);
+
 -- Bridges de skills. proficiency vive acá, no en los projects:
 -- el project es evidencia de uso, el nivel es una afirmación del candidato.
 CREATE TABLE IF NOT EXISTS UserTechnologies (
