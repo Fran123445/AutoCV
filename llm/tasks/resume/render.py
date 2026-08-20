@@ -64,6 +64,26 @@ def _render_tags(tags: list[ResumePromptTag]) -> str:
     )
 
 
+def _render_folder(source_path: str | None) -> str:
+    """
+    Render the last segment of a project's path.
+
+    Given so the writer can see what it is renaming away from, not so it can
+    use it: a folder is named by someone who already knows what is inside it,
+    and reads on a CV as either an abbreviation or a private joke.
+
+    Args:
+        source_path (str | None): Where the project was read from, if known.
+
+    Returns:
+        str: The folder name, or a marker when there is no path.
+    """
+    if not source_path:
+        return "(not given)"
+
+    return source_path.replace("\\", "/").rstrip("/").split("/")[-1] or "(not given)"
+
+
 def _render_project(project: ResumePromptProject) -> str:
     """
     Render one project as a labelled entry.
@@ -77,6 +97,7 @@ def _render_project(project: ResumePromptProject) -> str:
     return "\n\n".join(
         [
             f"--- project {project.source_project_id} ---\n"
+            f"folder name: {_render_folder(project.source_path)}\n"
             f"description: {project.description[:MAX_NARRATIVE_CHARS]}",
             f"technologies:\n{_render_tags(project.technologies)}",
             f"concepts:\n{_render_tags(project.concepts)}",
@@ -111,6 +132,7 @@ def _render_experience(
             f"role: {experience.role}",
             f"seniority: {experience.seniority or '(not given)'}",
             f"dates: {_render_dates(experience.start_date, experience.end_date)}",
+            f"tenure: {f'{experience.tenure_months} months' if experience.tenure_months else '(not given)'}",
             f"day to day: {day_to_day[:MAX_NARRATIVE_CHARS] if day_to_day else '(none)'}",
         ]
     )
@@ -146,6 +168,27 @@ def _render_education(education: list[ResumeEducation]) -> str:
     )
 
 
+def _render_skills(skills: list[str]) -> str:
+    """
+    Render everything the candidate is on record as knowing.
+
+    Flat, rather than sorted into the groups the block is printed in. Which
+    grouping earns its place depends on the posting being written against, so
+    one fixed here would be one the writer has to argue with rather than one
+    it can choose.
+
+    Args:
+        skills (list[str]): The names, already ordered.
+
+    Returns:
+        str: One line per skill, or a marker when there are none.
+    """
+    if not skills:
+        return "(none given)"
+
+    return "\n".join(f"* {skill}" for skill in skills)
+
+
 def render_candidate(context: ResumePromptContext) -> str:
     """
     Render the candidate half of the writer's prompt.
@@ -174,6 +217,7 @@ def render_candidate(context: ResumePromptContext) -> str:
     personal = "\n\n".join(_render_project(project) for project in context.personal_projects)
 
     sections = [
+        f"[skills on record]\n{_render_skills(context.skills)}",
         f"[education]\n{_render_education(context.education)}",
         f"[work history]\n{experience or '(none given)'}",
         f"[personal projects]\n{personal or '(none given)'}",
