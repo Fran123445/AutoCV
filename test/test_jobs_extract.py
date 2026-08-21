@@ -1,3 +1,7 @@
+import os
+
+from datetime import datetime, timezone
+
 import pytest
 
 from etl.jobs.config import (
@@ -8,6 +12,7 @@ from etl.jobs.config import (
     MODALITIES,
 )
 from etl.jobs.extract import (
+    JobDescriptionNotFound,
     _clean_html,
     _extract_body,
     _extract_company,
@@ -15,6 +20,8 @@ from etl.jobs.extract import (
     _extract_posted,
     _extract_source,
     _longest_common_suffix,
+    _read_mhtml,
+    extract_from_file,
     extract_from_html,
 )
 
@@ -332,3 +339,142 @@ def test_a_body_exactly_at_the_minimum_is_accepted():
     page = make_page(body="x" * MIN_BODY_LENGTH)
 
     assert len(extract_from_html(page)["body"]) == MIN_BODY_LENGTH
+
+
+def test_extract_from_html_falls_back_to_the_pre_pipe_position():
+    """
+    Title ending in a pipe leaves no company after it, and the subheader shares
+    no suffix with the title, so company stays null and the position is read
+    from the half before the last pipe rather than the half after it.
+    """
+    page = make_page(
+        title="Data Engineer |",
+        subheader="Data Engineer Acme • Buenos Aires · hace 3 meses",
+    )
+    header = extract_from_html(page)["header"]
+
+    assert header["company_name"] is None
+    assert header["position_name"] == "Data Engineer"
+
+
+def test_extract_from_html_below_the_minimum_raises():
+    """One character under the guard is the rejection the boundary test omits."""
+    page = make_page(body="x" * (MIN_BODY_LENGTH - 1))
+
+    with pytest.raises(JobDescriptionNotFound):
+        extract_from_html(page)
+
+
+# --------------------------------------------------------------------------
+# _read_mhtml and extract_from_file
+# --------------------------------------------------------------------------
+
+def make_mhtml(
+    html=None,
+    snapshot_url="https://www.linkedin.com/jobs/view/4231234567/",
+    with_html_part=True,
+):
+    """
+    Minimal single-file MHTML archive, the shape a browser writes on save.
+
+    A MIME container whose first part is the page and whose trailing image part
+    stands in for the assets _read_mhtml must walk past. The parts declare no
+    charset and ride 8bit, matching the save that forced the hand decode; the
+    origin lives in the Snapshot-Content-Location header, not the save comment.
+    """
+    if html is None:
+        html = make_page(source_url=snapshot_url)
+
+    header = (
+        "From: <Saved by Blink>\r\n"
+        f"Snapshot-Content-Location: {snapshot_url}\r\n"
+        "MIME-Version: 1.0\r\n"
+        'Content-Type: multipart/related; boundary="----BOUND"\r\n'
+        "\r\n"
+    )
+    image_part = (
+        "------BOUND\r\n"
+        "Content-Type: image/png\r\n"
+        "Content-Transfer-Encoding: base64\r\n"
+        "\r\n"
+        "iVBORw0KGgo=\r\n"
+    )
+    html_part = (
+        "------BOUND\r\n"
+        "Content-Type: text/html\r\n"
+        "Content-Transfer-Encoding: 8bit\r\n"
+        "\r\n"
+        f"{html}\r\n"
+    )
+
+    parts = [header]
+    if with_html_part:
+        parts.append(html_part)
+    parts.append(image_part)
+    parts.append("------BOUND--\r\n")
+
+    return "".join(parts).encode("utf-8")
+
+
+def test_read_mhtml_returns_the_html_and_the_snapshot_source(tmp_path):
+    path = tmp_path / "posting.mhtml"
+    path.write_bytes(make_mhtml())
+
+    html_content, source = _read_mhtml(path)
+
+    assert BODY_START_ANCHOR in html_content
+    assert source == {
+        "source_url": "https://www.linkedin.com/jobs/view/4231234567/",
+        "linkedin_job_id": 4231234567,
+    }
+
+
+def test_read_mhtml_picks_the_html_part_past_the_image(tmp_path):
+    """walk() must skip the image part and land on text/html, not the first part."""
+    path = tmp_path / "posting.mhtml"
+    path.write_bytes(make_mhtml())
+
+    html_content, _ = _read_mhtml(path)
+
+    assert html_content.startswith("<!-- saved from url")
+
+
+def test_read_mhtml_without_an_html_part_raises(tmp_path):
+    path = tmp_path / "imageonly.mhtml"
+    path.write_bytes(make_mhtml(with_html_part=False))
+
+    with pytest.raises(JobDescriptionNotFound):
+        _read_mhtml(path)
+
+
+def test_extract_from_file_reads_an_mhtml_archive(tmp_path):
+    path = tmp_path / "posting.mhtml"
+    path.write_bytes(make_mhtml())
+
+    result = extract_from_file(path)
+
+    assert result["header"]["linkedin_job_id"] == 4231234567
+    assert result["body"].startswith("Buscamos un ingeniero de datos.")
+
+
+def test_extract_from_file_reads_a_plain_html_file(tmp_path):
+    path = tmp_path / "posting.html"
+    path.write_text(make_page(), encoding="utf-8")
+
+    result = extract_from_file(path)
+
+    assert result["header"]["linkedin_job_id"] == 4231234567
+    assert result["body"].startswith("Buscamos un ingeniero de datos.")
+
+
+def test_extract_from_file_stamps_the_scrape_date_from_the_mtime(tmp_path):
+    """The scrape date is the file's mtime, taken as a UTC calendar date."""
+    path = tmp_path / "posting.html"
+    path.write_text(make_page(), encoding="utf-8")
+
+    when = datetime(2026, 3, 14, 9, 0, tzinfo=timezone.utc).timestamp()
+    os.utime(path, (when, when))
+
+    result = extract_from_file(path)
+
+    assert result["scrape_date"] == "2026-03-14"
