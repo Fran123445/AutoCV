@@ -36,7 +36,7 @@ def extract(parent_projects_dir: Path, out_dir: Path):
     made it into the gathered list still gets a row of its own.
 
     Args:
-        parent_projects_dir (Path): Folder whose immediate subdirectories are
+        parent_projects_dir (Path): Folder whose git repos, at any depth, are
             the candidate projects.
         out_dir (Path): Where the signal JSON goes, one file per project.
     """
@@ -240,7 +240,7 @@ def parse_args():
         # No default: the repos live outside this project, and guessing at
         # somebody's code folder would either scan the wrong tree or nothing.
         help=(
-            "Folder whose immediate subdirectories are the candidate projects. "
+            "Folder whose git repos, at any depth, are the candidate projects. "
             "Required when the extract stage runs."
         ),
     )

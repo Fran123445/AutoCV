@@ -48,6 +48,12 @@ SOURCE_EXTENSIONS = frozenset(
 # (scratch, config-only, empty scaffold) and never reaches the model.
 MIN_SOURCE_FILES = 3
 
+# Directory names the repo walk never descends into while hunting for a .git.
+# A repo sits at the top of its own tree, so these only ever hide a dependency
+# checkout or build junk, and crawling a node_modules tree for a .git that is
+# not there is the one way this walk could turn slow.
+WALK_PRUNE_DIRS = frozenset({".git", "node_modules", "venv", ".venv", "__pycache__"})
+
 # README is narrative fuel for the task_desc pass, not a parse target; cap it so
 # a monster readme cannot blow up the dict handed downstream.
 README_MAX_CHARS = 20_000

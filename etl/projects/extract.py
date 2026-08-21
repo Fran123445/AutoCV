@@ -16,6 +16,7 @@ from etl.projects.config import (
     MIN_SOURCE_FILES,
     README_MAX_CHARS,
     SOURCE_EXTENSIONS,
+    WALK_PRUNE_DIRS,
 )
 
 
@@ -106,30 +107,60 @@ def _count_source_files(files: list[str]) -> int:
     return sum(1 for f in files if Path(f).suffix.lower() in SOURCE_EXTENSIONS)
 
 
-def _filter_irrelevant_projects(parent_projects: Path) -> list[Path]:
+def _discover_repos(parent_projects: Path) -> list[Path]:
     """
-    Keep the child directories worth handing to the model.
+    Find every git repo at any depth under the parent folder.
 
-    Two cheap, deterministic gates only. Git presence, then a junk floor: a
-    manifest or a handful of source files. Anything subtler (an unclear repo
-    that clears the floor but may still be throwaway) is left for the transform
-    stage to judge, since that is a call code should not make.
+    A repo is a directory holding a .git. The walk descends non-repo folders
+    hunting for one and stops at each repo it finds: a repo's own files come
+    from git, and a repo nested inside one (a submodule, a vendored checkout) is
+    that repo's business, not a separate project of the user's. This is why a
+    frontend one level too deep is found where the old immediate-children scan
+    missed it. Junk directories are pruned so the walk never crawls a
+    node_modules tree for a .git that is not there.
 
     Args:
-        parent_projects (Path): Folder whose immediate subdirectories are the
+        parent_projects (Path): Folder to search beneath.
+
+    Returns:
+        list[Path]: Every git repo directory found, parents before children.
+    """
+    repos = []
+
+    def visit(directory: Path) -> None:
+        for child in sorted(directory.iterdir()):
+            if not child.is_dir() or child.name in WALK_PRUNE_DIRS:
+                continue
+            if (child / ".git").is_dir():
+                repos.append(child)
+            else:
+                visit(child)
+
+    visit(parent_projects)
+    return repos
+
+
+def _filter_irrelevant_projects(parent_projects: Path) -> list[Path]:
+    """
+    Keep the repos worth handing to the model.
+
+    Two cheap, deterministic gates. The repo walk supplies git presence; this
+    adds a junk floor: a manifest or a handful of source files. Anything subtler
+    (an unclear repo that clears the floor but may still be throwaway) is left
+    for the transform stage to judge, since that is a call code should not make.
+
+    Args:
+        parent_projects (Path): Folder whose repos, at any depth, are the
             candidate projects.
 
     Returns:
         list[Path]: The surviving project directories.
     """
     kept = []
-    for child in sorted(parent_projects.iterdir()):
-        if not child.is_dir() or not (child / ".git").is_dir():
-            continue
-
-        files = _tracked_files(child)
+    for repo in _discover_repos(parent_projects):
+        files = _tracked_files(repo)
         if _find_manifests(files) or _count_source_files(files) >= MIN_SOURCE_FILES:
-            kept.append(child)
+            kept.append(repo)
 
     return kept
 
@@ -357,9 +388,9 @@ def extract(parent_projects_folder: str) -> list[dict]:
     """
     Extract the signal dicts for every worthwhile project under a parent folder.
 
-    Deterministic, model-free stage: it scans the immediate subdirectories of
-    the parent, keeps the git repos that clear the junk floor, and gathers the
-    cheap signals the transform stage turns into technologies, concepts and a
+    Deterministic, model-free stage: it walks the parent for git repos at any
+    depth, keeps the ones that clear the junk floor, and gathers the cheap
+    signals the transform stage turns into technologies, concepts and a
     narrative. File lists come from git, so each project's own .gitignore prunes
     the tree.
 
@@ -376,7 +407,7 @@ def extract(parent_projects_folder: str) -> list[dict]:
         }
 
     Args:
-        parent_projects_folder (str): Folder whose immediate subdirectories are
+        parent_projects_folder (str): Folder whose git repos, at any depth, are
             the candidate projects.
 
     Returns:
