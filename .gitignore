@@ -46,6 +46,7 @@ dist/
 
 # Data folder
 data/
+.pytmp/
 
 # La plantilla llena: datos personales, y el repo es público. La copia en blanco
 # y el ejemplo viven en templates/ y sí van al repo.
