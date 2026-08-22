@@ -224,6 +224,7 @@ CREATE TABLE IF NOT EXISTS Project (
     source_id     TEXT,         -- la otra clave de dedupe: id del bloque en
                   -- experience.toml, para los projects que nacen de un job.
                   -- Null en los personales, que no salen de ese archivo
+    head_commit   TEXT,         -- hash del HEAD del repo (combinado si son varios). 
     UNIQUE (experience_id, source_id)   -- por experiencia y no global: los ids
            -- del archivo son únicos dentro de cada job, no entre jobs
 );

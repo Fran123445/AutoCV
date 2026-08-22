@@ -39,6 +39,48 @@ def _tracked_files(project: Path) -> list[str]:
     return [path for path in result.stdout.split("\0") if path]
 
 
+def _head_commit(repo: Path) -> str | None:
+    """
+    Args:
+        repo (Path): The repo directory (already known to be a git repo).
+
+    Returns:
+        str | None: The 40-char HEAD hash, or None.
+    """
+    result = subprocess.run(
+        ["git", "-C", str(repo), "rev-parse", "HEAD"],
+        capture_output=True,
+        text=True,
+        encoding="utf-8",
+    )
+    if result.returncode != 0:
+        return None
+
+    return result.stdout.strip() or None
+
+
+def _combine_heads(heads: list[str | None]) -> str | None:
+    """
+    Fold a group's per-repo HEAD hashes into one cache key.
+
+    Sorted and joined, so the key is stable whatever order the repos were walked
+    in, and so a multi-repo project turns over whenever any of its repos does. A
+    lone repo yields its own hash unchanged. None when no repo has a resolvable
+    commit, which the skip reads as "never matches".
+
+    Args:
+        heads (list[str | None]): One HEAD hash per repo, None where unresolved.
+
+    Returns:
+        str | None: The combined key, or None when nothing was resolvable.
+    """
+    present = sorted(head for head in heads if head)
+    if not present:
+        return None
+
+    return "+".join(present)
+
+
 def _count_source_files(files: list[str]) -> int:
     """
     Count tracked files carrying a recognized source extension.
@@ -116,13 +158,14 @@ def _gather_repo_signals(repo: Path) -> dict:
 
     The analyzer needs only the repository identity and its tracked file tree.
     Paths are relative to this repo's own root, which is what lets the merge
-    below re-root them under an umbrella.
+    below re-root them under an umbrella. "head" is this repo's HEAD hash, which
+    the merge folds into the project's combined cache key.
 
     Args:
         repo (Path): The repo directory.
 
     Returns:
-        dict: The repo's signal dict. See extract() for the shape.
+        dict: The repo's signal dict, {path, name, tree, head}.
     """
     files = _tracked_files(repo)
 
@@ -130,6 +173,7 @@ def _gather_repo_signals(repo: Path) -> dict:
         "path": str(repo),
         "name": repo.name,
         "tree": files,
+        "head": _head_commit(repo),
     }
 
 
@@ -176,9 +220,16 @@ def _merge_group(group_root: Path, repos: list[Path]) -> dict:
         dict: The merged project signal dict. See extract() for the shape.
     """
     if len(repos) == 1 and repos[0] == group_root:
-        return _gather_repo_signals(group_root)
+        signals = _gather_repo_signals(group_root)
+        return {
+            "path": signals["path"],
+            "name": signals["name"],
+            "tree": signals["tree"],
+            "head_commit": _combine_heads([signals["head"]]),
+        }
 
     tree: list[str] = []
+    heads: list[str | None] = []
 
     for repo in repos:
         rel = repo.relative_to(group_root).as_posix()
@@ -186,11 +237,13 @@ def _merge_group(group_root: Path, repos: list[Path]) -> dict:
         signals = _gather_repo_signals(repo)
 
         tree.extend(prefix + path for path in signals["tree"])
+        heads.append(signals["head"])
 
     return {
         "path": str(group_root),
         "name": group_root.name,
         "tree": tree,
+        "head_commit": _combine_heads(heads),
     }
 
 
@@ -210,6 +263,7 @@ def extract(parent_projects_folder: str) -> list[dict]:
             "path": str,                 # absolute path to the project
             "name": str,                 # directory name
             "tree": [str],               # tracked file paths, repo-relative
+            "head_commit": str | None,   # combined HEAD hash, the cache key
         }
 
     In a multi-repo project every tree path is prefixed with its repo folder, so

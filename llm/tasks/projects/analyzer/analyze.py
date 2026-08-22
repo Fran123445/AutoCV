@@ -73,6 +73,7 @@ def analyze(signals: dict) -> dict:
     return {
         "path": signals["path"],
         "name": signals["name"],
+        "head_commit": signals.get("head_commit"),
         "technologies": {
             "technologies": [entry.name for entry in result.technologies],
             "discarded_technologies": result.discarded_technologies,

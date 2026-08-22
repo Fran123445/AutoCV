@@ -14,8 +14,9 @@ from pathlib import Path
 
 import argparse
 import json
+import sqlite3
 
-from config import PROJECTS_EXTRACT_DIR, PROJECTS_TRANSFORM_DIR
+from config import DB_PATH, PROJECTS_EXTRACT_DIR, PROJECTS_TRANSFORM_DIR
 # Aliased, like the job side: this module has stage functions of its own whose
 # names would otherwise shadow the imports.
 from etl.projects.extract import extract as extract_projects
@@ -102,20 +103,82 @@ def transform_one(json_path: Path, transform_output_dir: Path):
             json.dump(transformed, f, ensure_ascii=False, indent=2)
 
 
+def _loaded_head_commits() -> dict[str, str]:
+    """
+    The stored HEAD of every project already in the base, by source_path.
+
+    Only rows with both a path and a head: a null on either side is not a cache
+    entry, it is a project that has to be reprocessed to earn one. Empty when
+    there is no base yet, or one that predates the Project table, since a cache
+    miss only ever means more work, never wrong work.
+
+    Returns:
+        dict[str, str]: source_path to head_commit, for the cacheable projects.
+    """
+    if not DB_PATH.exists():
+        return {}
+
+    connection = sqlite3.connect(DB_PATH)
+    try:
+        rows = connection.execute(
+            """
+            SELECT source_path, head_commit FROM Project
+            WHERE source_path IS NOT NULL AND head_commit IS NOT NULL
+            """
+        ).fetchall()
+        return {path: head for path, head in rows}
+    except sqlite3.OperationalError:
+        return {}
+    finally:
+        connection.close()
+
+
+def _plan_transforms(
+    json_paths: list[Path], loaded: dict[str, str]
+) -> tuple[list[Path], list[Path]]:
+    """
+    Split the extracted projects into those to transform and those to skip.
+
+    Args:
+        json_paths (list[Path]): The extract outputs, one per project.
+        loaded (dict[str, str]): source_path to stored head, for loaded projects.
+
+    Returns:
+        tuple[list[Path], list[Path]]: Paths to transform, and paths skipped.
+    """
+    to_run, skipped = [], []
+    for json_path in json_paths:
+        with json_path.open("r", encoding="utf-8") as f:
+            signals = json.load(f)
+
+        head = signals.get("head_commit")
+        if head is not None and loaded.get(signals["path"]) == head:
+            skipped.append(json_path)
+        else:
+            to_run.append(json_path)
+
+    return to_run, skipped
+
+
 def transform(extract_output_dir: Path, transform_output_dir: Path):
     json_paths = sorted(extract_output_dir.glob("*.json"))
+
+    to_run, skipped = _plan_transforms(json_paths, _loaded_head_commits())
+    for json_path in skipped:
+        print(f"Skipped {json_path.name} (unchanged since load)")
+
     transformed_count = 0
     failed = []
 
     with RunLogger(
         "projects_transform",
-        postings_total=len(json_paths),
+        postings_total=len(to_run),
         max_concurrency=MAX_CONCURRENCY,
     ) as run_log:
         with ThreadPoolExecutor(max_workers=MAX_CONCURRENCY) as pool:
             futures = {
                 pool.submit(transform_one, json_path, transform_output_dir): json_path
-                for json_path in json_paths
+                for json_path in to_run
             }
 
             # Results are handled here on the main thread, so the counter needs
@@ -138,7 +201,7 @@ def transform(extract_output_dir: Path, transform_output_dir: Path):
                     transformed_count += 1
                     print(
                         f"Transformed {json_path.name} "
-                        f"[{transformed_count}/{len(json_paths)}]"
+                        f"[{transformed_count}/{len(to_run)}]"
                     )
                 finally:
                     # Every iteration rather than once at the end: a batch this
@@ -149,7 +212,10 @@ def transform(extract_output_dir: Path, transform_output_dir: Path):
         run_log.postings_ok = transformed_count
         run_log.postings_failed = len(failed)
 
-    print(f"\nTransformed {transformed_count}, failed {len(failed)}.")
+    print(
+        f"\nTransformed {transformed_count}, skipped {len(skipped)}, "
+        f"failed {len(failed)}."
+    )
     for json_path, error in failed:
         print(f"  {json_path.name}: {error!r}")
 
