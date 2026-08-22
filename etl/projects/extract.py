@@ -350,38 +350,122 @@ def _scan_imports(project: Path, files: list[str]) -> dict[str, int]:
     return importers
 
 
-def _gather_signals(projects: list[Path]) -> list[dict]:
+def _gather_repo_signals(repo: Path) -> dict:
     """
-    Build the per-project signal dict that the transform stage consumes.
+    Build the signal dict for a single git repo.
 
     Everything cheap and deterministic: raw manifests, infra/CI markers, an
     extension histogram, the imported packages, the README, and the tracked file
     tree. Source files are opened only to match import lines, never read for
-    meaning; that is the sampling pass's job.
+    meaning; that is the sampling pass's job. Paths are relative to this repo's
+    own root, which is what lets the merge below re-root them under an umbrella.
 
     Args:
-        projects (list[Path]): The whitelisted project directories.
+        repo (Path): The repo directory.
 
     Returns:
-        list[dict]: One signal dict per project. See extract() for the shape.
+        dict: The repo's signal dict. See extract() for the shape.
     """
-    gathered = []
-    for project in projects:
-        files = _tracked_files(project)
-        gathered.append(
-            {
-                "path": str(project),
-                "name": project.name,
-                "manifests": _read_manifests(project, _find_manifests(files)),
-                "config_signals": _find_config_signals(files),
-                "ext_histogram": _extension_histogram(files),
-                "imports": _scan_imports(project, files),
-                "readme": _read_readme(project, files),
-                "tree": files,
-            }
-        )
+    files = _tracked_files(repo)
 
-    return gathered
+    return {
+        "path": str(repo),
+        "name": repo.name,
+        "manifests": _read_manifests(repo, _find_manifests(files)),
+        "config_signals": _find_config_signals(files),
+        "ext_histogram": _extension_histogram(files),
+        "imports": _scan_imports(repo, files),
+        "readme": _read_readme(repo, files),
+        "tree": files,
+    }
+
+
+def _group_repos(parent: Path, repos: list[Path]) -> dict[str, list[Path]]:
+    """
+    Bucket the kept repos by the top-level folder they sit under.
+
+    A directory the user thinks of as one project can hold several repos (a
+    backend and a frontend, for example). On disk that shows up as an umbrella folder
+    with no .git of its own whose children are the repos. The top-level segment
+    under the parent is that folder's name, so grouping on it collects those
+    repos into one project. A repo that is itself a top-level folder is its own
+    group of one, which is why single-repo projects come out unchanged.
+
+    Args:
+        parent (Path): The scanned parent folder.
+        repos (list[Path]): The kept repo directories, at any depth.
+
+    Returns:
+        dict[str, list[Path]]: Top-level folder name to the repos beneath it.
+    """
+    groups: dict[str, list[Path]] = {}
+    for repo in repos:
+        key = repo.relative_to(parent).parts[0]
+        groups.setdefault(key, []).append(repo)
+
+    return groups
+
+
+def _merge_group(group_root: Path, repos: list[Path]) -> dict:
+    """
+    Fold a group's repos into one project signal dict.
+
+    A one-repo group is the repo's own signals verbatim: group_root is the repo,
+    so nothing is re-rooted and the output matches the pre-grouping shape byte
+    for byte. A multi-repo group re-roots every repo's paths under the umbrella
+    by prefixing them with the repo's folder, so a path still resolves from the
+    group root the sampler is handed. Package keys stay bare (a package is the
+    same technology whichever repo imports it); their file lists union. The
+    extension histogram sums, config markers and the tree concatenate, and each
+    repo's README is kept under a header. The components key names the repos and
+    is what tells the renderer, and the model, that this is more than one repo.
+
+    Args:
+        group_root (Path): The umbrella folder (or the repo, for a lone repo).
+        repos (list[Path]): The repos in this group.
+
+    Returns:
+        dict: The merged project signal dict. See extract() for the shape.
+    """
+    if len(repos) == 1 and repos[0] == group_root:
+        return _gather_repo_signals(group_root)
+
+    manifests: dict[str, str] = {}
+    config_signals: list[str] = []
+    ext_histogram: dict[str, int] = {}
+    imports: dict[str, list[str]] = {}
+    tree: list[str] = []
+    readmes: list[str] = []
+    components: list[str] = []
+
+    for repo in repos:
+        rel = repo.relative_to(group_root).as_posix()
+        prefix = rel + "/"
+        signals = _gather_repo_signals(repo)
+        components.append(rel)
+
+        tree.extend(prefix + path for path in signals["tree"])
+        for name, content in signals["manifests"].items():
+            manifests[prefix + name] = content
+        config_signals.extend(prefix + marker for marker in signals["config_signals"])
+        for extension, count in signals["ext_histogram"].items():
+            ext_histogram[extension] = ext_histogram.get(extension, 0) + count
+        for package, files in signals["imports"].items():
+            imports.setdefault(package, []).extend(prefix + f for f in files)
+        if signals["readme"]:
+            readmes.append(f"--- {rel} ---\n{signals['readme']}")
+
+    return {
+        "path": str(group_root),
+        "name": group_root.name,
+        "manifests": manifests,
+        "config_signals": config_signals,
+        "ext_histogram": ext_histogram,
+        "imports": imports,
+        "readme": "\n\n".join(readmes) if readmes else None,
+        "tree": tree,
+        "components": components,
+    }
 
 
 def extract(parent_projects_folder: str) -> list[dict]:
@@ -389,10 +473,12 @@ def extract(parent_projects_folder: str) -> list[dict]:
     Extract the signal dicts for every worthwhile project under a parent folder.
 
     Deterministic, model-free stage: it walks the parent for git repos at any
-    depth, keeps the ones that clear the junk floor, and gathers the cheap
-    signals the transform stage turns into technologies, concepts and a
-    narrative. File lists come from git, so each project's own .gitignore prunes
-    the tree.
+    depth, keeps the ones that clear the junk floor, groups the survivors by the
+    top-level folder they live under, and gathers the cheap signals the
+    transform stage turns into technologies, concepts and a narrative. Grouping
+    is what makes an umbrella folder of several repos (a backend, a frontend, a
+    crawler) one project rather than several. File lists come from git, so each
+    repo's own .gitignore prunes the tree.
 
     Each dict has the shape:
         {
@@ -404,7 +490,13 @@ def extract(parent_projects_folder: str) -> list[dict]:
             "imports": {str: [str]},     # package -> files importing it
             "readme": str | None,        # capped README text
             "tree": [str],               # tracked file paths, repo-relative
+            "components": [str],         # repo folders, only when more than one
         }
+
+    In a multi-repo project every path (tree entries, manifest keys, import file
+    lists, config markers) is prefixed with its repo folder, so it still
+    resolves from "path". A single-repo project carries no "components" key and
+    is byte-for-byte what this stage produced before grouping existed.
 
     Args:
         parent_projects_folder (str): Folder whose git repos, at any depth, are
@@ -414,6 +506,9 @@ def extract(parent_projects_folder: str) -> list[dict]:
         list[dict]: One signal dict per surviving project.
     """
     parent = Path(parent_projects_folder)
-    projects = _filter_irrelevant_projects(parent)
+    kept = _filter_irrelevant_projects(parent)
+    groups = _group_repos(parent, kept)
 
-    return _gather_signals(projects)
+    return [
+        _merge_group(parent / key, sorted(repos)) for key, repos in sorted(groups.items())
+    ]

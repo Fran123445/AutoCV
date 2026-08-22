@@ -123,15 +123,22 @@ def render_signals(signals: dict) -> str:
     """
     readme = signals.get("readme")
     config_signals = signals.get("config_signals") or []
+    components = signals.get("components")
 
-    return "\n\n".join(
-        [
-            f"[project name]\n{signals['name']}",
-            f"[readme]\n{readme[:MAX_README_CHARS] if readme else '(none)'}",
-            f"[dependency manifests]\n{_render_manifests(signals.get('manifests') or {})}",
-            f"[imported packages, with how many files import each]\n{_render_imports(signals.get('imports') or {})}",
-            f"[infrastructure and CI files present]\n{', '.join(config_signals) or '(none)'}",
-            f"[tracked files by extension]\n{_render_histogram(signals.get('ext_histogram') or {})}",
-            f"[tracked file tree]\n{_render_tree(signals.get('tree') or [])}",
-        ]
-    )
+    sections = [
+        f"[project name]\n{signals['name']}",
+        f"[readme]\n{readme[:MAX_README_CHARS] if readme else '(none)'}",
+        f"[dependency manifests]\n{_render_manifests(signals.get('manifests') or {})}",
+        f"[imported packages, with how many files import each]\n{_render_imports(signals.get('imports') or {})}",
+        f"[infrastructure and CI files present]\n{', '.join(config_signals) or '(none)'}",
+        f"[tracked files by extension]\n{_render_histogram(signals.get('ext_histogram') or {})}",
+        f"[tracked file tree]\n{_render_tree(signals.get('tree') or [])}",
+    ]
+
+    # Only multi-repo projects carry components, and only then does the model
+    # need telling that one tree spans several repos rather than one. Placed
+    # right under the name so the framing is read before the merged evidence.
+    if components:
+        sections.insert(1, f"[repos making up this project]\n{', '.join(components)}")
+
+    return "\n\n".join(sections)
