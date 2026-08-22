@@ -63,8 +63,11 @@ def load(
 
         cursor = connection.execute(
             """
-            INSERT INTO Project (user_id, task_desc, source_path, head_commit)
-            VALUES (?, ?, ?, ?)
+            INSERT INTO Project (
+                user_id, task_desc, source_path, head_commit,
+                first_commit_at, last_commit_at
+            )
+            VALUES (?, ?, ?, ?, ?, ?)
             ON CONFLICT(source_path) DO NOTHING
             """,
             (
@@ -72,6 +75,8 @@ def load(
                 narrative["task_desc"],
                 transformed_data["path"],
                 transformed_data.get("head_commit"),
+                transformed_data.get("first_commit_at"),
+                transformed_data.get("last_commit_at"),
             ),
         )
 

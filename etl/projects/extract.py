@@ -1,3 +1,4 @@
+from datetime import datetime
 from pathlib import Path
 
 from etl.projects.config import (
@@ -5,7 +6,7 @@ from etl.projects.config import (
     SOURCE_EXTENSIONS,
     WALK_PRUNE_DIRS,
 )
-from gitcli import head_commit, tracked_files
+from gitcli import commit_span, head_commit, tracked_files
 
 
 def _combine_heads(heads: list[str | None]) -> str | None:
@@ -28,6 +29,27 @@ def _combine_heads(heads: list[str | None]) -> str | None:
         return None
 
     return "+".join(present)
+
+
+def _combine_spans(
+    spans: list[tuple[str | None, str | None]],
+) -> tuple[str | None, str | None]:
+    """
+    Fold a group's per-repo commit spans into the project's earliest and latest.
+
+    Args:
+        spans (list[tuple[str | None, str | None]]): One (first, last) per repo.
+
+    Returns:
+        tuple[str | None, str | None]: The project's first and latest dates.
+    """
+    firsts = [first for first, _ in spans if first]
+    lasts = [last for _, last in spans if last]
+
+    first = min(firsts, key=datetime.fromisoformat) if firsts else None
+    last = max(lasts, key=datetime.fromisoformat) if lasts else None
+
+    return first, last
 
 
 def _count_source_files(files: list[str]) -> int:
@@ -107,14 +129,15 @@ def _gather_repo_signals(repo: Path) -> dict:
 
     The analyzer needs only the repository identity and its tracked file tree.
     Paths are relative to this repo's own root, which is what lets the merge
-    below re-root them under an umbrella. "head" is this repo's HEAD hash, which
-    the merge folds into the project's combined cache key.
+    below re-root them under an umbrella. "head" is this repo's HEAD hash and
+    "span" its (first, latest) commit dates, both of which the merge folds across
+    the group.
 
     Args:
         repo (Path): The repo directory.
 
     Returns:
-        dict: The repo's signal dict, {path, name, tree, head}.
+        dict: The repo's signal dict, {path, name, tree, head, span}.
     """
     files = tracked_files(repo)
 
@@ -123,6 +146,7 @@ def _gather_repo_signals(repo: Path) -> dict:
         "name": repo.name,
         "tree": files,
         "head": head_commit(repo),
+        "span": commit_span(repo),
     }
 
 
@@ -170,15 +194,19 @@ def _merge_group(group_root: Path, repos: list[Path]) -> dict:
     """
     if len(repos) == 1 and repos[0] == group_root:
         signals = _gather_repo_signals(group_root)
+        first_commit_at, last_commit_at = _combine_spans([signals["span"]])
         return {
             "path": signals["path"],
             "name": signals["name"],
             "tree": signals["tree"],
             "head_commit": _combine_heads([signals["head"]]),
+            "first_commit_at": first_commit_at,
+            "last_commit_at": last_commit_at,
         }
 
     tree: list[str] = []
     heads: list[str | None] = []
+    spans: list[tuple[str | None, str | None]] = []
 
     for repo in repos:
         rel = repo.relative_to(group_root).as_posix()
@@ -187,12 +215,17 @@ def _merge_group(group_root: Path, repos: list[Path]) -> dict:
 
         tree.extend(prefix + path for path in signals["tree"])
         heads.append(signals["head"])
+        spans.append(signals["span"])
+
+    first_commit_at, last_commit_at = _combine_spans(spans)
 
     return {
         "path": str(group_root),
         "name": group_root.name,
         "tree": tree,
         "head_commit": _combine_heads(heads),
+        "first_commit_at": first_commit_at,
+        "last_commit_at": last_commit_at,
     }
 
 
@@ -213,6 +246,8 @@ def extract(parent_projects_folder: str) -> list[dict]:
             "name": str,                 # directory name
             "tree": [str],               # tracked file paths, repo-relative
             "head_commit": str | None,   # combined HEAD hash, the cache key
+            "first_commit_at": str | None,  # earliest commit date, ISO 8601
+            "last_commit_at": str | None,   # latest commit date, ISO 8601
         }
 
     In a multi-repo project every tree path is prefixed with its repo folder, so

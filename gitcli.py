@@ -69,3 +69,24 @@ def head_commit(repo: Path, short: bool = False) -> str | None:
         return None
 
     return out.strip() or None
+
+
+def commit_span(repo: Path) -> tuple[str | None, str | None]:
+    """
+    The dates of a repo's first and latest commit, as ISO 8601 strings.
+
+    Args:
+        repo (Path): The repo directory (already known to be a git repo).
+
+    Returns:
+        tuple[str | None, str | None]: The first and latest commit dates.
+    """
+    out = _run(["log", "--format=%aI"], repo)
+    if out is None:
+        return None, None
+
+    lines = out.split()
+    if not lines:
+        return None, None
+
+    return lines[-1], lines[0]
