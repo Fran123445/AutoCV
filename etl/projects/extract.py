@@ -1,62 +1,11 @@
 from pathlib import Path
 
-import subprocess
-
 from etl.projects.config import (
     MIN_SOURCE_FILES,
     SOURCE_EXTENSIONS,
     WALK_PRUNE_DIRS,
 )
-
-
-def _tracked_files(project: Path) -> list[str]:
-    """
-    List the git-tracked files of a project as repo-relative posix paths.
-
-    Tracked, not walked: git already knows what the user authored, so this drops
-    gitignored junk (a scraped data/ dir, node_modules, build output) for free
-    and without a .gitignore parser. Untracked-but-new files are missed, which
-    is the intended reading of "part of the project".
-
-    -z keeps NUL separators and quotepath=off keeps non-ASCII names literal, so
-    paths never arrive quoted or split on embedded characters.
-
-    Args:
-        project (Path): The project directory (already known to be a git repo).
-
-    Returns:
-        list[str]: Tracked file paths relative to the project root.
-    """
-    result = subprocess.run(
-        ["git", "-c", "core.quotepath=off", "-C", str(project), "ls-files", "-z"],
-        capture_output=True,
-        text=True,
-        encoding="utf-8",
-    )
-    if result.returncode != 0:
-        return []
-
-    return [path for path in result.stdout.split("\0") if path]
-
-
-def _head_commit(repo: Path) -> str | None:
-    """
-    Args:
-        repo (Path): The repo directory (already known to be a git repo).
-
-    Returns:
-        str | None: The 40-char HEAD hash, or None.
-    """
-    result = subprocess.run(
-        ["git", "-C", str(repo), "rev-parse", "HEAD"],
-        capture_output=True,
-        text=True,
-        encoding="utf-8",
-    )
-    if result.returncode != 0:
-        return None
-
-    return result.stdout.strip() or None
+from gitcli import head_commit, tracked_files
 
 
 def _combine_heads(heads: list[str | None]) -> str | None:
@@ -145,7 +94,7 @@ def _filter_irrelevant_projects(parent_projects: Path) -> list[Path]:
     """
     kept = []
     for repo in _discover_repos(parent_projects):
-        files = _tracked_files(repo)
+        files = tracked_files(repo)
         if _count_source_files(files) >= MIN_SOURCE_FILES:
             kept.append(repo)
 
@@ -167,13 +116,13 @@ def _gather_repo_signals(repo: Path) -> dict:
     Returns:
         dict: The repo's signal dict, {path, name, tree, head}.
     """
-    files = _tracked_files(repo)
+    files = tracked_files(repo)
 
     return {
         "path": str(repo),
         "name": repo.name,
         "tree": files,
-        "head": _head_commit(repo),
+        "head": head_commit(repo),
     }
 
 

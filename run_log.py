@@ -18,9 +18,9 @@ import hashlib
 import json
 import queue
 import sqlite3
-import subprocess
 
 from config import DB_PATH, ROOT_DIR
+from gitcli import head_commit
 from llm.config import BASE_URL, MODEL_NAME, TEMPERATURE, TIMEOUT
 
 
@@ -148,27 +148,6 @@ def record_job_run(source_file: str):
         _FINISHED_JOB_RUNS.put(job_run)
 
 
-def _git_commit() -> str | None:
-    """
-    Short hash of the checked out commit, or None when git cannot say.
-
-    Wrapped rather than trusted: git may be off the PATH, and a missing hash is
-    no reason to lose the run.
-    """
-    try:
-        completed = subprocess.run(
-            ["git", "rev-parse", "--short", "HEAD"],
-            cwd=ROOT_DIR,
-            capture_output=True,
-            text=True,
-            check=True,
-        )
-    except Exception:
-        return None
-
-    return completed.stdout.strip() or None
-
-
 def _config_snapshot() -> str:
     """
     The model settings this run used, as JSON for FactRun.config_json.
@@ -240,7 +219,7 @@ class RunLogger:
                 # by suffix so the projects pipeline's 'projects_transform'
                 # counts too.
                 _config_snapshot() if self.stage.endswith("transform") else None,
-                _git_commit(),
+                head_commit(ROOT_DIR, short=True),
             ),
         )
         self.run_id = cursor.lastrowid
