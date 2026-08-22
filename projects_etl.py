@@ -82,7 +82,7 @@ def transform_one(json_path: Path, transform_output_dir: Path):
 
     Runs on a worker thread. Every project reads and writes its own file, so the
     threads share nothing but the HTTP client, which is thread safe. The reads
-    of the project's own source happen inside the sampler, and are reads only.
+    of the project's own source happen inside the analyzer, and are reads only.
 
     Args:
         json_path (Path): The extract output to read.
