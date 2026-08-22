@@ -48,7 +48,13 @@ def get_client() -> httpx.Client:
     return _client
 
 
-def post_chat(prompt: str, schema: dict, think: bool = True, task_name: str = "unknown") -> dict:
+def post_chat(
+    prompt: str,
+    schema: dict,
+    think: bool = True,
+    task_name: str = "unknown",
+    reasoning_effort: str | None = None,
+) -> dict:
     """
     Send a prompt to the model and return the parsed JSON content.
 
@@ -65,6 +71,9 @@ def post_chat(prompt: str, schema: dict, think: bool = True, task_name: str = "u
         task_name (str): Who is asking, as 'pipeline.package.pass'. The
             pipeline prefix disambiguates identical pass names across
             pipelines, e.g. tech_identifier for a posting vs. a repo.
+        reasoning_effort (str | None): Cap on how much the model reasons before
+            answering ("low", "medium", "high"). Only read when think is on;
+            None leaves the server on its own default.
     """
     payload = {
         "messages": [{"role": "user", "content": prompt}],
@@ -78,6 +87,8 @@ def post_chat(prompt: str, schema: dict, think: bool = True, task_name: str = "u
         # by Qwen and friends and ignored by templates that lack it.
         payload["reasoning_effort"] = "none"
         payload["chat_template_kwargs"] = {"enable_thinking": False}
+    elif reasoning_effort is not None:
+        payload["reasoning_effort"] = reasoning_effort
 
     if MODEL_NAME:
         payload["model"] = MODEL_NAME
