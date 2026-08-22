@@ -12,7 +12,6 @@ from config import (
     CHAT_COMPLETIONS_PATH,
     MAX_CONCURRENCY,
     MODEL_NAME,
-    REASONING_EFFORT,
     REASONING_EFFORT_BY_TASK,
     TEMPERATURE,
     TIMEOUT,
@@ -73,25 +72,24 @@ def post_chat(
             key the per-task reasoning effort is looked up under.
         reasoning_effort (str | None): How hard the model reasons ("low",
             "medium", "high", or "none" to turn it off). An explicit value wins;
-            None defers to config, which keys an override off task_name and
-            otherwise uses the REASONING_EFFORT default, and leaves the server
-            on its own default when that too is unset.
+            None reads the effort keyed under task_name, which every task is
+            listed under in REASONING_EFFORT_BY_TASK.
+
+    Raises:
+        KeyError: task_name has no entry in REASONING_EFFORT_BY_TASK and no
+            reasoning_effort was passed. Every pass decides its effort there, so
+            a miss is a task added without one.
     """
-    effort = (
-        reasoning_effort
-        or REASONING_EFFORT_BY_TASK.get(task_name)
-        or REASONING_EFFORT
-    )
+    effort = reasoning_effort or REASONING_EFFORT_BY_TASK[task_name]
 
     payload = {
         "messages": [{"role": "user", "content": prompt}],
         "response_format": {"type": "json_object", "schema": schema},
         "temperature": TEMPERATURE,
+        "reasoning_effort": effort,
     }
-    if effort is not None:
-        payload["reasoning_effort"] = effort
-        if effort == "none":
-            payload["chat_template_kwargs"] = {"enable_thinking": False}
+    if effort == "none":
+        payload["chat_template_kwargs"] = {"enable_thinking": False}
 
     if MODEL_NAME:
         payload["model"] = MODEL_NAME

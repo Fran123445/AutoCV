@@ -67,11 +67,23 @@ TEMPERATURE = float(os.getenv("AUTOCV_TEMPERATURE") or 1)
 # Raise it once BASE_URL points somewhere hosted.
 MAX_CONCURRENCY = int(os.getenv("AUTOCV_MAX_CONCURRENCY") or 4)
 
-REASONING_EFFORT = os.getenv("AUTOCV_REASONING_EFFORT") or None
-
-# Per-task overrides, keyed by the task_name post_chat is called with. A task
-# named here uses its own effort in place of REASONING_EFFORT.
+# Reasoning effort per task, keyed by the task_name post_chat is called with.
+# "low", "medium" or "high", or "none" to turn reasoning off. Every task that
+# calls the model is listed: post_chat refuses a task it has no entry for rather
+# than guess a default, so adding a pass means deciding here how hard it thinks.
+# Code and not env, like the pipeline's other tuning tables: the right effort
+# for a pass is a property of the pass, not the deploy.
 REASONING_EFFORT_BY_TASK = {
+    "resume.write": "low",
+    "experience.tech_identifier.day_to_day": "low",
+    "experience.tech_identifier.project": "low",
+    "experience.project_describer.describe": "low",
+    "experience.project_narrator.narrate": "low",
+    "experience.day_to_day_narrator.narrate": "low",
+    "jobs.tech_identifier.first_pass": "low",
+    "jobs.tech_identifier.second_pass": "low",
+    "jobs.concept_identifier.first_pass": "low",
+    "jobs.concept_identifier.second_pass": "low",
     "projects.analyzer.analyze": "low",
     "jobs.role_identifier.classify": "none",
     "jobs.seniority_identifier.classify": "none",
