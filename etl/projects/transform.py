@@ -1,7 +1,7 @@
 from llm.tasks.projects.analyzer.analyze import analyze
 
 
-def transform(signals: dict) -> dict:
+def transform(signals: dict, author_email: str | None = None) -> dict:
     """
     Transform one project's extracted signals into its identified evidence.
 
@@ -12,8 +12,10 @@ def transform(signals: dict) -> dict:
 
     Args:
         signals (dict): A signal dict as produced by etl.projects.extract.
+        author_email (str | None): The CV author's email, so the analyzer can
+            point out which contributor in the per-folder split is the author.
 
     Returns:
         dict: The identified project.
     """
-    return analyze(signals)
+    return analyze(signals, author_email)

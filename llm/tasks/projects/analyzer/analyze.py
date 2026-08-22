@@ -5,7 +5,12 @@ from llm.registries.concepts import NAMES_ONLY as CONCEPTS_LIST
 from llm.registries.technologies import NAMES_ONLY as TECH_LIST
 
 from .models import RepoAnalysis
-from .render import SKIP_DIRS, _render_files, _render_tree
+from .render import (
+    SKIP_DIRS,
+    _render_contributions,
+    _render_files,
+    _render_tree,
+)
 
 
 PROMPT_TEMPLATE = """You are analysing a personal software project for its author's CV. You are given the project's file tree and the full text of its tracked files. Report what it does, the technologies it uses and the concepts it demonstrates.
@@ -44,11 +49,26 @@ Allowed concepts:
 <repository_files>
 {files}
 </repository_files>
+
+<folder_contributions>
+Per-folder share of authored commits, by contributor email. Evidence of who built which parts of the project.
+{author}{contributions}
+</folder_contributions>
 """
 
 
-def analyze(signals: dict) -> dict:
+def analyze(signals: dict, author_email: str | None = None) -> dict:
     """Run the one-shot analysis for one project's extract signals."""
+    # Only worth pointing out when there is a split to read it against: a repo
+    # with no contribution data leaves the author line dangling over nothing.
+    author = (
+        f"The CV's author is {author_email}. Weight their role in the project by "
+        "their share of the folders that form its core, and do not credit them "
+        "for parts they barely touched.\n"
+        if author_email and signals.get("folder_contributions")
+        else ""
+    )
+
     prompt = PROMPT_TEMPLATE.format(
         tech_list=TECH_LIST,
         concept_list=CONCEPTS_LIST,
@@ -57,6 +77,8 @@ def analyze(signals: dict) -> dict:
             [p for p in signals["tree"] if p.split("/")[0] not in SKIP_DIRS]
         ),
         files=_render_files(Path(signals["path"]), signals["tree"]),
+        author=author,
+        contributions=_render_contributions(signals.get("folder_contributions", {})),
     )
 
     result = RepoAnalysis.model_validate(

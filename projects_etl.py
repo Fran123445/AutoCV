@@ -15,8 +15,14 @@ from pathlib import Path
 import argparse
 import json
 import sqlite3
+import tomllib
 
-from config import DB_PATH, PROJECTS_EXTRACT_DIR, PROJECTS_TRANSFORM_DIR
+from config import (
+    DB_PATH,
+    EXPERIENCE_PATH,
+    PROJECTS_EXTRACT_DIR,
+    PROJECTS_TRANSFORM_DIR,
+)
 # Aliased, like the job side: this module has stage functions of its own whose
 # names would otherwise shadow the imports.
 from etl.projects.extract import extract as extract_projects
@@ -77,7 +83,25 @@ def extract(parent_projects_dir: Path, out_dir: Path):
         print(f"  {name}: {error!r}")
 
 
-def transform_one(json_path: Path, transform_output_dir: Path):
+def _author_email() -> str | None:
+    """
+    The candidate's email from experience.toml, or None when it cannot be read.
+
+    Returns:
+        str | None: The author's email, or None.
+    """
+    try:
+        with EXPERIENCE_PATH.open("rb") as experience_file:
+            document = tomllib.load(experience_file)
+    except (OSError, tomllib.TOMLDecodeError):
+        return None
+
+    return document.get("profile", {}).get("email")
+
+
+def transform_one(
+    json_path: Path, transform_output_dir: Path, author_email: str | None
+):
     """
     Transform a single extracted project and write it out.
 
@@ -88,6 +112,8 @@ def transform_one(json_path: Path, transform_output_dir: Path):
     Args:
         json_path (Path): The extract output to read.
         transform_output_dir (Path): Where the transformed project goes.
+        author_email (str | None): The CV author's email, for the analyzer to
+            place in the per-folder contribution split.
     """
     # Opens the project's telemetry record and closes it however this ends. The
     # model calls find it through a ContextVar, which is per thread, so the
@@ -96,7 +122,7 @@ def transform_one(json_path: Path, transform_output_dir: Path):
         with json_path.open("r", encoding="utf-8") as f:
             signals = json.load(f)
 
-        transformed = transform_project(signals)
+        transformed = transform_project(signals, author_email)
 
         out_path = transform_output_dir / f"{json_path.stem}.json"
         with out_path.open("w", encoding="utf-8") as f:
@@ -167,6 +193,9 @@ def transform(extract_output_dir: Path, transform_output_dir: Path):
     for json_path in skipped:
         print(f"Skipped {json_path.name} (unchanged since load)")
 
+    # Read once here, not per worker: the same email rides into every analysis.
+    author_email = _author_email()
+
     transformed_count = 0
     failed = []
 
@@ -177,7 +206,9 @@ def transform(extract_output_dir: Path, transform_output_dir: Path):
     ) as run_log:
         with ThreadPoolExecutor(max_workers=MAX_CONCURRENCY) as pool:
             futures = {
-                pool.submit(transform_one, json_path, transform_output_dir): json_path
+                pool.submit(
+                    transform_one, json_path, transform_output_dir, author_email
+                ): json_path
                 for json_path in to_run
             }
 

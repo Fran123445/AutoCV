@@ -6,7 +6,12 @@ from etl.projects.config import (
     SOURCE_EXTENSIONS,
     WALK_PRUNE_DIRS,
 )
-from gitcli import commit_span, head_commit, tracked_files
+from gitcli import (
+    commit_span,
+    folder_contributions,
+    head_commit,
+    tracked_files,
+)
 
 
 def _combine_heads(heads: list[str | None]) -> str | None:
@@ -131,13 +136,15 @@ def _gather_repo_signals(repo: Path) -> dict:
     Paths are relative to this repo's own root, which is what lets the merge
     below re-root them under an umbrella. "head" is this repo's HEAD hash and
     "span" its (first, latest) commit dates, both of which the merge folds across
-    the group.
+    the group. "contributions" is the per-folder author commit split, whose keys
+    the merge re-roots the same way the tree paths are.
 
     Args:
         repo (Path): The repo directory.
 
     Returns:
-        dict: The repo's signal dict, {path, name, tree, head, span}.
+        dict: The repo's signal dict, {path, name, tree, head, span,
+            contributions}.
     """
     files = tracked_files(repo)
 
@@ -147,6 +154,7 @@ def _gather_repo_signals(repo: Path) -> dict:
         "tree": files,
         "head": head_commit(repo),
         "span": commit_span(repo),
+        "contributions": folder_contributions(repo),
     }
 
 
@@ -202,11 +210,13 @@ def _merge_group(group_root: Path, repos: list[Path]) -> dict:
             "head_commit": _combine_heads([signals["head"]]),
             "first_commit_at": first_commit_at,
             "last_commit_at": last_commit_at,
+            "folder_contributions": signals["contributions"],
         }
 
     tree: list[str] = []
     heads: list[str | None] = []
     spans: list[tuple[str | None, str | None]] = []
+    contributions: dict[str, dict[str, int]] = {}
 
     for repo in repos:
         rel = repo.relative_to(group_root).as_posix()
@@ -216,6 +226,10 @@ def _merge_group(group_root: Path, repos: list[Path]) -> dict:
         tree.extend(prefix + path for path in signals["tree"])
         heads.append(signals["head"])
         spans.append(signals["span"])
+        # Prefixed like the tree, so an umbrella's folders read as backend/src
+        # rather than a bare src that two repos might both claim.
+        for folder, counts in signals["contributions"].items():
+            contributions[prefix + folder] = counts
 
     first_commit_at, last_commit_at = _combine_spans(spans)
 
@@ -226,6 +240,7 @@ def _merge_group(group_root: Path, repos: list[Path]) -> dict:
         "head_commit": _combine_heads(heads),
         "first_commit_at": first_commit_at,
         "last_commit_at": last_commit_at,
+        "folder_contributions": contributions,
     }
 
 
@@ -248,6 +263,9 @@ def extract(parent_projects_folder: str) -> list[dict]:
             "head_commit": str | None,   # combined HEAD hash, the cache key
             "first_commit_at": str | None,  # earliest commit date, ISO 8601
             "last_commit_at": str | None,   # latest commit date, ISO 8601
+            "folder_contributions": {       # per-folder author commit counts
+                str: {str: int},            # folder -> email -> commits
+            },
         }
 
     In a multi-repo project every tree path is prefixed with its repo folder, so

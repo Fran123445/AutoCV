@@ -113,6 +113,31 @@ def _render_tree(tree: list[str]) -> str:
     return "\n".join(sorted(tree, key=lambda p: (p.count("/"), p)))
 
 
+def _render_contributions(contributions: dict[str, dict[str, int]]) -> str:
+    """
+    Render the per-folder author commit split as compact evidence.
+
+    Shares as a percent with the raw count beside it, authors within a folder
+    ordered by weight, so the model can read who carried which part of the
+    project at a glance. Emails are left as git reports them; the model is not
+    asked to resolve identities.
+    """
+    if not contributions:
+        return "(no contribution data)"
+
+    blocks = []
+    for folder in sorted(contributions):
+        counts = contributions[folder]
+        total = sum(counts.values()) or 1
+        lines = [
+            f"  {email}: {100 * n / total:.0f}% ({n})"
+            for email, n in sorted(counts.items(), key=lambda kv: -kv[1])
+        ]
+        blocks.append(folder + "\n" + "\n".join(lines))
+
+    return "\n".join(blocks)
+
+
 def _render_files(project_root: Path, tree: list[str]) -> str:
     """Render readable tracked files, applying skip, truncation and cap rules."""
     blocks = []

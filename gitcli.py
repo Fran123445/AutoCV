@@ -90,3 +90,42 @@ def commit_span(repo: Path) -> tuple[str | None, str | None]:
         return None, None
 
     return lines[-1], lines[0]
+
+
+def folder_contributions(repo: Path) -> dict[str, dict[str, int]]:
+    """
+    Commit counts per author for each top-level tracked folder of a repo.
+
+    "Folder", not file: every tracked path is bucketed by its first segment, so
+    the result answers who worked on each part of the project at the granularity
+    a person thinks in. Root-level files belong to no folder and are left out.
+    The count is authored commits touching the folder, merges excluded, so a
+    commit spanning two folders counts once in each. Emails are mailmap-resolved,
+    which folds a contributor's known aliases together. Empty when git cannot say.
+
+    Args:
+        repo (Path): The repo directory (already known to be a git repo).
+
+    Returns:
+        dict[str, dict[str, int]]: folder -> author email -> commit count.
+    """
+    folders = sorted(
+        {path.split("/")[0] for path in tracked_files(repo) if "/" in path}
+    )
+
+    contributions: dict[str, dict[str, int]] = {}
+    for folder in folders:
+        out = _run(["log", "--no-merges", "--format=%aE", "--", folder], repo)
+        if not out:
+            continue
+
+        counts: dict[str, int] = {}
+        for email in out.splitlines():
+            email = email.strip()
+            if email:
+                counts[email] = counts.get(email, 0) + 1
+
+        if counts:
+            contributions[folder] = counts
+
+    return contributions
