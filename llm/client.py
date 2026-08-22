@@ -6,7 +6,7 @@ import httpx
 
 from run_log import LLMCall, prompt_fingerprint, record_call, utc_now
 
-from llm.config import (
+from config import (
     API_KEY,
     BASE_URL,
     CHAT_COMPLETIONS_PATH,

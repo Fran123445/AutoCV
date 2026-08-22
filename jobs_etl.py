@@ -13,13 +13,12 @@ from pathlib import Path
 import argparse
 import json
 
-from config import JOBS_EXTRACT_DIR, JOBS_TRANSFORM_DIR, STAGING_DIR
+from config import JOBS_EXTRACT_DIR, JOBS_TRANSFORM_DIR, MAX_CONCURRENCY, STAGING_DIR
 from etl.jobs.extract import JobDescriptionNotFound, extract_from_file
 from etl.jobs.load import load as load_job
 # Aliased: this module has a transform() of its own, over directories rather
 # than over a single posting.
 from etl.jobs.transform import transform as transform_job
-from llm.config import MAX_CONCURRENCY
 from run_log import RunLogger, record_job_run
 
 def extract(staging_dir: Path, out_dir: Path):

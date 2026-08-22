@@ -19,9 +19,8 @@ import json
 import queue
 import sqlite3
 
-from config import DB_PATH, ROOT_DIR
+from config import BASE_URL, DB_PATH, MODEL_NAME, ROOT_DIR, TEMPERATURE, TIMEOUT
 from gitcli import head_commit
-from llm.config import BASE_URL, MODEL_NAME, TEMPERATURE, TIMEOUT
 
 
 def utc_now() -> str:

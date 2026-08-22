@@ -266,7 +266,7 @@ CREATE TABLE IF NOT EXISTS FactRun (
     postings_ok     INTEGER,
     postings_failed INTEGER,
     max_concurrency INTEGER,
-    config_json     TEXT,                   -- snapshot de llm/config.py: model,
+    config_json     TEXT,                   -- snapshot de config.py: model,
                     -- temperature, timeout, base_url. Un JSON y no columnas
                     -- sueltas: la config cambia más seguido que el schema
     git_commit      TEXT,                   -- qué código produjo estos datos

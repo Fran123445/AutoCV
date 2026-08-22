@@ -94,7 +94,7 @@ One star schema in `schema.sql`. Job requirements and candidate evidence share t
 ## Layout
 
 ```
-config.py              Paths every pipeline agrees on
+config.py              Paths and model endpoint every pipeline agrees on
 db_creation.py         Schema + taxonomy seeding (idempotent)
 schema.sql             The star schema
 seeds/                 Canonical taxonomies (technologies, concepts, roles, ...)

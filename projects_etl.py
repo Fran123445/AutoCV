@@ -20,6 +20,7 @@ import tomllib
 from config import (
     DB_PATH,
     EXPERIENCE_PATH,
+    MAX_CONCURRENCY,
     PROJECTS_EXTRACT_DIR,
     PROJECTS_TRANSFORM_DIR,
 )
@@ -28,7 +29,6 @@ from config import (
 from etl.projects.extract import extract as extract_projects
 from etl.projects.load import load as load_project
 from etl.projects.transform import transform as transform_project
-from llm.config import MAX_CONCURRENCY
 from run_log import RunLogger, record_job_run
 
 
