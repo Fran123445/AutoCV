@@ -55,7 +55,6 @@ def classify_role(position_name: str | None, job_desc: str) -> Role:
         post_chat(
             prompt,
             Role.model_json_schema(),
-            think=False,
             task_name="jobs.role_identifier.classify",
         )
     )

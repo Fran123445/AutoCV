@@ -66,3 +66,14 @@ TEMPERATURE = float(os.getenv("AUTOCV_TEMPERATURE") or 1)
 # server splits its KV cache across the slots, so each one holds less context.
 # Raise it once BASE_URL points somewhere hosted.
 MAX_CONCURRENCY = int(os.getenv("AUTOCV_MAX_CONCURRENCY") or 4)
+
+REASONING_EFFORT = os.getenv("AUTOCV_REASONING_EFFORT") or None
+
+# Per-task overrides, keyed by the task_name post_chat is called with. A task
+# named here uses its own effort in place of REASONING_EFFORT.
+REASONING_EFFORT_BY_TASK = {
+    "projects.analyzer.analyze": "low",
+    "jobs.role_identifier.classify": "none",
+    "jobs.seniority_identifier.classify": "none",
+    "jobs.degree_identifier.classify": "none",
+}

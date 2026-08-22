@@ -86,8 +86,6 @@ def analyze(signals: dict, author_email: str | None = None) -> dict:
             prompt,
             RepoAnalysis.model_json_schema(),
             task_name="projects.analyzer.analyze",
-            think=True,
-            reasoning_effort="low",
         )
     )
 

@@ -12,6 +12,8 @@ from config import (
     CHAT_COMPLETIONS_PATH,
     MAX_CONCURRENCY,
     MODEL_NAME,
+    REASONING_EFFORT,
+    REASONING_EFFORT_BY_TASK,
     TEMPERATURE,
     TIMEOUT,
 )
@@ -51,7 +53,6 @@ def get_client() -> httpx.Client:
 def post_chat(
     prompt: str,
     schema: dict,
-    think: bool = True,
     task_name: str = "unknown",
     reasoning_effort: str | None = None,
 ) -> dict:
@@ -66,29 +67,31 @@ def post_chat(
     Args:
         prompt (str): The full prompt to send.
         schema (dict): JSON schema constraining the reply.
-        think (bool): Whether to let the model reason before answering. Off for
-            the tasks that are a lookup rather than a judgement call.
         task_name (str): Who is asking, as 'pipeline.package.pass'. The
             pipeline prefix disambiguates identical pass names across
-            pipelines, e.g. tech_identifier for a posting vs. a repo.
-        reasoning_effort (str | None): Cap on how much the model reasons before
-            answering ("low", "medium", "high"). Only read when think is on;
-            None leaves the server on its own default.
+            pipelines, e.g. tech_identifier for a posting vs. a repo. Also the
+            key the per-task reasoning effort is looked up under.
+        reasoning_effort (str | None): How hard the model reasons ("low",
+            "medium", "high", or "none" to turn it off). An explicit value wins;
+            None defers to config, which keys an override off task_name and
+            otherwise uses the REASONING_EFFORT default, and leaves the server
+            on its own default when that too is unset.
     """
+    effort = (
+        reasoning_effort
+        or REASONING_EFFORT_BY_TASK.get(task_name)
+        or REASONING_EFFORT
+    )
+
     payload = {
         "messages": [{"role": "user", "content": prompt}],
         "response_format": {"type": "json_object", "schema": schema},
         "temperature": TEMPERATURE,
     }
-    if not think:
-        # Two ways in, since either one alone covers only half the models.
-        # reasoning_effort is llama-server's own switch and works whatever the
-        # chat template says; enable_thinking is the template level one, read
-        # by Qwen and friends and ignored by templates that lack it.
-        payload["reasoning_effort"] = "none"
-        payload["chat_template_kwargs"] = {"enable_thinking": False}
-    elif reasoning_effort is not None:
-        payload["reasoning_effort"] = reasoning_effort
+    if effort is not None:
+        payload["reasoning_effort"] = effort
+        if effort == "none":
+            payload["chat_template_kwargs"] = {"enable_thinking": False}
 
     if MODEL_NAME:
         payload["model"] = MODEL_NAME
@@ -99,7 +102,7 @@ def post_chat(
         task_name=task_name,
         started_at=utc_now(),
         temperature=TEMPERATURE,
-        think=think,
+        think=effort != "none",
         prompt_sha1=prompt_fingerprint(prompt),
     )
     # perf_counter and not the two timestamps: they are rounded to the second,

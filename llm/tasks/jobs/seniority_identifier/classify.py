@@ -46,7 +46,6 @@ def classify_seniority(job_desc: str) -> Seniority:
         post_chat(
             prompt,
             Seniority.model_json_schema(),
-            think=False,
             task_name="jobs.seniority_identifier.classify",
         )
     )

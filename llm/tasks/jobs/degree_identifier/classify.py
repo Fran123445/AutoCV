@@ -47,7 +47,6 @@ def classify_degree(job_desc: str) -> DegreeRequirement:
         post_chat(
             prompt,
             DegreeRequirement.model_json_schema(),
-            think=False,
             task_name="jobs.degree_identifier.classify",
         )
     )
