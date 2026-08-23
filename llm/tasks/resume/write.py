@@ -21,7 +21,7 @@ Rules for voice, everywhere:
 Rules for summary:
 - One to three short paragraphs, each its own item in the list. The first is required, the rest are worth adding only when there is something to put in them.
 - Open the first on what the candidate is, how long they have been doing it, and in what setting: a role, then the tenure the record gives, then the environment the work happened in. Never open on a bare verb and never on a category.
-- A second paragraph, where you write one, sets out the range of the work as concrete kinds of system rather than adjectives. A third, rarer, says what the candidate optimises for and why.
+- A second paragraph, where you write one, sets out the range of the work as concrete kinds of system rather than adjectives.
 - Everything in the record is available here, including the education and any work project listed with no position.
 
 Rules for skills:
@@ -30,6 +30,7 @@ Rules for skills:
 - Where a term has a common short and long form, print both once, long form first, since the posting may be searched for either: "Extract Transform Load (ETL)", "software development life cycle (SDLC)". Do not do this to terms that only ever appear one way.
 - Leave the spoken languages out of the block: they are printed in their own section, straight from the record. A row labelled Languages is programming languages.
 - Group tightly enough that the label means something. A row called Other, or a row mixing languages with methodologies, is a row wasted.
+- Focus on matching keywords and concepts as they are written out in the job description.
 
 Rules for work_bullets:
 - One entry per position in the work history, always, even for a position the posting has no use for. Never more than one entry for the same position.
@@ -38,17 +39,18 @@ Rules for work_bullets:
 - Draw them from that position's day to day and from the projects listed under it. A project under a position is that position's work: it has no entry of its own and everything it shows belongs here.
 
 Rules for personal_bullets:
-- One entry per personal project worth showing for this posting, and no entry at all for the rest. Two to four projects is the usual number. Never more than one entry for the same project.
+- One entry per personal project worth showing for this posting, and no entry at all for the rest. Two is the ceiling and the usual number: the two the posting has most use for, written to the bottom, beat four written to the surface. Write one where only one fits. Never more than one entry for the same project.
 - source_project_id: the number on that project's "--- project N ---" line, taken from the personal projects section. Use only ids that appear there.
 - title: what the project is, not what its folder is called. The folder name is a private joke or an abbreviation and means nothing to the reader: "Schizo_measurements" is a personal messaging analytics warehouse, "tp-2024-1c-Frituras" is an operating system simulator. Three to six words, in title case, describing the system.
 - technologies: the few worth printing beside the title, the ones the posting asks for first. Three to six, not the whole list the record carries.
-- Exactly two bullets each.
+- Three or four bullets each, and no two of them on the same layer of the system: how the data moves through it, how its pieces are held apart, what constraint it was built against and what that forced. The room the projects you left out would have taken is what pays for this, so use it.
+- Make sure to explain the end product of each project so the reader knows what value is derived (if any).
 
 Rules for every bullet:
 - Start on the verb, with the subject left off, and vary it: two bullets in a row opening on "Built" or "Developed" read as one bullet.
 - One piece of work per bullet, and inside it say how the work was made to do its job. The mechanism is the point: "sampling matched row sets on natural keys and comparing at column level with exact and fuzzy string matching to surface field mappings" is a bullet, "using Pandas and RapidFuzz to perform fuzzy matching" is a library credit. Where the record gives a reason a thing was done one way and not another, that reason is the best material on the page.
 - Roughly twenty five to fifty words. One sentence carrying subordinate clauses reads better here than two short ones.
-- Do not name libraries and tools inside a bullet unless the choice itself is the point. They are already printed beside the project title and in the skills block, and spending bullet words on them costs you the mechanism. Name the technique, the structure, or the pattern instead.
+- Integrate the required technology directly with the mechanism or architectural pattern, never as a stand-alone passive mention.
 - Carry over every figure, volume, scale, count and result the record states: row counts, sizes, storage reclaimed, how many of a thing were handled, how much of a set was covered. These are the strongest marks on the page and the record is the only place they can come from, so dropping one to be safe costs more than any other mistake here.
 - Never state a number, an outcome, a scale or a responsibility the record does not. Do not round a figure the record gives, do not report part of a thing as all of it, and do not turn a task into ownership of a system. Repeating what the record states and inventing what it does not are different acts: this rule forbids the second and never the first.
 - Do not spend a bullet on a category name. "Built an ETL pipeline" and "Developed a backend application" say nothing by themselves; say what moved out of where, through what shape, into what.

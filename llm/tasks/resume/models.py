@@ -108,5 +108,5 @@ class ResumeResponse(BaseModel):
         default_factory=list, description="One entry per position given."
     )
     personal_bullets: list[ResumePersonalBullets] = Field(
-        default_factory=list, description="One entry per personal project worth showing."
+        default_factory=list, description="One entry per personal project worth showing, at most two."
     )
