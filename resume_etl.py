@@ -24,7 +24,7 @@ from config import RESUMES_DIR
 from resume_generator.generator import generate_resume
 from resume_generator.models import ResumeDocument
 from resume_generator.render import render_html
-from run_log import RunLogger, record_job_run
+from run_log import RunLogger, record_item
 
 
 DOCUMENT_NAME = "resume.json"
@@ -110,26 +110,26 @@ def write(user_id: int, job_id: int, resumes_dir: Path):
         job_id (int): Posting the CV is written against.
         resumes_dir (Path): Root the per-posting folders live under.
     """
-    with RunLogger("resume_write", postings_total=1) as run_log:
+    with RunLogger("resume", "write", items_total=1) as run_log:
         out_dir = posting_dir(run_log.connection, job_id, resumes_dir)
         out_dir.mkdir(parents=True, exist_ok=True)
 
         print(f"Writing a resume for user {user_id} against job {job_id}...")
         try:
-            with record_job_run(out_dir.name) as job_run:
+            with record_item(out_dir.name) as item:
                 document = generate_resume(run_log.connection, user_id, job_id)
 
-                job_run.job_id = job_id
+                item.produced("FactJob", job_id)
 
                 out_path = out_dir / DOCUMENT_NAME
                 out_path.write_text(
                     document.model_dump_json(indent=2), encoding="utf-8"
                 )
         except Exception:
-            run_log.postings_failed = 1
+            run_log.items_failed = 1
             raise
 
-        run_log.postings_ok = 1
+        run_log.items_ok = 1
 
     print(f"\nWrote the resume for user {user_id} against job {job_id} to {out_path}.")
 
@@ -143,17 +143,17 @@ def render(user_id: int, job_id: int, resumes_dir: Path):
         job_id (int): Posting the CV was written against.
         resumes_dir (Path): Root the per-posting folders live under.
     """
-    with RunLogger("resume_render", postings_total=1) as run_log:
+    with RunLogger("resume", "render", items_total=1) as run_log:
         out_dir = posting_dir(run_log.connection, job_id, resumes_dir)
         json_path = out_dir / DOCUMENT_NAME
 
         print(f"Rendering {json_path}...")
         try:
             # The same telemetry wrapper the model-calling stage uses, so its
-            # call list stays empty. job_id stays null: the document on disk may
-            # have been written against an older version of the posting, and the
-            # column would point at one this run never read.
-            with record_job_run(out_dir.name):
+            # call list stays empty. The entity columns stay null: the document
+            # on disk may have been written against an older version of the
+            # posting, and they would point at one this run never read.
+            with record_item(out_dir.name):
                 document = ResumeDocument.model_validate_json(
                     json_path.read_text(encoding="utf-8")
                 )
@@ -161,10 +161,10 @@ def render(user_id: int, job_id: int, resumes_dir: Path):
                 out_path = out_dir / PAGE_NAME
                 out_path.write_text(render_html(document), encoding="utf-8")
         except Exception:
-            run_log.postings_failed = 1
+            run_log.items_failed = 1
             raise
 
-        run_log.postings_ok = 1
+        run_log.items_ok = 1
 
     print(f"\nRendered {json_path.name} into {out_path}.")
 
@@ -183,23 +183,23 @@ def pdf(user_id: int, job_id: int, resumes_dir: Path):
     # installed. Printing is the only stage that needs either.
     from resume_generator.pdf import render_pdf
 
-    with RunLogger("resume_pdf", postings_total=1) as run_log:
+    with RunLogger("resume", "pdf", items_total=1) as run_log:
         out_dir = posting_dir(run_log.connection, job_id, resumes_dir)
         html_path = out_dir / PAGE_NAME
 
         print(f"Printing {html_path}...")
         try:
             # Wrapped like the render stage and null for the same reason.
-            with record_job_run(out_dir.name):
+            with record_item(out_dir.name):
                 printed = render_pdf(html_path.read_text(encoding="utf-8"))
 
                 out_path = out_dir / PDF_NAME
                 out_path.write_bytes(printed.pdf)
         except Exception:
-            run_log.postings_failed = 1
+            run_log.items_failed = 1
             raise
 
-        run_log.postings_ok = 1
+        run_log.items_ok = 1
 
     print(
         f"\nPrinted {html_path.name} into {out_path} "

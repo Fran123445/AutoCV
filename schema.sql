@@ -250,17 +250,22 @@ CREATE TABLE IF NOT EXISTS ProjectConcepts (
 );
 
 -- Run observability
+--
+-- Three grains, parent to child: a run is one stage of one pipeline, an item is
+-- one unit of work inside that stage, a call is one request to the model. 
 
 CREATE TABLE IF NOT EXISTS FactRun (
     id              INTEGER PRIMARY KEY,
-    stage           TEXT NOT NULL,          -- 'extract' | 'transform' | 'load'
+    pipeline        TEXT NOT NULL,          -- 'jobs' | 'projects' | 'experience' | 'resume'
+    stage           TEXT NOT NULL,          -- 'extract' | 'transform' | 'load',
+                    -- and 'write' | 'render' | 'pdf' on the resume side.
     started_at      TEXT NOT NULL,          -- ISO 8601, like the rest
     ended_at        TEXT,                   -- null = running, or dead
     status          TEXT NOT NULL DEFAULT 'running',
                     -- 'running' | 'completed' | 'failed'
-    postings_total  INTEGER,
-    postings_ok     INTEGER,
-    postings_failed INTEGER,
+    items_total     INTEGER,                -- units of work, whatever the unit
+    items_ok        INTEGER,                -- is for the pipeline: a posting, a
+    items_failed    INTEGER,                -- repo, a file, one resume
     max_concurrency INTEGER,
     config_json     TEXT,                   -- snapshot of config.py: model,
                     -- temperature, timeout, base_url. One JSON and not loose
@@ -269,21 +274,28 @@ CREATE TABLE IF NOT EXISTS FactRun (
     error           TEXT
 );
 
-CREATE TABLE IF NOT EXISTS FactJobRun (
-    id          INTEGER PRIMARY KEY,
-    run_id      INTEGER NOT NULL REFERENCES FactRun(id),
-    source_file TEXT NOT NULL,              -- stem of the json; in transform the
-                -- FactJob to point at doesn't exist yet
-    job_id      INTEGER REFERENCES FactJob(id),  -- filled in at load
-    started_at  TEXT NOT NULL,
-    ended_at    TEXT,
-    status      TEXT NOT NULL DEFAULT 'running',
-    error       TEXT                        -- repr of the exception
+CREATE TABLE IF NOT EXISTS FactRunItem (
+    id           INTEGER PRIMARY KEY,
+    run_id       INTEGER NOT NULL REFERENCES FactRun(id),
+    item_key     TEXT NOT NULL,             -- names the unit, and its not always
+                 -- a file: a json stem on the pipelines that glob a folder, a
+                 -- repo name on projects, a resume folder on the resume side
+    entity_table TEXT,                      -- which row this item is about, as
+    entity_id    INTEGER,                   -- 'FactJob' | 'Project' | ...
+                 -- Both null on a stage that produces no single row. Named
+                 -- rather than a real foreign key because the parent differs
+                 -- per pipeline: one column each would grow with every new
+                 -- pipeline and leave all but one null on every row. The cost
+                 -- is that sqlite does not check it
+    started_at   TEXT NOT NULL,
+    ended_at     TEXT,
+    status       TEXT NOT NULL DEFAULT 'running',
+    error        TEXT                       -- repr of the exception
 );
 
 CREATE TABLE IF NOT EXISTS FactLLMCall (
     id                INTEGER PRIMARY KEY,
-    job_run_id        INTEGER NOT NULL REFERENCES FactJobRun(id),
+    run_item_id       INTEGER NOT NULL REFERENCES FactRunItem(id),
     task_name         TEXT NOT NULL,        -- 'jobs.tech_identifier.first_pass', ...
     attempt           INTEGER NOT NULL DEFAULT 1,  -- no retries yet, but without
                       -- a counter a retry looks like a duplicate row
@@ -297,7 +309,7 @@ CREATE TABLE IF NOT EXISTS FactLLMCall (
     think             INTEGER,              -- 0/1, the only thing that varies per task
     prompt_tokens     INTEGER,
     completion_tokens INTEGER,              -- includes reasoning ones:
-                      -- llama-server doesn't split them out in usage
+                      -- llama-server does not split them out in usage
     prompt_sha1       TEXT,                 -- hash of the rendered prompt;
                       -- without it an old run and a new one just "differ"
     http_status       INTEGER,
@@ -308,6 +320,7 @@ CREATE TABLE IF NOT EXISTS FactLLMCall (
 CREATE INDEX IF NOT EXISTS idx_experience_user ON FactExperience(user_id);
 CREATE INDEX IF NOT EXISTS idx_project_user     ON Project(user_id);
 CREATE INDEX IF NOT EXISTS idx_project_exp      ON Project(experience_id);
-CREATE INDEX IF NOT EXISTS idx_jobrun_run     ON FactJobRun(run_id);
-CREATE INDEX IF NOT EXISTS idx_llmcall_jr     ON FactLLMCall(job_run_id);
+CREATE INDEX IF NOT EXISTS idx_runitem_run    ON FactRunItem(run_id);
+CREATE INDEX IF NOT EXISTS idx_runitem_entity ON FactRunItem(entity_table, entity_id);
+CREATE INDEX IF NOT EXISTS idx_llmcall_item   ON FactLLMCall(run_item_id);
 CREATE INDEX IF NOT EXISTS idx_llmcall_task   ON FactLLMCall(task_name);

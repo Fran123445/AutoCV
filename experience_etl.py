@@ -18,7 +18,7 @@ from config import EXPERIENCE_PATH, EXPERIENCE_TRANSFORM_DIR
 from etl.experience.extract import extract as extract_experience
 from etl.experience.load import load as load_experience
 from etl.experience.transform import transform as transform_experience
-from run_log import RunLogger, record_job_run
+from run_log import RunLogger, record_item
 
 
 def extract(experience_path: Path):
@@ -35,19 +35,19 @@ def extract(experience_path: Path):
         experience_path (Path): The filled template, normally
             config.EXPERIENCE_PATH.
     """
-    with RunLogger("experience_extract", postings_total=1) as run_log:
+    with RunLogger("experience", "extract", items_total=1) as run_log:
         print(f"Extracting {experience_path}...")
         try:
             # Wrapped even though no model is involved, same as the other two
             # pipelines: the run tables are also where you look up when the file
             # last parsed and what it said when it did not.
-            with record_job_run(experience_path.stem):
+            with record_item(experience_path.stem):
                 experience = extract_experience(experience_path)
         except Exception:
-            run_log.postings_failed = 1
+            run_log.items_failed = 1
             raise
 
-        run_log.postings_ok = 1
+        run_log.items_ok = 1
 
     projects_count = sum(len(job.project) for job in experience.job)
     print(
@@ -73,10 +73,10 @@ def transform(experience_path: Path, transform_output_dir: Path):
             config.EXPERIENCE_PATH.
         transform_output_dir (Path): Where the transformed experience goes.
     """
-    with RunLogger("experience_transform", postings_total=1) as run_log:
+    with RunLogger("experience", "transform", items_total=1) as run_log:
         print(f"Transforming {experience_path}...")
         try:
-            with record_job_run(experience_path.stem):
+            with record_item(experience_path.stem):
                 experience = extract_experience(experience_path)
                 transformed = transform_experience(experience)
 
@@ -84,10 +84,10 @@ def transform(experience_path: Path, transform_output_dir: Path):
                 with out_path.open("w", encoding="utf-8") as f:
                     json.dump(transformed, f, ensure_ascii=False, indent=2)
         except Exception:
-            run_log.postings_failed = 1
+            run_log.items_failed = 1
             raise
 
-        run_log.postings_ok = 1
+        run_log.items_ok = 1
 
     print(f"\nTransformed {experience_path.name} into {out_path}.")
 
@@ -108,14 +108,14 @@ def load(transform_output_dir: Path, experience_path: Path):
     """
     json_path = transform_output_dir / f"{experience_path.stem}.json"
 
-    with RunLogger("experience_load", postings_total=1) as run_log:
+    with RunLogger("experience", "load", items_total=1) as run_log:
         print(f"Loading {json_path}...")
         try:
             # The same telemetry wrapper the other stages use. No model calls
-            # happen here, so its call list stays empty, and job_id stays null:
-            # that column is a FactJob foreign key, and nothing this stage
-            # writes belongs in it.
-            with record_job_run(json_path.stem):
+            # happen here, so its call list stays empty, and the entity columns
+            # stay null: the unit here is the whole file, and the loader writes
+            # many rows out of it rather than the one those columns name.
+            with record_item(json_path.stem):
                 with json_path.open("r", encoding="utf-8") as f:
                     transformed = json.load(f)
 
@@ -124,10 +124,10 @@ def load(transform_output_dir: Path, experience_path: Path):
                 # for the write lock.
                 counts = load_experience(transformed, run_log.connection)
         except Exception:
-            run_log.postings_failed = 1
+            run_log.items_failed = 1
             raise
 
-        run_log.postings_ok = 1
+        run_log.items_ok = 1
 
     print(
         f"\nLoaded {counts['experiences_loaded']} jobs and "

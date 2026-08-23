@@ -29,7 +29,7 @@ from config import (
 from etl.projects.extract import extract as extract_projects
 from etl.projects.load import load as load_project
 from etl.projects.transform import transform as transform_project
-from run_log import RunLogger, record_job_run
+from run_log import RunLogger, record_item
 
 
 def extract(parent_projects_dir: Path, out_dir: Path):
@@ -50,12 +50,12 @@ def extract(parent_projects_dir: Path, out_dir: Path):
     extracted_count = 0
     failed = []
 
-    with RunLogger("projects_extract") as run_log:
+    with RunLogger("projects", "extract") as run_log:
         print(f"Scanning {parent_projects_dir}...")
         gathered = extract_projects(str(parent_projects_dir))
         # Only known once the scan has run, unlike a glob the stage could count
         # up front. RunLogger writes it on the way out for exactly this case.
-        run_log.postings_total = len(gathered)
+        run_log.items_total = len(gathered)
         print(f"Kept {len(gathered)} projects.\n")
 
         for signals in gathered:
@@ -64,7 +64,7 @@ def extract(parent_projects_dir: Path, out_dir: Path):
                 # Wrapped even though no model is involved, same as the job
                 # side: the run tables are also where you look up which project
                 # failed and when.
-                with record_job_run(signals["name"]):
+                with record_item(signals["name"]):
                     json_path = out_dir / f"{signals['name']}.json"
                     with json_path.open("w", encoding="utf-8") as f:
                         json.dump(signals, f, ensure_ascii=False, indent=2)
@@ -75,8 +75,8 @@ def extract(parent_projects_dir: Path, out_dir: Path):
 
             extracted_count += 1
 
-        run_log.postings_ok = extracted_count
-        run_log.postings_failed = len(failed)
+        run_log.items_ok = extracted_count
+        run_log.items_failed = len(failed)
 
     print(f"\nExtracted {extracted_count}, failed {len(failed)}.")
     for name, error in failed:
@@ -118,7 +118,7 @@ def transform_one(
     # Opens the project's telemetry record and closes it however this ends. The
     # model calls find it through a ContextVar, which is per thread, so the
     # worker running next door writes into its own record.
-    with record_job_run(json_path.stem):
+    with record_item(json_path.stem):
         with json_path.open("r", encoding="utf-8") as f:
             signals = json.load(f)
 
@@ -200,8 +200,9 @@ def transform(extract_output_dir: Path, transform_output_dir: Path):
     failed = []
 
     with RunLogger(
-        "projects_transform",
-        postings_total=len(to_run),
+        "projects",
+        "transform",
+        items_total=len(to_run),
         max_concurrency=MAX_CONCURRENCY,
     ) as run_log:
         with ThreadPoolExecutor(max_workers=MAX_CONCURRENCY) as pool:
@@ -240,8 +241,8 @@ def transform(extract_output_dir: Path, transform_output_dir: Path):
                     # finish just because a later one killed the process.
                     run_log.flush()
 
-        run_log.postings_ok = transformed_count
-        run_log.postings_failed = len(failed)
+        run_log.items_ok = transformed_count
+        run_log.items_failed = len(failed)
 
     print(
         f"\nTransformed {transformed_count}, skipped {len(skipped)}, "
@@ -268,15 +269,13 @@ def load(transform_output_dir: Path):
     skipped_count = 0
     failed = []
 
-    with RunLogger("projects_load", postings_total=len(json_paths)) as run_log:
+    with RunLogger("projects", "load", items_total=len(json_paths)) as run_log:
         for json_path in json_paths:
             try:
                 # The same telemetry wrapper transform uses, so a load that
-                # blows up on one project still leaves a FactJobRun row behind.
-                # No model calls happen here, so its call list stays empty, and
-                # job_id stays null: that column is a FactJob foreign key, and
-                # a Project id would not point where it claims to.
-                with record_job_run(json_path.stem):
+                # blows up on one project still leaves a FactRunItem row behind.
+                # No model calls happen here, so its call list stays empty.
+                with record_item(json_path.stem) as item:
                     with json_path.open("r", encoding="utf-8") as f:
                         transformed = json.load(f)
 
@@ -284,6 +283,7 @@ def load(transform_output_dir: Path):
                     # on; reuse it rather than open a second one that would only
                     # contend for the write lock.
                     project_id = load_project(transformed, run_log.connection)
+                    item.produced("Project", project_id)
             except Exception as error:
                 failed.append((json_path, error))
                 print(f"  FAILED {json_path.name}: {error!r}")
@@ -300,8 +300,8 @@ def load(transform_output_dir: Path):
             # lose the telemetry of what did land if a later one kills it.
             run_log.flush()
 
-        run_log.postings_ok = loaded_count
-        run_log.postings_failed = len(failed)
+        run_log.items_ok = loaded_count
+        run_log.items_failed = len(failed)
 
     print(
         f"\nLoaded {loaded_count}, skipped {skipped_count}, failed {len(failed)}."

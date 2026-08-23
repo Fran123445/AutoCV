@@ -19,7 +19,7 @@ from etl.jobs.load import load as load_job
 # Aliased: this module has a transform() of its own, over directories rather
 # than over a single posting.
 from etl.jobs.transform import transform as transform_job
-from run_log import RunLogger, record_job_run
+from run_log import RunLogger, record_item
 
 def extract(staging_dir: Path, out_dir: Path):
     html_paths = sorted(
@@ -30,13 +30,13 @@ def extract(staging_dir: Path, out_dir: Path):
     extracted_count = 0
     skipped = []
 
-    with RunLogger("extract", postings_total=len(html_paths)) as run_log:
+    with RunLogger("jobs", "extract", items_total=len(html_paths)) as run_log:
         for html_path in html_paths:
             print(f"Extracting {html_path}...")
             try:
                 # Wrapped even though no model is involved: the run tables are
                 # also where you look up which page failed and when.
-                with record_job_run(html_path.stem):
+                with record_item(html_path.stem):
                     extracted = extract_from_file(html_path)
 
                     json_path = out_dir / f"{html_path.stem}.json"
@@ -49,8 +49,8 @@ def extract(staging_dir: Path, out_dir: Path):
 
             extracted_count += 1
 
-        run_log.postings_ok = extracted_count
-        run_log.postings_failed = len(skipped)
+        run_log.items_ok = extracted_count
+        run_log.items_failed = len(skipped)
 
     print(f"\nExtracted {extracted_count}, skipped {len(skipped)}.")
     for html_path, error in skipped:
@@ -71,7 +71,7 @@ def transform_one(json_path: Path, transform_output_dir: Path):
     # Opens the posting's telemetry record and closes it however this ends. The
     # model calls find it through a ContextVar, which is per thread, so the
     # worker running next door writes into its own record.
-    with record_job_run(json_path.stem):
+    with record_item(json_path.stem):
         with json_path.open("r", encoding="utf-8") as f:
             extracted = json.load(f)
 
@@ -107,8 +107,9 @@ def transform(extract_output_dir: Path, transform_output_dir: Path):
     failed = []
 
     with RunLogger(
+        "jobs",
         "transform",
-        postings_total=len(json_paths) + len(skipped_paths),
+        items_total=len(json_paths) + len(skipped_paths),
         max_concurrency=MAX_CONCURRENCY,
     ) as run_log:
         for json_path in skipped_paths:
@@ -148,8 +149,8 @@ def transform(extract_output_dir: Path, transform_output_dir: Path):
                     # finish just because a later one killed the process.
                     run_log.flush()
 
-        run_log.postings_ok = transformed_count
-        run_log.postings_failed = len(failed)
+        run_log.items_ok = transformed_count
+        run_log.items_failed = len(failed)
 
     print(
         f"\nTransformed {transformed_count}, skipped {len(skipped_paths)}, "
@@ -176,13 +177,13 @@ def load(transform_output_dir: Path):
     skipped_count = 0
     failed = []
 
-    with RunLogger("load", postings_total=len(json_paths)) as run_log:
+    with RunLogger("jobs", "load", items_total=len(json_paths)) as run_log:
         for json_path in json_paths:
             try:
                 # The same telemetry wrapper transform uses, so a load that
-                # blows up on one posting still leaves a FactJobRun row behind.
+                # blows up on one posting still leaves a FactRunItem row behind.
                 # No model calls happen here, so its call list stays empty.
-                with record_job_run(json_path.stem) as job_run:
+                with record_item(json_path.stem) as item:
                     with json_path.open("r", encoding="utf-8") as f:
                         transformed = json.load(f)
 
@@ -190,7 +191,7 @@ def load(transform_output_dir: Path):
                     # on; reuse it rather than open a second one that would only
                     # contend for the write lock.
                     job_id = load_job(transformed, run_log.connection)
-                    job_run.job_id = job_id
+                    item.produced("FactJob", job_id)
             except Exception as error:
                 failed.append((json_path, error))
                 print(f"  FAILED {json_path.name}: {error!r}")
@@ -207,8 +208,8 @@ def load(transform_output_dir: Path):
             # lose the telemetry of what did land if a later posting kills it.
             run_log.flush()
 
-        run_log.postings_ok = loaded_count
-        run_log.postings_failed = len(failed)
+        run_log.items_ok = loaded_count
+        run_log.items_failed = len(failed)
 
     print(
         f"\nLoaded {loaded_count}, skipped {skipped_count}, failed {len(failed)}."
