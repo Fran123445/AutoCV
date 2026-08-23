@@ -62,7 +62,7 @@ class LLMCall:
     latency_ms: int | None = None
     model_name: str | None = None
     temperature: float | None = None
-    think: bool | None = None
+    reasoning_effort: str | None = None
     prompt_tokens: int | None = None
     completion_tokens: int | None = None
     prompt_sha1: str | None = None
@@ -337,8 +337,9 @@ class RunLogger:
             """
             INSERT INTO FactLLMCall (
                 run_item_id, task_name, attempt, started_at, ended_at,
-                latency_ms, model_name, temperature, think, prompt_tokens,
-                completion_tokens, prompt_sha1, http_status, status, error
+                latency_ms, model_name, temperature, reasoning_effort,
+                prompt_tokens, completion_tokens, prompt_sha1, http_status,
+                status, error
             )
             VALUES (?, ?, 1, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
             """,
@@ -351,7 +352,7 @@ class RunLogger:
                     call.latency_ms,
                     call.model_name,
                     call.temperature,
-                    None if call.think is None else int(call.think),
+                    call.reasoning_effort,
                     call.prompt_tokens,
                     call.completion_tokens,
                     call.prompt_sha1,

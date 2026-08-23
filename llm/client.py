@@ -100,7 +100,7 @@ def post_chat(
         task_name=task_name,
         started_at=utc_now(),
         temperature=TEMPERATURE,
-        think=effort != "none",
+        reasoning_effort=effort,
         prompt_sha1=prompt_fingerprint(prompt),
     )
     # perf_counter and not the two timestamps: they are rounded to the second,

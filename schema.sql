@@ -306,7 +306,8 @@ CREATE TABLE IF NOT EXISTS FactLLMCall (
                       -- the one you asked for: MODEL_NAME is empty and the
                       -- server picks
     temperature       REAL,
-    think             INTEGER,              -- 0/1, the only thing that varies per task
+    reasoning_effort  TEXT,                 -- 'low' | 'medium' | 'high' |
+                      -- 'none'. The one payload field that varies per task.
     prompt_tokens     INTEGER,
     completion_tokens INTEGER,              -- includes reasoning ones:
                       -- llama-server does not split them out in usage
