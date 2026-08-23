@@ -1,7 +1,7 @@
--- Dimensiones
+-- Dimensions
 --
--- Todo va con IF NOT EXISTS: db_creation.py corre este archivo entero en cada
--- arranque, así una tabla nueva aparece sin tener que borrar la base.
+-- Everything uses IF NOT EXISTS: db_creation.py runs this whole file on every
+-- startup, so a new table shows up without dropping the database.
 
 CREATE TABLE IF NOT EXISTS DimCompany (
     id           INTEGER PRIMARY KEY,
@@ -12,27 +12,27 @@ CREATE TABLE IF NOT EXISTS DimCompany (
 
 CREATE TABLE IF NOT EXISTS DimRole (
     id        INTEGER PRIMARY KEY,
-    role_name TEXT NOT NULL UNIQUE   -- estandarizado: 'backend dev', 'bi dev', 'full stack dev', ...
+    role_name TEXT NOT NULL UNIQUE   -- standardized: 'backend dev', 'bi dev', 'full stack dev', ...
 );
 
 CREATE TABLE IF NOT EXISTS DimSeniority (
     id              INTEGER PRIMARY KEY,
     label           TEXT NOT NULL UNIQUE,  -- 'junior', 'ssr', 'senior', 'lead'
-    typical_min_exp INTEGER,               -- años típicos del label, ambos
-    typical_max_exp INTEGER                -- nullable: muchas JDs dicen
-                    -- 'Senior' sin años. 'typical' porque describen la palabra,
-                    -- no ningún aviso: los años que pide un aviso concreto son
-                    -- otra cosa y no viven acá
+    typical_min_exp INTEGER,               -- typical years for the label, both
+    typical_max_exp INTEGER                -- nullable: many JDs say 'Senior'
+                    -- with no years. 'typical' because they describe the word,
+                    -- not any posting: the years a concrete posting asks for
+                    -- are a different thing and don't live here
 );
 
 CREATE TABLE IF NOT EXISTS DimTechnologies (
     id   INTEGER PRIMARY KEY,
-    name TEXT NOT NULL UNIQUE        -- nombre canónico: 'javascript', 'postgresql', ...
+    name TEXT NOT NULL UNIQUE        -- canonical name: 'javascript', 'postgresql', ...
 );
 
 CREATE TABLE IF NOT EXISTS TechnologyDependency (
     child_id  INTEGER NOT NULL REFERENCES DimTechnologies(id),  -- 'react'
-    parent_id INTEGER NOT NULL REFERENCES DimTechnologies(id),  -- implica 'javascript'
+    parent_id INTEGER NOT NULL REFERENCES DimTechnologies(id),  -- implies 'javascript'
     PRIMARY KEY (child_id, parent_id)
 );
 
@@ -43,14 +43,15 @@ CREATE TABLE IF NOT EXISTS DimConcepts (
 
 CREATE TABLE IF NOT EXISTS ConceptDependency (
     child_id  INTEGER NOT NULL REFERENCES DimConcepts(id),  -- 'dashboarding'
-    parent_id INTEGER NOT NULL REFERENCES DimConcepts(id),  -- implica 'business intelligence'
+    parent_id INTEGER NOT NULL REFERENCES DimConcepts(id),  -- implies 'business intelligence'
     PRIMARY KEY (child_id, parent_id)
 );
 
--- El aviso pide el paraguas ('relational databases') y el candidato declara la
--- herramienta ('sql server'): sin este puente el match da 0 en algo que sabe.
--- Sólo implicaciones ciertas: 'power bi' implica business intelligence, no
--- implica machine learning porque alguien lo use para un modelo.
+-- The posting asks for the umbrella ('relational databases') and the candidate
+-- declares the tool ('sql server'): without this bridge the match scores 0 on
+-- something they know. Only certain implications: 'power bi' implies business
+-- intelligence, it doesn't imply machine learning because someone used it for
+-- a model.
 CREATE TABLE IF NOT EXISTS TechnologyConcept (
     technology_id INTEGER NOT NULL REFERENCES DimTechnologies(id),
     concept_id    INTEGER NOT NULL REFERENCES DimConcepts(id),
@@ -59,46 +60,45 @@ CREATE TABLE IF NOT EXISTS TechnologyConcept (
 
 CREATE TABLE IF NOT EXISTS DimDegree (
     id     INTEGER PRIMARY KEY,
-    name   TEXT NOT NULL UNIQUE,  -- canónico: 'computer science', 'information systems engineering', ...
+    name   TEXT NOT NULL UNIQUE,  -- canonical: 'computer science', 'information systems engineering', ...
     level  TEXT,                  -- 'high school' | 'bachelor' | 'master' | 'phd' | ...
-    field  TEXT                   -- área amplia: 'cs', 'engineering', 'math'. Permite
-                   -- matchear 'cualquier master en cs' sin depender del nombre exacto
+    field  TEXT                   -- broad area: 'cs', 'engineering', 'math'. Allows
+                   -- matching 'any master in cs' without relying on the exact name
 );
 
 -- Fact
 
 CREATE TABLE IF NOT EXISTS FactJob (
     id                 INTEGER PRIMARY KEY,
-    linkedin_job_id    INTEGER NOT NULL UNIQUE,  -- clave de dedupe; sale de la
-                       -- URL guardada, no del cuerpo del HTML: ahí aparecen los
-                       -- ids de los avisos recomendados
-    position_name      TEXT NOT NULL,        -- título tal cual aparece en la JD
+    linkedin_job_id    INTEGER NOT NULL UNIQUE,  -- dedupe key; comes from the
+                       -- saved URL, not the HTML body
+    position_name      TEXT NOT NULL,        -- title as it appears in the JD
     company_id         INTEGER REFERENCES DimCompany(id),
     role_id            INTEGER REFERENCES DimRole(id),
     seniority_id       INTEGER REFERENCES DimSeniority(id),
-    post_date          TEXT,                 -- ISO 8601, derivado de scrape_date
-                       -- menos el tiempo transcurrido; precisión gruesa
-    post_date_raw      TEXT,                 -- 'hace 3 meses' tal cual
+    post_date          TEXT,                 -- ISO 8601, derived from scrape_date
+                       -- minus the elapsed time; coarse precision
+    post_date_raw      TEXT,                 -- '3 months ago' verbatim
     scrape_date        TEXT NOT NULL,
     source_url         TEXT,
-    location           TEXT,                 -- ubicación del puesto, no de la empresa
-    days_at_the_office INTEGER,              -- null = no especificado, 0 = full remote
+    location           TEXT,                 -- location of the position, not the company
+    days_at_the_office INTEGER,              -- null = unspecified, 0 = full remote
     language           TEXT,                 -- 'en', 'es', ...
     salary_min         INTEGER,
     salary_max         INTEGER,
     salary_currency    TEXT,
     status             TEXT NOT NULL DEFAULT 'scraped',
                        -- 'scraped' | 'applied' | 'rejected' | 'interview' | 'discarded'
-    raw_text           TEXT NOT NULL         -- siempre: permite re-extraer si mejorás el schema
+    raw_text           TEXT NOT NULL         -- always: allows re-extracting if you improve the schema
 );
 
--- Bridges (N:M job ↔ tech/concept)
+-- Bridges (N:M job <-> tech/concept)
 
 CREATE TABLE IF NOT EXISTS JobTechnologies (
     job_id        INTEGER NOT NULL REFERENCES FactJob(id),
     technology_id INTEGER NOT NULL REFERENCES DimTechnologies(id),
     required      INTEGER NOT NULL DEFAULT 1,  -- 1 = must-have, 0 = nice-to-have
-    min_exp       INTEGER,                     -- años por tecnología; casi siempre null
+    min_exp       INTEGER,                     -- years per technology; almost always null
     max_exp       INTEGER,
     PRIMARY KEY (job_id, technology_id)
 );
@@ -112,38 +112,40 @@ CREATE TABLE IF NOT EXISTS JobConcepts (
     PRIMARY KEY (job_id, concept_id)
 );
 
--- Un aviso pide varias carreras como alternativas: 'Ingeniería en Sistemas,
--- Ciencias de la Computación o afín'. Todas cuentan como aceptables (OR), sin
--- must-have vs nice-to-have: no hay exp por carrera ni jerarquía entre ellas,
--- por eso este bridge no lleva las columnas required/min_exp/max_exp de los
--- otros dos. Sin filas = el aviso no pide ninguna carrera, común en dev.
+-- A posting asks for several degrees as alternatives: 'Systems Engineering,
+-- Computer Science or related'. All count as acceptable (OR), with no
+-- must-have vs nice-to-have: there's no exp per degree and no hierarchy among
+-- them, so this bridge doesn't carry the required/min_exp/max_exp columns the
+-- other two have. No rows = the posting asks for no degree, common in dev.
 CREATE TABLE IF NOT EXISTS JobDegrees (
     job_id    INTEGER NOT NULL REFERENCES FactJob(id),
     degree_id INTEGER NOT NULL REFERENCES DimDegree(id),
     PRIMARY KEY (job_id, degree_id)
 );
 
--- Lado candidato (el usuario). Multiuser desde el arranque aunque hoy haya uno
--- solo: user_id atado a todo evita un refactor si mañana entran más candidatos.
+-- Candidate side (the user). Multiuser from the start even though today
+-- there's only one: user_id tied to everything avoids a refactor if more
+-- candidates show up tomorrow.
 
--- Todo lo de acá abajo de birth_date es de render, no de match: ninguna query
--- de matching va a joinear por un teléfono. Vive igual en la base y no sólo en
--- experience.toml porque el generador de CV lee de la base, no del TOML.
+-- Everything below birth_date is for rendering, not matching: no matching
+-- query will join on a phone number. It lives in the database anyway and not
+-- only in experience.toml because the CV generator reads from the database,
+-- not the TOML.
 CREATE TABLE IF NOT EXISTS FactUser (
     id         INTEGER PRIMARY KEY,
     full_name  TEXT,
     email      TEXT,
     phone      TEXT,
-    location   TEXT,  -- ciudad y país como van en el CV, no dirección postal
+    location   TEXT,  -- city and country as they go in the CV, not postal address
     birth_date TEXT   -- ISO 8601
 );
 
--- Links del CV: github, linkedin, portfolio, blog, etc.
+-- CV links: github, linkedin, portfolio, blog, etc.
 CREATE TABLE IF NOT EXISTS UserLink (
     user_id    INTEGER NOT NULL REFERENCES FactUser(id),
     kind       TEXT NOT NULL,  -- 'github' | 'linkedin' | 'portfolio' | ...
-                               -- abierto a propósito: no hay seed que valga la
-                               -- pena mantener para cuatro valores
+                               -- open on purpose: no seed worth maintaining for
+                               -- four values
     url        TEXT NOT NULL,
     PRIMARY KEY (user_id, kind)
 );
@@ -152,29 +154,29 @@ CREATE TABLE IF NOT EXISTS UserEducation (
     user_id     INTEGER NOT NULL REFERENCES FactUser(id),
     degree_id   INTEGER NOT NULL REFERENCES DimDegree(id),
     institution TEXT,
-    gpa         TEXT,   -- como se imprime, con su escala: '8.48 / 10', '3.7/4.0'.
-                -- TEXT y no REAL para mantener la escala
+    gpa         TEXT,   -- as printed, with its scale: '8.48 / 10', '3.7/4.0'.
+                -- TEXT and not REAL to keep the scale
     start_date  TEXT,   -- ISO 8601
-    end_date    TEXT,   -- null = en curso
+    end_date    TEXT,   -- null = ongoing
     PRIMARY KEY (user_id, degree_id, institution)
 );
 
--- Idiomas hablados. Sin dim y sin nivel canónico, como UserLink: no se matchea
--- contra nada (FactJob.language es el idioma del aviso, no un requisito), así
--- que name y level salen impresos tal cual se escribieron.
+-- Spoken languages. No dim and no canonical level, like UserLink: it isn't
+-- matched against anything (FactJob.language is the posting's language, not a
+-- requirement), so name and level print exactly as written.
 CREATE TABLE IF NOT EXISTS UserLanguage (
     user_id INTEGER NOT NULL REFERENCES FactUser(id),
-    name    TEXT NOT NULL,  -- 'English', 'Spanish', ... como va en el CV
-    level   TEXT,           -- como se imprime: 'Native', 'C1', 'B2 (Upper-intermediate)'
+    name    TEXT NOT NULL,  -- 'English', 'Spanish', ... as it goes in the CV
+    level   TEXT,           -- as printed: 'Native', 'C1', 'B2 (Upper-intermediate)'
     PRIMARY KEY (user_id, name)
 );
 
--- Bridges de skills. proficiency vive acá, no en los projects:
--- el project es evidencia de uso, el nivel es una afirmación del candidato.
+-- Skill bridges. proficiency lives here, not in the projects: the project is
+-- evidence of use, the level is a claim by the candidate.
 CREATE TABLE IF NOT EXISTS UserTechnologies (
     user_id       INTEGER NOT NULL REFERENCES FactUser(id),
     technology_id INTEGER NOT NULL REFERENCES DimTechnologies(id),
-    proficiency   INTEGER,   -- 1-5, misma escala en todo el lado usuario
+    proficiency   INTEGER,   -- 1-5, same scale across the whole user side
     PRIMARY KEY (user_id, technology_id)
 );
 
@@ -185,124 +187,119 @@ CREATE TABLE IF NOT EXISTS UserConcepts (
     PRIMARY KEY (user_id, concept_id)
 );
 
--- Historia laboral. Simétrico con FactJob: mismas dims (company/role/seniority)
--- así el match candidato vs aviso compara peras con peras.
+-- Work history. Symmetric with FactJob: same dims (company/role/seniority) so
+-- the candidate vs posting match compares apples to apples.
 CREATE TABLE IF NOT EXISTS FactExperience (
     id           INTEGER PRIMARY KEY,
     user_id      INTEGER NOT NULL REFERENCES FactUser(id),
-    source_id    TEXT,   -- id del bloque en experience.toml: la clave de dedupe
-                 -- del ETL, como linkedin_job_id en FactJob. Un puesto no tiene
-                 -- id natural, y company + role + fechas no alcanza: dos
-                 -- pasajes por el mismo puesto son dos bloques distintos
-    company_id   INTEGER REFERENCES DimCompany(id),   -- reusa DimCompany
-    role_id      INTEGER REFERENCES DimRole(id), -- categoria dentro de la taxonomia cerrada
-    job_title    TEXT,   -- el título real del puesto, como lo imprime el CV.
+    source_id    TEXT,   -- id of the block in experience.toml: the ETL's dedupe
+                 -- key, like linkedin_job_id in FactJob. A position has no
+                 -- natural id, and company + role + dates isn't enough: two
+                 -- stints in the same position are two distinct blocks
+    company_id   INTEGER REFERENCES DimCompany(id),   -- reuses DimCompany
+    role_id      INTEGER REFERENCES DimRole(id), -- category within the closed taxonomy
+    job_title    TEXT,   -- the real position title, as the CV prints it.
     seniority_id INTEGER REFERENCES DimSeniority(id),
     start_date   TEXT,   -- ISO 8601
-    end_date     TEXT,   -- null = actual
-    day_to_day   TEXT,   -- narrado, no crudo: el crudo vive en experience.toml.
-                 -- Los tags que salen de esta prosa van a UserTechnologies y
-                 -- UserConcepts, pero los tags alcanzan para matchear y no para
-                 -- escribir. Sin la prosa, un match que no tiene un Project
-                 -- atrás deja al generador de CV con una etiqueta y ninguna
-                 -- histori.
-    UNIQUE (user_id, source_id)   -- por usuario y no global: el id sale de un
-           -- archivo que cada candidato escribe solo, y nada impide que dos
-           -- elijan el mismo. Null en filas cargadas a mano, y los null son
-           -- distintos entre sí en sqlite, así que no chocan
+    end_date     TEXT,   -- null = current
+    day_to_day   TEXT,   -- narrated, not raw: the raw lives in experience.toml.
+                 -- The tags derived from this prose go to UserTechnologies and
+                 -- UserConcepts, but tags are enough to match and not to write.
+                 -- Without the prose, a match with no Project behind it leaves
+                 -- the CV generator with a label and no story.
+    UNIQUE (user_id, source_id)   -- per user and not global: the id comes from
+           -- a file each candidate writes alone, and nothing stops two of them
+           -- from picking the same one. Null in hand-loaded rows, and nulls
+           -- differ from each other in sqlite, so they don't collide
 );
 
 CREATE TABLE IF NOT EXISTS Project (
     id            INTEGER PRIMARY KEY,
-    user_id       INTEGER NOT NULL REFERENCES FactUser(id),  -- denormalizado: los
-                  -- projects personales (experience_id null) igual saben de quién son
+    user_id       INTEGER NOT NULL REFERENCES FactUser(id),  -- denormalized: personal
+                  -- projects (experience_id null) still know whose they are
     experience_id INTEGER REFERENCES FactExperience(id),     -- null = personal
     task_desc     TEXT NOT NULL,
-    source_path   TEXT UNIQUE,  -- repo del que salió; null = cargado a mano
-                  -- (varios null conviven). Clave de dedupe del ETL, igual que
-                  -- linkedin_job_id en FactJob
-    source_id     TEXT,         -- la otra clave de dedupe: id del bloque en
-                  -- experience.toml, para los projects que nacen de un job.
-                  -- Null en los personales, que no salen de ese archivo
-    head_commit   TEXT,         -- hash del HEAD del repo (combinado si son varios).
-    first_commit_at TEXT,       -- fecha ISO 8601 del primer commit
-    last_commit_at  TEXT,       -- fecha ISO 8601 del último commit
-    UNIQUE (experience_id, source_id)   -- por experiencia y no global: los ids
-           -- del archivo son únicos dentro de cada job, no entre jobs
+    source_path   TEXT UNIQUE,  -- repo it came from; null = hand-loaded (several
+                  -- nulls coexist). The ETL's dedupe key, same as
+                  -- linkedin_job_id in FactJob
+    source_id     TEXT,         -- the other dedupe key: id of the block in
+                  -- experience.toml, for projects born from a job. Null in
+                  -- personal ones, which don't come from that file
+    head_commit   TEXT,         -- hash of the repo's HEAD (combined if several).
+    first_commit_at TEXT,       -- ISO 8601 date of the first commit
+    last_commit_at  TEXT,       -- ISO 8601 date of the last commit
+    UNIQUE (experience_id, source_id)   -- per experience and not global: the
+           -- file's ids are unique within each job, not across jobs
 );
 
--- Bridges de evidencia: qué tech/concepto tocó cada project. Sin proficiency;
--- eso vive en UserTechnologies/UserConcepts. Los techs de un project deberían
--- estar contenidos en los del usuario (rollup), no al revés.
+-- Evidence bridges: which tech/concept each project touched. No proficiency;
+-- that lives in UserTechnologies/UserConcepts. A project's techs should be
+-- contained in the user's (rollup), not the other way around.
 CREATE TABLE IF NOT EXISTS ProjectTechnologies (
     project_id    INTEGER NOT NULL REFERENCES Project(id),
     technology_id INTEGER NOT NULL REFERENCES DimTechnologies(id),
-    descr         TEXT,   -- rol de esta tech en el project: 'state del
-                  -- dashboard', 'cola de jobs async'. Frase corta, no relato:
-                  -- el relato vive en Project.task_desc. Null en deps triviales
-                  -- (igual cuentan como tag para el match, sin narrativa)
+    descr         TEXT,   -- this tech's role in the project
     PRIMARY KEY (project_id, technology_id)
 );
 
 CREATE TABLE IF NOT EXISTS ProjectConcepts (
     project_id INTEGER NOT NULL REFERENCES Project(id),
     concept_id INTEGER NOT NULL REFERENCES DimConcepts(id),
-    descr      TEXT,   -- como ProjectTechnologies.descr. Pesa más acá: un tag
-               -- de concepto ('caching', 'machine learning') dice poco sin el
-               -- contexto de cómo se aplicó en este project
+    descr      TEXT,   -- like ProjectTechnologies.descr.
     PRIMARY KEY (project_id, concept_id)
 );
 
--- Observabilidad de corridas
+-- Run observability
 
 CREATE TABLE IF NOT EXISTS FactRun (
     id              INTEGER PRIMARY KEY,
     stage           TEXT NOT NULL,          -- 'extract' | 'transform' | 'load'
-    started_at      TEXT NOT NULL,          -- ISO 8601, como el resto
-    ended_at        TEXT,                   -- null = corriendo, o muerta
+    started_at      TEXT NOT NULL,          -- ISO 8601, like the rest
+    ended_at        TEXT,                   -- null = running, or dead
     status          TEXT NOT NULL DEFAULT 'running',
                     -- 'running' | 'completed' | 'failed'
     postings_total  INTEGER,
     postings_ok     INTEGER,
     postings_failed INTEGER,
     max_concurrency INTEGER,
-    config_json     TEXT,                   -- snapshot de config.py: model,
-                    -- temperature, timeout, base_url. Un JSON y no columnas
-                    -- sueltas: la config cambia más seguido que el schema
-    git_commit      TEXT,                   -- qué código produjo estos datos
+    config_json     TEXT,                   -- snapshot of config.py: model,
+                    -- temperature, timeout, base_url. One JSON and not loose
+                    -- columns: the config changes more often than the schema
+    git_commit      TEXT,                   -- which code produced this data
     error           TEXT
 );
 
 CREATE TABLE IF NOT EXISTS FactJobRun (
     id          INTEGER PRIMARY KEY,
     run_id      INTEGER NOT NULL REFERENCES FactRun(id),
-    source_file TEXT NOT NULL,              -- stem del json; en transform
-                -- todavía no existe el FactJob al que apuntar
-    job_id      INTEGER REFERENCES FactJob(id),  -- se completa en load
+    source_file TEXT NOT NULL,              -- stem of the json; in transform the
+                -- FactJob to point at doesn't exist yet
+    job_id      INTEGER REFERENCES FactJob(id),  -- filled in at load
     started_at  TEXT NOT NULL,
     ended_at    TEXT,
     status      TEXT NOT NULL DEFAULT 'running',
-    error       TEXT                        -- repr de la excepción
+    error       TEXT                        -- repr of the exception
 );
 
 CREATE TABLE IF NOT EXISTS FactLLMCall (
     id                INTEGER PRIMARY KEY,
     job_run_id        INTEGER NOT NULL REFERENCES FactJobRun(id),
     task_name         TEXT NOT NULL,        -- 'jobs.tech_identifier.first_pass', ...
-    attempt           INTEGER NOT NULL DEFAULT 1,  -- todavía no hay reintentos,
-                      -- pero sin contador un reintento parece fila duplicada
+    attempt           INTEGER NOT NULL DEFAULT 1,  -- no retries yet, but without
+                      -- a counter a retry looks like a duplicate row
     started_at        TEXT NOT NULL,
     ended_at          TEXT,
     latency_ms        INTEGER,
-    model_name        TEXT,                 -- el que devolvió el server, no el
-                      -- que pediste: MODEL_NAME está vacío y elige el server
+    model_name        TEXT,                 -- the one the server returned, not
+                      -- the one you asked for: MODEL_NAME is empty and the
+                      -- server picks
     temperature       REAL,
-    think             INTEGER,              -- 0/1, lo único que varía por tarea
+    think             INTEGER,              -- 0/1, the only thing that varies per task
     prompt_tokens     INTEGER,
-    completion_tokens INTEGER,              -- incluye los de razonamiento:
-                      -- llama-server no los separa en usage
-    prompt_sha1       TEXT,                 -- hash del prompt renderizado; sin
-                      -- esto una corrida vieja y una nueva sólo "dan distinto"
+    completion_tokens INTEGER,              -- includes reasoning ones:
+                      -- llama-server doesn't split them out in usage
+    prompt_sha1       TEXT,                 -- hash of the rendered prompt;
+                      -- without it an old run and a new one just "differ"
     http_status       INTEGER,
     status            TEXT NOT NULL DEFAULT 'running',
     error             TEXT
