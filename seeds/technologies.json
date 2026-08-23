@@ -289,6 +289,20 @@
       ]
     },
     {
+      "name": "power bi dataflows",
+      "category": "etl",
+      "aliases": [
+        "dataflows"
+      ],
+      "parents": [
+        "power query m"
+      ],
+      "concepts": [
+        "etl",
+        "data pipelines"
+      ]
+    },
+    {
       "name": "mdx",
       "category": "language",
       "aliases": [],
@@ -1208,6 +1222,57 @@
         "python"
       ],
       "concepts": []
+    },
+    {
+      "name": "httpx",
+      "category": "library",
+      "aliases": [],
+      "parents": [
+        "python"
+      ],
+      "concepts": []
+    },
+    {
+      "name": "ratelimit",
+      "category": "library",
+      "aliases": [],
+      "parents": [
+        "python"
+      ],
+      "concepts": [
+        "rate limiting"
+      ]
+    },
+    {
+      "name": "pyodbc",
+      "category": "library",
+      "aliases": [],
+      "parents": [
+        "python"
+      ],
+      "concepts": [
+        "relational databases"
+      ]
+    },
+    {
+      "name": "sqlglot",
+      "category": "library",
+      "aliases": [],
+      "parents": [
+        "python"
+      ],
+      "concepts": []
+    },
+    {
+      "name": "rapidfuzz",
+      "category": "library",
+      "aliases": [],
+      "parents": [
+        "python"
+      ],
+      "concepts": [
+        "fuzzy matching"
+      ]
     },
     {
       "name": "beautifulsoup",

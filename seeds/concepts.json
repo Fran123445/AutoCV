@@ -1256,6 +1256,18 @@
       "parents": ["data cleaning"]
     },
     {
+      "name": "fuzzy matching",
+      "category": "data",
+      "aliases": ["fuzzy string matching", "approximate string matching", "coincidencia difusa"],
+      "parents": []
+    },
+    {
+      "name": "data staging",
+      "category": "data",
+      "aliases": ["staging layer", "staging tables"],
+      "parents": ["etl"]
+    },
+    {
       "name": "data reconciliation",
       "category": "data",
       "aliases": ["conciliacion de datos", "conciliación de datos"],
