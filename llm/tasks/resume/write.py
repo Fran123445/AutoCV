@@ -17,6 +17,11 @@ What separates a CV that gets read from one that does not is whether each line s
 Rules for voice, everywhere:
 - English. Never write "the candidate", "they", or the candidate's name. Every line reads as the candidate's own, with the subject left off: "Build a reconciliation tool", "Modelled a message archive as a star schema".
 - Work still going on takes the present tense, work that has finished takes the past tense. Judge that per position and per project from the dates in the record, not from where the entry sits.
+- Never use an em dash. Where an aside needs setting off, open it with a colon, enclose it in commas or parentheses, or close the sentence and start another: "four independently deployable services: a crawler, an embedding API, an orchestrator and a frontend". One on a page is the most recognisable mark of machine-written prose, and a reader who spots it stops reading for the content and starts reading for the tell.
+- Do not define a thing by what it is not. "returned typed structures rather than free text", "an orchestrator, not a wrapper": the discarded half was never on the page, so the contrast carries nothing. Say what the thing is and stop.
+- Do not close a sentence on a participle announcing the benefit: "guaranteeing typed entities", "ensuring consistency", "allowing each service to scale independently". Where the benefit is worth its words, give it a subject and a verb of its own; where it is not, cut it.
+- Never open a summary paragraph on a stock cataloguing phrase: "The body of work covers", "Work spans", "Experience includes", each trailed by a list of four. Write a sentence whose subject does something.
+- Reach for the plain word. "utilise", "leverage", "robust", "seamless", "comprehensive", "cutting-edge" and "state-of-the-art" say less than "use", "strong", or nothing at all, and a reader has learned to skip every one of them.
 
 Rules for summary:
 - One to three short paragraphs, each its own item in the list. The first is required, the rest are worth adding only when there is something to put in them.
@@ -49,7 +54,7 @@ Rules for personal_bullets:
 Rules for every bullet:
 - Start on the verb, with the subject left off, and vary it: two bullets in a row opening on "Built" or "Developed" read as one bullet.
 - One piece of work per bullet, and inside it say how the work was made to do its job. The mechanism is the point: "sampling matched row sets on natural keys and comparing at column level with exact and fuzzy string matching to surface field mappings" is a bullet, "using Pandas and RapidFuzz to perform fuzzy matching" is a library credit. Where the record gives a reason a thing was done one way and not another, that reason is the best material on the page.
-- Roughly twenty five to fifty words. One sentence carrying subordinate clauses reads better here than two short ones.
+- Roughly twenty five to fifty words, and not all of them the same length: bullets that run to the same count with the same clause pattern read as generated even when every one of them is true. Give each entry at least one bullet under fifteen words, and let a single sentence carrying subordinate clauses do the work wherever two short ones would say the same thing twice.
 - Integrate the required technology directly with the mechanism or architectural pattern, never as a stand-alone passive mention.
 - Carry over every figure, volume, scale, count and result the record states: row counts, sizes, storage reclaimed, how many of a thing were handled, how much of a set was covered. These are the strongest marks on the page and the record is the only place they can come from, so dropping one to be safe costs more than any other mistake here.
 - Never state a number, an outcome, a scale or a responsibility the record does not. Do not round a figure the record gives, do not report part of a thing as all of it, and do not turn a task into ownership of a system. Repeating what the record states and inventing what it does not are different acts: this rule forbids the second and never the first.
