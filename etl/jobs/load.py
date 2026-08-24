@@ -120,9 +120,9 @@ def load(transformed_data: dict, connection: sqlite3.Connection) -> int | None:
             INSERT INTO FactJob (
                 linkedin_job_id, position_name, company_id, role_id, seniority_id,
                 post_date, post_date_raw, scrape_date, source_url, location,
-                days_at_the_office, raw_text
+                days_at_the_office, language, raw_text
             )
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
             ON CONFLICT(linkedin_job_id) DO NOTHING
             """,
             (
@@ -137,6 +137,7 @@ def load(transformed_data: dict, connection: sqlite3.Connection) -> int | None:
                 header["source_url"],
                 header["location"],
                 _MODALITY_DAYS.get(header["modality"]),
+                transformed_data["language"],
                 transformed_data["body"],
             ),
         )
