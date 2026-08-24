@@ -1,8 +1,8 @@
-# JD transform test set
+# Jobs transform eval set
 
 ```
-extracted_jds_input/       23  input:    output of etl/jobs/extract.py
-expected_transform_output/ 23  expected: output of etl/jobs/transform.py
+input/    23  output of etl/jobs/extract.py
+expected/ 23  output of etl/jobs/transform.py
 ```
 
 Filenames match 1:1. `header` and `body` are carried through unchanged, so compare only

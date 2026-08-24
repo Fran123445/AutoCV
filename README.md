@@ -105,7 +105,7 @@ job_matcher/           Reads evidence and requirements out of the base
 resume_generator/      Résumé document model, HTML render, PDF print
 templates/             experience.toml template + résumé HTML/CSS
 run_log.py             Run-table telemetry wrappers
-eval/                  Transform golden-file fixtures
+eval/                  Transform golden-file fixtures per pipeline
 test/                  Extract/load tests
 ```
 
