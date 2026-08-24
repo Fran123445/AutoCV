@@ -4,6 +4,14 @@ from .models import ResumePromptContext, ResumeResponse
 from .render import render_candidate
 
 
+# What FactJob.language carries, spelled out for the prompt. The column is set
+# by a stopword count that returns null when the posting is too short to tell,
+# and a language outside this table is one the counter cannot produce yet, so
+# both fall back to the language the CV was written in before any of this.
+LANGUAGE_NAMES = {"en": "English", "es": "Spanish"}
+DEFAULT_LANGUAGE = "English"
+
+
 # The two bullet lists are asked for differently on purpose. A position the
 # candidate held goes on the CV whether or not the posting cares about it, since
 # a gap in the work history reads worse than a weak entry; a personal project
@@ -15,13 +23,14 @@ PROMPT_TEMPLATE = """You are writing a candidate's CV for one specific job. Read
 What separates a CV that gets read from one that does not is whether each line says how something was made to work. A reader who already builds these systems is looking for the decision behind the work: what was compared against what, what was separated from what, what the shape of the thing was. Naming the task and the library it used tells them nothing they could not have guessed. Write every line for that reader.
 
 Rules for voice, everywhere:
-- English. Never write "the candidate", "they", or the candidate's name. Every line reads as the candidate's own, with the subject left off: "Build a reconciliation tool", "Modelled a message archive as a star schema".
+- Write the whole CV in {language}: every summary paragraph, every skills label, every project title and every bullet. The record is kept in whatever language the candidate wrote it in and that never shows through. Names are not translated: a company, a product and a technology are printed the way the industry writes them.
+- Never write "the candidate", "they", or the candidate's name. Every line reads as the candidate's own, with the subject left off: "Build a reconciliation tool", "Modelled a message archive as a star schema". Each language has its own way of doing that: Spanish drops the pronoun and keeps the first person, "Modelé un archivo de mensajes como un esquema en estrella".
 - Work still going on takes the present tense, work that has finished takes the past tense. Judge that per position and per project from the dates in the record, not from where the entry sits.
 - Never use an em dash. Where an aside needs setting off, open it with a colon, enclose it in commas or parentheses, or close the sentence and start another: "four independently deployable services: a crawler, an embedding API, an orchestrator and a frontend". One on a page is the most recognisable mark of machine-written prose, and a reader who spots it stops reading for the content and starts reading for the tell.
 - Do not define a thing by what it is not. "returned typed structures rather than free text", "an orchestrator, not a wrapper": the discarded half was never on the page, so the contrast carries nothing. Say what the thing is and stop.
 - Do not close a sentence on a participle announcing the benefit: "guaranteeing typed entities", "ensuring consistency", "allowing each service to scale independently". Where the benefit is worth its words, give it a subject and a verb of its own; where it is not, cut it.
 - Never open a summary paragraph on a stock cataloguing phrase: "The body of work covers", "Work spans", "Experience includes", each trailed by a list of four. Write a sentence whose subject does something.
-- Reach for the plain word. "utilise", "leverage", "robust", "seamless", "comprehensive", "cutting-edge" and "state-of-the-art" say less than "use", "strong", or nothing at all, and a reader has learned to skip every one of them.
+- Reach for the plain word. "utilise", "leverage", "robust", "seamless", "comprehensive", "cutting-edge" and "state-of-the-art" say less than "use", "strong", or nothing at all, and a reader has learned to skip every one of them. {language} has its own set, "sinergia", "potenciar", "soluciones integrales" and the rest, and they are skipped the same way.
 
 Rules for summary:
 - One to three short paragraphs, each its own item in the list. The first is required, the rest are worth adding only when there is something to put in them.
@@ -46,7 +55,7 @@ Rules for work_bullets:
 Rules for personal_bullets:
 - One entry per personal project worth showing for this posting, and no entry at all for the rest. Two is the ceiling and the usual number: the two the posting has most use for, written to the bottom, beat four written to the surface. Write one where only one fits. Never more than one entry for the same project.
 - source_project_id: the number on that project's "--- project N ---" line, taken from the personal projects section. Use only ids that appear there.
-- title: what the project is, not what its folder is called. The folder name is a private joke or an abbreviation and means nothing to the reader: "Schizo_measurements" is a personal messaging analytics warehouse, "tp-2024-1c-Frituras" is an operating system simulator. Three to six words, in title case, describing the system.
+- title: what the project is, not what its folder is called. The folder name is a private joke or an abbreviation and means nothing to the reader: "Schizo_measurements" is a personal messaging analytics warehouse, "tp-2024-1c-Frituras" is an operating system simulator. Three to six words describing the system, cased the way {language} cases a heading.
 - technologies: the few worth printing beside the title, the ones the posting asks for first. Three to six, not the whole list the record carries.
 - Three or four bullets each, and no two of them on the same layer of the system: how the data moves through it, how its pieces are held apart, what constraint it was built against and what that forced. The room the projects you left out would have taken is what pays for this, so use it.
 - Make sure to explain the end product of each project so the reader knows what value is derived (if any).
@@ -77,6 +86,9 @@ def write_resume(context: ResumePromptContext) -> ResumeResponse:
     """
     Write one candidate's summary, skills and bullets against one job description.
 
+    Written in the posting's own language: a Spanish posting is read by Spanish
+    speakers, and a CV answering it in English asks them to do the translating.
+
     Args:
         context (ResumePromptContext): Candidate and job data for one resume.
 
@@ -84,6 +96,7 @@ def write_resume(context: ResumePromptContext) -> ResumeResponse:
         ResumeResponse: The document's written parts, keyed by source id.
     """
     prompt = PROMPT_TEMPLATE.format(
+        language=LANGUAGE_NAMES.get(context.language, DEFAULT_LANGUAGE),
         job_desc=context.job_description,
         candidate=render_candidate(context),
     )

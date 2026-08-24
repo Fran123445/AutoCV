@@ -274,7 +274,7 @@ def _build_prompt_context(
     """Gather everything the writer reads about one candidate and one posting."""
 
     job = connection.execute(
-        "SELECT raw_text FROM FactJob WHERE id = ?",
+        "SELECT raw_text, language FROM FactJob WHERE id = ?",
         (job_id,),
     ).fetchone()
 
@@ -290,6 +290,7 @@ def _build_prompt_context(
 
     return ResumePromptContext(
         job_description=job[0],
+        language=job[1],
         education=_build_education(connection, user_id),
         languages=_build_languages(connection, user_id),
         experience=_build_prompt_experience(connection, user_id),

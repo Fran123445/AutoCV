@@ -47,6 +47,9 @@ class ResumePromptContext(_PromptBlock):
     """Structured candidate and job data rendered into an LLM prompt."""
 
     job_description: str
+    # The posting's language as FactJob stores it, null when it was too short
+    # to tell. The CV is written in it, so it is job data rather than a setting.
+    language: str | None = None
     education: list[ResumeEducation] = Field(default_factory=list)
     languages: list[ResumeLanguage] = Field(default_factory=list)
     experience: list[ResumePromptExperience] = Field(default_factory=list)
@@ -59,7 +62,7 @@ class ResumeSkillGroup(BaseModel):
     """One labelled row of the skills block."""
 
     label: str = Field(
-        description="What this row of skills has in common, in title case, as the reader's eye needs to land on it before the list: for example Languages, Data Engineering, Databases and Platforms, Testing and Tooling."
+        description="What this row of skills has in common, cased the way the CV's language cases a heading, as the reader's eye needs to land on it before the list: for example Languages, Data Engineering, Databases and Platforms, Testing and Tooling."
     )
     items: list[str] = Field(
         description="The skills on this row, ordered with the ones the posting asks for first."
@@ -84,7 +87,7 @@ class ResumePersonalBullets(BaseModel):
         description="The project these bullets belong to, taken from the id given with it."
     )
     title: str = Field(
-        description="What the project is, in three to six words a reader outside the candidate's head would understand, not the name of its folder."
+        description="What the project is, in three to six words of the CV's language that a reader outside the candidate's head would understand, not the name of its folder."
     )
     technologies: list[str] = Field(
         description="The few technologies worth printing beside the title, ordered with the ones the posting asks for first."
