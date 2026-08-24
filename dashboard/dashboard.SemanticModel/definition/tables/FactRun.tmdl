@@ -1,0 +1,133 @@
+table FactRun
+	lineageTag: dc65df66-48ba-4a57-9fbd-3842a53ad4bf
+
+	column id
+		dataType: double
+		lineageTag: a75e8bac-1fe5-4d61-9d9f-e51fa7f73742
+		summarizeBy: none
+		sourceColumn: id
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column pipeline
+		dataType: string
+		lineageTag: 35b9eb7b-1f47-4153-afec-4afd39a04110
+		summarizeBy: none
+		sourceColumn: pipeline
+
+		annotation SummarizationSetBy = Automatic
+
+	column stage
+		dataType: string
+		lineageTag: fb69f6e1-042a-4be7-9e2f-b802137bc412
+		summarizeBy: none
+		sourceColumn: stage
+
+		annotation SummarizationSetBy = Automatic
+
+	column started_at
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 4374960b-fcf1-417a-9854-132fcc06fe7b
+		summarizeBy: none
+		sourceColumn: started_at
+
+		annotation SummarizationSetBy = Automatic
+
+	column ended_at
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: bee29709-4f82-42f1-8cca-cb4ddcf8649b
+		summarizeBy: none
+		sourceColumn: ended_at
+
+		annotation SummarizationSetBy = Automatic
+
+	column status
+		dataType: string
+		lineageTag: cf676002-9989-4c43-a597-d4b9f15752cc
+		summarizeBy: none
+		sourceColumn: status
+
+		annotation SummarizationSetBy = Automatic
+
+	column items_total
+		dataType: double
+		lineageTag: 6df418e3-852c-4600-a0de-11044d17d989
+		summarizeBy: sum
+		sourceColumn: items_total
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column items_ok
+		dataType: double
+		lineageTag: 8fc63104-a376-42f2-a78f-c34279947914
+		summarizeBy: sum
+		sourceColumn: items_ok
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column items_failed
+		dataType: double
+		lineageTag: 2a1647da-944d-4205-b999-89ffcac309c5
+		summarizeBy: sum
+		sourceColumn: items_failed
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column max_concurrency
+		dataType: double
+		lineageTag: b667098c-ba5a-44f6-873a-b67896fc0a41
+		summarizeBy: sum
+		sourceColumn: max_concurrency
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column config_json
+		dataType: string
+		lineageTag: 582cf551-8a27-419a-9644-a36d0df2dc30
+		summarizeBy: none
+		sourceColumn: config_json
+
+		annotation SummarizationSetBy = Automatic
+
+	column git_commit
+		dataType: string
+		lineageTag: 58a4c33a-5073-4210-a725-b0e52bc1d1ba
+		summarizeBy: none
+		sourceColumn: git_commit
+
+		annotation SummarizationSetBy = Automatic
+
+	column error
+		dataType: string
+		lineageTag: 90f539c5-6707-4d50-ba0e-46f199409168
+		summarizeBy: none
+		sourceColumn: error
+
+		annotation SummarizationSetBy = Automatic
+
+	partition FactRun = m
+		mode: import
+		source =
+				let
+				    Source = Odbc.DataSource("dsn=AutoCV", [HierarchicalNavigation=true]),
+				    FactRun_Table = Source{[Name="FactRun",Kind="Table"]}[Data],
+				    #"Changed Type" = Table.TransformColumnTypes(FactRun_Table,{{"started_at", type datetime}, {"ended_at", type datetime}})
+				in
+				    #"Changed Type"
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

@@ -1,0 +1,97 @@
+table FactRunItem
+	lineageTag: 8760cc53-7cf2-46c3-bdd2-321e7fe65e1b
+
+	column id
+		dataType: double
+		lineageTag: 58418b51-29f4-4480-935f-88d93e46e7ab
+		summarizeBy: none
+		sourceColumn: id
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column run_id
+		dataType: double
+		lineageTag: c8929434-29f7-42bb-85f2-545e7cc41e7b
+		summarizeBy: none
+		sourceColumn: run_id
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column item_key
+		dataType: string
+		lineageTag: 3a09898e-5759-4c53-97d1-b0b514f10b6a
+		summarizeBy: none
+		sourceColumn: item_key
+
+		annotation SummarizationSetBy = Automatic
+
+	column entity_table
+		dataType: string
+		lineageTag: b395fa30-2b8b-41eb-8239-fc1ce00e34a2
+		summarizeBy: none
+		sourceColumn: entity_table
+
+		annotation SummarizationSetBy = Automatic
+
+	column entity_id
+		dataType: double
+		lineageTag: ab655bdf-c5c2-4471-9ca5-82a248834768
+		summarizeBy: sum
+		sourceColumn: entity_id
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column started_at
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 637f1d0a-7ed7-4174-a016-bc3694c51515
+		summarizeBy: none
+		sourceColumn: started_at
+
+		annotation SummarizationSetBy = Automatic
+
+	column ended_at
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 05bb3044-133d-4b51-943b-382ad3814e3c
+		summarizeBy: none
+		sourceColumn: ended_at
+
+		annotation SummarizationSetBy = Automatic
+
+	column status
+		dataType: string
+		lineageTag: a2759462-4318-4ed0-9499-12c5319239c0
+		summarizeBy: none
+		sourceColumn: status
+
+		annotation SummarizationSetBy = Automatic
+
+	column error
+		dataType: string
+		lineageTag: aa1cef07-efa2-4ed2-8f0c-2d86d52f465a
+		summarizeBy: none
+		sourceColumn: error
+
+		annotation SummarizationSetBy = Automatic
+
+	partition FactRunItem = m
+		mode: import
+		source =
+				let
+				    Source = Odbc.DataSource("dsn=AutoCV", [HierarchicalNavigation=true]),
+				    FactRunItem_Table = Source{[Name="FactRunItem",Kind="Table"]}[Data],
+				    #"Changed Type" = Table.TransformColumnTypes(FactRunItem_Table,{{"started_at", type datetime}, {"ended_at", type datetime}})
+				in
+				    #"Changed Type"
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

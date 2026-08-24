@@ -1,0 +1,163 @@
+table FactLLMCall
+	lineageTag: b86c8a31-6ff9-4d6b-956c-9eef062e30e6
+
+	column id
+		dataType: double
+		lineageTag: 660d902a-1ab5-44f3-8332-ad9672b1c6fe
+		summarizeBy: sum
+		sourceColumn: id
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column run_item_id
+		dataType: double
+		lineageTag: 0327e405-dcc0-4e71-afa7-261676c004e4
+		summarizeBy: none
+		sourceColumn: run_item_id
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column task_name
+		dataType: string
+		lineageTag: ed2fc783-cde0-4d51-a755-be1ebb1bb8a0
+		summarizeBy: none
+		sourceColumn: task_name
+
+		annotation SummarizationSetBy = Automatic
+
+	column attempt
+		dataType: double
+		lineageTag: b129c748-fa82-4cd0-b39b-880174d6db76
+		summarizeBy: sum
+		sourceColumn: attempt
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column started_at
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 347ba936-b1c2-4848-aaa9-a1d28d479f52
+		summarizeBy: none
+		sourceColumn: started_at
+
+		annotation SummarizationSetBy = Automatic
+
+	column ended_at
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 7865e072-2fa5-4715-9794-a3e3583d1a6c
+		summarizeBy: none
+		sourceColumn: ended_at
+
+		annotation SummarizationSetBy = Automatic
+
+	column latency_ms
+		dataType: double
+		lineageTag: ef48fa39-2597-4777-bbb1-049cc60e64bb
+		summarizeBy: sum
+		sourceColumn: latency_ms
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column model_name
+		dataType: string
+		lineageTag: 6fe30911-a042-48c3-ba43-4ffa8bd2e72c
+		summarizeBy: none
+		sourceColumn: model_name
+
+		annotation SummarizationSetBy = Automatic
+
+	column temperature
+		dataType: double
+		lineageTag: 2ec9c59d-5f0b-435c-a05a-2765db67890a
+		summarizeBy: sum
+		sourceColumn: temperature
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column reasoning_effort
+		dataType: string
+		lineageTag: 2bcd7ca4-c99b-44c6-8d18-65ace7f93e8e
+		summarizeBy: none
+		sourceColumn: reasoning_effort
+
+		annotation SummarizationSetBy = Automatic
+
+	column prompt_tokens
+		dataType: double
+		lineageTag: 0b18792f-9bdf-47f6-8752-8f75b4ad68ad
+		summarizeBy: sum
+		sourceColumn: prompt_tokens
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column completion_tokens
+		dataType: double
+		lineageTag: c76e447f-b9ed-4b56-908d-1a74844d77db
+		summarizeBy: sum
+		sourceColumn: completion_tokens
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column prompt_sha1
+		dataType: string
+		lineageTag: be32cb0e-5d42-4f7d-9ff7-9d861c4104d5
+		summarizeBy: none
+		sourceColumn: prompt_sha1
+
+		annotation SummarizationSetBy = Automatic
+
+	column http_status
+		dataType: double
+		lineageTag: 441f78a3-96c1-447d-9f56-1355e4521f0a
+		summarizeBy: sum
+		sourceColumn: http_status
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column status
+		dataType: string
+		lineageTag: 64d527d9-0bb1-4e01-a4e9-e4226073bdfa
+		summarizeBy: none
+		sourceColumn: status
+
+		annotation SummarizationSetBy = Automatic
+
+	column error
+		dataType: string
+		lineageTag: f39a1af8-8313-4e48-9a75-b086594b2f97
+		summarizeBy: none
+		sourceColumn: error
+
+		annotation SummarizationSetBy = Automatic
+
+	partition FactLLMCall = m
+		mode: import
+		source =
+				let
+				    Source = Odbc.DataSource("dsn=AutoCV", [HierarchicalNavigation=true]),
+				    FactLLMCall_Table = Source{[Name="FactLLMCall",Kind="Table"]}[Data],
+				    #"Changed Type" = Table.TransformColumnTypes(FactLLMCall_Table,{{"started_at", type datetime}, {"ended_at", type datetime}})
+				in
+				    #"Changed Type"
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

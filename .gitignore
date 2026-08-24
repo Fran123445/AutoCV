@@ -48,6 +48,9 @@ dist/
 data/
 .pytmp/
 
-# La plantilla llena: datos personales, y el repo es público. La copia en blanco
-# y el ejemplo viven en templates/ y sí van al repo.
+# Completed exp template
 /experience.toml
+
+# Power BI (PBIP) local state
+**/.pbi/localSettings.json
+**/.pbi/cache.abf
