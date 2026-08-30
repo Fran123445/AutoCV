@@ -47,8 +47,8 @@ class ResumePromptContext(_PromptBlock):
     """Structured candidate and job data rendered into an LLM prompt."""
 
     job_description: str
-    # The posting's language as FactJob stores it, null when it was too short
-    # to tell. The CV is written in it, so it is job data rather than a setting.
+    # The normalized output language derived from FactJob.language. Missing or
+    # unsupported posting languages resolve to English before writing.
     language: str | None = None
     education: list[ResumeEducation] = Field(default_factory=list)
     languages: list[ResumeLanguage] = Field(default_factory=list)

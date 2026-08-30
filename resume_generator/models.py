@@ -86,6 +86,9 @@ class ResumeDocument(_ResumeBlock):
     """Complete renderer-independent representation of a generated resume."""
 
     profile: ResumeProfile
+    # The locale used for both the LLM-written text and structural labels. The
+    # default keeps documents written before locale support renderable.
+    language: str = "en"
     summary: list[str] = Field(default_factory=list)
     skills: list[ResumeSkillGroup] = Field(default_factory=list)
     experience: list[ResumeExperience] = Field(default_factory=list)

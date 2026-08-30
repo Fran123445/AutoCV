@@ -2,14 +2,7 @@ from llm.client import post_chat
 
 from .models import ResumePromptContext, ResumeResponse
 from .render import render_candidate
-
-
-# What FactJob.language carries, spelled out for the prompt. The column is set
-# by a stopword count that returns null when the posting is too short to tell,
-# and a language outside this table is one the counter cannot produce yet, so
-# both fall back to the language the CV was written in before any of this.
-LANGUAGE_NAMES = {"en": "English", "es": "Spanish"}
-DEFAULT_LANGUAGE = "English"
+from resume_generator.localization import resolve_locale
 
 
 # The two bullet lists are asked for differently on purpose. A position the
@@ -96,7 +89,7 @@ def write_resume(context: ResumePromptContext) -> ResumeResponse:
         ResumeResponse: The document's written parts, keyed by source id.
     """
     prompt = PROMPT_TEMPLATE.format(
-        language=LANGUAGE_NAMES.get(context.language, DEFAULT_LANGUAGE),
+        language=resolve_locale(context.language).llm_name,
         job_desc=context.job_description,
         candidate=render_candidate(context),
     )

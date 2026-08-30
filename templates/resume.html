@@ -5,6 +5,8 @@
 
   Expected render context:
     document   -- resume_generator.models.ResumeDocument
+    locale     -- resolved resume_generator.localization.ResumeLocale
+    labels     -- structural labels for the document's locale
     stylesheet -- contents of templates/resume.css, inlined below so the page
                   carries its own styling and the PDF pass fetches nothing.
                   Printed unescaped: it is a repo file rather than candidate
@@ -19,7 +21,7 @@
   projects should not get an empty PROJECTS heading.
 #}
 <!doctype html>
-<html lang="en">
+<html lang="{{ locale.code }}">
 <head>
 <meta charset="utf-8">
 <title>{{ document.profile.full_name }}</title>
@@ -43,7 +45,7 @@
 
 {% if document.summary %}
 <section>
-  <h2>Summary</h2>
+  <h2>{{ labels.summary }}</h2>
   {% for paragraph in document.summary %}
     <p>{{ paragraph }}</p>
   {% endfor %}
@@ -52,7 +54,7 @@
 
 {% if document.skills %}
 <section>
-  <h2>Skills</h2>
+  <h2>{{ labels.skills }}</h2>
   {% for group in document.skills %}
     <p class="skill-group"><strong>{{ group.label }}:</strong> {{ group.items | join(', ') }}</p>
   {% endfor %}
@@ -61,12 +63,12 @@
 
 {% if document.experience %}
 <section>
-  <h2>Experience</h2>
+  <h2>{{ labels.experience }}</h2>
   {% for entry in document.experience %}
     <article class="entry">
       <div class="entry-head">
         <h3>{{ entry.job_title or entry.role }} &middot; {{ entry.company }}</h3>
-        <span class="dates">{{ span(entry.start_date, entry.end_date) }}</span>
+        <span class="dates">{{ span(entry.start_date, entry.end_date, locale.code) }}</span>
       </div>
       {% if entry.bullets %}
         <ul>
@@ -80,7 +82,7 @@
 
 {% if document.projects %}
 <section>
-  <h2>Personal Projects</h2>
+  <h2>{{ labels.projects }}</h2>
   {% for project in document.projects %}
     <article class="entry">
       <div class="entry-head">
@@ -101,15 +103,15 @@
 
 {% if document.education %}
 <section>
-  <h2>Education</h2>
+  <h2>{{ labels.education }}</h2>
   {% for entry in document.education %}
     <article class="entry">
       <div class="entry-head">
         <h3>{{ entry.degree }}</h3>
-        <span class="dates">{{ span(entry.start_date, entry.end_date) }}</span>
+        <span class="dates">{{ span(entry.start_date, entry.end_date, locale.code) }}</span>
       </div>
       <p class="entry-detail">
-        {{ entry.institution or '' }}{% if entry.gpa %} &middot; GPA {{ entry.gpa }}{% endif %}
+        {{ entry.institution or '' }}{% if entry.gpa %} &middot; {{ labels.gpa }} {{ entry.gpa }}{% endif %}
       </p>
     </article>
   {% endfor %}
@@ -118,10 +120,10 @@
 
 {% if document.languages %}
 <section>
-  <h2>Languages</h2>
+  <h2>{{ labels.languages }}</h2>
   <p class="languages">
     {% for language in document.languages %}
-      <span><strong>{{ language.name }}</strong>{% if language.level %} — {{ language.level }}{% endif %}</span>
+      <span><strong>{{ spoken_language_name(language.name, locale.code) }}</strong>{% if language.level %} — {{ spoken_language_level(language.level, locale.code) }}{% endif %}</span>
     {% endfor %}
   </p>
 </section>

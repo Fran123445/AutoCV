@@ -13,6 +13,11 @@ from jinja2 import Environment, FileSystemLoader, select_autoescape
 from config import TEMPLATES_DIR
 
 from .dates import span
+from .localization import (
+    localize_language_name,
+    localize_proficiency_level,
+    resolve_locale,
+)
 from .models import ResumeDocument
 
 
@@ -31,6 +36,8 @@ _environment = Environment(
 # Registered as a global rather than a filter: the template calls it on two
 # arguments, and a filter reading its second from a pipe would only obscure that.
 _environment.globals["span"] = span
+_environment.globals["spoken_language_name"] = localize_language_name
+_environment.globals["spoken_language_level"] = localize_proficiency_level
 
 
 def render_html(document: ResumeDocument) -> str:
@@ -45,8 +52,11 @@ def render_html(document: ResumeDocument) -> str:
             moved and the PDF pass fetches nothing.
     """
     stylesheet = (TEMPLATES_DIR / STYLESHEET_NAME).read_text(encoding="utf-8")
+    locale = resolve_locale(document.language)
 
     return _environment.get_template(TEMPLATE_NAME).render(
         document=document,
+        locale=locale,
+        labels=locale.labels,
         stylesheet=stylesheet,
     )

@@ -13,6 +13,11 @@ from llm.tasks.resume.models import (
 from llm.tasks.resume.write import write_resume
 
 from .dates import parse_date
+from .localization import (
+    localize_language_name,
+    localize_proficiency_level,
+    resolve_locale,
+)
 from .models import (
     ResumeDocument,
     ResumeEducation,
@@ -290,7 +295,7 @@ def _build_prompt_context(
 
     return ResumePromptContext(
         job_description=job[0],
-        language=job[1],
+        language=resolve_locale(job[1]).code,
         education=_build_education(connection, user_id),
         languages=_build_languages(connection, user_id),
         experience=_build_prompt_experience(connection, user_id),
@@ -333,6 +338,7 @@ def generate_resume(
 
     return ResumeDocument(
         profile=_build_profile(connection, user_id),
+        language=resolve_locale(context.language).code,
         summary=written.summary,
         skills=[
             ResumeSkillGroup(label=group.label, items=group.items) for group in written.skills
@@ -359,5 +365,15 @@ def generate_resume(
             for project in written.personal_bullets
         ],
         education=context.education,
-        languages=context.languages,
+        languages=[
+            ResumeLanguage(
+                name=localize_language_name(language.name, context.language),
+                level=(
+                    localize_proficiency_level(language.level, context.language)
+                    if language.level
+                    else None
+                ),
+            )
+            for language in context.languages
+        ],
     )
