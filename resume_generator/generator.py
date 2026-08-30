@@ -109,7 +109,9 @@ def _build_education(
 
     return [
         ResumeEducation(
-            degree=degree,
+            # DimDegree keeps lowercase canonical names for matching; the
+            # document carries the human-facing title-cased form.
+            degree=degree.title(),
             institution=institution,
             gpa=gpa,
             start_date=start_date,

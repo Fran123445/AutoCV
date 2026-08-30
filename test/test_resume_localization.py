@@ -1,4 +1,5 @@
 from resume_generator.dates import span
+from resume_generator.generator import _build_education
 from resume_generator.localization import resolve_locale
 from resume_generator.models import (
     ResumeDocument,
@@ -70,6 +71,28 @@ def test_spanish_resume_localizes_structural_text():
     assert "Promedio 9" in html
     assert "<strong>Español</strong> — Nativo" in html
     assert "<strong>Inglés</strong> — C1" in html
+
+
+def test_degree_names_are_title_cased_for_the_resume_document(seeded_db):
+    seeded_db.execute(
+        "INSERT INTO FactUser (id, full_name) VALUES (?, ?)",
+        (1, "Ada Lovelace"),
+    )
+    degree_id = seeded_db.execute(
+        "SELECT id FROM DimDegree WHERE name = ?",
+        ("information systems engineering",),
+    ).fetchone()[0]
+    seeded_db.execute(
+        """
+        INSERT INTO UserEducation (user_id, degree_id, institution)
+        VALUES (?, ?, ?)
+        """,
+        (1, degree_id, "Universidad"),
+    )
+
+    education = _build_education(seeded_db, 1)
+
+    assert education[0].degree == "Information Systems Engineering"
 
 
 def test_unknown_resume_language_falls_back_to_english():
