@@ -1,4 +1,4 @@
-from llm.client import post_chat
+from llm.client import LLMClient
 from llm.registries.concepts import NAMES_WITH_ALIASES, resolve_concepts
 from llm.registries.technologies import drop_technologies
 
@@ -43,7 +43,11 @@ Allowed concepts:
 """
 
 
-def narrate(technologies: list[str], story: str) -> JobProjectNarrative:
+def narrate(
+    technologies: list[str],
+    story: str,
+    llm_client: LLMClient,
+) -> JobProjectNarrative:
     """
     Describe a project a candidate did at a job, and tag what it demonstrates.
 
@@ -61,7 +65,7 @@ def narrate(technologies: list[str], story: str) -> JobProjectNarrative:
     )
 
     narrative = JobProjectNarrative.model_validate(
-        post_chat(
+        llm_client.post_chat(
             prompt,
             JobProjectNarrative.model_json_schema(),
             task_name="experience.project_narrator.narrate",

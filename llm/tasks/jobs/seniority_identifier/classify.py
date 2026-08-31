@@ -1,4 +1,4 @@
-from llm.client import post_chat
+from llm.client import LLMClient
 from llm.registries.seniority import LABELS_WITH_ALIASES
 
 from .models import Seniority
@@ -30,7 +30,9 @@ Allowed levels:
 """
 
 
-def classify_seniority(job_desc: str) -> Seniority:
+def classify_seniority(
+    job_desc: str, llm_client: LLMClient
+) -> Seniority:
     """
     Identify the seniority level a job description advertises.
 
@@ -43,7 +45,7 @@ def classify_seniority(job_desc: str) -> Seniority:
     )
 
     return Seniority.model_validate(
-        post_chat(
+        llm_client.post_chat(
             prompt,
             Seniority.model_json_schema(),
             task_name="jobs.seniority_identifier.classify",

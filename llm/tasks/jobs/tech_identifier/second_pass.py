@@ -1,4 +1,4 @@
-from llm.client import post_chat
+from llm.client import LLMClient
 from llm.registries.technologies import NAMES_WITH_ALIASES
 
 from .models import SecondPassResult, TechnologyList
@@ -35,7 +35,11 @@ Allowed technologies:
 """
 
 
-def run_second_pass(job_desc: str, first_pass: TechnologyList) -> SecondPassResult:
+def run_second_pass(
+    job_desc: str,
+    first_pass: TechnologyList,
+    llm_client: LLMClient,
+) -> SecondPassResult:
     """
     Review a first pass and report the technologies it missed.
 
@@ -56,7 +60,7 @@ def run_second_pass(job_desc: str, first_pass: TechnologyList) -> SecondPassResu
     )
 
     return SecondPassResult.model_validate(
-        post_chat(
+        llm_client.post_chat(
             prompt,
             SecondPassResult.model_json_schema(),
             task_name="jobs.tech_identifier.second_pass",

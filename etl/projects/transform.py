@@ -1,7 +1,12 @@
+from llm.client import LLMClient
 from llm.tasks.projects.analyzer.analyze import analyze
 
 
-def transform(signals: dict, author_email: str | None = None) -> dict:
+def transform(
+    signals: dict,
+    llm_client: LLMClient,
+    author_email: str | None = None,
+) -> dict:
     """
     Transform one project's extracted signals into its identified evidence.
 
@@ -18,4 +23,4 @@ def transform(signals: dict, author_email: str | None = None) -> dict:
     Returns:
         dict: The identified project.
     """
-    return analyze(signals, author_email)
+    return analyze(signals, llm_client, author_email)

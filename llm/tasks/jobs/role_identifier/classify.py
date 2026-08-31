@@ -1,4 +1,4 @@
-from llm.client import post_chat
+from llm.client import LLMClient
 from llm.registries.roles import NAMES_WITH_ALIASES
 
 from .models import Role
@@ -36,7 +36,11 @@ Allowed roles:
 """
 
 
-def classify_role(position_name: str | None, job_desc: str) -> Role:
+def classify_role(
+    position_name: str | None,
+    job_desc: str,
+    llm_client: LLMClient,
+) -> Role:
     """
     Identify the role a job description advertises.
 
@@ -52,7 +56,7 @@ def classify_role(position_name: str | None, job_desc: str) -> Role:
     )
 
     return Role.model_validate(
-        post_chat(
+        llm_client.post_chat(
             prompt,
             Role.model_json_schema(),
             task_name="jobs.role_identifier.classify",

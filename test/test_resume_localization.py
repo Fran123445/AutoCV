@@ -133,20 +133,22 @@ def test_unknown_resume_language_falls_back_to_english():
     assert "Jan 2024 - Present" in html
 
 
-def test_writer_uses_the_same_resolved_language(monkeypatch):
+def test_writer_uses_the_same_resolved_language():
     captured = {}
 
-    def fake_post_chat(prompt, schema, task_name):
-        captured["prompt"] = prompt
-        return {
-            "summary": [],
-            "skills": [],
-            "work_bullets": [],
-            "personal_bullets": [],
-        }
+    class FakeLLMClient:
+        def post_chat(self, prompt, schema, task_name):
+            captured["prompt"] = prompt
+            return {
+                "summary": [],
+                "skills": [],
+                "work_bullets": [],
+                "personal_bullets": [],
+            }
 
-    monkeypatch.setattr("llm.tasks.resume.write.post_chat", fake_post_chat)
-
-    write_resume(ResumePromptContext(job_description="Descripción", language="es"))
+    write_resume(
+        ResumePromptContext(job_description="Descripción", language="es"),
+        FakeLLMClient(),
+    )
 
     assert "whole CV in Spanish" in captured["prompt"]

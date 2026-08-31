@@ -1,6 +1,6 @@
 from pathlib import Path
 
-from llm.client import post_chat
+from llm.client import LLMClient
 from llm.registries.concepts import NAMES_ONLY as CONCEPTS_LIST
 from llm.registries.technologies import NAMES_ONLY as TECH_LIST
 
@@ -57,7 +57,11 @@ Per-folder share of authored commits, by contributor email. Evidence of who buil
 """
 
 
-def analyze(signals: dict, author_email: str | None = None) -> dict:
+def analyze(
+    signals: dict,
+    llm_client: LLMClient,
+    author_email: str | None = None,
+) -> dict:
     """Run the one-shot analysis for one project's extract signals."""
     # Only worth pointing out when there is a split to read it against: a repo
     # with no contribution data leaves the author line dangling over nothing.
@@ -82,7 +86,7 @@ def analyze(signals: dict, author_email: str | None = None) -> dict:
     )
 
     result = RepoAnalysis.model_validate(
-        post_chat(
+        llm_client.post_chat(
             prompt,
             RepoAnalysis.model_json_schema(),
             task_name="projects.analyzer.analyze",
@@ -110,5 +114,3 @@ def analyze(signals: dict, author_email: str | None = None) -> dict:
             "concepts": [entry.model_dump() for entry in result.concepts],
         },
     }
-
-

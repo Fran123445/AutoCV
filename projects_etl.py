@@ -20,7 +20,6 @@ import tomllib
 from config import (
     DB_PATH,
     EXPERIENCE_PATH,
-    MAX_CONCURRENCY,
     PROJECTS_EXTRACT_DIR,
     PROJECTS_TRANSFORM_DIR,
 )
@@ -29,6 +28,8 @@ from config import (
 from etl.projects.extract import extract as extract_projects
 from etl.projects.load import load as load_project
 from etl.projects.transform import transform as transform_project
+from llm.client import LLMClient
+from llm.settings import LLMSettings
 from run_log import RunLogger, record_item
 
 
@@ -100,7 +101,10 @@ def _author_email() -> str | None:
 
 
 def transform_one(
-    json_path: Path, transform_output_dir: Path, author_email: str | None
+    json_path: Path,
+    transform_output_dir: Path,
+    author_email: str | None,
+    llm_client: LLMClient,
 ):
     """
     Transform a single extracted project and write it out.
@@ -122,7 +126,7 @@ def transform_one(
         with json_path.open("r", encoding="utf-8") as f:
             signals = json.load(f)
 
-        transformed = transform_project(signals, author_email)
+        transformed = transform_project(signals, llm_client, author_email)
 
         out_path = transform_output_dir / f"{json_path.stem}.json"
         with out_path.open("w", encoding="utf-8") as f:
@@ -186,7 +190,12 @@ def _plan_transforms(
     return to_run, skipped
 
 
-def transform(extract_output_dir: Path, transform_output_dir: Path):
+def transform(
+    extract_output_dir: Path,
+    transform_output_dir: Path,
+    llm_client: LLMClient,
+):
+    concurrency = llm_client.settings.max_concurrency
     json_paths = sorted(extract_output_dir.glob("*.json"))
 
     to_run, skipped = _plan_transforms(json_paths, _loaded_head_commits())
@@ -203,12 +212,17 @@ def transform(extract_output_dir: Path, transform_output_dir: Path):
         "projects",
         "transform",
         items_total=len(to_run),
-        max_concurrency=MAX_CONCURRENCY,
+        max_concurrency=concurrency,
+        llm_settings=llm_client.settings,
     ) as run_log:
-        with ThreadPoolExecutor(max_workers=MAX_CONCURRENCY) as pool:
+        with ThreadPoolExecutor(max_workers=concurrency) as pool:
             futures = {
                 pool.submit(
-                    transform_one, json_path, transform_output_dir, author_email
+                    transform_one,
+                    json_path,
+                    transform_output_dir,
+                    author_email,
+                    llm_client,
                 ): json_path
                 for json_path in to_run
             }
@@ -244,12 +258,12 @@ def transform(extract_output_dir: Path, transform_output_dir: Path):
         run_log.items_ok = transformed_count
         run_log.items_failed = len(failed)
 
-    print(
-        f"\nTransformed {transformed_count}, skipped {len(skipped)}, "
-        f"failed {len(failed)}."
-    )
-    for json_path, error in failed:
-        print(f"  {json_path.name}: {error!r}")
+        print(
+            f"\nTransformed {transformed_count}, skipped {len(skipped)}, "
+            f"failed {len(failed)}."
+        )
+        for json_path, error in failed:
+            print(f"  {json_path.name}: {error!r}")
 
 
 def load(transform_output_dir: Path):
@@ -361,7 +375,9 @@ def main():
 
     if "transform" in stages:
         PROJECTS_TRANSFORM_DIR.mkdir(parents=True, exist_ok=True)
-        transform(PROJECTS_EXTRACT_DIR, PROJECTS_TRANSFORM_DIR)
+        settings = LLMSettings.from_env("projects")
+        with LLMClient(settings) as llm_client:
+            transform(PROJECTS_EXTRACT_DIR, PROJECTS_TRANSFORM_DIR, llm_client)
 
     if "load" in stages:
         load(PROJECTS_TRANSFORM_DIR)

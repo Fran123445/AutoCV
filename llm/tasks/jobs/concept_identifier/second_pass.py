@@ -1,4 +1,4 @@
-from llm.client import post_chat
+from llm.client import LLMClient
 from llm.registries.concepts import NAMES_WITH_ALIASES
 
 from .models import ConceptList, SecondPassResult
@@ -36,7 +36,11 @@ Allowed concepts:
 """
 
 
-def run_second_pass(job_desc: str, first_pass: ConceptList) -> SecondPassResult:
+def run_second_pass(
+    job_desc: str,
+    first_pass: ConceptList,
+    llm_client: LLMClient,
+) -> SecondPassResult:
     """
     Review a first pass and report the concepts it missed.
 
@@ -57,7 +61,7 @@ def run_second_pass(job_desc: str, first_pass: ConceptList) -> SecondPassResult:
     )
 
     return SecondPassResult.model_validate(
-        post_chat(
+        llm_client.post_chat(
             prompt,
             SecondPassResult.model_json_schema(),
             task_name="jobs.concept_identifier.second_pass",

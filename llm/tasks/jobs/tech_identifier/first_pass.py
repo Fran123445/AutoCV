@@ -1,4 +1,4 @@
-from llm.client import post_chat
+from llm.client import LLMClient
 from llm.registries.technologies import NAMES_ONLY
 
 from .models import TechnologyList
@@ -25,7 +25,7 @@ Allowed technologies:
 """
 
 
-def run_first_pass(job_desc: str) -> TechnologyList:
+def run_first_pass(job_desc: str, llm_client: LLMClient) -> TechnologyList:
     """
     Identify technologies mentioned in a job description.
 
@@ -38,7 +38,7 @@ def run_first_pass(job_desc: str) -> TechnologyList:
     )
 
     return TechnologyList.model_validate(
-        post_chat(
+        llm_client.post_chat(
             prompt,
             TechnologyList.model_json_schema(),
             task_name="jobs.tech_identifier.first_pass",

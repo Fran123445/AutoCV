@@ -1,4 +1,4 @@
-from llm.client import post_chat
+from llm.client import LLMClient
 from llm.registries.degrees import NAMES_WITH_ALIASES
 
 from .models import DegreeRequirement
@@ -31,7 +31,9 @@ Allowed degrees:
 """
 
 
-def classify_degree(job_desc: str) -> DegreeRequirement:
+def classify_degree(
+    job_desc: str, llm_client: LLMClient
+) -> DegreeRequirement:
     """
     Identify the fields of study a job description accepts.
 
@@ -44,7 +46,7 @@ def classify_degree(job_desc: str) -> DegreeRequirement:
     )
 
     return DegreeRequirement.model_validate(
-        post_chat(
+        llm_client.post_chat(
             prompt,
             DegreeRequirement.model_json_schema(),
             task_name="jobs.degree_identifier.classify",

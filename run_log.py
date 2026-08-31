@@ -23,8 +23,9 @@ import json
 import queue
 import sqlite3
 
-from config import BASE_URL, DB_PATH, MODEL_NAME, ROOT_DIR, TEMPERATURE, TIMEOUT
+from config import DB_PATH, ROOT_DIR
 from gitcli import head_commit
+from llm.settings import LLMSettings
 
 
 def utc_now() -> str:
@@ -173,20 +174,16 @@ def record_item(item_key: str):
         _FINISHED_ITEMS.put(item)
 
 
-def _config_snapshot() -> str:
+def _config_snapshot(settings: LLMSettings | None = None) -> str:
     """
     The model settings this run used, as JSON for FactRun.config_json.
 
-    MODEL_NAME is what was asked for and is usually empty; what the server
-    actually served is recorded per call instead, where it is known.
+    The selected model is what was asked for and is usually empty when a local
+    server chooses its own model; what the server actually served is recorded
+    per call instead, where it is known.
     """
     return json.dumps(
-        {
-            "base_url": BASE_URL,
-            "model_name": MODEL_NAME,
-            "temperature": TEMPERATURE,
-            "timeout": TIMEOUT,
-        }
+        settings.snapshot() if settings is not None else {}
     )
 
 
@@ -205,6 +202,7 @@ class RunLogger:
         stage: str,
         items_total: int | None = None,
         max_concurrency: int | None = None,
+        llm_settings: LLMSettings | None = None,
     ):
         """
         Args:
@@ -215,11 +213,14 @@ class RunLogger:
                 'render' or 'pdf' on the resume side.
             items_total (int | None): Units the stage found to work on.
             max_concurrency (int | None): Workers, or None when sequential.
+            llm_settings: Settings used by the stage's LLM client, when it has
+                one. Used to make the run configuration auditable.
         """
         self.pipeline = pipeline
         self.stage = stage
         self.items_total = items_total
         self.max_concurrency = max_concurrency
+        self.llm_settings = llm_settings
         self.items_ok = 0
         self.items_failed = 0
 
@@ -244,12 +245,9 @@ class RunLogger:
                 utc_now(),
                 self.items_total,
                 self.max_concurrency,
-                # Every run, not only the ones that reach the model. Which
-                # stages those are is not readable off the name: the resume
-                # side calls the model under a stage named 'write'. Where
-                # nothing called out, four settings no one read are a cheaper
-                # thing to carry than a rule to keep in sync.
-                _config_snapshot(),
+                # Every run, not only the ones that reach the model. Non-LLM
+                # stages carry an empty configuration snapshot.
+                _config_snapshot(self.llm_settings),
                 head_commit(ROOT_DIR, short=True),
             ),
         )

@@ -1,4 +1,4 @@
-from llm.client import post_chat
+from llm.client import LLMClient
 from llm.descriptions import build_description_model
 
 
@@ -40,7 +40,11 @@ Concepts to describe:
 
 
 def describe(
-    task_desc: str, technologies: list[str], concepts: list[str], story: str
+    task_desc: str,
+    technologies: list[str],
+    concepts: list[str],
+    story: str,
+    llm_client: LLMClient,
 ) -> dict:
     """
     Describe the part each technology and concept played in a job's project.
@@ -67,7 +71,7 @@ def describe(
     )
 
     return model.model_validate(
-        post_chat(
+        llm_client.post_chat(
             prompt,
             model.model_json_schema(),
             task_name="experience.project_describer.describe",

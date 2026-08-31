@@ -1,5 +1,6 @@
 import re
 
+from llm.client import LLMClient
 from llm.tasks.jobs.concept_identifier.first_pass import run_first_pass as concepts_first_pass
 from llm.tasks.jobs.concept_identifier.merge import merge_passes as merge_concept_passes
 from llm.tasks.jobs.concept_identifier.models import ConceptList
@@ -55,7 +56,9 @@ def _identify_language(job_desc: str) -> str | None:
     return "es" if spanish > english else "en"
 
 
-def _identify_technologies(job_desc: str) -> TechnologyList:
+def _identify_technologies(
+    job_desc: str, llm_client: LLMClient
+) -> TechnologyList:
     """
     Identify technologies in a job description.
 
@@ -69,13 +72,15 @@ def _identify_technologies(job_desc: str) -> TechnologyList:
         TechnologyList: The technologies the posting requires, the ones it
             treats as desirable, and the terms neither pass could match.
     """
-    first_pass = tech_first_pass(job_desc)
-    second_pass = tech_second_pass(job_desc, first_pass)
+    first_pass = tech_first_pass(job_desc, llm_client)
+    second_pass = tech_second_pass(job_desc, first_pass, llm_client)
 
     return merge_tech_passes(first_pass, second_pass)
 
 
-def _identify_concepts(job_desc: str) -> ConceptList:
+def _identify_concepts(
+    job_desc: str, llm_client: LLMClient
+) -> ConceptList:
     """
     Identify concepts in a job description.
 
@@ -89,13 +94,13 @@ def _identify_concepts(job_desc: str) -> ConceptList:
         ConceptList: The concepts the posting requires, the ones it treats as
             desirable, and the terms neither pass could match.
     """
-    first_pass = concepts_first_pass(job_desc)
-    second_pass = concepts_second_pass(job_desc, first_pass)
+    first_pass = concepts_first_pass(job_desc, llm_client)
+    second_pass = concepts_second_pass(job_desc, first_pass, llm_client)
 
     return merge_concept_passes(first_pass, second_pass)
 
 
-def transform(jd_json: dict) -> dict:
+def transform(jd_json: dict, llm_client: LLMClient) -> dict:
     """
     Transform a job description
 
@@ -115,11 +120,13 @@ def transform(jd_json: dict) -> dict:
         # the load stage should not have to reopen the extract output to get it.
         "body": job_desc,
         "language": _identify_language(job_desc),
-        "technologies": _identify_technologies(job_desc).model_dump(),
-        "concepts": _identify_concepts(job_desc).model_dump(),
-        "seniority": classify_seniority(job_desc).model_dump(),
+        "technologies": _identify_technologies(job_desc, llm_client).model_dump(),
+        "concepts": _identify_concepts(job_desc, llm_client).model_dump(),
+        "seniority": classify_seniority(job_desc, llm_client).model_dump(),
         # The only identifier that reads the header: the title settles the role
         # far more often than the description does.
-        "role": classify_role(jd_json["header"]["position_name"], job_desc).model_dump(),
-        "degree": classify_degree(job_desc).model_dump(),
+        "role": classify_role(
+            jd_json["header"]["position_name"], job_desc, llm_client
+        ).model_dump(),
+        "degree": classify_degree(job_desc, llm_client).model_dump(),
     }

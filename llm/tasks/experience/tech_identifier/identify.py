@@ -1,4 +1,4 @@
-from llm.client import post_chat
+from llm.client import LLMClient
 from llm.registries.technologies import NAMES_WITH_ALIASES
 
 from .models import ExperienceTechnologyList
@@ -32,7 +32,11 @@ Allowed technologies:
 """
 
 
-def identify_technologies(account: str, subject: str) -> ExperienceTechnologyList:
+def identify_technologies(
+    account: str,
+    subject: str,
+    llm_client: LLMClient,
+) -> ExperienceTechnologyList:
     """
     Identify the technologies a candidate worked with, from their own account.
 
@@ -53,7 +57,7 @@ def identify_technologies(account: str, subject: str) -> ExperienceTechnologyLis
     )
 
     return ExperienceTechnologyList.model_validate(
-        post_chat(
+        llm_client.post_chat(
             prompt,
             ExperienceTechnologyList.model_json_schema(),
             task_name=f"experience.tech_identifier.{subject}",

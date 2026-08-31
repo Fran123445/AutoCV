@@ -16,6 +16,10 @@ from etl.experience.transform import (
     _transform_profile,
     transform,
 )
+from unittest.mock import Mock
+
+
+NOOP_LLM_CLIENT = Mock()
 
 
 # --------------------------------------------------------------------------
@@ -222,7 +226,7 @@ def test_a_nameless_language_is_dropped():
 
 def test_a_job_is_renamed_with_its_dates_parsed_and_prose_null():
     job = make_job(id="j1", company="Acme", title="Data Engineer", start="2019-03", end="2021-08")
-    result = transform(make_experience(job=[job]))["jobs"]
+    result = transform(make_experience(job=[job]), NOOP_LLM_CLIENT)["jobs"]
 
     assert result[0]["id"] == "j1"
     assert result[0]["company"] == "Acme"
@@ -234,7 +238,9 @@ def test_a_job_is_renamed_with_its_dates_parsed_and_prose_null():
 
 
 def test_an_ongoing_job_carries_a_null_end():
-    result = transform(make_experience(job=[make_job(end="current")]))["jobs"]
+    result = transform(
+        make_experience(job=[make_job(end="current")]), NOOP_LLM_CLIENT
+    )["jobs"]
 
     assert result[0]["end_date"] is None
 
@@ -245,7 +251,7 @@ def test_a_project_with_no_story_is_kept_with_null_identified():
     row must reach load for it to be the one that refuses it.
     """
     job = make_job(project=[Project(id="p1", story=None)])
-    result = transform(make_experience(job=[job]))["jobs"]
+    result = transform(make_experience(job=[job]), NOOP_LLM_CLIENT)["jobs"]
 
     assert result[0]["projects"] == [{"id": "p1", "identified": None}]
 
@@ -253,7 +259,7 @@ def test_a_project_with_no_story_is_kept_with_null_identified():
 def test_the_job_ids_are_the_files_own():
     """load dedupes on these, so they pass through untouched."""
     job = make_job(id="j-42", project=[Project(id="p-7", story=None)])
-    result = transform(make_experience(job=[job]))["jobs"]
+    result = transform(make_experience(job=[job]), NOOP_LLM_CLIENT)["jobs"]
 
     assert result[0]["id"] == "j-42"
     assert result[0]["projects"][0]["id"] == "p-7"
@@ -264,7 +270,7 @@ def test_the_job_ids_are_the_files_own():
 # --------------------------------------------------------------------------
 
 def test_transform_returns_the_four_blocks():
-    result = transform(make_experience())
+    result = transform(make_experience(), NOOP_LLM_CLIENT)
 
     assert set(result) == {"profile", "education", "languages", "jobs"}
 
@@ -276,7 +282,7 @@ def test_the_blocks_are_independent_and_each_lands():
         language=[Language(name="English", level="C1")],
         job=[make_job(id="j1")],
     )
-    result = transform(experience)
+    result = transform(experience, NOOP_LLM_CLIENT)
 
     assert result["profile"]["full_name"] == "Ada"
     assert result["education"][0]["degree"] == "computer science"

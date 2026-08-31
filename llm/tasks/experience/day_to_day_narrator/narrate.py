@@ -1,4 +1,4 @@
-from llm.client import post_chat
+from llm.client import LLMClient
 from llm.registries.concepts import NAMES_WITH_ALIASES, resolve_concepts
 from llm.registries.technologies import drop_technologies
 
@@ -42,7 +42,11 @@ Allowed concepts:
 """
 
 
-def narrate(technologies: list[str], day_to_day: str) -> DayToDayNarrative:
+def narrate(
+    technologies: list[str],
+    day_to_day: str,
+    llm_client: LLMClient,
+) -> DayToDayNarrative:
     """
     Rewrite one job's day_to_day block and tag the concepts it demonstrates.
 
@@ -61,7 +65,7 @@ def narrate(technologies: list[str], day_to_day: str) -> DayToDayNarrative:
     )
 
     narrative = DayToDayNarrative.model_validate(
-        post_chat(
+        llm_client.post_chat(
             prompt,
             DayToDayNarrative.model_json_schema(),
             task_name="experience.day_to_day_narrator.narrate",

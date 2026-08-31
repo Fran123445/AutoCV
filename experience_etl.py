@@ -18,6 +18,8 @@ from config import EXPERIENCE_PATH, EXPERIENCE_TRANSFORM_DIR
 from etl.experience.extract import extract as extract_experience
 from etl.experience.load import load as load_experience
 from etl.experience.transform import transform as transform_experience
+from llm.client import LLMClient
+from llm.settings import LLMSettings
 from run_log import RunLogger, record_item
 
 
@@ -56,7 +58,11 @@ def extract(experience_path: Path):
     )
 
 
-def transform(experience_path: Path, transform_output_dir: Path):
+def transform(
+    experience_path: Path,
+    transform_output_dir: Path,
+    llm_client: LLMClient,
+):
     """
     Transform the experience file and write it out.
 
@@ -73,12 +79,17 @@ def transform(experience_path: Path, transform_output_dir: Path):
             config.EXPERIENCE_PATH.
         transform_output_dir (Path): Where the transformed experience goes.
     """
-    with RunLogger("experience", "transform", items_total=1) as run_log:
+    with RunLogger(
+        "experience",
+        "transform",
+        items_total=1,
+        llm_settings=llm_client.settings,
+    ) as run_log:
         print(f"Transforming {experience_path}...")
         try:
             with record_item(experience_path.stem):
                 experience = extract_experience(experience_path)
-                transformed = transform_experience(experience)
+                transformed = transform_experience(experience, llm_client)
 
                 out_path = transform_output_dir / f"{experience_path.stem}.json"
                 with out_path.open("w", encoding="utf-8") as f:
@@ -176,7 +187,9 @@ def main():
 
     if "transform" in stages:
         EXPERIENCE_TRANSFORM_DIR.mkdir(parents=True, exist_ok=True)
-        transform(args.experience_path, EXPERIENCE_TRANSFORM_DIR)
+        settings = LLMSettings.from_env("experience")
+        with LLMClient(settings) as llm_client:
+            transform(args.experience_path, EXPERIENCE_TRANSFORM_DIR, llm_client)
 
     if "load" in stages:
         load(EXPERIENCE_TRANSFORM_DIR, args.experience_path)

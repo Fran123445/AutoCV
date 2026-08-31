@@ -42,7 +42,8 @@ The PDF stage needs [WeasyPrint](https://weasyprint.org/) and its Pango/Cairo sy
 Every value in `.env` shows its default, so an empty file behaves the same as none. Key knobs:
 
 - `AUTOCV_BASE_URL` — where the model lives (default `http://localhost:5001`)
-- `AUTOCV_MODEL_NAME` / `AUTOCV_API_KEY` — leave blank for a local unauthenticated server
+- `AUTOCV_MODEL_NAME` / `AUTOCV_API_KEY` — default model and credentials; leave blank for a local unauthenticated server
+- `AUTOCV_JOBS_MODEL_NAME`, `AUTOCV_EXPERIENCE_MODEL_NAME`, `AUTOCV_PROJECTS_MODEL_NAME`, `AUTOCV_RESUME_MODEL_NAME` — optional model overrides for an individual pipeline
 - `AUTOCV_MAX_CONCURRENCY` — postings transformed at once; locally, match your llama-server `--parallel` slot count
 - `AUTOCV_DATA_DIR` — base for the generated `data/` tree (all of it is derivable and gitignored)
 
@@ -98,13 +99,13 @@ One star schema in `schema.sql`. Job requirements and candidate evidence share t
 ## Layout
 
 ```
-config.py              Paths and model endpoint every pipeline agrees on
+config.py              Paths and shared filesystem configuration
 db_creation.py         Schema + taxonomy seeding (idempotent)
 schema.sql             The star schema
 seeds/                 Canonical taxonomies (technologies, concepts, roles, ...)
 *_etl.py               The four pipeline entry points
 etl/                   Extract/transform/load stages per pipeline
-llm/                   HTTP client, config, and the per-task model packages
+llm/                   Settings, HTTP client, and the per-task model packages
 job_matcher/           Reads evidence and requirements out of the base
 resume_generator/      Résumé document model, HTML render, PDF print
 templates/             experience.toml template + résumé HTML/CSS

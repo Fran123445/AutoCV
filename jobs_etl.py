@@ -17,7 +17,6 @@ from config import (
     JOBS_EXTRACT_DIR,
     JOBS_PROCESSED_DIR,
     JOBS_TRANSFORM_DIR,
-    MAX_CONCURRENCY,
     STAGING_DIR,
 )
 from etl.jobs.extract import JobDescriptionNotFound, extract_from_file
@@ -25,6 +24,8 @@ from etl.jobs.load import load as load_job
 # Aliased: this module has a transform() of its own, over directories rather
 # than over a single posting.
 from etl.jobs.transform import transform as transform_job
+from llm.client import LLMClient
+from llm.settings import LLMSettings
 from run_log import RunLogger, record_item
 
 def _move_processed_source(source_path: Path, processed_dir: Path) -> Path:
@@ -91,7 +92,11 @@ def extract(
         print(f"  {html_path.name}: {error}")
 
 
-def transform_one(json_path: Path, transform_output_dir: Path):
+def transform_one(
+    json_path: Path,
+    transform_output_dir: Path,
+    llm_client: LLMClient,
+):
     """
     Transform a single extracted posting and write it out.
 
@@ -109,7 +114,7 @@ def transform_one(json_path: Path, transform_output_dir: Path):
         with json_path.open("r", encoding="utf-8") as f:
             extracted = json.load(f)
 
-        transformed = transform_job(extracted)
+        transformed = transform_job(extracted, llm_client)
 
         out_path = transform_output_dir / f"{json_path.stem}.json"
         with out_path.open("w", encoding="utf-8") as f:
@@ -133,7 +138,12 @@ def _pending_transform_paths(
     return pending, skipped
 
 
-def transform(extract_output_dir: Path, transform_output_dir: Path):
+def transform(
+    extract_output_dir: Path,
+    transform_output_dir: Path,
+    llm_client: LLMClient,
+):
+    concurrency = llm_client.settings.max_concurrency
     json_paths, skipped_paths = _pending_transform_paths(
         extract_output_dir, transform_output_dir
     )
@@ -144,14 +154,17 @@ def transform(extract_output_dir: Path, transform_output_dir: Path):
         "jobs",
         "transform",
         items_total=len(json_paths) + len(skipped_paths),
-        max_concurrency=MAX_CONCURRENCY,
+        max_concurrency=concurrency,
+        llm_settings=llm_client.settings,
     ) as run_log:
         for json_path in skipped_paths:
             print(f"Skipped {json_path.name} (already transformed)")
 
-        with ThreadPoolExecutor(max_workers=MAX_CONCURRENCY) as pool:
+        with ThreadPoolExecutor(max_workers=concurrency) as pool:
             futures = {
-                pool.submit(transform_one, json_path, transform_output_dir): json_path
+                pool.submit(
+                    transform_one, json_path, transform_output_dir, llm_client
+                ): json_path
                 for json_path in json_paths
             }
 
@@ -186,12 +199,12 @@ def transform(extract_output_dir: Path, transform_output_dir: Path):
         run_log.items_ok = transformed_count
         run_log.items_failed = len(failed)
 
-    print(
-        f"\nTransformed {transformed_count}, skipped {len(skipped_paths)}, "
-        f"failed {len(failed)}."
-    )
-    for json_path, error in failed:
-        print(f"  {json_path.name}: {error!r}")
+        print(
+            f"\nTransformed {transformed_count}, skipped {len(skipped_paths)}, "
+            f"failed {len(failed)}."
+        )
+        for json_path, error in failed:
+            print(f"  {json_path.name}: {error!r}")
 
 
 def load(transform_output_dir: Path):
@@ -290,7 +303,9 @@ def main():
 
     if "transform" in stages:
         JOBS_TRANSFORM_DIR.mkdir(parents=True, exist_ok=True)
-        transform(JOBS_EXTRACT_DIR, JOBS_TRANSFORM_DIR)
+        settings = LLMSettings.from_env("jobs")
+        with LLMClient(settings) as llm_client:
+            transform(JOBS_EXTRACT_DIR, JOBS_TRANSFORM_DIR, llm_client)
 
     if "load" in stages:
         load(JOBS_TRANSFORM_DIR)

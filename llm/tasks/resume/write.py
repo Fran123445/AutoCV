@@ -1,4 +1,4 @@
-from llm.client import post_chat
+from llm.client import LLMClient
 
 from .models import ResumePromptContext, ResumeResponse
 from .render import render_candidate
@@ -75,7 +75,9 @@ Rules for every bullet:
 """
 
 
-def write_resume(context: ResumePromptContext) -> ResumeResponse:
+def write_resume(
+    context: ResumePromptContext, llm_client: LLMClient
+) -> ResumeResponse:
     """
     Write one candidate's summary, skills and bullets against one job description.
 
@@ -95,7 +97,7 @@ def write_resume(context: ResumePromptContext) -> ResumeResponse:
     )
 
     return ResumeResponse.model_validate(
-        post_chat(
+        llm_client.post_chat(
             prompt,
             ResumeResponse.model_json_schema(),
             task_name="resume.write",

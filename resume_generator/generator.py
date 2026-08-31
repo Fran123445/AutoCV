@@ -4,6 +4,7 @@ import sqlite3
 
 from datetime import date
 
+from llm.client import LLMClient
 from llm.tasks.resume.models import (
     ResumePromptContext,
     ResumePromptExperience,
@@ -319,6 +320,7 @@ def generate_resume(
     connection: sqlite3.Connection,
     user_id: int,
     job_id: int,
+    llm_client: LLMClient,
 ) -> ResumeDocument:
     """Build one candidate's resume for one job posting.
 
@@ -340,7 +342,7 @@ def generate_resume(
             candidate has no name.
     """
     context = _build_prompt_context(connection, user_id, job_id)
-    written = write_resume(context)
+    written = write_resume(context, llm_client)
 
     bullets = {entry.source_experience_id: entry.bullets for entry in written.work_bullets}
 

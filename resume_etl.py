@@ -21,6 +21,8 @@ import re
 import sqlite3
 
 from config import RESUMES_DIR
+from llm.client import LLMClient
+from llm.settings import LLMSettings
 from resume_generator.generator import generate_resume
 from resume_generator.models import ResumeDocument
 from resume_generator.render import render_html
@@ -110,26 +112,35 @@ def write(user_id: int, job_id: int, resumes_dir: Path):
         job_id (int): Posting the CV is written against.
         resumes_dir (Path): Root the per-posting folders live under.
     """
-    with RunLogger("resume", "write", items_total=1) as run_log:
-        out_dir = posting_dir(run_log.connection, job_id, resumes_dir)
-        out_dir.mkdir(parents=True, exist_ok=True)
+    llm_settings = LLMSettings.from_env("resume")
+    with LLMClient(llm_settings) as llm_client:
+        with RunLogger(
+            "resume",
+            "write",
+            items_total=1,
+            llm_settings=llm_settings,
+        ) as run_log:
+            out_dir = posting_dir(run_log.connection, job_id, resumes_dir)
+            out_dir.mkdir(parents=True, exist_ok=True)
 
-        print(f"Writing a resume for user {user_id} against job {job_id}...")
-        try:
-            with record_item(out_dir.name) as item:
-                document = generate_resume(run_log.connection, user_id, job_id)
+            print(f"Writing a resume for user {user_id} against job {job_id}...")
+            try:
+                with record_item(out_dir.name) as item:
+                    document = generate_resume(
+                        run_log.connection, user_id, job_id, llm_client
+                    )
 
-                item.produced("FactJob", job_id)
+                    item.produced("FactJob", job_id)
 
-                out_path = out_dir / DOCUMENT_NAME
-                out_path.write_text(
-                    document.model_dump_json(indent=2), encoding="utf-8"
-                )
-        except Exception:
-            run_log.items_failed = 1
-            raise
+                    out_path = out_dir / DOCUMENT_NAME
+                    out_path.write_text(
+                        document.model_dump_json(indent=2), encoding="utf-8"
+                    )
+            except Exception:
+                run_log.items_failed = 1
+                raise
 
-        run_log.items_ok = 1
+            run_log.items_ok = 1
 
     print(f"\nWrote the resume for user {user_id} against job {job_id} to {out_path}.")
 

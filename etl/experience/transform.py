@@ -1,6 +1,7 @@
 import re
 
 from etl.experience.models import Experience
+from llm.client import LLMClient
 from llm.tasks.experience.day_to_day_narrator.narrate import narrate as narrate_day_to_day
 from llm.tasks.experience.project_describer.describe import describe
 from llm.tasks.experience.project_narrator.narrate import narrate as narrate_project
@@ -102,7 +103,9 @@ def _transform_language(experience: Experience) -> list[dict]:
         if language.name is not None
     ]
 
-def _transform_job(experience: Experience) -> list[dict]:
+def _transform_job(
+    experience: Experience, llm_client: LLMClient
+) -> list[dict]:
     """
     Map each job block onto FactExperience shape, with its projects.
 
@@ -130,13 +133,13 @@ def _transform_job(experience: Experience) -> list[dict]:
             "seniority": job.seniority,
             "start_date": _parse_date(job.start),
             "end_date": _parse_date(job.end),
-            "day_to_day": _transform_job_day_to_day(job.day_to_day),
+            "day_to_day": _transform_job_day_to_day(job.day_to_day, llm_client),
             "projects": [
                 {
                     "id": project.id,
                     # Kept even when None (not dropped): Project.task_desc is
                     # NOT NULL, so load must reject this row itself.
-                    "identified": _transform_job_project(project.story),
+                    "identified": _transform_job_project(project.story, llm_client),
                 }
                 for project in job.project
             ],
@@ -144,7 +147,9 @@ def _transform_job(experience: Experience) -> list[dict]:
         for job in experience.job
     ]
 
-def _transform_job_day_to_day(day_to_day: str | None) -> dict | None:
+def _transform_job_day_to_day(
+    day_to_day: str | None, llm_client: LLMClient
+) -> dict | None:
     """
     Identify and rewrite what one job consisted of day to day.
 
@@ -166,15 +171,19 @@ def _transform_job_day_to_day(day_to_day: str | None) -> dict | None:
     if day_to_day is None:
         return None
 
-    technologies = identify_technologies(day_to_day, "day_to_day")
-    narrative = narrate_day_to_day(technologies.technologies, day_to_day)
+    technologies = identify_technologies(day_to_day, "day_to_day", llm_client)
+    narrative = narrate_day_to_day(
+        technologies.technologies, day_to_day, llm_client
+    )
 
     return {
         "technologies": technologies.model_dump(),
         "narrative": narrative.model_dump(),
     }
 
-def _transform_job_project(story: str | None) -> dict | None:
+def _transform_job_project(
+    story: str | None, llm_client: LLMClient
+) -> dict | None:
     """
     Identify one project a candidate did at a job, from their account of it.
 
@@ -198,13 +207,14 @@ def _transform_job_project(story: str | None) -> dict | None:
     if story is None:
         return None
 
-    technologies = identify_technologies(story, "project")
-    narrative = narrate_project(technologies.technologies, story)
+    technologies = identify_technologies(story, "project", llm_client)
+    narrative = narrate_project(technologies.technologies, story, llm_client)
     descriptions = describe(
         narrative.task_desc,
         technologies.technologies,
         narrative.concepts,
         story,
+        llm_client,
     )
 
     return {
@@ -213,7 +223,9 @@ def _transform_job_project(story: str | None) -> dict | None:
         "descriptions": descriptions,
     }
 
-def transform(experience: Experience) -> dict:
+def transform(
+    experience: Experience, llm_client: LLMClient
+) -> dict:
     """
     Transform one experience file into the rows the load stage writes.
 
@@ -235,5 +247,5 @@ def transform(experience: Experience) -> dict:
         "profile": _transform_profile(experience),
         "education": _transform_education(experience),
         "languages": _transform_language(experience),
-        "jobs": _transform_job(experience),
+        "jobs": _transform_job(experience, llm_client),
     }
