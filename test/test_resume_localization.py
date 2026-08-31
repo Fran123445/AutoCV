@@ -73,7 +73,7 @@ def test_spanish_resume_localizes_structural_text():
     assert "<strong>Inglés</strong> — C1" in html
 
 
-def test_degree_names_are_title_cased_for_the_resume_document(seeded_db):
+def test_degree_names_use_the_requested_translation(seeded_db):
     seeded_db.execute(
         "INSERT INTO FactUser (id, full_name) VALUES (?, ?)",
         (1, "Ada Lovelace"),
@@ -90,7 +90,34 @@ def test_degree_names_are_title_cased_for_the_resume_document(seeded_db):
         (1, degree_id, "Universidad"),
     )
 
-    education = _build_education(seeded_db, 1)
+    education = _build_education(seeded_db, 1, "es")
+
+    assert education[0].degree == "Ingeniería en Sistemas"
+
+    education = _build_education(seeded_db, 1, "en")
+
+    assert education[0].degree == "Information Systems Engineering"
+
+
+def test_degree_names_fall_back_to_english(seeded_db):
+    seeded_db.execute(
+        "INSERT INTO FactUser (id, full_name) VALUES (?, ?)",
+        (1, "Ada Lovelace"),
+    )
+    degree_id = seeded_db.execute(
+        "SELECT id FROM DimDegree WHERE name = ?",
+        ("information systems engineering",),
+    ).fetchone()[0]
+    seeded_db.execute(
+        "INSERT INTO UserEducation (user_id, degree_id, institution) VALUES (?, ?, ?)",
+        (1, degree_id, "Universidad"),
+    )
+    seeded_db.execute(
+        "DELETE FROM DimDegreeTranslation WHERE degree_id = ? AND locale = ?",
+        (degree_id, "es"),
+    )
+
+    education = _build_education(seeded_db, 1, "es")
 
     assert education[0].degree == "Information Systems Engineering"
 

@@ -88,14 +88,20 @@ def _build_profile(
 def _build_education(
     connection: sqlite3.Connection,
     user_id: int,
+    language: str,
 ) -> list[ResumeEducation]:
-    """Build education entries from the candidate's stored education."""
+    """Build education entries using the requested display language."""
 
     education = connection.execute(
         """
-        SELECT d.name, ue.institution, ue.gpa, ue.start_date, ue.end_date
+        SELECT COALESCE(localized.name, english.name),
+               ue.institution, ue.gpa, ue.start_date, ue.end_date
         FROM UserEducation AS ue
         JOIN DimDegree AS d ON d.id = ue.degree_id
+        LEFT JOIN DimDegreeTranslation AS localized
+            ON localized.degree_id = d.id AND localized.locale = ?
+        LEFT JOIN DimDegreeTranslation AS english
+            ON english.degree_id = d.id AND english.locale = 'en'
         WHERE ue.user_id = ?
         ORDER BY
             ue.end_date IS NULL DESC,
@@ -104,14 +110,12 @@ def _build_education(
             d.name,
             ue.institution
         """,
-        (user_id,),
+        (resolve_locale(language).code, user_id),
     ).fetchall()
 
     return [
         ResumeEducation(
-            # DimDegree keeps lowercase canonical names for matching; the
-            # document carries the human-facing title-cased form.
-            degree=degree.title(),
+            degree=degree,
             institution=institution,
             gpa=gpa,
             start_date=start_date,
@@ -288,6 +292,8 @@ def _build_prompt_context(
     if job is None:
         raise ValueError(f"job not found: {job_id}")
 
+    language = resolve_locale(job[1]).code
+
     technologies = _build_prompt_tags(
         connection, user_id, "ProjectTechnologies", "DimTechnologies", "name", "technology_id"
     )
@@ -297,8 +303,8 @@ def _build_prompt_context(
 
     return ResumePromptContext(
         job_description=job[0],
-        language=resolve_locale(job[1]).code,
-        education=_build_education(connection, user_id),
+        language=language,
+        education=_build_education(connection, user_id, language),
         languages=_build_languages(connection, user_id),
         experience=_build_prompt_experience(connection, user_id),
         work_projects=_build_prompt_projects(connection, user_id, False, technologies, concepts),
