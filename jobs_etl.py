@@ -13,7 +13,13 @@ from pathlib import Path
 import argparse
 import json
 
-from config import JOBS_EXTRACT_DIR, JOBS_TRANSFORM_DIR, MAX_CONCURRENCY, STAGING_DIR
+from config import (
+    JOBS_EXTRACT_DIR,
+    JOBS_PROCESSED_DIR,
+    JOBS_TRANSFORM_DIR,
+    MAX_CONCURRENCY,
+    STAGING_DIR,
+)
 from etl.jobs.extract import JobDescriptionNotFound, extract_from_file
 from etl.jobs.load import load as load_job
 # Aliased: this module has a transform() of its own, over directories rather
@@ -21,7 +27,29 @@ from etl.jobs.load import load as load_job
 from etl.jobs.transform import transform as transform_job
 from run_log import RunLogger, record_item
 
-def extract(staging_dir: Path, out_dir: Path):
+def _move_processed_source(source_path: Path, processed_dir: Path) -> Path:
+    """Move a successfully extracted source page out of staging."""
+    processed_dir.mkdir(parents=True, exist_ok=True)
+    destination = processed_dir / source_path.name
+
+    # Do not silently replace a source page if the same file name is already
+    # archived. Leaving the source in staging makes the collision visible and
+    # keeps the archived copy recoverable.
+    if destination.exists():
+        raise FileExistsError(
+            f"processed source already exists: {destination}"
+        )
+
+    source_path.rename(destination)
+    return destination
+
+
+def extract(
+    staging_dir: Path,
+    out_dir: Path,
+    processed_dir: Path | None = None,
+):
+    processed_dir = processed_dir or JOBS_PROCESSED_DIR
     html_paths = sorted(
         path
         for path in staging_dir.iterdir()
@@ -42,8 +70,14 @@ def extract(staging_dir: Path, out_dir: Path):
                     json_path = out_dir / f"{html_path.stem}.json"
                     with json_path.open("w", encoding="utf-8") as f:
                         json.dump(extracted, f, ensure_ascii=False, indent=2)
+                    _move_processed_source(html_path, processed_dir)
             except JobDescriptionNotFound as error:
                 # One page saved mid-render should not end the batch.
+                skipped.append((html_path, error))
+                continue
+            except OSError as error:
+                # Keep files in staging when archiving fails, so the source is
+                # still available for a retry and the failure is visible.
                 skipped.append((html_path, error))
                 continue
 
@@ -252,7 +286,7 @@ def main():
 
     if "extract" in stages:
         JOBS_EXTRACT_DIR.mkdir(parents=True, exist_ok=True)
-        extract(STAGING_DIR, JOBS_EXTRACT_DIR)
+        extract(STAGING_DIR, JOBS_EXTRACT_DIR, JOBS_PROCESSED_DIR)
 
     if "transform" in stages:
         JOBS_TRANSFORM_DIR.mkdir(parents=True, exist_ok=True)

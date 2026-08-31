@@ -28,6 +28,9 @@ DATA_DIR = Path(os.getenv("AUTOCV_DATA_DIR") or ROOT_DIR / "data")
 DB_PATH = DATA_DIR / "autocv.db"
 
 STAGING_DIR = DATA_DIR / "staging"
+# Source pages that completed job extraction. Keeping these out of staging
+# makes the staging folder represent only work that still needs processing.
+JOBS_PROCESSED_DIR = DATA_DIR / "processed_jobs"
 JOBS_EXTRACT_DIR = DATA_DIR / "extracted_descs"
 JOBS_TRANSFORM_DIR = DATA_DIR / "transformed_descs"
 PROJECTS_EXTRACT_DIR = DATA_DIR / "extracted_projects"

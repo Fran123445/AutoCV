@@ -66,6 +66,10 @@ Ingest job postings — drop saved LinkedIn pages into `data/staging/`, then:
 python jobs_etl.py
 ```
 
+After a posting is extracted successfully, its source `.html` or `.mhtml` file
+moves to `data/processed_jobs/`. Files that fail extraction remain in staging
+for inspection or retry.
+
 Ingest personal projects from a folder of repos:
 
 ```bash
