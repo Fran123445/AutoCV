@@ -90,6 +90,20 @@ def test_an_unseeded_degree_raises(seeded_db):
         solve_degree_id(seeded_db, "underwater basket weaving")
 
 
+def test_degree_display_names_are_seeded_by_locale(seeded_db):
+    translation = seeded_db.execute(
+        """
+        SELECT ddt.name
+        FROM DimDegreeTranslation AS ddt
+        JOIN DimDegree AS dd ON dd.id = ddt.degree_id
+        WHERE dd.name = ? AND ddt.locale = ?
+        """,
+        ("information systems engineering", "es"),
+    ).fetchone()
+
+    assert translation[0] == "Ingeniería en Sistemas"
+
+
 # --------------------------------------------------------------------------
 # solve_technology_name_id / solve_concept_name_id, seeded and not nullable
 # --------------------------------------------------------------------------

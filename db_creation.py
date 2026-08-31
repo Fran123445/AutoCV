@@ -92,6 +92,46 @@ def _load_degrees_data(connection: sqlite3.Connection) -> int:
     return len(degrees)
 
 
+def _load_degree_translations_data(connection: sqlite3.Connection) -> int:
+    """Load localized display names for the seeded degrees."""
+
+    translations = load_seed("degree_translations.json", "translations")
+    degree_ids = {
+        name: degree_id
+        for degree_id, name in connection.execute(
+            "SELECT id, name FROM DimDegree"
+        )
+    }
+
+    entries = []
+    for translation in translations:
+        degree_name = translation["degree"]
+        degree_id = degree_ids.get(degree_name)
+        if degree_id is None:
+            raise ValueError(
+                f"degree translation names unknown degree {degree_name!r}"
+            )
+
+        entries.append(
+            (
+                degree_id,
+                translation["locale"].casefold(),
+                translation["name"],
+            )
+        )
+
+    connection.executemany(
+        """
+        INSERT INTO DimDegreeTranslation (degree_id, locale, name)
+        VALUES (?, ?, ?)
+        ON CONFLICT(degree_id, locale) DO UPDATE SET name = excluded.name
+        """,
+        entries,
+    )
+
+    return len(entries)
+
+
 def _load_technologies_data(connection: sqlite3.Connection) -> int:
     """
     Load the technologies data into the DimTechnologies table.
@@ -266,6 +306,7 @@ def run_db_creation():
             "DimSeniority": _load_seniority_data(connection),
             "DimRole": _load_roles_data(connection),
             "DimDegree": _load_degrees_data(connection),
+            "DimDegreeTranslation": _load_degree_translations_data(connection),
             "DimTechnologies": _load_technologies_data(connection),
             "DimConcepts": _load_concepts_data(connection),
             # Después de las dos dims: una arista nombra un hijo que el seed

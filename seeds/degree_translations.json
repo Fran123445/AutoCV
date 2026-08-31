@@ -1,0 +1,33 @@
+{
+  "description": "Localized display names for DimDegree. 'degree' is the canonical DimDegree.name, not a database id, so the seed remains stable when ids differ between databases. Every degree has an English display name and a Spanish display name.",
+  "translations": [
+    {"degree": "computer science", "locale": "en", "name": "Computer Science"},
+    {"degree": "computer science", "locale": "es", "name": "Ciencias de la Computación"},
+    {"degree": "information systems engineering", "locale": "en", "name": "Information Systems Engineering"},
+    {"degree": "information systems engineering", "locale": "es", "name": "Ingeniería en Sistemas"},
+    {"degree": "software engineering", "locale": "en", "name": "Software Engineering"},
+    {"degree": "software engineering", "locale": "es", "name": "Ingeniería de Software"},
+    {"degree": "computer engineering", "locale": "en", "name": "Computer Engineering"},
+    {"degree": "computer engineering", "locale": "es", "name": "Ingeniería en Computación"},
+    {"degree": "informatics", "locale": "en", "name": "Informatics"},
+    {"degree": "informatics", "locale": "es", "name": "Informática"},
+    {"degree": "information systems", "locale": "en", "name": "Information Systems"},
+    {"degree": "information systems", "locale": "es", "name": "Sistemas de Información"},
+    {"degree": "data science", "locale": "en", "name": "Data Science"},
+    {"degree": "data science", "locale": "es", "name": "Ciencia de Datos"},
+    {"degree": "electronics engineering", "locale": "en", "name": "Electronics Engineering"},
+    {"degree": "electronics engineering", "locale": "es", "name": "Ingeniería Electrónica"},
+    {"degree": "telecommunications engineering", "locale": "en", "name": "Telecommunications Engineering"},
+    {"degree": "telecommunications engineering", "locale": "es", "name": "Ingeniería en Telecomunicaciones"},
+    {"degree": "industrial engineering", "locale": "en", "name": "Industrial Engineering"},
+    {"degree": "industrial engineering", "locale": "es", "name": "Ingeniería Industrial"},
+    {"degree": "engineering", "locale": "en", "name": "Engineering"},
+    {"degree": "engineering", "locale": "es", "name": "Ingeniería"},
+    {"degree": "mathematics", "locale": "en", "name": "Mathematics"},
+    {"degree": "mathematics", "locale": "es", "name": "Matemáticas"},
+    {"degree": "statistics", "locale": "en", "name": "Statistics"},
+    {"degree": "statistics", "locale": "es", "name": "Estadística"},
+    {"degree": "physics", "locale": "en", "name": "Physics"},
+    {"degree": "physics", "locale": "es", "name": "Física"}
+  ]
+}

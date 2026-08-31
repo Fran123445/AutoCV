@@ -2,6 +2,7 @@ from db_creation import (
     _create_schema,
     _load_concept_dependencies,
     _load_concepts_data,
+    _load_degree_translations_data,
     _load_degrees_data,
     _load_roles_data,
     _load_seniority_data,
@@ -40,6 +41,7 @@ def seeded_db(db):
     _load_seniority_data(db)
     _load_roles_data(db)
     _load_degrees_data(db)
+    _load_degree_translations_data(db)
     _load_technologies_data(db)
     _load_concepts_data(db)
     _load_technology_dependencies(db)

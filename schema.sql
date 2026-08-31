@@ -66,6 +66,16 @@ CREATE TABLE IF NOT EXISTS DimDegree (
                    -- matching 'any master in cs' without relying on the exact name
 );
 
+-- Human-facing degree names. DimDegree.name stays canonical and language
+-- neutral for matching; this table carries the display spelling per locale.
+CREATE TABLE IF NOT EXISTS DimDegreeTranslation (
+    id        INTEGER PRIMARY KEY,
+    degree_id INTEGER NOT NULL REFERENCES DimDegree(id),
+    locale    TEXT NOT NULL CHECK (length(trim(locale)) > 0),
+    name      TEXT NOT NULL CHECK (length(trim(name)) > 0),
+    UNIQUE (degree_id, locale)
+);
+
 -- Fact
 
 CREATE TABLE IF NOT EXISTS FactJob (
