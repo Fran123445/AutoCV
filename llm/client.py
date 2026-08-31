@@ -1,18 +1,29 @@
 import json
 import time
+from typing import Any, Literal
 
 import httpx
 
 from run_log import LLMCall, prompt_fingerprint, record_call, utc_now
 
+from llm.policy import TaskPolicy
 from llm.settings import LLMSettings
 
 
-class LLMClient:
-    """Thread-safe client for one OpenAI-compatible chat-completions target."""
+ProviderName = Literal["llama-server", "openrouter"]
 
-    def __init__(self, settings: LLMSettings):
+
+class LLMClient:
+    """Thread-safe client for one provider target."""
+
+    def __init__(
+        self,
+        settings: LLMSettings,
+        provider: ProviderName,
+        transport: httpx.BaseTransport | None = None,
+    ):
         self.settings = settings
+        self.provider = provider
         # One client is shared by all workers in the pipeline. httpx.Client is
         # thread-safe and reuses connections, while each LLMClient can target a
         # different model or endpoint.
@@ -20,6 +31,7 @@ class LLMClient:
             base_url=settings.base_url,
             timeout=settings.timeout,
             limits=httpx.Limits(max_connections=settings.max_concurrency),
+            transport=transport,
         )
 
     def close(self):
@@ -36,16 +48,16 @@ class LLMClient:
         self,
         prompt: str,
         schema: dict,
-        task_name: str = "unknown",
-        reasoning_effort: str | None = None,
+        *,
+        policy: TaskPolicy,
     ) -> dict:
         """Send a prompt to this client's model and return parsed JSON.
 
         The call is also attached to the current run item by ``run_log``.
+        The policy is required so task-specific model requirements are explicit
+        at every call site.
         """
-        effort = reasoning_effort or self.settings.reasoning_effort_by_task[task_name]
-
-        payload = {
+        payload: dict[str, Any] = {
             "messages": [{"role": "user", "content": prompt}],
             "response_format": {
                 "type": "json_schema",
@@ -55,21 +67,19 @@ class LLMClient:
                     "schema": schema,
                 },
             },
-            "temperature": self.settings.temperature,
-            "reasoning_effort": effort,
+            "temperature": policy.temperature,
+            "reasoning_effort": policy.reasoning_effort,
         }
-        is_openrouter = "openrouter.ai" in self.settings.base_url.lower()
-
-        if effort == "none" and not is_openrouter:
-            payload["chat_template_kwargs"] = {"enable_thinking": False}
-
-        # OpenRouter can route a model to endpoints that do not support every
-        # parameter in the request unless this is explicitly required.
-        if is_openrouter:
-            payload["provider"] = {"require_parameters": True}
-
         if self.settings.model_name:
             payload["model"] = self.settings.model_name
+
+        if self.provider == "llama-server" and policy.reasoning_effort == "none":
+            payload["chat_template_kwargs"] = {"enable_thinking": False}
+        elif self.provider == "openrouter":
+            provider_options: dict[str, Any] = {"require_parameters": True}
+            if policy.zero_data_retention is True:
+                provider_options["zdr"] = True
+            payload["provider"] = provider_options
 
         headers = (
             {"Authorization": f"Bearer {self.settings.api_key}"}
@@ -78,10 +88,10 @@ class LLMClient:
         )
 
         call = LLMCall(
-            task_name=task_name,
+            task_name=policy.name,
             started_at=utc_now(),
-            temperature=self.settings.temperature,
-            reasoning_effort=effort,
+            temperature=policy.temperature,
+            reasoning_effort=policy.reasoning_effort,
             prompt_sha1=prompt_fingerprint(prompt),
         )
         started = time.perf_counter()
