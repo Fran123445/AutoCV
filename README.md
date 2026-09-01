@@ -42,6 +42,7 @@ The PDF stage needs [WeasyPrint](https://weasyprint.org/) and its Pango/Cairo sy
 Every value in `.env` shows its default, so an empty file behaves the same as none. Key knobs:
 
 - `AUTOCV_BASE_URL` — where the model lives (default `http://localhost:5001`)
+- `AUTOCV_PROVIDER` — `llama-server` or `openrouter` (default `llama-server`)
 - `AUTOCV_MODEL_NAME` / `AUTOCV_API_KEY` — default model and credentials; leave blank for a local unauthenticated server
 - `AUTOCV_JOBS_MODEL_NAME`, `AUTOCV_EXPERIENCE_MODEL_NAME`, `AUTOCV_PROJECTS_MODEL_NAME`, `AUTOCV_RESUME_MODEL_NAME` — optional model overrides for an individual pipeline
 - `AUTOCV_MAX_CONCURRENCY` — postings transformed at once; locally, match your llama-server `--parallel` slot count

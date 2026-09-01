@@ -1,16 +1,13 @@
 import json
 import time
-from typing import Any, Literal
+from typing import Any
 
 import httpx
 
 from run_log import LLMCall, prompt_fingerprint, record_call, utc_now
 
-from llm.policy import TaskPolicy
-from llm.settings import LLMSettings
-
-
-ProviderName = Literal["llama-server", "openrouter"]
+from llm.policy import policy_for
+from llm.settings import LLMSettings, ProviderName
 
 
 class LLMClient:
@@ -19,11 +16,11 @@ class LLMClient:
     def __init__(
         self,
         settings: LLMSettings,
-        provider: ProviderName,
+        provider: ProviderName | None = None,
         transport: httpx.BaseTransport | None = None,
     ):
         self.settings = settings
-        self.provider = provider
+        self.provider = provider or settings.provider
         # One client is shared by all workers in the pipeline. httpx.Client is
         # thread-safe and reuses connections, while each LLMClient can target a
         # different model or endpoint.
@@ -49,14 +46,15 @@ class LLMClient:
         prompt: str,
         schema: dict,
         *,
-        policy: TaskPolicy,
+        task_name: str,
     ) -> dict:
         """Send a prompt to this client's model and return parsed JSON.
 
         The call is also attached to the current run item by ``run_log``.
-        The policy is required so task-specific model requirements are explicit
-        at every call site.
+        ``task_name`` resolves to a centrally registered policy, keeping the
+        requirements explicit without duplicating settings at every call site.
         """
+        policy = policy_for(task_name)
         payload: dict[str, Any] = {
             "messages": [{"role": "user", "content": prompt}],
             "response_format": {
@@ -73,6 +71,8 @@ class LLMClient:
         if self.settings.model_name:
             payload["model"] = self.settings.model_name
 
+        # I'm well aware this is hacky and fragile, but for this scale and variance I don't care
+        # Worst case scenario, if I need to expand on it I'll just abstract properly this when the time comes
         if self.provider == "llama-server" and policy.reasoning_effort == "none":
             payload["chat_template_kwargs"] = {"enable_thinking": False}
         elif self.provider == "openrouter":
@@ -88,7 +88,7 @@ class LLMClient:
         )
 
         call = LLMCall(
-            task_name=policy.name,
+            task_name=task_name,
             started_at=utc_now(),
             temperature=policy.temperature,
             reasoning_effort=policy.reasoning_effort,
