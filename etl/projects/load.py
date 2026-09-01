@@ -19,15 +19,16 @@ def load(
     Loads the transformed project into the database.
 
     One project, one transaction: either the Project row and both bridges land
-    or none of them do. A project already in the base is skipped rather than
-    rewritten, deduping on source_path the way the job side does on
-    linkedin_job_id. experience_id is left null, which is what marks a project
-    as personal.
+    or none of them do. A project already in the base is updated in place,
+    deduping on source_path while keeping the existing Project id. Its evidence
+    bridges are replaced so tags and descriptions removed from the new
+    transform do not survive the reload. experience_id is left null, which is
+    what marks a project as personal.
 
-    The rollup into the user bridges runs before that dedupe and not after: a
-    repo whose tags never reached UserTechnologies is exactly the repo that is
-    already loaded, so skipping it would keep the gap open forever. Writing it
-    twice costs nothing, both inserts resolve their conflict.
+    The rollup into the user bridges runs on every load. Those rows describe
+    the candidate's aggregate experience and may also be supported by another
+    project or the experience pipeline, so reloading one project must not
+    remove them. Re-inserting them resolves the existing conflict harmlessly.
 
     Args:
         transformed_data (dict): The data to load, as etl.projects.transform
@@ -36,7 +37,7 @@ def load(
         user_id (int): The user the project belongs to.
 
     Returns:
-        int | None: The Project id, or None when it was already there.
+        int: The Project id, whether the project was inserted or updated.
 
     Raises:
         UnknownSeedValue: A canonical name has no row in its dimension.
@@ -61,14 +62,21 @@ def load(
             connection, "UserConcepts", "concept_id", user_id, concept_ids
         )
 
-        cursor = connection.execute(
+        connection.execute(
             """
             INSERT INTO Project (
                 user_id, task_desc, source_path, head_commit,
                 first_commit_at, last_commit_at
             )
             VALUES (?, ?, ?, ?, ?, ?)
-            ON CONFLICT(source_path) DO NOTHING
+            ON CONFLICT(source_path) DO UPDATE SET
+                user_id = excluded.user_id,
+                experience_id = excluded.experience_id,
+                task_desc = excluded.task_desc,
+                source_id = excluded.source_id,
+                head_commit = excluded.head_commit,
+                first_commit_at = excluded.first_commit_at,
+                last_commit_at = excluded.last_commit_at
             """,
             (
                 user_id,
@@ -80,12 +88,22 @@ def load(
             ),
         )
 
-        # Nothing inserted means the conflict fired and the project is already
-        # loaded. lastrowid would be stale, so bail before touching the bridges.
-        if cursor.rowcount == 0:
-            return None
+        # lastrowid is stale when the conflict path updates an existing row, so
+        # resolve the id by the natural key after either insert or update.
+        project_id = connection.execute(
+            "SELECT id FROM Project WHERE source_path = ?",
+            (transformed_data["path"],),
+        ).fetchone()[0]
 
-        project_id = cursor.lastrowid
+        # The bridge rows are the complete evidence for this project, not an
+        # append-only history. Delete first so tags or descriptions removed by
+        # the new transform cannot remain attached to the old project state.
+        connection.execute(
+            "DELETE FROM ProjectTechnologies WHERE project_id = ?", (project_id,)
+        )
+        connection.execute(
+            "DELETE FROM ProjectConcepts WHERE project_id = ?", (project_id,)
+        )
 
         technology_descriptions = descriptions_by_name(descriptions, "technologies")
         load_project_bridge(

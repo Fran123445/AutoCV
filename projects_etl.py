@@ -271,16 +271,14 @@ def load(transform_output_dir: Path):
     Load every transformed project into the database.
 
     Sequential, unlike transform: sqlite takes one writer, so there is no
-    concurrency to gain here. The loader dedupes on the project's path, so one
-    already in the base is skipped rather than failed, which is what lets this
-    be re-run over the same directory.
+    concurrency to gain here. The loader upserts on the project's path, so a
+    re-run replaces the stored project and its evidence bridges in place.
 
     Args:
         transform_output_dir (Path): Where the transform stage wrote its JSON.
     """
     json_paths = sorted(transform_output_dir.glob("*.json"))
     loaded_count = 0
-    skipped_count = 0
     failed = []
 
     with RunLogger("projects", "load", items_total=len(json_paths)) as run_log:
@@ -303,12 +301,8 @@ def load(transform_output_dir: Path):
                 print(f"  FAILED {json_path.name}: {error!r}")
                 continue
 
-            if project_id is None:
-                skipped_count += 1
-                print(f"Skipped {json_path.name} (already loaded)")
-            else:
-                loaded_count += 1
-                print(f"Loaded {json_path.name} [{loaded_count}/{len(json_paths)}]")
+            loaded_count += 1
+            print(f"Loaded {json_path.name} [{loaded_count}/{len(json_paths)}]")
 
             # One project per flush, matching transform: a long batch should not
             # lose the telemetry of what did land if a later one kills it.
@@ -318,7 +312,7 @@ def load(transform_output_dir: Path):
         run_log.items_failed = len(failed)
 
     print(
-        f"\nLoaded {loaded_count}, skipped {skipped_count}, failed {len(failed)}."
+        f"\nLoaded {loaded_count}, failed {len(failed)}."
     )
     for json_path, error in failed:
         print(f"  {json_path.name}: {error!r}")
