@@ -151,4 +151,4 @@ def test_writer_uses_the_same_resolved_language():
         FakeLLMClient(),
     )
 
-    assert "whole CV in Spanish" in captured["prompt"]
+    assert "every generated field in Spanish" in captured["prompt"]

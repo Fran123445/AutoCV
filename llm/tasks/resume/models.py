@@ -76,7 +76,7 @@ class ResumeWorkBullets(BaseModel):
         description="The position these bullets belong to, taken from the id given with it."
     )
     bullets: list[str] = Field(
-        description="What the candidate did in this position, one piece of work per bullet, each naming the mechanism that made it work."
+        description="What the candidate did in this position. Use two or three concise, action-led bullets when relevant, one or two otherwise; target 12-24 words and never exceed 28 words per bullet."
     )
 
 
@@ -93,7 +93,7 @@ class ResumePersonalBullets(BaseModel):
         description="The few technologies worth printing beside the title, ordered with the ones the posting asks for first."
     )
     bullets: list[str] = Field(
-        description="What the candidate built on this project, one piece of work per bullet, each naming the mechanism that made it work."
+        description="What the candidate built on this project. Use two or three concise, action-led bullets, targeting 12-24 words and never exceeding 28 words per bullet."
     )
 
 
@@ -102,7 +102,7 @@ class ResumeResponse(BaseModel):
 
     summary: list[str] = Field(
         default_factory=list,
-        description="One to three short paragraphs placing the candidate against this posting, without naming them.",
+        description="One or two short paragraphs placing the candidate against this posting, without naming them; keep the first to 35-55 words and omit the second unless useful.",
     )
     skills: list[ResumeSkillGroup] = Field(
         default_factory=list, description="The skills block, three to six labelled rows."

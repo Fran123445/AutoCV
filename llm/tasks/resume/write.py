@@ -11,59 +11,45 @@ from resume_generator.localization import resolve_locale
 # that has nothing to do with the posting is just noise, and there are far more
 # of them than there is room for. So every position gets an entry and personal
 # projects are opted into.
-PROMPT_TEMPLATE = """You are writing a candidate's CV for one specific job. Read the job description and the candidate's record, both delimited below, and report the summary, the skills block, and the bullets each entry should carry.
+PROMPT_TEMPLATE = """Produce a high-conversion, ATS-readable CV tailored to the target job. Return only fields allowed by the response schema.
 
-What separates a CV that gets read from one that does not is whether each line says how something was made to work. A reader who already builds these systems is looking for the decision behind the work: what was compared against what, what was separated from what, what the shape of the thing was. Naming the task and the library it used tells them nothing they could not have guessed. Write every line for that reader.
+Your objective is to make the strongest truthful case for an interview in a fast first review. Use the target job as the relevance standard and the candidate record as the only evidence base.
 
-Rules for voice, everywhere:
-- Write the whole CV in {language}: every summary paragraph, every skills label, every project title and every bullet. The record is kept in whatever language the candidate wrote it in and that never shows through. Names are not translated: a company, a product and a technology are printed the way the industry writes them.
-- Never write "the candidate", "they", or the candidate's name. Every line reads as the candidate's own, with the subject left off: "Build a reconciliation tool", "Modelled a message archive as a star schema". Each language has its own way of doing that: Spanish drops the pronoun and keeps the first person, "Modelé un archivo de mensajes como un esquema en estrella".
-- Work still going on takes the present tense, work that has finished takes the past tense. Judge that per position and per project from the dates in the record, not from where the entry sits.
-- Never use an em dash. Where an aside needs setting off, open it with a colon, enclose it in commas or parentheses, or close the sentence and start another: "four independently deployable services: a crawler, an embedding API, an orchestrator and a frontend". One on a page is the most recognisable mark of machine-written prose, and a reader who spots it stops reading for the content and starts reading for the tell.
-- Do not define a thing by what it is not. "returned typed structures rather than free text", "an orchestrator, not a wrapper": the discarded half was never on the page, so the contrast carries nothing. Say what the thing is and stop.
-- Do not close a sentence on a participle announcing the benefit: "guaranteeing typed entities", "ensuring consistency", "allowing each service to scale independently". Where the benefit is worth its words, give it a subject and a verb of its own; where it is not, cut it.
-- Never open a summary paragraph on a stock cataloguing phrase: "The body of work covers", "Work spans", "Experience includes", each trailed by a list of four. Write a sentence whose subject does something.
-- Reach for the plain word. "utilise", "leverage", "robust", "seamless", "comprehensive", "cutting-edge" and "state-of-the-art" say less than "use", "strong", or nothing at all, and a reader has learned to skip every one of them. {language} has its own set, "sinergia", "potenciar", "soluciones integrales" and the rest, and they are skipped the same way.
+Decision framework:
+1. Identify the role's essential responsibilities, required capabilities and domain terms. Give greatest weight to requirements stated as required, primary responsibilities, or repeated throughout the posting.
+2. Match each requirement only to direct, specific candidate evidence. Prioritize evidence by: directness of match, demonstrated outcome or scope, recency, and seniority. Do this reasoning silently.
+3. Spend the limited page on the highest-value matches first. Preserve the full work history, but use minimal space on entries that cannot strengthen the case.
+4. Mirror the posting's exact terminology only when the candidate evidence supports it. Prefer the employer's common term over a synonym so both an applicant system and a human can recognize the match.
 
-Rules for summary:
-- One to three short paragraphs, each its own item in the list. The first is required, the rest are worth adding only when there is something to put in them.
-- Open the first on what the candidate is, how long they have been doing it, and in what setting: a role, then the tenure the record gives, then the environment the work happened in. Never open on a bare verb and never on a category.
-- A second paragraph, where you write one, sets out the range of the work as concrete kinds of system rather than adjectives.
-- Everything in the record is available here, including the education and any work project listed with no position.
+Truth and credibility:
+- Never invent or infer tools, duties, metrics, ownership, seniority, dates, outcomes, or proficiency. Do not convert related experience into an unsupported claim.
+- Every claim must be traceable to the candidate record. Omit a claim when the evidence is ambiguous.
+- Put verifiable achievements before routine duties. When the record supports it, write each bullet as: action + relevant object or method + concrete outcome, scope, or business purpose.
+- Preserve exact numbers. Use a metric only when it is meaningful evidence; never manufacture a number or use a vague magnitude.
+- Do not keyword-stuff. A skills list is an index of supported evidence, not a list of desirable terms.
 
-Rules for skills:
-- Three to six rows, each a label and its items. Choose labels that fit this candidate against this posting rather than working from a fixed set, and put the row the posting cares about most first.
-- Draw only on the skills list and on what the record shows the candidate using. Leave out anything the posting has no use for: the list given to you is everything they have ever touched, not everything worth printing.
-- Where a term has a common short and long form, print both once, long form first, since the posting may be searched for either: "Extract Transform Load (ETL)", "software development life cycle (SDLC)". Do not do this to terms that only ever appear one way.
-- Leave the spoken languages out of the block: they are printed in their own section, straight from the record. A row labelled Languages is programming languages.
-- Group tightly enough that the label means something. A row called Other, or a row mixing languages with methodologies, is a row wasted.
-- Focus on matching keywords and concepts as they are written out in the job description.
+Writing rules:
+- Write every generated field in {language}. Keep company, product, credential, and technology names in their standard form.
+- Use direct active voice, a varied strong verb at the start of each bullet, and a consistent tense appropriate to finished versus ongoing work.
+- Omit the subject. Never write the candidate's name, "the candidate", or pronouns such as "they".
+- Do not use em dashes, first-person voice, filler, soft-skill labels, or generic assertions such as "hard-working", "passionate", "results-oriented", or "responsible for".
+- Do not repeat content across the summary, skills, work history, or projects. Do not repeat company names, roles, or dates already shown by the layout.
 
-Rules for work_bullets:
-- One entry per position in the work history, always, even for a position the posting has no use for. Never more than one entry for the same position.
-- source_experience_id: the number on that position's "--- experience N ---" line. Use only ids that appear there.
-- Three or four bullets for a position the posting fits, one or two for one it does not. Fewer and longer beats more and shorter: a position with several projects under it should get its strongest three, not one bullet each.
-- Draw them from that position's day to day and from the projects listed under it. A project under a position is that position's work: it has no entry of its own and everything it shows belongs here.
+Output structure:
+- summary: exactly one 35-55 word paragraph. Open with the target professional profile, then state the two or three strongest supported qualifications for this role. It must be a value proposition, not a biography or objective statement.
+- skills: 3-5 concise, readable groups with 3-6 items each. Put the role's highest-priority supported terms first. Use conventional group labels. Exclude spoken languages and unsupported tools.
+- work_bullets: return exactly one entry for every supplied position, keyed by source_experience_id. Give directly relevant positions 2-3 bullets and other positions 1 concise bullet. Use a position's nested work projects as evidence for that position only.
+- personal_bullets: include only personal projects that directly reinforce an important job requirement, at most two. Key each by source_project_id. Give each a clear 3-5 word descriptive title, 3-5 supported technologies, and exactly 2 bullets.
 
-Rules for personal_bullets:
-- One entry per personal project worth showing for this posting, and no entry at all for the rest. Two is the ceiling and the usual number: the two the posting has most use for, written to the bottom, beat four written to the surface. Write one where only one fits. Never more than one entry for the same project.
-- source_project_id: the number on that project's "--- project N ---" line, taken from the personal projects section. Use only ids that appear there.
-- title: what the project is, not what its folder is called. The folder name is a private joke or an abbreviation and means nothing to the reader: "Schizo_measurements" is a personal messaging analytics warehouse, "tp-2024-1c-Frituras" is an operating system simulator. Three to six words describing the system, cased the way {language} cases a heading.
-- technologies: the few worth printing beside the title, the ones the posting asks for first. Three to six, not the whole list the record carries.
-- Three or four bullets each, and no two of them on the same layer of the system: how the data moves through it, how its pieces are held apart, what constraint it was built against and what that forced. The room the projects you left out would have taken is what pays for this, so use it.
-- Make sure to explain the end product of each project so the reader knows what value is derived (if any).
+Bullet quality and length:
+- Use one distinct achievement, contribution, or responsibility per bullet; avoid stacked claims.
+- Write 12-22 words per bullet and never exceed 25 words.
+- Include a method or technology only when it substantiates the match; end with the outcome, scope, or purpose when supported.
 
-Rules for every bullet:
-- Start on the verb, with the subject left off, and vary it: two bullets in a row opening on "Built" or "Developed" read as one bullet.
-- One piece of work per bullet, and inside it say how the work was made to do its job. The mechanism is the point: "sampling matched row sets on natural keys and comparing at column level with exact and fuzzy string matching to surface field mappings" is a bullet, "using Pandas and RapidFuzz to perform fuzzy matching" is a library credit. Where the record gives a reason a thing was done one way and not another, that reason is the best material on the page.
-- Roughly twenty five to fifty words, and not all of them the same length: bullets that run to the same count with the same clause pattern read as generated even when every one of them is true. Give each entry at least one bullet under fifteen words, and let a single sentence carrying subordinate clauses do the work wherever two short ones would say the same thing twice.
-- Integrate the required technology directly with the mechanism or architectural pattern, never as a stand-alone passive mention.
-- Carry over every figure, volume, scale, count and result the record states: row counts, sizes, storage reclaimed, how many of a thing were handled, how much of a set was covered. These are the strongest marks on the page and the record is the only place they can come from, so dropping one to be safe costs more than any other mistake here.
-- Never state a number, an outcome, a scale or a responsibility the record does not. Do not round a figure the record gives, do not report part of a thing as all of it, and do not turn a task into ownership of a system. Repeating what the record states and inventing what it does not are different acts: this rule forbids the second and never the first.
-- Do not spend a bullet on a category name. "Built an ETL pipeline" and "Developed a backend application" say nothing by themselves; say what moved out of where, through what shape, into what.
-- Do not repeat the company name, the role or the dates. Those are already printed on the entry.
-- Do not repeat the same work across two bullets in different words.
-- Reach for the posting's own vocabulary over the record's wherever both describe the same thing.
+Final quality gate:
+- Keep only content that improves relevance, credibility, or scanability for this specific role.
+- The complete content must fit comfortably on one page in the supplied layout.
+- Return no explanation or text outside the response schema.
 
 <job_description>
 {job_desc}
