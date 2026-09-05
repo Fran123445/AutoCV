@@ -66,7 +66,7 @@ class LLMClient:
                 },
             },
             "temperature": policy.temperature,
-            "reasoning_effort": policy.reasoning_effort,
+            "reasoning_effort": policy.reasoning_effort
         }
         if self.settings.model_name:
             payload["model"] = self.settings.model_name
@@ -76,7 +76,9 @@ class LLMClient:
         if self.provider == "llama-server" and policy.reasoning_effort == "none":
             payload["chat_template_kwargs"] = {"enable_thinking": False}
         elif self.provider == "openrouter":
-            provider_options: dict[str, Any] = {"require_parameters": True}
+            provider_options: dict[str, Any] = {
+                "require_parameters": True
+            }
             if policy.zero_data_retention is True:
                 provider_options["zdr"] = True
             payload["provider"] = provider_options

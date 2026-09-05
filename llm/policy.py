@@ -31,7 +31,7 @@ class TaskPolicy:
 
 # Shared profiles make the intent of each entry obvious and avoid a long list
 # of near-identical settings.
-FAST_EXTRACT = TaskPolicy(reasoning_effort="none")
+FAST_EXTRACT = TaskPolicy(reasoning_effort="low")
 EXTRACT = TaskPolicy(reasoning_effort="low")
 REVIEW = TaskPolicy(reasoning_effort="low")
 PRIVATE_EXTRACT = TaskPolicy(reasoning_effort="low", zero_data_retention=True)

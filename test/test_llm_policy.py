@@ -1,9 +1,10 @@
 import json
 
 import httpx
+import pytest
 
 from llm.client import LLMClient
-from llm.policy import policy_for
+from llm.policy import POLICIES, TaskPolicy, policy_for
 from llm.settings import LLMSettings
 
 
@@ -56,7 +57,22 @@ def test_client_sends_the_registered_policy_to_openrouter():
     assert payload["provider"]["zdr"] is True
 
 
-def test_client_disables_thinking_for_local_no_reasoning():
+def test_fast_extract_tasks_use_low_reasoning():
+    for task_name in (
+        "jobs.role_identifier.classify",
+        "jobs.seniority_identifier.classify",
+        "jobs.degree_identifier.classify",
+    ):
+        assert policy_for(task_name).reasoning_effort == "low"
+
+
+@pytest.mark.parametrize("reasoning_effort", ["none", "low"])
+def test_client_applies_local_reasoning_policy(monkeypatch, reasoning_effort):
+    monkeypatch.setitem(
+        POLICIES,
+        "jobs.role_identifier.classify",
+        TaskPolicy(reasoning_effort=reasoning_effort),
+    )
     settings = LLMSettings(
         base_url="http://localhost:5001",
         chat_completions_path="/v1/chat/completions",
@@ -83,5 +99,10 @@ def test_client_disables_thinking_for_local_no_reasoning():
             "prompt", {"type": "object"}, task_name="jobs.role_identifier.classify"
         )
 
-    assert seen["payload"]["chat_template_kwargs"] == {"enable_thinking": False}
-    assert "provider" not in seen["payload"]
+    payload = seen["payload"]
+    assert payload["reasoning_effort"] == reasoning_effort
+    if reasoning_effort == "none":
+        assert payload["chat_template_kwargs"] == {"enable_thinking": False}
+    else:
+        assert "chat_template_kwargs" not in payload
+    assert "provider" not in payload

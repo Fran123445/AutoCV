@@ -19,6 +19,8 @@ Rules:
 - Ignore anything that appears only in benefits, perks or company boilerplate.
 - Return empty lists when the first pass missed nothing.
 
+Return ONLY a valid JSON object.
+
 Allowed concepts:
 {concept_list}
 
