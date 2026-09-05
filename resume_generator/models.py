@@ -89,7 +89,7 @@ class ResumeDocument(_ResumeBlock):
     # The locale used for both the LLM-written text and structural labels. The
     # default keeps documents written before locale support renderable.
     language: str = "en"
-    summary: list[str] = Field(default_factory=list)
+    summary: str
     skills: list[ResumeSkillGroup] = Field(default_factory=list)
     experience: list[ResumeExperience] = Field(default_factory=list)
     projects: list[ResumeProject] = Field(default_factory=list)

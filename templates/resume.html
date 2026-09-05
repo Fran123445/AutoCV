@@ -46,9 +46,7 @@
 {% if document.summary %}
 <section>
   <h2>{{ labels.summary }}</h2>
-  {% for paragraph in document.summary %}
-    <p>{{ paragraph }}</p>
-  {% endfor %}
+    <p>{{ document.summary }}</p>
 </section>
 {% endif %}
 

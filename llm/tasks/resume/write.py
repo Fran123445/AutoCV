@@ -11,7 +11,7 @@ from resume_generator.localization import resolve_locale
 # that has nothing to do with the posting is just noise, and there are far more
 # of them than there is room for. So every position gets an entry and personal
 # projects are opted into.
-PROMPT_TEMPLATE = """Produce a high-conversion, ATS-readable CV tailored to the target job. Return only fields allowed by the response schema.
+PROMPT_TEMPLATE = """Produce an ATS-readable CV tailored to the target job. Return only fields allowed by the response schema.
 
 Your objective is to make the strongest truthful case for an interview in a fast first review. Use the target job as the relevance standard and the candidate record as the only evidence base.
 
@@ -22,17 +22,17 @@ Decision framework:
 4. Mirror the posting's exact terminology only when the candidate evidence supports it. Prefer the employer's common term over a synonym so both an applicant system and a human can recognize the match.
 
 Truth and credibility:
-- Never invent or infer tools, duties, metrics, ownership, seniority, dates, outcomes, or proficiency. Do not convert related experience into an unsupported claim.
-- Every claim must be traceable to the candidate record. Omit a claim when the evidence is ambiguous.
+- Never invent or infer tools, duties, metrics, ownership, seniority, dates, or proficiency. Do not convert related experience into an unsupported claim.
+- Every claim must be traceable to the candidate record.
 - Put verifiable achievements before routine duties. When the record supports it, write each bullet as: action + relevant object or method + concrete outcome, scope, or business purpose.
 - Preserve exact numbers. Use a metric only when it is meaningful evidence; never manufacture a number or use a vague magnitude.
 - Do not keyword-stuff. A skills list is an index of supported evidence, not a list of desirable terms.
 
 Writing rules:
 - Write every generated field in {language}. Keep company, product, credential, and technology names in their standard form.
-- Use direct active voice, a varied strong verb at the start of each bullet, and a consistent tense appropriate to finished versus ongoing work.
-- Omit the subject. Never write the candidate's name, "the candidate", or pronouns such as "they".
-- Do not use em dashes, first-person voice, filler, soft-skill labels, or generic assertions such as "hard-working", "passionate", "results-oriented", or "responsible for".
+- Write every bullet in first-person past tense, using the localized equivalent of “I” and a strong action verb (for example, “Built…” or “Construí…”). Apply past tense even to a current position: describe completed contributions without inventing an end date.
+- Never write the candidate's name, "the candidate", or pronouns such as "they". The summary must also be in first-person, past tense.
+- Do not use em dashes, filler, soft-skill labels, or generic assertions such as "hard-working", "passionate", "results-oriented", or "responsible for".
 - Do not repeat content across the summary, skills, work history, or projects. Do not repeat company names, roles, or dates already shown by the layout.
 
 Output structure:
@@ -43,7 +43,7 @@ Output structure:
 
 Bullet quality and length:
 - Use one distinct achievement, contribution, or responsibility per bullet; avoid stacked claims.
-- Write 12-22 words per bullet and never exceed 25 words.
+- Write around 12-22 words per bullet.
 - Include a method or technology only when it substantiates the match; end with the outcome, scope, or purpose when supported.
 
 Final quality gate:

@@ -100,8 +100,7 @@ class ResumePersonalBullets(BaseModel):
 class ResumeResponse(BaseModel):
     """What the resume-writing pass returns."""
 
-    summary: list[str] = Field(
-        default_factory=list,
+    summary: str = Field(
         description="One or two short paragraphs placing the candidate against this posting, without naming them; keep the first to 35-55 words and omit the second unless useful.",
     )
     skills: list[ResumeSkillGroup] = Field(

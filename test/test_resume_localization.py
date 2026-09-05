@@ -19,7 +19,7 @@ def make_document(language="es"):
     return ResumeDocument(
         language=language,
         profile=ResumeProfile(full_name="Ada Lovelace"),
-        summary=["Diseño sistemas de datos."],
+        summary="Diseñé sistemas de datos.",
         skills=[ResumeSkillGroup(label="Datos", items=["Python"])],
         experience=[
             ResumeExperience(
@@ -58,6 +58,7 @@ def test_spanish_resume_localizes_structural_text():
     html = render_html(make_document())
 
     assert '<html lang="es">' in html
+    assert "<p>Diseñé sistemas de datos.</p>" in html
     for heading in (
         "Resumen",
         "Habilidades",
@@ -140,15 +141,16 @@ def test_writer_uses_the_same_resolved_language():
         def post_chat(self, prompt, schema, task_name):
             captured["prompt"] = prompt
             return {
-                "summary": [],
+                "summary": "Diseñé sistemas de datos.",
                 "skills": [],
                 "work_bullets": [],
                 "personal_bullets": [],
             }
 
-    write_resume(
+    response = write_resume(
         ResumePromptContext(job_description="Descripción", language="es"),
         FakeLLMClient(),
     )
 
     assert "every generated field in Spanish" in captured["prompt"]
+    assert response.summary == "Diseñé sistemas de datos."
