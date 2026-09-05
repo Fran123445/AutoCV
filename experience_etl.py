@@ -14,7 +14,8 @@ from pathlib import Path
 import argparse
 import json
 
-from config import EXPERIENCE_PATH, EXPERIENCE_TRANSFORM_DIR
+from config import EXPERIENCE_PATH, EXPERIENCE_PROCESSED_DIR, EXPERIENCE_TRANSFORM_DIR
+from etl.files import archive_file, write_json
 from etl.experience.extract import extract as extract_experience
 from etl.experience.load import load as load_experience
 from etl.experience.transform import transform as transform_experience
@@ -92,8 +93,7 @@ def transform(
                 transformed = transform_experience(experience, llm_client)
 
                 out_path = transform_output_dir / f"{experience_path.stem}.json"
-                with out_path.open("w", encoding="utf-8") as f:
-                    json.dump(transformed, f, ensure_ascii=False, indent=2)
+                write_json(out_path, transformed)
         except Exception:
             run_log.items_failed = 1
             raise
@@ -103,7 +103,10 @@ def transform(
     print(f"\nTransformed {experience_path.name} into {out_path}.")
 
 
-def load(transform_output_dir: Path, experience_path: Path):
+def load(
+    transform_output_dir: Path, experience_path: Path,
+    processed_dir: Path | None = None,
+):
     """
     Load the transformed experience into the database.
 
@@ -118,6 +121,10 @@ def load(transform_output_dir: Path, experience_path: Path):
             is the name both other stages logged their rows under.
     """
     json_path = transform_output_dir / f"{experience_path.stem}.json"
+    processed_dir = processed_dir or EXPERIENCE_PROCESSED_DIR
+    if not json_path.exists():
+        print("No pending transformed experience to load.")
+        return
 
     with RunLogger("experience", "load", items_total=1) as run_log:
         print(f"Loading {json_path}...")
@@ -134,6 +141,8 @@ def load(transform_output_dir: Path, experience_path: Path):
                 # reuse it rather than open a second one that would only contend
                 # for the write lock.
                 counts = load_experience(transformed, run_log.connection)
+                run_log.connection.commit()
+                archive_file(json_path, processed_dir)
         except Exception:
             run_log.items_failed = 1
             raise

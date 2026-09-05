@@ -62,15 +62,53 @@ Load the candidate's own history. Fill in `templates/experience.toml` first (see
 python experience_etl.py
 ```
 
-Ingest job postings — drop saved LinkedIn pages into `data/staging/`, then:
+Ingest job postings — drop saved LinkedIn pages into `data/jobs/pending/sources/`, then:
 
 ```bash
 python jobs_etl.py
 ```
 
-After a posting is extracted successfully, its source `.html` or `.mhtml` file
-moves to `data/processed_jobs/`. Files that fail extraction remain in staging
-for inspection or retry.
+Jobs and experience separate pending inputs from processed inputs:
+
+```text
+data/
+├── jobs/
+│   ├── pending/
+│   │   ├── sources/       # saved .html / .mhtml pages awaiting extraction
+│   │   ├── extracted/     # JSON awaiting transformation
+│   │   └── transformed/   # JSON awaiting database loading
+│   └── processed/
+│       ├── sources/
+│       ├── extracted/
+│       └── transformed/
+└── experience/
+    ├── pending/
+    │   └── transformed/
+    └── processed/
+        └── transformed/
+```
+
+Each job stage publishes its output, then moves its input to the corresponding
+`processed/` folder. Load stages commit the database transaction before moving
+the transformed JSON. Failed inputs stay pending; already-loaded jobs are also
+archived safely without changing application status. Archives preserve earlier
+files when names collide by adding a content hash and, if needed, a number.
+
+If a transformation was saved but its input could not be archived, retrying reuses
+the saved output from either pending or processed storage. New job outputs carry
+an input fingerprint; older outputs are checked against their original posting
+content. Different inputs with the same output filename are reported as conflicts
+instead of overwriting pending work.
+
+Experience transformation still reads the editable `experience.toml` in place;
+loading moves only the generated JSON. Loading again with no pending JSON does
+nothing. Projects and resume artifacts retain their existing folders and behavior.
+
+To reload an archived artifact, copy the desired JSON from `processed/transformed/`
+to `pending/transformed/` and run the corresponding load stage. For experience,
+use the source TOML's stem as the JSON filename (normally `experience.json`). To
+deliberately transform a job again, copy its archived extracted JSON into
+`jobs/pending/extracted/` and run `python jobs_etl.py transform --force`.
 
 Ingest personal projects from a folder of repos:
 

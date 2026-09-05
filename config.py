@@ -27,16 +27,18 @@ DATA_DIR = Path(os.getenv("AUTOCV_DATA_DIR") or ROOT_DIR / "data")
 
 DB_PATH = DATA_DIR / "autocv.db"
 
-STAGING_DIR = DATA_DIR / "staging"
-# Source pages that completed job extraction. Keeping these out of staging
-# makes the staging folder represent only work that still needs processing.
-JOBS_PROCESSED_DIR = DATA_DIR / "processed_jobs"
-JOBS_EXTRACT_DIR = DATA_DIR / "extracted_descs"
-JOBS_TRANSFORM_DIR = DATA_DIR / "transformed_descs"
+JOBS_DIR = DATA_DIR / "jobs"
+STAGING_DIR = JOBS_DIR / "pending" / "sources"
+JOBS_PROCESSED_DIR = JOBS_DIR / "processed" / "sources"
+JOBS_EXTRACT_DIR = JOBS_DIR / "pending" / "extracted"
+JOBS_TRANSFORM_DIR = JOBS_DIR / "pending" / "transformed"
+JOBS_EXTRACT_PROCESSED_DIR = JOBS_DIR / "processed" / "extracted"
+JOBS_TRANSFORM_PROCESSED_DIR = JOBS_DIR / "processed" / "transformed"
 PROJECTS_EXTRACT_DIR = DATA_DIR / "extracted_projects"
 PROJECTS_TRANSFORM_DIR = DATA_DIR / "transformed_projects"
 # No extract counterpart: the experience file is already the structured artifact.
-EXPERIENCE_TRANSFORM_DIR = DATA_DIR / "transformed_experience"
+EXPERIENCE_TRANSFORM_DIR = DATA_DIR / "experience" / "pending" / "transformed"
+EXPERIENCE_PROCESSED_DIR = DATA_DIR / "experience" / "processed" / "transformed"
 
 RESUMES_DIR = DATA_DIR / "resume"
 

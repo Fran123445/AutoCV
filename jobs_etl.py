@@ -15,11 +15,16 @@ import json
 
 from config import (
     JOBS_EXTRACT_DIR,
+    JOBS_EXTRACT_PROCESSED_DIR,
     JOBS_PROCESSED_DIR,
     JOBS_TRANSFORM_DIR,
+    JOBS_TRANSFORM_PROCESSED_DIR,
     STAGING_DIR,
 )
 from etl.jobs.extract import JobDescriptionNotFound, extract_from_file
+from etl.files import (
+    SOURCE_HASH_KEY, archive_file, completed_output, source_hash, write_json,
+)
 from etl.jobs.load import load as load_job
 # Aliased: this module has a transform() of its own, over directories rather
 # than over a single posting.
@@ -28,36 +33,20 @@ from llm.client import LLMClient
 from llm.settings import LLMSettings
 from run_log import RunLogger, record_item
 
-def _move_processed_source(source_path: Path, processed_dir: Path) -> Path:
-    """Move a successfully extracted source page out of staging."""
-    processed_dir.mkdir(parents=True, exist_ok=True)
-    destination = processed_dir / source_path.name
-
-    # Do not silently replace a source page if the same file name is already
-    # archived. Leaving the source in staging makes the collision visible and
-    # keeps the archived copy recoverable.
-    if destination.exists():
-        raise FileExistsError(
-            f"processed source already exists: {destination}"
-        )
-
-    source_path.rename(destination)
-    return destination
-
-
 def extract(
     staging_dir: Path,
     out_dir: Path,
     processed_dir: Path | None = None,
 ):
     processed_dir = processed_dir or JOBS_PROCESSED_DIR
+    staging_dir.mkdir(parents=True, exist_ok=True)
     html_paths = sorted(
         path
         for path in staging_dir.iterdir()
-        if path.suffix.lower() in (".html", ".mhtml")
+        if path.is_file() and path.suffix.lower() in (".html", ".mhtml")
     )
     extracted_count = 0
-    skipped = []
+    failed = []
 
     with RunLogger("jobs", "extract", items_total=len(html_paths)) as run_log:
         for html_path in html_paths:
@@ -69,26 +58,31 @@ def extract(
                     extracted = extract_from_file(html_path)
 
                     json_path = out_dir / f"{html_path.stem}.json"
-                    with json_path.open("w", encoding="utf-8") as f:
-                        json.dump(extracted, f, ensure_ascii=False, indent=2)
-                    _move_processed_source(html_path, processed_dir)
+                    # Never replace a different posting waiting for transform.
+                    if json_path.exists():
+                        existing = json.loads(json_path.read_text(encoding="utf-8"))
+                        if existing != extracted:
+                            raise FileExistsError(f"pending output already exists: {json_path}")
+                    else:
+                        write_json(json_path, extracted)
+                    archive_file(html_path, processed_dir)
             except JobDescriptionNotFound as error:
                 # One page saved mid-render should not end the batch.
-                skipped.append((html_path, error))
+                failed.append((html_path, error))
                 continue
-            except OSError as error:
+            except (OSError, ValueError) as error:
                 # Keep files in staging when archiving fails, so the source is
                 # still available for a retry and the failure is visible.
-                skipped.append((html_path, error))
+                failed.append((html_path, error))
                 continue
 
             extracted_count += 1
 
         run_log.items_ok = extracted_count
-        run_log.items_failed = len(skipped)
+        run_log.items_failed = len(failed)
 
-    print(f"\nExtracted {extracted_count}, skipped {len(skipped)}.")
-    for html_path, error in skipped:
+    print(f"\nExtracted {extracted_count}, failed {len(failed)}.")
+    for html_path, error in failed:
         print(f"  {html_path.name}: {error}")
 
 
@@ -96,6 +90,9 @@ def transform_one(
     json_path: Path,
     transform_output_dir: Path,
     llm_client: LLMClient,
+    processed_dir: Path | None = None,
+    processed_output_dir: Path | None = None,
+    force: bool = False,
 ):
     """
     Transform a single extracted posting and write it out.
@@ -111,59 +108,62 @@ def transform_one(
     # model calls find it through a ContextVar, which is per thread, so the
     # worker running next door writes into its own record.
     with record_item(json_path.stem):
+        processed_dir = processed_dir or JOBS_EXTRACT_PROCESSED_DIR
+        processed_output_dir = processed_output_dir or JOBS_TRANSFORM_PROCESSED_DIR
+        if not force and completed_output(
+            json_path, transform_output_dir, processed_output_dir
+        ):
+            archive_file(json_path, processed_dir)
+            return False
+
         with json_path.open("r", encoding="utf-8") as f:
             extracted = json.load(f)
+        digest = source_hash(json_path)
+
+        out_path = transform_output_dir / json_path.name
+        if out_path.exists():
+            existing = json.loads(out_path.read_text(encoding="utf-8"))
+            if (
+                existing.get(SOURCE_HASH_KEY) != digest
+                and completed_output(json_path, transform_output_dir) != out_path
+            ):
+                raise FileExistsError(f"pending output already exists: {out_path}")
 
         transformed = transform_job(extracted, llm_client)
-
-        out_path = transform_output_dir / f"{json_path.stem}.json"
-        with out_path.open("w", encoding="utf-8") as f:
-            json.dump(transformed, f, ensure_ascii=False, indent=2)
-
-
-def _pending_transform_paths(
-    extract_output_dir: Path, transform_output_dir: Path
-) -> tuple[list[Path], list[Path]]:
-    """Return extracted postings that still need transforming and the rest."""
-    pending = []
-    skipped = []
-
-    for json_path in sorted(extract_output_dir.glob("*.json")):
-        out_path = transform_output_dir / json_path.name
-        if out_path.is_file():
-            skipped.append(json_path)
-        else:
-            pending.append(json_path)
-
-    return pending, skipped
+        if source_hash(json_path) != digest:
+            raise RuntimeError(f"input changed during transformation: {json_path}")
+        transformed[SOURCE_HASH_KEY] = digest
+        write_json(out_path, transformed)
+        archive_file(json_path, processed_dir)
+        return True
 
 
 def transform(
     extract_output_dir: Path,
     transform_output_dir: Path,
     llm_client: LLMClient,
+    processed_dir: Path | None = None,
+    processed_output_dir: Path | None = None,
+    force: bool = False,
 ):
     concurrency = llm_client.settings.max_concurrency
-    json_paths, skipped_paths = _pending_transform_paths(
-        extract_output_dir, transform_output_dir
-    )
+    json_paths = sorted(extract_output_dir.glob("*.json"))
     transformed_count = 0
+    recovered_count = 0
     failed = []
 
     with RunLogger(
         "jobs",
         "transform",
-        items_total=len(json_paths) + len(skipped_paths),
+        items_total=len(json_paths),
         max_concurrency=concurrency,
         llm_settings=llm_client.settings,
     ) as run_log:
-        for json_path in skipped_paths:
-            print(f"Skipped {json_path.name} (already transformed)")
-
         with ThreadPoolExecutor(max_workers=concurrency) as pool:
             futures = {
                 pool.submit(
-                    transform_one, json_path, transform_output_dir, llm_client
+                    transform_one, json_path, transform_output_dir, llm_client,
+                    processed_dir, processed_output_dir, force,
                 ): json_path
                 for json_path in json_paths
             }
@@ -176,7 +176,7 @@ def transform(
             for future in as_completed(futures):
                 json_path = futures[future]
                 try:
-                    future.result()
+                    was_transformed = future.result()
                 except Exception as error:
                     # Deliberately broad. This runs for hours, every call
                     # crosses the network, and one bad posting should not cost
@@ -185,40 +185,42 @@ def transform(
                     print(f"  FAILED {json_path.name}: {error!r}")
                     continue
                 else:
-                    transformed_count += 1
-                    print(
-                        f"Transformed {json_path.name} "
-                        f"[{transformed_count}/{len(json_paths)}]"
-                    )
+                    if was_transformed:
+                        transformed_count += 1
+                        print(f"Transformed {json_path.name}")
+                    else:
+                        recovered_count += 1
+                        print(f"Archived {json_path.name} (saved transformation reused)")
                 finally:
                     # Every iteration rather than once at the end: a batch this
                     # long should not lose the rows of the postings that did
                     # finish just because a later one killed the process.
                     run_log.flush()
 
-        run_log.items_ok = transformed_count
+        run_log.items_ok = transformed_count + recovered_count
         run_log.items_failed = len(failed)
 
         print(
-            f"\nTransformed {transformed_count}, skipped {len(skipped_paths)}, "
+            f"\nTransformed {transformed_count}, recovered {recovered_count}, "
             f"failed {len(failed)}."
         )
         for json_path, error in failed:
             print(f"  {json_path.name}: {error!r}")
 
 
-def load(transform_output_dir: Path):
+def load(transform_output_dir: Path, processed_dir: Path | None = None):
     """
     Load every transformed posting into the database.
 
     Sequential, unlike transform: sqlite takes one writer, so there is no
     concurrency to gain here. The loader dedupes on linkedin_job_id, so a
-    posting already in the base is skipped rather than failed, which is what
-    lets this be re-run over the same directory without touching applied status.
+    posting already in the base is archived without touching applied status.
+    Inputs move only after their database transaction is committed.
 
     Args:
         transform_output_dir (Path): Where the transform stage wrote its JSON.
     """
+    processed_dir = processed_dir or JOBS_TRANSFORM_PROCESSED_DIR
     json_paths = sorted(transform_output_dir.glob("*.json"))
     loaded_count = 0
     skipped_count = 0
@@ -239,6 +241,8 @@ def load(transform_output_dir: Path):
                     # contend for the write lock.
                     job_id = load_job(transformed, run_log.connection)
                     item.produced("FactJob", job_id)
+                    run_log.connection.commit()
+                    archive_file(json_path, processed_dir)
             except Exception as error:
                 failed.append((json_path, error))
                 print(f"  FAILED {json_path.name}: {error!r}")
@@ -246,7 +250,7 @@ def load(transform_output_dir: Path):
 
             if job_id is None:
                 skipped_count += 1
-                print(f"Skipped {json_path.name} (already loaded)")
+                print(f"Archived {json_path.name} (already loaded)")
             else:
                 loaded_count += 1
                 print(f"Loaded {json_path.name} [{loaded_count}/{len(json_paths)}]")
@@ -255,11 +259,11 @@ def load(transform_output_dir: Path):
             # lose the telemetry of what did land if a later posting kills it.
             run_log.flush()
 
-        run_log.items_ok = loaded_count
+        run_log.items_ok = loaded_count + skipped_count
         run_log.items_failed = len(failed)
 
     print(
-        f"\nLoaded {loaded_count}, skipped {skipped_count}, failed {len(failed)}."
+        f"\nLoaded {loaded_count}, already loaded {skipped_count}, failed {len(failed)}."
     )
     for json_path, error in failed:
         print(f"  {json_path.name}: {error!r}")
@@ -287,6 +291,10 @@ def parse_args():
         ),
     )
 
+    parser.add_argument(
+        "--force", action="store_true",
+        help="Transform pending extracted files again even if a saved result exists.",
+    )
     args = parser.parse_args()
     args.stages = args.stages or list(STAGES)
 
@@ -305,7 +313,7 @@ def main():
         JOBS_TRANSFORM_DIR.mkdir(parents=True, exist_ok=True)
         settings = LLMSettings.from_env("jobs")
         with LLMClient(settings) as llm_client:
-            transform(JOBS_EXTRACT_DIR, JOBS_TRANSFORM_DIR, llm_client)
+            transform(JOBS_EXTRACT_DIR, JOBS_TRANSFORM_DIR, llm_client, force=args.force)
 
     if "load" in stages:
         load(JOBS_TRANSFORM_DIR)
