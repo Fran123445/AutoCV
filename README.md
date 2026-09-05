@@ -2,7 +2,7 @@
 
 Tailor a résumé to a job posting from structured evidence instead of a wall of prose.
 
-AutoCV scrapes LinkedIn job postings and a candidate's own history into one normalized SQLite base, uses a local LLM to tag both sides against shared taxonomies of technologies, concepts, roles, seniority and degrees, then writes and prints a résumé aimed at a specific posting. Because both the posting's requirements and the candidate's projects land in the same dimension tables, a posting that asks for *relational databases* can be matched against a candidate who only ever wrote *SQL Server* — the taxonomy bridges the gap.
+AutoCV extracts saved LinkedIn job postings and a candidate's own history into one normalized SQLite base, uses an LLM to tag both sides against shared taxonomies of technologies, concepts, roles, seniority and degrees, then writes and prints a résumé aimed at a specific posting. The résumé writer receives the posting's text alongside the candidate's structured work history, projects and skills, and selects relevant evidence for the document.
 
 ## How it works
 
@@ -95,7 +95,7 @@ The stage split follows the cost: only `transform` (jobs/projects) and `write` (
 
 ## Data model
 
-One star schema in `schema.sql`. Job requirements and candidate evidence share the same dimension tables (`DimTechnologies`, `DimConcepts`, `DimRole`, `DimSeniority`, `DimDegree`) so the two sides compare like with like. Dependency bridges (`TechnologyDependency`, `ConceptDependency`, `TechnologyConcept`) encode implications — *react* implies *javascript*, *power bi* implies *business intelligence* — which `job_matcher/retrievers.py` walks to expand a project's direct tags into everything it is evidence for, tracking the depth at which each was reached.
+One star schema in `schema.sql`. Job requirements and candidate evidence share the same dimension tables (`DimTechnologies`, `DimConcepts`, `DimRole`, `DimSeniority`, `DimDegree`) for consistent tagging. Dependency bridges (`TechnologyDependency`, `ConceptDependency`, `TechnologyConcept`) store taxonomy relationships such as *react* implying *javascript* and *power bi* implying *business intelligence*. Résumé generation reads the posting's raw text and the candidate's stored evidence; it does not traverse those dependency bridges.
 
 ## Layout
 
@@ -107,7 +107,6 @@ seeds/                 Canonical taxonomies (technologies, concepts, roles, ...)
 *_etl.py               The four pipeline entry points
 etl/                   Extract/transform/load stages per pipeline
 llm/                   Settings, HTTP client, and the per-task model packages
-job_matcher/           Reads evidence and requirements out of the base
 resume_generator/      Résumé document model, HTML render, PDF print
 templates/             experience.toml template + résumé HTML/CSS
 run_log.py             Run-table telemetry wrappers
