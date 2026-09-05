@@ -15,7 +15,7 @@ SOURCE_EXTENSIONS = frozenset(
 
 # A repo under this many source files is treated as junk (scratch, config-only,
 # empty scaffold) and never reaches the model.
-MIN_SOURCE_FILES = 3
+MIN_SOURCE_FILES = 1
 
 # Directory names the repo walk never descends into while hunting for a .git.
 # A repo sits at the top of its own tree, so these only ever hide a dependency
