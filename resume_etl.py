@@ -20,6 +20,7 @@ import argparse
 import re
 import sqlite3
 
+from app_log import get_logger
 from config import RESUMES_DIR
 from llm.client import LLMClient
 from llm.settings import LLMSettings
@@ -27,6 +28,9 @@ from resume_generator.generator import generate_resume
 from resume_generator.models import ResumeDocument
 from resume_generator.render import render_html
 from run_log import RunLogger, record_item
+
+
+logger = get_logger(__name__)
 
 
 DOCUMENT_NAME = "resume.json"
@@ -112,6 +116,7 @@ def write(user_id: int, job_id: int, resumes_dir: Path):
         job_id (int): Posting the CV is written against.
         resumes_dir (Path): Root the per-posting folders live under.
     """
+    logger.info("Resume write starting: user_id=%s job_id=%s", user_id, job_id)
     llm_settings = LLMSettings.from_env("resume")
     with LLMClient(llm_settings) as llm_client:
         with RunLogger(
@@ -138,11 +143,13 @@ def write(user_id: int, job_id: int, resumes_dir: Path):
                     )
             except Exception:
                 run_log.items_failed = 1
+                logger.exception("Resume write failed: user_id=%s job_id=%s", user_id, job_id)
                 raise
 
             run_log.items_ok = 1
 
     print(f"\nWrote the resume for user {user_id} against job {job_id} to {out_path}.")
+    logger.info("Resume write completed: output=%s", out_path)
 
 
 def render(user_id: int, job_id: int, resumes_dir: Path):
@@ -154,6 +161,7 @@ def render(user_id: int, job_id: int, resumes_dir: Path):
         job_id (int): Posting the CV was written against.
         resumes_dir (Path): Root the per-posting folders live under.
     """
+    logger.info("Resume render starting: user_id=%s job_id=%s", user_id, job_id)
     with RunLogger("resume", "render", items_total=1) as run_log:
         out_dir = posting_dir(run_log.connection, job_id, resumes_dir)
         json_path = out_dir / DOCUMENT_NAME
@@ -173,11 +181,13 @@ def render(user_id: int, job_id: int, resumes_dir: Path):
                 out_path.write_text(render_html(document), encoding="utf-8")
         except Exception:
             run_log.items_failed = 1
+            logger.exception("Resume render failed: user_id=%s job_id=%s", user_id, job_id)
             raise
 
         run_log.items_ok = 1
 
     print(f"\nRendered {json_path.name} into {out_path}.")
+    logger.info("Resume render completed: output=%s", out_path)
 
 
 def pdf(user_id: int, job_id: int, resumes_dir: Path):
@@ -194,6 +204,7 @@ def pdf(user_id: int, job_id: int, resumes_dir: Path):
     # installed. Printing is the only stage that needs either.
     from resume_generator.pdf import render_pdf
 
+    logger.info("Resume PDF starting: user_id=%s job_id=%s", user_id, job_id)
     with RunLogger("resume", "pdf", items_total=1) as run_log:
         out_dir = posting_dir(run_log.connection, job_id, resumes_dir)
         html_path = out_dir / PAGE_NAME
@@ -208,6 +219,7 @@ def pdf(user_id: int, job_id: int, resumes_dir: Path):
                 out_path.write_bytes(printed.pdf)
         except Exception:
             run_log.items_failed = 1
+            logger.exception("Resume PDF failed: user_id=%s job_id=%s", user_id, job_id)
             raise
 
         run_log.items_ok = 1
@@ -216,6 +228,7 @@ def pdf(user_id: int, job_id: int, resumes_dir: Path):
         f"\nPrinted {html_path.name} into {out_path} "
         f"over {printed.page_count} page(s)."
     )
+    logger.info("Resume PDF completed: output=%s pages=%s", out_path, printed.page_count)
 
 
 STAGES = ("write", "render", "pdf")
@@ -255,6 +268,10 @@ def parse_args():
 def main():
     args = parse_args()
     stages = args.stages
+    logger.info(
+        "Resume pipeline requested: stages=%s user_id=%s job_id=%s",
+        stages, args.user_id, args.job_id,
+    )
 
     if "write" in stages:
         write(args.user_id, args.job_id, RESUMES_DIR)
@@ -264,6 +281,8 @@ def main():
 
     if "pdf" in stages:
         pdf(args.user_id, args.job_id, RESUMES_DIR)
+
+    logger.info("Resume pipeline completed: stages=%s", stages)
 
 
 if __name__ == "__main__":

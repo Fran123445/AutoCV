@@ -14,6 +14,7 @@ from pathlib import Path
 import argparse
 import json
 
+from app_log import get_logger
 from config import EXPERIENCE_PATH, EXPERIENCE_PROCESSED_DIR, EXPERIENCE_TRANSFORM_DIR
 from etl.files import archive_file, write_json
 from etl.experience.extract import extract as extract_experience
@@ -22,6 +23,9 @@ from etl.experience.transform import transform as transform_experience
 from llm.client import LLMClient
 from llm.settings import LLMSettings
 from run_log import RunLogger, record_item
+
+
+logger = get_logger(__name__)
 
 
 def extract(experience_path: Path):
@@ -38,6 +42,7 @@ def extract(experience_path: Path):
         experience_path (Path): The filled template, normally
             config.EXPERIENCE_PATH.
     """
+    logger.info("Experience extract starting: source=%s", experience_path)
     with RunLogger("experience", "extract", items_total=1) as run_log:
         print(f"Extracting {experience_path}...")
         try:
@@ -48,6 +53,7 @@ def extract(experience_path: Path):
                 experience = extract_experience(experience_path)
         except Exception:
             run_log.items_failed = 1
+            logger.exception("Experience extract failed: source=%s", experience_path)
             raise
 
         run_log.items_ok = 1
@@ -56,6 +62,10 @@ def extract(experience_path: Path):
     print(
         f"\nRead {len(experience.job)} jobs, {projects_count} projects, "
         f"{len(experience.education)} education blocks."
+    )
+    logger.info(
+        "Experience extract completed: jobs=%s projects=%s education=%s",
+        len(experience.job), projects_count, len(experience.education),
     )
 
 
@@ -80,6 +90,10 @@ def transform(
             config.EXPERIENCE_PATH.
         transform_output_dir (Path): Where the transformed experience goes.
     """
+    logger.info(
+        "Experience transform starting: source=%s output=%s",
+        experience_path, transform_output_dir,
+    )
     with RunLogger(
         "experience",
         "transform",
@@ -96,11 +110,13 @@ def transform(
                 write_json(out_path, transformed)
         except Exception:
             run_log.items_failed = 1
+            logger.exception("Experience transform failed: source=%s", experience_path)
             raise
 
         run_log.items_ok = 1
 
     print(f"\nTransformed {experience_path.name} into {out_path}.")
+    logger.info("Experience transform completed: output=%s", out_path)
 
 
 def load(
@@ -124,8 +140,10 @@ def load(
     processed_dir = processed_dir or EXPERIENCE_PROCESSED_DIR
     if not json_path.exists():
         print("No pending transformed experience to load.")
+        logger.info("Experience load skipped: no pending output=%s", json_path)
         return
 
+    logger.info("Experience load starting: input=%s", json_path)
     with RunLogger("experience", "load", items_total=1) as run_log:
         print(f"Loading {json_path}...")
         try:
@@ -145,6 +163,7 @@ def load(
                 archive_file(json_path, processed_dir)
         except Exception:
             run_log.items_failed = 1
+            logger.exception("Experience load failed: input=%s", json_path)
             raise
 
         run_log.items_ok = 1
@@ -155,6 +174,7 @@ def load(
         f"{counts['experiences_skipped']} jobs and "
         f"{counts['projects_skipped']} projects already in the base."
     )
+    logger.info("Experience load completed: counts=%s", counts)
 
 
 STAGES = ("extract", "transform", "load")
@@ -190,6 +210,7 @@ def parse_args():
 def main():
     args = parse_args()
     stages = args.stages
+    logger.info("Experience pipeline requested: stages=%s source=%s", stages, args.experience_path)
 
     if "extract" in stages:
         extract(args.experience_path)
@@ -202,6 +223,8 @@ def main():
 
     if "load" in stages:
         load(EXPERIENCE_TRANSFORM_DIR, args.experience_path)
+
+    logger.info("Experience pipeline completed: stages=%s", stages)
 
 
 if __name__ == "__main__":

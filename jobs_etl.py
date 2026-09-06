@@ -13,6 +13,7 @@ from pathlib import Path
 import argparse
 import json
 
+from app_log import get_logger
 from config import (
     JOBS_EXTRACT_DIR,
     JOBS_EXTRACT_PROCESSED_DIR,
@@ -33,6 +34,10 @@ from llm.client import LLMClient
 from llm.settings import LLMSettings
 from run_log import RunLogger, record_item
 
+
+logger = get_logger(__name__)
+
+
 def extract(
     staging_dir: Path,
     out_dir: Path,
@@ -47,6 +52,10 @@ def extract(
     )
     extracted_count = 0
     failed = []
+    logger.info(
+        "Jobs extract discovered %s input file(s): staging=%s output=%s",
+        len(html_paths), staging_dir, out_dir,
+    )
 
     with RunLogger("jobs", "extract", items_total=len(html_paths)) as run_log:
         for html_path in html_paths:
@@ -69,11 +78,13 @@ def extract(
             except JobDescriptionNotFound as error:
                 # One page saved mid-render should not end the batch.
                 failed.append((html_path, error))
+                logger.warning("Job page could not be extracted: path=%s error=%s", html_path, error)
                 continue
             except (OSError, ValueError) as error:
                 # Keep files in staging when archiving fails, so the source is
                 # still available for a retry and the failure is visible.
                 failed.append((html_path, error))
+                logger.exception("Jobs extract failed: path=%s", html_path)
                 continue
 
             extracted_count += 1
@@ -84,6 +95,7 @@ def extract(
     print(f"\nExtracted {extracted_count}, failed {len(failed)}.")
     for html_path, error in failed:
         print(f"  {html_path.name}: {error}")
+    logger.info("Jobs extract summary: extracted=%s failed=%s", extracted_count, len(failed))
 
 
 def transform_one(
@@ -108,6 +120,7 @@ def transform_one(
     # model calls find it through a ContextVar, which is per thread, so the
     # worker running next door writes into its own record.
     with record_item(json_path.stem):
+        logger.debug("Transforming job extract: %s", json_path)
         processed_dir = processed_dir or JOBS_EXTRACT_PROCESSED_DIR
         processed_output_dir = processed_output_dir or JOBS_TRANSFORM_PROCESSED_DIR
         if not force and completed_output(
@@ -151,6 +164,10 @@ def transform(
     transformed_count = 0
     recovered_count = 0
     failed = []
+    logger.info(
+        "Jobs transform starting: inputs=%s concurrency=%s force=%s",
+        len(json_paths), concurrency, force,
+    )
 
     with RunLogger(
         "jobs",
@@ -183,6 +200,7 @@ def transform(
                     # the batch.
                     failed.append((json_path, error))
                     print(f"  FAILED {json_path.name}: {error!r}")
+                    logger.exception("Jobs transform failed: path=%s", json_path)
                     continue
                 else:
                     if was_transformed:
@@ -206,6 +224,10 @@ def transform(
         )
         for json_path, error in failed:
             print(f"  {json_path.name}: {error!r}")
+        logger.info(
+            "Jobs transform summary: transformed=%s recovered=%s failed=%s",
+            transformed_count, recovered_count, len(failed),
+        )
 
 
 def load(transform_output_dir: Path, processed_dir: Path | None = None):
@@ -225,6 +247,7 @@ def load(transform_output_dir: Path, processed_dir: Path | None = None):
     loaded_count = 0
     skipped_count = 0
     failed = []
+    logger.info("Jobs load starting: inputs=%s", len(json_paths))
 
     with RunLogger("jobs", "load", items_total=len(json_paths)) as run_log:
         for json_path in json_paths:
@@ -246,6 +269,7 @@ def load(transform_output_dir: Path, processed_dir: Path | None = None):
             except Exception as error:
                 failed.append((json_path, error))
                 print(f"  FAILED {json_path.name}: {error!r}")
+                logger.exception("Jobs load failed: path=%s", json_path)
                 continue
 
             if job_id is None:
@@ -267,6 +291,10 @@ def load(transform_output_dir: Path, processed_dir: Path | None = None):
     )
     for json_path, error in failed:
         print(f"  {json_path.name}: {error!r}")
+    logger.info(
+        "Jobs load summary: loaded=%s already_loaded=%s failed=%s",
+        loaded_count, skipped_count, len(failed),
+    )
 
 
 STAGES = ("extract", "transform", "load")
@@ -304,6 +332,7 @@ def parse_args():
 def main():
     args = parse_args()
     stages = args.stages
+    logger.info("Jobs pipeline requested: stages=%s force=%s", stages, args.force)
 
     if "extract" in stages:
         JOBS_EXTRACT_DIR.mkdir(parents=True, exist_ok=True)
@@ -317,6 +346,8 @@ def main():
 
     if "load" in stages:
         load(JOBS_TRANSFORM_DIR)
+
+    logger.info("Jobs pipeline completed: stages=%s", stages)
 
 
 if __name__ == "__main__":

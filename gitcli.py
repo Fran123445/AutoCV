@@ -2,6 +2,10 @@ from pathlib import Path
 
 import subprocess
 
+from app_log import get_logger
+
+
+logger = get_logger(__name__)
 
 def _run(args: list[str], repo: Path) -> str | None:
     """
@@ -22,9 +26,17 @@ def _run(args: list[str], repo: Path) -> str | None:
             encoding="utf-8",
         )
     except FileNotFoundError:
+        logger.warning("Git executable not found while inspecting %s", repo)
         return None
 
     if result.returncode != 0:
+        logger.debug(
+            "Git command failed: repo=%s args=%s returncode=%s stderr=%s",
+            repo,
+            args,
+            result.returncode,
+            result.stderr.strip(),
+        )
         return None
 
     return result.stdout

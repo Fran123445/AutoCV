@@ -47,6 +47,15 @@ Every value in `.env` shows its default, so an empty file behaves the same as no
 - `AUTOCV_JOBS_MODEL_NAME`, `AUTOCV_EXPERIENCE_MODEL_NAME`, `AUTOCV_PROJECTS_MODEL_NAME`, `AUTOCV_RESUME_MODEL_NAME` — optional model overrides for an individual pipeline
 - `AUTOCV_MAX_CONCURRENCY` — postings transformed at once; locally, match your llama-server `--parallel` slot count
 - `AUTOCV_DATA_DIR` — base for the generated `data/` tree (all of it is derivable and gitignored)
+- `AUTOCV_LOG_DIR` — base directory for operational logs (default `logs/`)
+- `AUTOCV_LOG_LEVEL` — `INFO` by default; use `DEBUG` when diagnosing a noisy run
+
+Each pipeline run writes one operational log to
+`logs/<pipeline>/run-<run_id>.log`. It includes stage starts and summaries,
+file archiving, database setup, failures with tracebacks, and model-call
+timing/token details; request prompts, responses and API keys are not logged.
+Structured run and LLM-call telemetry remains available in the `FactRun`,
+`FactRunItem` and `FactLLMCall` tables.
 
 ## Usage
 
@@ -147,7 +156,8 @@ etl/                   Extract/transform/load stages per pipeline
 llm/                   Settings, HTTP client, and the per-task model packages
 resume_generator/      Résumé document model, HTML render, PDF print
 templates/             experience.toml template + résumé HTML/CSS
-run_log.py             Run-table telemetry wrappers
+run_log.py             Run-table telemetry and per-run log wrappers
+app_log.py             Per-pipeline operational log configuration
 eval/                  Transform golden-file fixtures per pipeline
 test/                  Extract/load tests
 ```

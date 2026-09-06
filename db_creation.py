@@ -1,7 +1,11 @@
 import sqlite3
 
+from app_log import get_logger
 from config import DB_PATH, SCHEMA_PATH
 from llm.seeds import load_seed
+
+
+logger = get_logger(__name__)
 
 
 def _create_schema(connection: sqlite3.Connection):
@@ -293,6 +297,7 @@ def run_db_creation():
     dropped from a seed may still be referenced by a FactJob row; the three
     bridges are the exception, and _replace_edges says why.
     """
+    logger.info("Starting database creation: path=%s", DB_PATH)
     DB_PATH.parent.mkdir(parents=True, exist_ok=True)
 
     connection = sqlite3.connect(DB_PATH)
@@ -317,6 +322,9 @@ def run_db_creation():
         }
 
         connection.commit()
+    except Exception:
+        logger.exception("Database creation failed: path=%s", DB_PATH)
+        raise
     finally:
         # sqlite3.connect as a context manager commits but never closes, which
         # is why this is a try/finally instead.
@@ -325,6 +333,11 @@ def run_db_creation():
     print(f"Database ready at {DB_PATH}.")
     for table, count in seeded.items():
         print(f"  {table}: {count} seed entries")
+    logger.info(
+        "Database ready: path=%s seeded_tables=%s",
+        DB_PATH,
+        ", ".join(f"{table}={count}" for table, count in seeded.items()),
+    )
 
 
 if __name__ == "__main__":

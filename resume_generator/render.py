@@ -10,6 +10,7 @@ than a second layout.
 
 from jinja2 import Environment, FileSystemLoader, select_autoescape
 
+from app_log import get_logger
 from config import TEMPLATES_DIR
 
 from .dates import span
@@ -23,6 +24,7 @@ from .models import ResumeDocument
 
 TEMPLATE_NAME = "resume.html"
 STYLESHEET_NAME = "resume.css"
+logger = get_logger(__name__)
 
 # Built once and reused. trim_blocks and lstrip_blocks only tidy the emitted
 # whitespace; without them the page renders the same but is unreadable when
@@ -51,12 +53,15 @@ def render_html(document: ResumeDocument) -> str:
         str: The page, carrying its own styling so that the file survives being
             moved and the PDF pass fetches nothing.
     """
+    logger.info("Rendering resume HTML: language=%s", document.language)
     stylesheet = (TEMPLATES_DIR / STYLESHEET_NAME).read_text(encoding="utf-8")
     locale = resolve_locale(document.language)
 
-    return _environment.get_template(TEMPLATE_NAME).render(
+    html = _environment.get_template(TEMPLATE_NAME).render(
         document=document,
         locale=locale,
         labels=locale.labels,
         stylesheet=stylesheet,
     )
+    logger.info("Resume HTML rendered: characters=%s", len(html))
+    return html

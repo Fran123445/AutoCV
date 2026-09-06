@@ -17,6 +17,7 @@ import json
 import sqlite3
 import tomllib
 
+from app_log import get_logger
 from config import (
     DB_PATH,
     EXPERIENCE_PATH,
@@ -31,6 +32,9 @@ from etl.projects.transform import transform as transform_project
 from llm.client import LLMClient
 from llm.settings import LLMSettings
 from run_log import RunLogger, record_item
+
+
+logger = get_logger(__name__)
 
 
 def extract(parent_projects_dir: Path, out_dir: Path):
@@ -50,6 +54,7 @@ def extract(parent_projects_dir: Path, out_dir: Path):
     """
     extracted_count = 0
     failed = []
+    logger.info("Projects extract starting: source=%s output=%s", parent_projects_dir, out_dir)
 
     with RunLogger("projects", "extract") as run_log:
         print(f"Scanning {parent_projects_dir}...")
@@ -72,6 +77,7 @@ def extract(parent_projects_dir: Path, out_dir: Path):
             except Exception as error:
                 failed.append((signals["name"], error))
                 print(f"  FAILED {signals['name']}: {error!r}")
+                logger.exception("Projects extract failed: project=%s", signals["name"])
                 continue
 
             extracted_count += 1
@@ -82,6 +88,7 @@ def extract(parent_projects_dir: Path, out_dir: Path):
     print(f"\nExtracted {extracted_count}, failed {len(failed)}.")
     for name, error in failed:
         print(f"  {name}: {error!r}")
+    logger.info("Projects extract summary: extracted=%s failed=%s", extracted_count, len(failed))
 
 
 def _author_email() -> str | None:
@@ -95,6 +102,7 @@ def _author_email() -> str | None:
         with EXPERIENCE_PATH.open("rb") as experience_file:
             document = tomllib.load(experience_file)
     except (OSError, tomllib.TOMLDecodeError):
+        logger.warning("Could not read candidate email from %s", EXPERIENCE_PATH)
         return None
 
     return document.get("profile", {}).get("email")
@@ -199,6 +207,10 @@ def transform(
     json_paths = sorted(extract_output_dir.glob("*.json"))
 
     to_run, skipped = _plan_transforms(json_paths, _loaded_head_commits())
+    logger.info(
+        "Projects transform starting: inputs=%s to_run=%s skipped=%s concurrency=%s",
+        len(json_paths), len(to_run), len(skipped), concurrency,
+    )
     for json_path in skipped:
         print(f"Skipped {json_path.name} (unchanged since load)")
 
@@ -242,6 +254,7 @@ def transform(
                     # the batch.
                     failed.append((json_path, error))
                     print(f"  FAILED {json_path.name}: {error!r}")
+                    logger.exception("Projects transform failed: path=%s", json_path)
                     continue
                 else:
                     transformed_count += 1
@@ -264,6 +277,10 @@ def transform(
         )
         for json_path, error in failed:
             print(f"  {json_path.name}: {error!r}")
+        logger.info(
+            "Projects transform summary: transformed=%s skipped=%s failed=%s",
+            transformed_count, len(skipped), len(failed),
+        )
 
 
 def load(transform_output_dir: Path):
@@ -280,6 +297,7 @@ def load(transform_output_dir: Path):
     json_paths = sorted(transform_output_dir.glob("*.json"))
     loaded_count = 0
     failed = []
+    logger.info("Projects load starting: inputs=%s", len(json_paths))
 
     with RunLogger("projects", "load", items_total=len(json_paths)) as run_log:
         for json_path in json_paths:
@@ -299,6 +317,7 @@ def load(transform_output_dir: Path):
             except Exception as error:
                 failed.append((json_path, error))
                 print(f"  FAILED {json_path.name}: {error!r}")
+                logger.exception("Projects load failed: path=%s", json_path)
                 continue
 
             loaded_count += 1
@@ -316,6 +335,7 @@ def load(transform_output_dir: Path):
     )
     for json_path, error in failed:
         print(f"  {json_path.name}: {error!r}")
+    logger.info("Projects load summary: loaded=%s failed=%s", loaded_count, len(failed))
 
 
 STAGES = ("extract", "transform", "load")
@@ -362,6 +382,7 @@ def parse_args():
 def main():
     args = parse_args()
     stages = args.stages
+    logger.info("Projects pipeline requested: stages=%s", stages)
 
     if "extract" in stages:
         PROJECTS_EXTRACT_DIR.mkdir(parents=True, exist_ok=True)
@@ -375,6 +396,8 @@ def main():
 
     if "load" in stages:
         load(PROJECTS_TRANSFORM_DIR)
+
+    logger.info("Projects pipeline completed: stages=%s", stages)
 
 
 if __name__ == "__main__":

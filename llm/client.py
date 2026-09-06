@@ -4,10 +4,14 @@ from typing import Any
 
 import httpx
 
+from app_log import get_logger
 from run_log import LLMCall, prompt_fingerprint, record_call, utc_now
 
 from llm.policy import policy_for
 from llm.settings import LLMSettings, ProviderName
+
+
+logger = get_logger(__name__)
 
 
 class LLMClient:
@@ -29,6 +33,13 @@ class LLMClient:
             timeout=settings.timeout,
             limits=httpx.Limits(max_connections=settings.max_concurrency),
             transport=transport,
+        )
+        logger.info(
+            "Initialized LLM client: provider=%s model=%s timeout=%s concurrency=%s",
+            self.provider,
+            settings.model_name or "(provider default)",
+            settings.timeout,
+            settings.max_concurrency,
         )
 
     def close(self):
@@ -99,6 +110,14 @@ class LLMClient:
         started = time.perf_counter()
         response = None
 
+        logger.debug(
+            "Starting LLM call: task=%s provider=%s model=%s prompt_sha1=%s",
+            task_name,
+            self.provider,
+            self.settings.model_name or "(provider default)",
+            call.prompt_sha1,
+        )
+
         try:
             response = self._http.post(
                 self.settings.chat_completions_path,
@@ -133,3 +152,23 @@ class LLMClient:
             call.ended_at = utc_now()
             call.latency_ms = int((time.perf_counter() - started) * 1000)
             record_call(call)
+            if call.status == "failed":
+                logger.error(
+                    "LLM call failed: task=%s provider=%s http_status=%s latency_ms=%s error=%s",
+                    task_name,
+                    self.provider,
+                    call.http_status,
+                    call.latency_ms,
+                    call.error,
+                )
+            else:
+                logger.info(
+                    "LLM call completed: task=%s provider=%s model=%s http_status=%s latency_ms=%s prompt_tokens=%s completion_tokens=%s",
+                    task_name,
+                    self.provider,
+                    call.model_name or self.settings.model_name or "(provider default)",
+                    call.http_status,
+                    call.latency_ms,
+                    call.prompt_tokens,
+                    call.completion_tokens,
+                )

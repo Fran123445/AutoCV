@@ -8,6 +8,11 @@ from typing import NamedTuple
 
 from weasyprint import HTML
 
+from app_log import get_logger
+
+
+logger = get_logger(__name__)
+
 
 class PrintedResume(NamedTuple):
     """
@@ -41,6 +46,10 @@ def render_pdf(html: str) -> PrintedResume:
     #
     # No base_url either: the page inlines its stylesheet and links no images,
     # so there is no relative reference left for WeasyPrint to resolve.
+    logger.info("Rendering resume PDF: html_characters=%s", len(html))
     document = HTML(string=html).render()
 
-    return PrintedResume(pdf=document.write_pdf(), page_count=len(document.pages))
+    pdf = document.write_pdf()
+    result = PrintedResume(pdf=pdf, page_count=len(document.pages))
+    logger.info("Resume PDF rendered: bytes=%s pages=%s", len(pdf), result.page_count)
+    return result

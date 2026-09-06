@@ -6,8 +6,11 @@ import os
 from pathlib import Path
 import tempfile
 
+from app_log import get_logger
+
 
 SOURCE_HASH_KEY = "_autocv_source_sha256"
+logger = get_logger(__name__)
 
 
 def source_hash(path: Path) -> str:
@@ -28,6 +31,7 @@ def write_json(path: Path, data: dict) -> None:
             stream.flush()
             os.fsync(stream.fileno())
         temporary.replace(path)
+        logger.debug("Published JSON output: %s", path)
     finally:
         if temporary is not None:
             temporary.unlink(missing_ok=True)
@@ -45,6 +49,7 @@ def archive_file(source: Path, directory: Path) -> Path:
             destination = directory / f"{source.stem}.{digest}.{counter}{source.suffix}"
             counter += 1
     source.rename(destination)
+    logger.info("Archived input: %s -> %s", source, destination)
     return destination
 
 
@@ -61,6 +66,7 @@ def completed_output(source: Path, *directories: Path) -> Path | None:
             try:
                 data = json.loads(candidate.read_text(encoding="utf-8"))
             except (ValueError, OSError):
+                logger.warning("Ignoring unreadable candidate output: %s", candidate)
                 continue
             if isinstance(data, dict) and data.get(SOURCE_HASH_KEY) == digest:
                 return candidate

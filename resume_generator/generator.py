@@ -4,6 +4,7 @@ import sqlite3
 
 from datetime import date
 
+from app_log import get_logger
 from llm.client import LLMClient
 from llm.tasks.resume.models import (
     ResumePromptContext,
@@ -29,6 +30,9 @@ from .models import (
     ResumeProject,
     ResumeSkillGroup,
 )
+
+
+logger = get_logger(__name__)
 
 
 def _tenure_months(start: str | None, end: str | None) -> int | None:
@@ -341,12 +345,13 @@ def generate_resume(
         ValueError: If the candidate or the posting does not exist, or the
             candidate has no name.
     """
+    logger.info("Building resume document: user_id=%s job_id=%s", user_id, job_id)
     context = _build_prompt_context(connection, user_id, job_id)
     written = write_resume(context, llm_client)
 
     bullets = {entry.source_experience_id: entry.bullets for entry in written.work_bullets}
 
-    return ResumeDocument(
+    document = ResumeDocument(
         profile=_build_profile(connection, user_id),
         language=resolve_locale(context.language).code,
         summary=written.summary,
@@ -387,3 +392,12 @@ def generate_resume(
             for language in context.languages
         ],
     )
+    logger.info(
+        "Resume document built: user_id=%s job_id=%s experience=%s projects=%s skills=%s",
+        user_id,
+        job_id,
+        len(document.experience),
+        len(document.projects),
+        sum(len(group.items) for group in document.skills),
+    )
+    return document

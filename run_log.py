@@ -17,6 +17,7 @@ from contextlib import contextmanager
 from contextvars import ContextVar
 from dataclasses import dataclass, field
 from datetime import datetime, timezone
+from pathlib import Path
 
 import hashlib
 import json
@@ -26,6 +27,10 @@ import sqlite3
 from config import DB_PATH, ROOT_DIR
 from gitcli import head_commit
 from llm.settings import LLMSettings
+from app_log import configure_run_logging, get_logger
+
+
+logger = get_logger(__name__)
 
 
 def utc_now() -> str:
@@ -157,6 +162,7 @@ def record_item(item_key: str):
         RunItem: The record, already registered as the current item.
     """
     item = RunItem(item_key=item_key, started_at=utc_now())
+    logger.debug("Started stage item: %s", item_key)
     token = _CURRENT_CALLS.set(item.calls)
 
     try:
@@ -169,6 +175,12 @@ def record_item(item_key: str):
     finally:
         item.ended_at = utc_now()
         _CURRENT_CALLS.reset(token)
+        logger.debug(
+            "Finished stage item: item=%s status=%s calls=%s",
+            item.item_key,
+            item.status,
+            len(item.calls),
+        )
         # Queued before the exception leaves this frame, so by the time the
         # future resolves on the main thread the record is already waiting.
         _FINISHED_ITEMS.put(item)
@@ -226,6 +238,7 @@ class RunLogger:
 
         self.connection: sqlite3.Connection | None = None
         self.run_id: int | None = None
+        self.log_path: Path | None = None
 
     def __enter__(self) -> "RunLogger":
         self.connection = sqlite3.connect(DB_PATH)
@@ -253,6 +266,17 @@ class RunLogger:
         )
         self.run_id = cursor.lastrowid
         self.connection.commit()
+        self.log_path = configure_run_logging(self.pipeline, self.run_id)
+
+        logger.info(
+            "Starting %s/%s stage (run_id=%s, items_total=%s, max_concurrency=%s, log=%s)",
+            self.pipeline,
+            self.stage,
+            self.run_id,
+            self.items_total,
+            self.max_concurrency,
+            self.log_path,
+        )
 
         return self
 
@@ -282,6 +306,23 @@ class RunLogger:
         self.connection.commit()
         self.connection.close()
 
+        logger.info(
+            "Finished %s/%s stage: status=%s items_ok=%s items_failed=%s",
+            self.pipeline,
+            self.stage,
+            "failed" if exc_type is not None else "completed",
+            self.items_ok,
+            self.items_failed,
+        )
+        if exc_type is not None:
+            logger.error(
+                "Stage raised an exception: %s/%s error=%s",
+                self.pipeline,
+                self.stage,
+                exc_value,
+                exc_info=(exc_type, exc_value, traceback),
+            )
+
         # Never swallow: a stage that blew up still has to reach the caller.
         return False
 
@@ -300,6 +341,13 @@ class RunLogger:
                 break
 
             self._insert_item(item)
+
+            if item.status == "failed":
+                logger.error(
+                    "Stage item failed: item=%s error=%s",
+                    item.item_key,
+                    item.error,
+                )
 
         self.connection.commit()
 
