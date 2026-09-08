@@ -42,7 +42,7 @@ def test_extract_reads_stable_indeed_fields():
     assert result["header"] == {
         "source": "indeed",
         "source_url": "https://ar.indeed.com/viewjob?jk=abc123",
-        "indeed_job_id": "abc123",
+        "source_job_id": "abc123",
         "position_name": "Data Engineer",
         "company_name": "Acme",
         "location": "Buenos Aires, Buenos Aires",
@@ -66,5 +66,5 @@ def test_file_extract_dispatches_indeed(tmp_path):
     result = extract_from_file(path)
 
     assert result["header"]["source"] == "indeed"
-    assert result["header"]["indeed_job_id"] == "abc123"
+    assert result["header"]["source_job_id"] == "abc123"
     assert result["header"]["position_name"] == "Data Engineer"

@@ -235,7 +235,7 @@ def load(transform_output_dir: Path, processed_dir: Path | None = None):
     Load every transformed posting into the database.
 
     Sequential, unlike transform: sqlite takes one writer, so there is no
-    concurrency to gain here. The loader dedupes on linkedin_job_id, so a
+    concurrency to gain here. The loader dedupes on (source, source_job_id), so a
     posting already in the base is archived without touching applied status.
     Inputs move only after their database transaction is committed.
 

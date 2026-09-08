@@ -138,7 +138,7 @@ python jobs_etl.py transform load     # skip re-extracting
 python resume_etl.py render pdf --user-id 1 --job-id 7   # re-print without re-calling the model
 ```
 
-The stage split follows the cost: only `transform` (jobs/projects) and `write` (résumé) call the model, so template, stylesheet or schema edits re-run the cheap stages without paying for the LLM a second time. Loads dedupe on a natural key (`linkedin_job_id`, repo path, `experience.toml` block id), so re-running over the same directory does not duplicate rows. Personal projects are updated in place on a repo-path match, including replacement of their technology and concept evidence.
+The stage split follows the cost: only `transform` (jobs/projects) and `write` (résumé) call the model, so template, stylesheet or schema edits re-run the cheap stages without paying for the LLM a second time. Loads dedupe on a natural key (`source` + `source_job_id`, repo path, `experience.toml` block id), so re-running over the same directory does not duplicate rows. Personal projects are updated in place on a repo-path match, including replacement of their technology and concept evidence.
 
 ## Data model
 

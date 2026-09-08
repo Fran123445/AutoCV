@@ -118,15 +118,16 @@ def load(transformed_data: dict, connection: sqlite3.Connection) -> int | None:
         cursor = connection.execute(
             """
             INSERT INTO FactJob (
-                linkedin_job_id, position_name, company_id, role_id, seniority_id,
-                post_date, post_date_raw, scrape_date, source_url, location,
-                days_at_the_office, language, raw_text
+                source, source_job_id, position_name, company_id, role_id,
+                seniority_id, post_date, post_date_raw, scrape_date, source_url,
+                location, days_at_the_office, language, raw_text
             )
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-            ON CONFLICT(linkedin_job_id) DO NOTHING
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            ON CONFLICT(source, source_job_id) DO NOTHING
             """,
             (
-                header["linkedin_job_id"],
+                header["source"],
+                header["source_job_id"],
                 header["position_name"],
                 company_id,
                 role_id,

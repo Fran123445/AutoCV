@@ -122,7 +122,7 @@ def _transform_job(
         list[dict]: id, company, title, role, seniority, dates, the identified
             day_to_day and the identified projects, per block. The ids are the
             file's own and are what load dedupes on, since a job has no
-            linkedin_job_id and a project born here has no source_path.
+            source_job_id and a project born here has no source_path.
     """
     return [
         {

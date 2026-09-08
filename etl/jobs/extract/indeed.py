@@ -51,7 +51,7 @@ def _source_from_url(source_url: str | None, soup: BeautifulSoup) -> dict:
     return {
         "source": "indeed",
         "source_url": f"{base_url}/viewjob?jk={quote(job_id)}",
-        "indeed_job_id": job_id,
+        "source_job_id": job_id,
     }
 
 

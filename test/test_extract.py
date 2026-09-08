@@ -86,7 +86,7 @@ def test_extract_from_file_dispatches_linkedin_for_mhtml(tmp_path):
     path = tmp_path / "posting.mhtml"
     path.write_bytes(make_mhtml())
     result = extract_from_file(path)
-    assert result["header"]["linkedin_job_id"] == 4231234567
+    assert result["header"]["source_job_id"] == 4231234567
 
 
 def test_extract_from_file_stamps_scrape_date(tmp_path):

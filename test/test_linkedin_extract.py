@@ -137,7 +137,7 @@ def test_extract_reads_linkedin_header_and_body():
     assert header["posted_days_ago"] == 90
     assert header["modality"] == MODALITIES[0]
     assert header["contract_type"] == CONTRACT_TYPES[0]
-    assert header["linkedin_job_id"] == 4231234567
+    assert header["source_job_id"] == 4231234567
     assert result["body"].startswith("Buscamos un ingeniero de datos.")
     assert "rail junk from another posting" not in result["body"]
     assert "color: red" not in result["body"]

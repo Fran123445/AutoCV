@@ -80,8 +80,8 @@ CREATE TABLE IF NOT EXISTS DimDegreeTranslation (
 
 CREATE TABLE IF NOT EXISTS FactJob (
     id                 INTEGER PRIMARY KEY,
-    linkedin_job_id    INTEGER NOT NULL UNIQUE,  -- dedupe key; comes from the
-                       -- saved URL, not the HTML body
+    source             TEXT NOT NULL,            -- linkedin, indeed, ...
+    source_job_id      TEXT NOT NULL,            -- source-local id from the URL
     position_name      TEXT NOT NULL,        -- title as it appears in the JD
     company_id         INTEGER REFERENCES DimCompany(id),
     role_id            INTEGER REFERENCES DimRole(id),
@@ -99,7 +99,8 @@ CREATE TABLE IF NOT EXISTS FactJob (
     salary_currency    TEXT,
     status             TEXT NOT NULL DEFAULT 'scraped',
                        -- 'scraped' | 'applied' | 'rejected' | 'interview' | 'discarded'
-    raw_text           TEXT NOT NULL         -- always: allows re-extracting if you improve the schema
+    raw_text           TEXT NOT NULL,        -- always: allows re-extracting if you improve the schema
+    UNIQUE (source, source_job_id)           -- dedupe within each source
 );
 
 -- Bridges (N:M job <-> tech/concept)
@@ -203,7 +204,7 @@ CREATE TABLE IF NOT EXISTS FactExperience (
     id           INTEGER PRIMARY KEY,
     user_id      INTEGER NOT NULL REFERENCES FactUser(id),
     source_id    TEXT,   -- id of the block in experience.toml: the ETL's dedupe
-                 -- key, like linkedin_job_id in FactJob. A position has no
+                 -- key, like source_job_id in FactJob. A position has no
                  -- natural id, and company + role + dates isn't enough: two
                  -- stints in the same position are two distinct blocks
     company_id   INTEGER REFERENCES DimCompany(id),   -- reuses DimCompany
@@ -231,7 +232,7 @@ CREATE TABLE IF NOT EXISTS Project (
     task_desc     TEXT NOT NULL,
     source_path   TEXT UNIQUE,  -- repo it came from; null = hand-loaded (several
                   -- nulls coexist). The ETL's dedupe key, same as
-                  -- linkedin_job_id in FactJob
+                  -- source_job_id in FactJob
     source_id     TEXT,         -- the other dedupe key: id of the block in
                   -- experience.toml, for projects born from a job. Null in
                   -- personal ones, which don't come from that file

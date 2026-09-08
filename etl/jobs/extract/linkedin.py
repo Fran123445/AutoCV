@@ -56,14 +56,14 @@ def _source_from_url(source_url: str | None) -> dict:
         source_url (str | None): The URL the page was saved from.
     """
     if source_url is None:
-        return {"source_url": None, "linkedin_job_id": None}
+        return {"source": "linkedin", "source_url": None, "source_job_id": None}
 
     job_id = _JOB_ID_RE.search(source_url)
 
     return {
         "source": "linkedin",
         "source_url": source_url,
-        "linkedin_job_id": int(job_id.group(1)) if job_id else None,
+        "source_job_id": int(job_id.group(1)) if job_id else None,
     }
 
 
