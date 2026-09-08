@@ -7,28 +7,10 @@ from pathlib import Path
 import email
 import re
 
-from bs4 import BeautifulSoup
+from .exceptions import JobDescriptionNotFound, UnsupportedJobSource
 
 
 _SAVED_URL_RE = re.compile(r"saved from url=\(\d+\)([^\s\->]+)")
-
-
-class JobDescriptionNotFound(Exception):
-    """Raised when a saved page carries no usable job description."""
-
-
-class UnsupportedJobSource(ValueError):
-    """Raised when no source-specific extractor is registered for a page."""
-
-
-def _clean_html(html_content: str) -> str:
-    """Remove non-readable tags and collapse the remaining page text."""
-    soup = BeautifulSoup(html_content, "html.parser")
-
-    for tag in soup(["script", "style", "noscript"]):
-        tag.decompose()
-
-    return re.sub(r"\s+", " ", soup.get_text(" ")).strip()
 
 
 def _read_mhtml(path: Path) -> tuple[str, str | None]:
@@ -72,6 +54,11 @@ def extractor_for(source_url: str | None):
         from . import linkedin
 
         return linkedin
+
+    if source_url and "indeed.com" in source_url.casefold():
+        from . import indeed
+
+        return indeed
 
     raise UnsupportedJobSource(f"no extractor registered for {source_url!r}")
 

@@ -47,7 +47,7 @@ def extract(
     staging_dir.mkdir(parents=True, exist_ok=True)
     html_paths = sorted(
         path
-        for path in staging_dir.iterdir()
+        for path in staging_dir.rglob("*")
         if path.is_file() and path.suffix.lower() in (".html", ".mhtml")
     )
     extracted_count = 0

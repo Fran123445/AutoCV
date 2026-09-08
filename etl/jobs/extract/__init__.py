@@ -1,8 +1,7 @@
 """Public job-posting extraction entry points."""
 
+from .exceptions import JobDescriptionNotFound, UnsupportedJobSource
 from .extract import (
-    JobDescriptionNotFound,
-    UnsupportedJobSource,
     extractor_for,
     extract_from_file,
     read_saved_page,

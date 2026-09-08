@@ -1,5 +1,7 @@
 import re
 
+from bs4 import BeautifulSoup
+
 from etl.jobs.config import (
     BODY_END_ANCHORS,
     BODY_START_ANCHOR,
@@ -7,10 +9,7 @@ from etl.jobs.config import (
     MIN_BODY_LENGTH,
     MODALITIES,
 )
-from .extract import (
-    JobDescriptionNotFound,
-    _clean_html,
-)
+from .exceptions import JobDescriptionNotFound
 
 
 _JOB_ID_RE = re.compile(r"/jobs/view/(\d+)")
@@ -39,6 +38,16 @@ _UNIT_DAYS = {
 }
 
 
+def _clean_html(html_content: str) -> str:
+    """Remove non-readable tags and collapse the LinkedIn page text."""
+    soup = BeautifulSoup(html_content, "html.parser")
+
+    for tag in soup(["script", "style", "noscript"]):
+        tag.decompose()
+
+    return re.sub(r"\s+", " ", soup.get_text(" ")).strip()
+
+
 def _source_from_url(source_url: str | None) -> dict:
     """
     Pairs the origin URL with the job id read out of it.
@@ -52,6 +61,7 @@ def _source_from_url(source_url: str | None) -> dict:
     job_id = _JOB_ID_RE.search(source_url)
 
     return {
+        "source": "linkedin",
         "source_url": source_url,
         "linkedin_job_id": int(job_id.group(1)) if job_id else None,
     }

@@ -70,3 +70,29 @@ def test_extract_leaves_failed_source_in_staging(tmp_path, monkeypatch):
 
     assert source_path.exists()
     assert not processed_dir.exists()
+
+
+def test_extract_discovers_sources_in_nested_directories(tmp_path, monkeypatch):
+    staging_dir = tmp_path / "staging"
+    extract_dir = tmp_path / "extracted"
+    processed_dir = tmp_path / "processed"
+    source_dir = staging_dir / "Indeed"
+    source_dir.mkdir(parents=True)
+    extract_dir.mkdir()
+
+    source_path = source_dir / "Data Engineer - Indeed.mhtml"
+    source_path.write_text("saved page", encoding="utf-8")
+
+    monkeypatch.setattr(jobs_etl, "RunLogger", DummyRunLogger)
+    monkeypatch.setattr(jobs_etl, "record_item", dummy_record_item)
+    monkeypatch.setattr(
+        jobs_etl,
+        "extract_from_file",
+        lambda _path: {"header": {}, "body": "description"},
+    )
+
+    jobs_etl.extract(staging_dir, extract_dir, processed_dir)
+
+    assert not source_path.exists()
+    assert (processed_dir / source_path.name).exists()
+    assert (extract_dir / "Data Engineer - Indeed.json").exists()
