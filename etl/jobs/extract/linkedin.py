@@ -1,11 +1,4 @@
-from datetime import datetime, timezone
-from email import policy
-from pathlib import Path
-
-import email
 import re
-
-from bs4 import BeautifulSoup
 
 from etl.jobs.config import (
     BODY_END_ANCHORS,
@@ -14,9 +7,12 @@ from etl.jobs.config import (
     MIN_BODY_LENGTH,
     MODALITIES,
 )
+from .extract import (
+    JobDescriptionNotFound,
+    _clean_html,
+)
 
 
-_SOURCE_URL_RE = re.compile(r"saved from url=\(\d+\)([^\s\->]+)")
 _JOB_ID_RE = re.compile(r"/jobs/view/(\d+)")
 _TITLE_SUFFIX = " | LinkedIn"
 _POSTED_RE = re.compile(
@@ -43,25 +39,6 @@ _UNIT_DAYS = {
 }
 
 
-class JobDescriptionNotFound(Exception):
-    """Raised when a saved page carries no usable job description."""
-
-
-def _clean_html(html_content: str) -> str:
-    """
-    Cleans the HTML content by removing unnecessary tags and whitespace.
-
-    Args:
-        html_content (str): The raw HTML content.
-    """
-    soup = BeautifulSoup(html_content, "html.parser")
-
-    for tag in soup(["script", "style", "noscript"]):
-        tag.decompose()
-
-    return re.sub(r"\s+", " ", soup.get_text(" ")).strip()
-
-
 def _source_from_url(source_url: str | None) -> dict:
     """
     Pairs the origin URL with the job id read out of it.
@@ -78,21 +55,6 @@ def _source_from_url(source_url: str | None) -> dict:
         "source_url": source_url,
         "linkedin_job_id": int(job_id.group(1)) if job_id else None,
     }
-
-
-def _extract_source(html_content: str) -> dict:
-    """
-    Extracts the origin URL and job id from the browser's save comment.
-
-    The job id must come from this comment and not from the document body,
-    where the recommended-jobs rail contributes ids of unrelated postings.
-
-    Args:
-        html_content (str): The raw HTML content.
-    """
-    match = _SOURCE_URL_RE.search(html_content[:4000])
-
-    return _source_from_url(match.group(1) if match else None)
 
 
 def _extract_posted(header: str) -> dict:
@@ -231,15 +193,13 @@ def _extract_body(cleaned_html: str) -> str | None:
     return cleaned_html[start:end].strip()
 
 
-def extract_from_html(html_content: str, source: dict | None = None):
+def extract(html_content: str, source_info: dict):
     """
     Extracts a saved job posting from its markup.
 
     Args:
         html_content (str): The raw HTML content.
-        source (dict | None): Origin URL and job id, for saved formats that
-            carry them outside the markup. Read from the save comment when
-            not given.
+        source_info (dict): Origin metadata from the common reader.
     """
     cleaned_html = _clean_html(html_content)
     header = _extract_header(cleaned_html)
@@ -255,61 +215,7 @@ def extract_from_html(html_content: str, source: dict | None = None):
     return {
         "header": {
             **header,
-            **(source if source is not None else _extract_source(html_content)),
+            **_source_from_url(source_info["source_url"]),
         },
         "body": body
     }
-
-
-def _read_mhtml(path: Path) -> tuple[str, dict]:
-    """
-    Reads the page document out of a single-file MHTML archive.
-
-    The archive is a MIME container: the page is its first text/html part,
-    and the images and stylesheets that follow are of no interest here. The
-    save comment that _extract_source looks for is absent, so the origin URL
-    comes from the container's own header instead.
-
-    Args:
-        path (Path): Path to the saved LinkedIn MHTML file.
-    """
-    with path.open("rb") as handle:
-        message = email.message_from_binary_file(handle, policy=policy.default)
-
-    part = next(
-        (p for p in message.walk() if p.get_content_type() == "text/html"),
-        None,
-    )
-    if part is None:
-        raise JobDescriptionNotFound("archive carries no HTML part")
-
-    # Decoded by hand rather than through get_content(): the part declares no
-    # charset, so the email package would fall back to ASCII and mangle the
-    # accented anchors into text no anchor below matches.
-    html_content = part.get_payload(decode=True).decode("utf-8")
-
-    return html_content, _source_from_url(message["Snapshot-Content-Location"])
-
-
-def extract_from_file(path) -> dict:
-    """
-    Extracts a saved job posting from disk.
-
-    Args:
-        path: Path to the saved LinkedIn HTML or MHTML file.
-    """
-    path = Path(path)
-    if path.suffix.lower() == ".mhtml":
-        extracted = extract_from_html(*_read_mhtml(path))
-    else:
-        with path.open(encoding="utf-8") as handle:
-            extracted = extract_from_html(handle.read())
-
-    # The file's mtime is when the browser wrote the page, which is the moment
-    # it was scraped. Captured here at the one point that still holds the file,
-    # so transform can carry it and load never has to guess. Date precision to
-    # match FactJob.scrape_date and the post_date it is walked back from.
-    mtime = path.stat().st_mtime
-    extracted["scrape_date"] = datetime.fromtimestamp(mtime, tz=timezone.utc).date().isoformat()
-
-    return extracted

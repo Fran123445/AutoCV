@@ -11,19 +11,20 @@ from etl.jobs.config import (
     MIN_BODY_LENGTH,
     MODALITIES,
 )
-from etl.jobs.extract import (
-    JobDescriptionNotFound,
-    _clean_html,
+from etl.jobs.extract import JobDescriptionNotFound, extract_from_file, read_saved_page
+from etl.jobs.extract.extract import _clean_html
+from etl.jobs.extract.linkedin import (
     _extract_body,
     _extract_company,
     _extract_location,
     _extract_posted,
-    _extract_source,
     _longest_common_suffix,
-    _read_mhtml,
-    extract_from_file,
-    extract_from_html,
+    extract,
 )
+
+
+def source_info(source_url="https://www.linkedin.com/jobs/view/4231234567/"):
+    return {"source_url": source_url}
 
 
 def make_page(
@@ -42,7 +43,7 @@ def make_page(
     Every LinkedIn UI string comes from etl/jobs/config.py rather than being
     retyped, so these tests cover the parse structure and never the wording.
     A LinkedIn rewording is a config edit and leaves the suite untouched; it
-    is caught at runtime by extract_from_html raising, not by any test here.
+    is caught at runtime by extract raising, not by any test here.
     """
     return (
         f"<!-- saved from url=(0045){source_url} -->"
@@ -84,43 +85,43 @@ def test_clean_html(html, expected):
 
 
 # --------------------------------------------------------------------------
-# _extract_source
+# read_saved_page source metadata
 # --------------------------------------------------------------------------
 
-def test_source_reads_url_and_job_id():
-    html = "<!-- saved from url=(0045)https://www.linkedin.com/jobs/view/4231234567/ -->"
-    assert _extract_source(html) == {
-        "source_url": "https://www.linkedin.com/jobs/view/4231234567/",
-        "linkedin_job_id": 4231234567,
-    }
-
-
-def test_source_without_save_comment_is_all_none():
-    assert _extract_source("<html><body>no comment here</body></html>") == {
-        "source_url": None,
-        "linkedin_job_id": None,
-    }
-
-
-def test_source_url_without_job_id_keeps_the_url():
-    html = "<!-- saved from url=(0032)https://www.linkedin.com/feed/ -->"
-    result = _extract_source(html)
-
-    assert result["source_url"] == "https://www.linkedin.com/feed/"
-    assert result["linkedin_job_id"] is None
-
-
-def test_source_ignores_ids_past_the_first_4000_characters():
-    """
-    The search window is deliberate: the recommended-jobs rail further down the
-    page carries ids of unrelated postings, and one of those must never win.
-    """
-    html = (
-        "x" * 4100
-        + "<!-- saved from url=(0045)https://www.linkedin.com/jobs/view/999/ -->"
+def test_source_reads_url_from_a_saved_html_comment(tmp_path):
+    path = tmp_path / "posting.html"
+    path.write_text(
+        "<!-- saved from url=(0045)https://www.linkedin.com/jobs/view/4231234567/ -->",
+        encoding="utf-8",
     )
 
-    assert _extract_source(html) == {"source_url": None, "linkedin_job_id": None}
+    _, source = read_saved_page(path)
+
+    assert source == {
+        "source_url": "https://www.linkedin.com/jobs/view/4231234567/",
+    }
+
+
+def test_source_without_save_comment_is_none(tmp_path):
+    path = tmp_path / "posting.html"
+    path.write_text("<html><body>no comment here</body></html>", encoding="utf-8")
+
+    _, source = read_saved_page(path)
+
+    assert source == {"source_url": None}
+
+
+def test_source_comment_is_ignored_after_the_first_4000_characters(tmp_path):
+    path = tmp_path / "posting.html"
+    path.write_text(
+        "x" * 4100
+        + "<!-- saved from url=(0045)https://www.linkedin.com/jobs/view/999/ -->",
+        encoding="utf-8",
+    )
+
+    _, source = read_saved_page(path)
+
+    assert source == {"source_url": None}
 
 
 # --------------------------------------------------------------------------
@@ -283,11 +284,11 @@ def test_body_cuts_at_the_earliest_end_anchor():
 
 
 # --------------------------------------------------------------------------
-# extract_from_html, over a whole synthetic page
+# extract, over a whole synthetic page
 # --------------------------------------------------------------------------
 
-def test_extract_from_html_reads_the_header():
-    result = extract_from_html(make_page())
+def test_extract_reads_the_header():
+    result = extract(make_page(), source_info())
     header = result["header"]
 
     assert header["position_name"] == "Data Engineer"
@@ -299,33 +300,33 @@ def test_extract_from_html_reads_the_header():
     assert header["linkedin_job_id"] == 4231234567
 
 
-def test_extract_from_html_keeps_the_rail_out_of_the_body():
-    result = extract_from_html(make_page())
+def test_extract_keeps_the_rail_out_of_the_body():
+    result = extract(make_page(), source_info())
 
     assert result["body"].startswith("Buscamos un ingeniero de datos.")
     assert "rail junk from another posting" not in result["body"]
     assert BODY_END_ANCHORS[0] not in result["body"]
 
 
-def test_extract_from_html_drops_style_and_script_text():
-    result = extract_from_html(make_page())
+def test_extract_drops_style_and_script_text():
+    result = extract(make_page(), source_info())
 
     assert "color: red" not in result["body"]
 
 
 @pytest.mark.parametrize("modality", MODALITIES)
-def test_extract_from_html_reads_every_modality(modality):
+def test_extract_reads_every_modality(modality):
     page = make_page(
         subheader=f"Data Engineer Acme • Buenos Aires · hace 3 meses · {modality}"
     )
 
-    assert extract_from_html(page)["header"]["modality"] == modality
+    assert extract(page, source_info())["header"]["modality"] == modality
 
 
-def test_extract_from_html_leaves_absent_fields_null():
+def test_extract_leaves_absent_fields_null():
     """A posting that names no modality or contract type reports neither."""
     page = make_page(subheader="Data Engineer Acme • Buenos Aires · hace 3 meses")
-    header = extract_from_html(page)["header"]
+    header = extract(page, source_info())["header"]
 
     assert header["modality"] is None
     assert header["contract_type"] is None
@@ -338,10 +339,10 @@ def test_a_body_exactly_at_the_minimum_is_accepted():
     """
     page = make_page(body="x" * MIN_BODY_LENGTH)
 
-    assert len(extract_from_html(page)["body"]) == MIN_BODY_LENGTH
+    assert len(extract(page, source_info())["body"]) == MIN_BODY_LENGTH
 
 
-def test_extract_from_html_falls_back_to_the_pre_pipe_position():
+def test_extract_falls_back_to_the_pre_pipe_position():
     """
     Title ending in a pipe leaves no company after it, and the subheader shares
     no suffix with the title, so company stays null and the position is read
@@ -351,22 +352,22 @@ def test_extract_from_html_falls_back_to_the_pre_pipe_position():
         title="Data Engineer |",
         subheader="Data Engineer Acme • Buenos Aires · hace 3 meses",
     )
-    header = extract_from_html(page)["header"]
+    header = extract(page, source_info())["header"]
 
     assert header["company_name"] is None
     assert header["position_name"] == "Data Engineer"
 
 
-def test_extract_from_html_below_the_minimum_raises():
+def test_extract_below_the_minimum_raises():
     """One character under the guard is the rejection the boundary test omits."""
     page = make_page(body="x" * (MIN_BODY_LENGTH - 1))
 
     with pytest.raises(JobDescriptionNotFound):
-        extract_from_html(page)
+        extract(page, source_info())
 
 
 # --------------------------------------------------------------------------
-# _read_mhtml and extract_from_file
+# read_saved_page and extract_from_file
 # --------------------------------------------------------------------------
 
 def make_mhtml(
@@ -378,7 +379,7 @@ def make_mhtml(
     Minimal single-file MHTML archive, the shape a browser writes on save.
 
     A MIME container whose first part is the page and whose trailing image part
-    stands in for the assets _read_mhtml must walk past. The parts declare no
+    stands in for the assets read_saved_page must walk past. The parts declare no
     charset and ride 8bit, matching the save that forced the hand decode; the
     origin lives in the Snapshot-Content-Location header, not the save comment.
     """
@@ -416,35 +417,34 @@ def make_mhtml(
     return "".join(parts).encode("utf-8")
 
 
-def test_read_mhtml_returns_the_html_and_the_snapshot_source(tmp_path):
+def test_read_saved_page_returns_the_html_and_the_snapshot_source(tmp_path):
     path = tmp_path / "posting.mhtml"
     path.write_bytes(make_mhtml())
 
-    html_content, source = _read_mhtml(path)
+    html_content, source = read_saved_page(path)
 
     assert BODY_START_ANCHOR in html_content
     assert source == {
         "source_url": "https://www.linkedin.com/jobs/view/4231234567/",
-        "linkedin_job_id": 4231234567,
     }
 
 
-def test_read_mhtml_picks_the_html_part_past_the_image(tmp_path):
+def test_read_saved_page_picks_the_html_part_past_the_image(tmp_path):
     """walk() must skip the image part and land on text/html, not the first part."""
     path = tmp_path / "posting.mhtml"
     path.write_bytes(make_mhtml())
 
-    html_content, _ = _read_mhtml(path)
+    html_content, _ = read_saved_page(path)
 
     assert html_content.startswith("<!-- saved from url")
 
 
-def test_read_mhtml_without_an_html_part_raises(tmp_path):
+def test_read_saved_page_without_an_html_part_raises(tmp_path):
     path = tmp_path / "imageonly.mhtml"
     path.write_bytes(make_mhtml(with_html_part=False))
 
     with pytest.raises(JobDescriptionNotFound):
-        _read_mhtml(path)
+        read_saved_page(path)
 
 
 def test_extract_from_file_reads_an_mhtml_archive(tmp_path):
