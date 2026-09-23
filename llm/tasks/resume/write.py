@@ -31,12 +31,12 @@ Truth and credibility:
 Writing rules:
 - Write every generated field in {language}. Keep company, product, credential, and technology names in their standard form.
 - Write every bullet in first-person past tense, using the localized equivalent of “I” and a strong action verb (for example, “Built…” or “Construí…”). Apply past tense even to a current position: describe completed contributions without inventing an end date.
-- Never write the candidate's name, "the candidate", or pronouns such as "they". The summary must also be in first-person, past tense.
+- Never write the candidate's name, "the candidate", or pronouns such as "they". Work and project bullets must use first-person past tense. The summary is an exception: write it as a concise professional positioning statement, not as an account of past tasks.
 - Do not use em dashes, filler, soft-skill labels, or generic assertions such as "hard-working", "passionate", "results-oriented", or "responsible for".
 - Do not repeat content across the summary, skills, work history, or projects. Do not repeat company names, roles, or dates already shown by the layout.
 
 Output structure:
-- summary: exactly one 35-55 word paragraph. Open with the target professional profile, then state the two or three strongest supported qualifications for this role. It must be a value proposition, not a biography or objective statement.
+- summary: exactly one 30-45 word paragraph that sells the candidate's fit for this specific role. Lead with a clear professional positioning, then connect at most two distinctive, directly supported strengths to the value they bring to the employer. Do not recap the CV, list tools, narrate projects, repeat bullets, or open with a biographical fact such as current studies. Use natural present-tense or concise nominal phrasing, not first-person past tense. Never claim a proposal or proof of concept reached production, or that an outcome was achieved, unless the candidate evidence states that explicitly.
 - skills: 3-5 concise, readable groups with 3-6 items each. Put the role's highest-priority supported terms first. Use conventional group labels. Exclude spoken languages and unsupported tools.
 - work_bullets: return exactly one entry for every supplied position, keyed by source_experience_id. Give directly relevant positions 2-3 bullets and other positions 1 concise bullet. Use a position's nested work projects as evidence for that position only.
 - personal_bullets: include only personal projects that directly reinforce an important job requirement, at most two. Key each by source_project_id. Give each a clear 3-5 word descriptive title, 3-5 supported technologies, and exactly 2 bullets.
