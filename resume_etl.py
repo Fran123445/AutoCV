@@ -12,6 +12,8 @@ the written document instead of paying for the CV a second time to look at it.
 
 All three write into one folder per posting, named for it, so that a CV and the
 page and the PDF made from it sit together rather than three stage folders apart.
+The artifacts themselves are named from the candidate and the position:
+``nombre-apellido-posicion-cv``.
 """
 
 from pathlib import Path
@@ -19,6 +21,7 @@ from pathlib import Path
 import argparse
 import re
 import sqlite3
+import unicodedata
 
 from app_log import get_logger
 from config import RESUMES_DIR
@@ -32,10 +35,6 @@ from run_log import RunLogger, record_item
 
 logger = get_logger(__name__)
 
-
-DOCUMENT_NAME = "resume.json"
-PAGE_NAME = "resume.html"
-PDF_NAME = "resume.pdf"
 
 # Reserved on Windows, and a path separator on every platform. Control
 # characters go with them: legal on Linux, and unopenable everywhere else.
@@ -61,6 +60,49 @@ def _path_segment(value: str) -> str:
     segment = _UNUSABLE.sub("-", value)
 
     return _WHITESPACE.sub(" ", segment).strip()[:SEGMENT_LIMIT]
+
+
+def _filename_segment(value: str) -> str:
+    """Turn a name or position into one lowercase, hyphen-separated segment."""
+    normalized = unicodedata.normalize("NFKD", value)
+    ascii_value = normalized.encode("ascii", "ignore").decode("ascii")
+    return "-".join(re.findall(r"[a-z0-9]+", ascii_value.casefold()))
+
+
+def resume_stem(
+    connection: sqlite3.Connection, user_id: int, job_id: int
+) -> str:
+    """Return the shared filename stem for a candidate's posting resume."""
+    row = connection.execute(
+        """
+        SELECT user.full_name, job.position_name
+        FROM FactUser AS user
+        JOIN FactJob AS job ON job.id = ?
+        WHERE user.id = ?
+        """,
+        (job_id, user_id),
+    ).fetchone()
+
+    if row is None:
+        raise ValueError(f"No candidate with id {user_id}.")
+
+    full_name, position_name = row
+    name = _filename_segment(full_name or f"user-{user_id}")
+    position = _filename_segment(position_name)
+    return "-".join(part for part in (name, position, "cv") if part)
+
+
+def resume_paths(
+    connection: sqlite3.Connection, user_id: int, job_id: int, resumes_dir: Path
+) -> tuple[Path, Path, Path]:
+    """Return the JSON, HTML and PDF paths for one candidate and posting."""
+    out_dir = posting_dir(connection, job_id, resumes_dir)
+    stem = resume_stem(connection, user_id, job_id)
+    return (
+        out_dir / f"{stem}.json",
+        out_dir / f"{stem}.html",
+        out_dir / f"{stem}.pdf",
+    )
 
 
 def posting_dir(connection: sqlite3.Connection, job_id: int, resumes_dir: Path) -> Path:
@@ -125,7 +167,10 @@ def write(user_id: int, job_id: int, resumes_dir: Path):
             items_total=1,
             llm_settings=llm_settings,
         ) as run_log:
-            out_dir = posting_dir(run_log.connection, job_id, resumes_dir)
+            json_path, _, _ = resume_paths(
+                run_log.connection, user_id, job_id, resumes_dir
+            )
+            out_dir = json_path.parent
             out_dir.mkdir(parents=True, exist_ok=True)
 
             print(f"Writing a resume for user {user_id} against job {job_id}...")
@@ -137,10 +182,10 @@ def write(user_id: int, job_id: int, resumes_dir: Path):
 
                     item.produced("FactJob", job_id)
 
-                    out_path = out_dir / DOCUMENT_NAME
-                    out_path.write_text(
+                    json_path.write_text(
                         document.model_dump_json(indent=2), encoding="utf-8"
                     )
+                    out_path = json_path
             except Exception:
                 run_log.items_failed = 1
                 logger.exception("Resume write failed: user_id=%s job_id=%s", user_id, job_id)
@@ -163,8 +208,10 @@ def render(user_id: int, job_id: int, resumes_dir: Path):
     """
     logger.info("Resume render starting: user_id=%s job_id=%s", user_id, job_id)
     with RunLogger("resume", "render", items_total=1) as run_log:
-        out_dir = posting_dir(run_log.connection, job_id, resumes_dir)
-        json_path = out_dir / DOCUMENT_NAME
+        json_path, html_path, _ = resume_paths(
+            run_log.connection, user_id, job_id, resumes_dir
+        )
+        out_dir = json_path.parent
 
         print(f"Rendering {json_path}...")
         try:
@@ -177,8 +224,8 @@ def render(user_id: int, job_id: int, resumes_dir: Path):
                     json_path.read_text(encoding="utf-8")
                 )
 
-                out_path = out_dir / PAGE_NAME
-                out_path.write_text(render_html(document), encoding="utf-8")
+                html_path.write_text(render_html(document), encoding="utf-8")
+                out_path = html_path
         except Exception:
             run_log.items_failed = 1
             logger.exception("Resume render failed: user_id=%s job_id=%s", user_id, job_id)
@@ -206,8 +253,10 @@ def pdf(user_id: int, job_id: int, resumes_dir: Path):
 
     logger.info("Resume PDF starting: user_id=%s job_id=%s", user_id, job_id)
     with RunLogger("resume", "pdf", items_total=1) as run_log:
-        out_dir = posting_dir(run_log.connection, job_id, resumes_dir)
-        html_path = out_dir / PAGE_NAME
+        _, html_path, pdf_path = resume_paths(
+            run_log.connection, user_id, job_id, resumes_dir
+        )
+        out_dir = html_path.parent
 
         print(f"Printing {html_path}...")
         try:
@@ -215,8 +264,8 @@ def pdf(user_id: int, job_id: int, resumes_dir: Path):
             with record_item(out_dir.name):
                 printed = render_pdf(html_path.read_text(encoding="utf-8"))
 
-                out_path = out_dir / PDF_NAME
-                out_path.write_bytes(printed.pdf)
+                pdf_path.write_bytes(printed.pdf)
+                out_path = pdf_path
         except Exception:
             run_log.items_failed = 1
             logger.exception("Resume PDF failed: user_id=%s job_id=%s", user_id, job_id)
