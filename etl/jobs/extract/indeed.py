@@ -36,6 +36,21 @@ def _description_text(node) -> str | None:
     return unescape(body) or None
 
 
+def _description_node(soup: BeautifulSoup):
+    """Find the description in desktop and mobile Indeed snapshots."""
+    # Desktop Indeed pages use the long-standing id.  Mobile snapshots use a
+    # React Native HTML wrapper instead and do not render that id at all.
+    for selector in (
+        "#jobDescriptionText",
+        '[data-testid="vj-job-description"]',
+        "div.simple-job-description-html",
+    ):
+        node = soup.select_one(selector)
+        if node is not None:
+            return node
+    return None
+
+
 def _source_from_url(source_url: str | None, soup: BeautifulSoup) -> dict:
     """Resolve Indeed's ``jk`` id and keep a canonical job URL."""
     canonical = soup.select_one('meta[property="og:url"]')
@@ -58,6 +73,7 @@ def _source_from_url(source_url: str | None, soup: BeautifulSoup) -> dict:
 def _extract_title(soup: BeautifulSoup) -> str | None:
     return _text(
         soup.select_one('[data-testid="jobsearch-JobInfoHeader-title"]')
+        or soup.select_one('[data-testid="vj-job-title"]')
         or soup.select_one("h1")
     )
 
@@ -66,6 +82,7 @@ def _extract_company(soup: BeautifulSoup) -> str | None:
     return _text(
         soup.select_one('[data-testid="inlineHeader-companyName"]')
         or soup.select_one('[data-company-name="true"]')
+        or soup.select_one('[data-testid="company-info-metadata"] a')
     )
 
 
@@ -74,6 +91,10 @@ def _extract_location(soup: BeautifulSoup) -> str | None:
         soup.select_one('[data-testid="inlineHeader-companyLocation"]')
         or soup.select_one('[data-testid="jobsearch-JobInfoHeader-companyLocation"]')
         or soup.select_one("#jobLocationText")
+        or soup.select_one(
+            '[data-testid="company-info-metadata"] > div > div:nth-child(2)'
+        )
+        or soup.select_one('[data-testid="company-info-metadata"] > div:nth-child(2)')
     )
 
 
@@ -84,7 +105,7 @@ def _extract_contract_type(soup: BeautifulSoup) -> str | None:
 def extract(html_content: str, source_info: dict) -> dict:
     """Extract one Indeed posting into the normalized job extract shape."""
     soup = BeautifulSoup(html_content, "html.parser")
-    body = _description_text(soup.select_one("#jobDescriptionText"))
+    body = _description_text(_description_node(soup))
 
     if body is None or len(body) < MIN_BODY_LENGTH:
         raise JobDescriptionNotFound(

@@ -55,6 +55,39 @@ def test_extract_reads_stable_indeed_fields():
     assert "\n" in result["body"]
 
 
+def test_extract_reads_mobile_indeed_description_wrapper():
+    body = "Descripción completa del empleo. " * 20
+    page = f"""
+    <html>
+      <head>
+        <meta property="og:url" content="https://ar.indeed.com/viewjob?jk=mobile123">
+      </head>
+      <body>
+        <h5 data-testid="vj-job-title">Data Scientist</h5>
+        <div data-testid="company-info-metadata">
+          <a href="https://ar.indeed.com/cmp/acme">Acme</a>
+          <div>Buenos Aires, Buenos Aires</div>
+        </div>
+        <h4 data-testid="vj-job-description-heading">Descripción completa del empleo</h4>
+        <div class="react-native-html-content simple-job-description-html">
+          <div><p>{body}</p><ul><li>Python</li><li>Databricks</li></ul></div>
+        </div>
+      </body>
+    </html>
+    """
+
+    result = extract(
+        page,
+        {"source_url": "https://ar.indeed.com/viewjob?jk=mobile123"},
+    )
+
+    assert "Databricks" in result["body"]
+    assert "Descripción completa del empleo" in result["body"]
+    assert result["header"]["position_name"] == "Data Scientist"
+    assert result["header"]["company_name"] == "Acme"
+    assert result["header"]["location"] == "Buenos Aires, Buenos Aires"
+
+
 def test_file_extract_dispatches_indeed(tmp_path):
     path = tmp_path / "posting.html"
     saved_comment = (

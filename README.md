@@ -16,7 +16,7 @@ Four pipelines feed one database and read back out of it. Each is an independent
  experience.toml ─► experience_etl.py ─────────────┤   FactExperience + Project
                                                    │
                                                    ▼
-                              resume_etl.py (one candidate × one posting) ──► resume.pdf
+                              resume_etl.py (one candidate × one posting) ──► <nombre>-<apellido>-<posicion>-cv.pdf
 ```
 
 | Pipeline | Source | Produces |
@@ -24,7 +24,7 @@ Four pipelines feed one database and read back out of it. Each is an independent
 | `jobs_etl.py` | Saved LinkedIn posting pages (`.html` / `.mhtml`) | `FactJob` rows with tagged technology / concept / degree requirements, role and seniority |
 | `projects_etl.py` | A folder of git repos (at any depth) | `Project` rows with technology / concept evidence |
 | `experience_etl.py` | One hand-written `experience.toml` | `FactExperience` and its `Project` rows |
-| `resume_etl.py` | The loaded base, one `--user-id` × one `--job-id` | `resume.json` → `resume.html` → `resume.pdf` |
+| `resume_etl.py` | The loaded base, one `--user-id` × one `--job-id` | `<nombre>-<apellido>-<posicion>-cv.json` → `.html` → `.pdf` |
 
 The LLM work lives in `llm/tasks/`, one package per identifier (technologies, concepts, roles, seniority, degrees) and per narrator. The heavier identifiers run a two-pass shape: a first extraction pass, a second review pass hunting for what the first missed, then a merge. Every model call is recorded to the run tables (`FactRun`, `FactJobRun`, `FactLLMCall`) with timings, token usage and a prompt hash, so a run is auditable after the fact.
 
@@ -138,7 +138,7 @@ python jobs_etl.py transform load     # skip re-extracting
 python resume_etl.py render pdf --user-id 1 --job-id 7   # re-print without re-calling the model
 ```
 
-The stage split follows the cost: only `transform` (jobs/projects) and `write` (résumé) call the model, so template, stylesheet or schema edits re-run the cheap stages without paying for the LLM a second time. Loads dedupe on a natural key (`source` + `source_job_id`, repo path, `experience.toml` block id), so re-running over the same directory does not duplicate rows. Personal projects are updated in place on a repo-path match, including replacement of their technology and concept evidence.
+The stage split follows the cost: only `transform` (jobs/projects) and `write` (résumé) call the model, so template, stylesheet or schema edits re-run the cheap stages without paying for the LLM a second time. Loads dedupe on a natural key (`source` + `source_job_id`, repo path, `experience.toml` block id), so re-running over the same directory does not duplicate rows. Experience jobs and projects are authoritative snapshots: matching blocks are overwritten in place, their evidence is replaced, and blocks removed from `experience.toml` are removed from the candidate database. Personal projects are updated in place on a repo-path match, including replacement of their technology and concept evidence.
 
 ## Data model
 

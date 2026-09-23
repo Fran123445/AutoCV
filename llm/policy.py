@@ -17,7 +17,7 @@ class TaskPolicy:
     """Requirements for one task, independent of the provider."""
 
     reasoning_effort: ReasoningEffort = "low"
-    temperature: float = 0.0
+    temperature: float = 1.0
     zero_data_retention: bool = False
 
     def __post_init__(self) -> None:
