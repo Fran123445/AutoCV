@@ -233,22 +233,27 @@ def test_a_job_without_a_day_to_day_stores_null_prose(seeded_db):
     assert prose is None
 
 
-def test_a_job_seen_before_is_skipped_not_duplicated(seeded_db):
+def test_a_job_seen_before_is_updated_not_duplicated(seeded_db):
     """
-    source_id dedupes a re-run: the second load finds the row and reports it
-    skipped rather than writing a second FactExperience.
+    source_id dedupes a re-run: the second load updates the row instead of
+    writing a second FactExperience.
     """
     experience = make_experience(jobs=[make_job()])
     load(experience, seeded_db)
-    counts = load(experience, seeded_db)
+    updated = make_experience(jobs=[make_job(title="Staff Data Engineer")])
+    counts = load(updated, seeded_db)
 
     total = seeded_db.execute(
         "SELECT count(*) FROM FactExperience WHERE source_id = ?", ("j1",)
     ).fetchone()[0]
 
     assert total == 1
-    assert counts["experiences_skipped"] == 1
-    assert counts["experiences_loaded"] == 0
+    title = seeded_db.execute(
+        "SELECT job_title FROM FactExperience WHERE source_id = ?", ("j1",)
+    ).fetchone()[0]
+    assert title == "Staff Data Engineer"
+    assert counts["experiences_loaded"] == 1
+    assert counts["experiences_skipped"] == 0
 
 
 # --------------------------------------------------------------------------
@@ -320,18 +325,74 @@ def test_an_empty_project_story_is_refused(seeded_db):
         load(make_experience(jobs=[job]), seeded_db)
 
 
-def test_a_project_seen_before_is_skipped_not_duplicated(seeded_db):
+def test_a_project_seen_before_is_updated_not_duplicated(seeded_db):
     job = make_job(projects=[make_project(id="p1")])
     experience = make_experience(jobs=[job])
     load(experience, seeded_db)
-    counts = load(experience, seeded_db)
+    updated_job = make_job(projects=[make_project(
+        id="p1",
+        identified=make_identified(
+            technologies=("javascript",),
+            concepts=("scrum",),
+            task_desc="Rebuilt the thing.",
+            descriptions=make_descriptions(
+                technologies=[{"name": "javascript", "descr": "new role"}],
+                concepts=[{"name": "scrum", "descr": "new approach"}],
+            ),
+        ),
+    )])
+    counts = load(make_experience(jobs=[updated_job]), seeded_db)
 
     total = seeded_db.execute(
         "SELECT count(*) FROM Project WHERE source_id = ?", ("p1",)
     ).fetchone()[0]
 
     assert total == 1
-    assert counts["projects_skipped"] == 1
+    project = seeded_db.execute(
+        "SELECT task_desc FROM Project WHERE source_id = ?", ("p1",)
+    ).fetchone()[0]
+    assert project == "Rebuilt the thing."
+    technologies = seeded_db.execute(
+        """
+        SELECT dt.name, pt.descr
+        FROM ProjectTechnologies pt
+        JOIN DimTechnologies dt ON dt.id = pt.technology_id
+        JOIN Project p ON p.id = pt.project_id
+        WHERE p.source_id = ?
+        """,
+        ("p1",),
+    ).fetchall()
+    concepts = seeded_db.execute(
+        """
+        SELECT dc.concept_name, pc.descr
+        FROM ProjectConcepts pc
+        JOIN DimConcepts dc ON dc.id = pc.concept_id
+        JOIN Project p ON p.id = pc.project_id
+        WHERE p.source_id = ?
+        """,
+        ("p1",),
+    ).fetchall()
+    assert technologies == [("javascript", "new role")]
+    assert concepts == [("scrum", "new approach")]
+    assert counts["projects_loaded"] == 1
+    assert counts["projects_skipped"] == 0
+
+
+def test_removed_jobs_and_projects_are_removed_from_the_snapshot(seeded_db):
+    first = make_experience(jobs=[make_job(projects=[make_project(id="p1")])])
+    load(first, seeded_db)
+
+    load(make_experience(), seeded_db)
+
+    assert seeded_db.execute(
+        "SELECT count(*) FROM FactExperience WHERE source_id = ?", ("j1",)
+    ).fetchone()[0] == 0
+    assert seeded_db.execute(
+        "SELECT count(*) FROM Project WHERE source_id = ?", ("p1",)
+    ).fetchone()[0] == 0
+    assert seeded_db.execute(
+        "SELECT count(*) FROM UserTechnologies WHERE user_id = ?", (DEFAULT_USER_ID,)
+    ).fetchone()[0] == 0
 
 
 # --------------------------------------------------------------------------

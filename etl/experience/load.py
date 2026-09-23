@@ -153,7 +153,7 @@ def _load_experience(
     connection: sqlite3.Connection, job: dict, user_id: int
 ) -> tuple[int, bool]:
     """
-    Write one job block, or find the row a previous run already wrote.
+    Write one job block, replacing the row a previous run already wrote.
 
     Args:
         connection (sqlite3.Connection): Open connection to the database.
@@ -161,26 +161,30 @@ def _load_experience(
         user_id (int): The user whose history this is.
 
     Returns:
-        tuple[int, bool]: The FactExperience id, and whether this run inserted
-            it. A job already in the base still returns its id: its projects are
-            deduped one by one, so a block added to a job loaded last week lands
-            without the job itself being touched.
+        tuple[int, bool]: The FactExperience id, and whether this source block
+            was loaded. Existing rows are updated in place because the TOML is
+            authoritative for the candidate's work history.
 
     Raises:
         UnknownSeedValue: A canonical name has no row in its dimension.
     """
     day_to_day = job["day_to_day"]
 
-    cursor = connection.execute(
+    connection.execute(
         """
         INSERT INTO FactExperience (
             user_id, source_id, company_id, role_id, job_title, seniority_id,
             start_date, end_date, day_to_day
         )
         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
-        -- Not an upsert: rowcount below is what says whether this inserted,
-        -- and an update sets it to 1 too.
-        ON CONFLICT(user_id, source_id) DO NOTHING
+        ON CONFLICT(user_id, source_id) DO UPDATE SET
+            company_id = excluded.company_id,
+            role_id = excluded.role_id,
+            job_title = excluded.job_title,
+            seniority_id = excluded.seniority_id,
+            start_date = excluded.start_date,
+            end_date = excluded.end_date,
+            day_to_day = excluded.day_to_day
         """,
         (
             user_id,
@@ -197,20 +201,17 @@ def _load_experience(
         ),
     )
 
-    if cursor.rowcount == 0:
-        row = connection.execute(
-            "SELECT id FROM FactExperience WHERE user_id = ? AND source_id = ?",
-            (user_id, job["id"]),
-        ).fetchone()
+    row = connection.execute(
+        "SELECT id FROM FactExperience WHERE user_id = ? AND source_id = ?",
+        (user_id, job["id"]),
+    ).fetchone()
 
-        return row[0], False
-
-    return cursor.lastrowid, True
+    return row[0], True
 
 
 def _load_project(
     connection: sqlite3.Connection, project: dict, experience_id: int, user_id: int
-) -> int | None:
+) -> int:
     """
     Write one project a candidate did at a job, with its two bridges.
 
@@ -222,7 +223,7 @@ def _load_project(
             same way the personal ones carry it.
 
     Returns:
-        int | None: The Project id, or None when it was already there.
+        int: The Project id, whether the project was inserted or updated.
 
     Raises:
         MissingProjectStory: The block has no story written in it.
@@ -236,24 +237,37 @@ def _load_project(
     narrative = identified["narrative"]
     descriptions = identified["descriptions"]
 
-    cursor = connection.execute(
+    connection.execute(
         # source_path stays null: there is no repository behind this project,
         # which is also what tells it apart from one the projects pipeline
         # loaded. The file's id goes to source_id and dedupes it instead.
         """
         INSERT INTO Project (user_id, experience_id, source_id, task_desc)
         VALUES (?, ?, ?, ?)
-        ON CONFLICT(experience_id, source_id) DO NOTHING
+        ON CONFLICT(experience_id, source_id) DO UPDATE SET
+            user_id = excluded.user_id,
+            task_desc = excluded.task_desc
         """,
         (user_id, experience_id, project["id"], narrative["task_desc"]),
     )
 
-    # Nothing inserted means the conflict fired and the project is already
-    # loaded. lastrowid would be stale, so bail before touching the bridges.
-    if cursor.rowcount == 0:
-        return None
+    project_id = connection.execute(
+        """
+        SELECT id
+        FROM Project
+        WHERE experience_id = ? AND source_id = ?
+        """,
+        (experience_id, project["id"]),
+    ).fetchone()[0]
 
-    project_id = cursor.lastrowid
+    # Evidence is a complete snapshot, not an append-only history. Remove the
+    # old bridges before loading the new technology/concept set and descriptions.
+    connection.execute(
+        "DELETE FROM ProjectTechnologies WHERE project_id = ?", (project_id,)
+    )
+    connection.execute(
+        "DELETE FROM ProjectConcepts WHERE project_id = ?", (project_id,)
+    )
 
     technology_descriptions = descriptions_by_name(descriptions, "technologies")
     load_project_bridge(
@@ -283,6 +297,28 @@ def _load_project(
     )
 
     return project_id
+
+
+def _delete_project(connection: sqlite3.Connection, project_id: int):
+    """Delete an experience project and its evidence bridges."""
+    connection.execute(
+        "DELETE FROM ProjectTechnologies WHERE project_id = ?", (project_id,)
+    )
+    connection.execute(
+        "DELETE FROM ProjectConcepts WHERE project_id = ?", (project_id,)
+    )
+    connection.execute("DELETE FROM Project WHERE id = ?", (project_id,))
+
+
+def _delete_experience(connection: sqlite3.Connection, experience_id: int):
+    """Delete an experience row and all projects/evidence hanging from it."""
+    project_ids = connection.execute(
+        "SELECT id FROM Project WHERE experience_id = ?", (experience_id,)
+    ).fetchall()
+    for (project_id,) in project_ids:
+        _delete_project(connection, project_id)
+
+    connection.execute("DELETE FROM FactExperience WHERE id = ?", (experience_id,))
 
 
 def _rollup_names(jobs: list[dict]) -> tuple[list[str], list[str]]:
@@ -320,6 +356,64 @@ def _rollup_names(jobs: list[dict]) -> tuple[list[str], list[str]]:
     return sorted(technologies), sorted(concepts)
 
 
+def _replace_user_rollups(
+    connection: sqlite3.Connection, jobs: list[dict], user_id: int
+):
+    """Make candidate skill rollups match current experience plus personal projects."""
+    technology_names, concept_names = _rollup_names(jobs)
+    technology_ids = {
+        solve_technology_name_id(connection, name) for name in technology_names
+    }
+    concept_ids = {
+        solve_concept_name_id(connection, name) for name in concept_names
+    }
+
+    # Personal projects are maintained by the projects pipeline and remain
+    # valid evidence when the experience source is replaced.
+    technology_ids.update(
+        row[0]
+        for row in connection.execute(
+            """
+            SELECT DISTINCT pt.technology_id
+            FROM ProjectTechnologies pt
+            JOIN Project p ON p.id = pt.project_id
+            WHERE p.user_id = ? AND p.experience_id IS NULL
+            """,
+            (user_id,),
+        )
+    )
+    concept_ids.update(
+        row[0]
+        for row in connection.execute(
+            """
+            SELECT DISTINCT pc.concept_id
+            FROM ProjectConcepts pc
+            JOIN Project p ON p.id = pc.project_id
+            WHERE p.user_id = ? AND p.experience_id IS NULL
+            """,
+            (user_id,),
+        )
+    )
+
+    for table, column, ids in (
+        ("UserTechnologies", "technology_id", technology_ids),
+        ("UserConcepts", "concept_id", concept_ids),
+    ):
+        if ids:
+            placeholders = ", ".join("?" for _ in ids)
+            connection.execute(
+                f"""
+                DELETE FROM {table}
+                WHERE user_id = ? AND {column} NOT IN ({placeholders})
+                """,
+                (user_id, *sorted(ids)),
+            )
+        else:
+            connection.execute(f"DELETE FROM {table} WHERE user_id = ?", (user_id,))
+
+        load_user_bridge(connection, table, column, user_id, sorted(ids))
+
+
 def load(
     transformed_data: dict,
     connection: sqlite3.Connection,
@@ -340,8 +434,9 @@ def load(
         user_id (int): The user the file describes.
 
     Returns:
-        dict: What landed and what was already there, by kind. The profile,
-            the education and the languages are not counted: they are written
+        dict: What experience blocks were loaded. Existing jobs and projects
+            count as loaded because they are overwritten in place. The
+            profile, education and languages are not counted: they are written
             on every run.
 
     Raises:
@@ -361,28 +456,45 @@ def load(
         _load_education(connection, transformed_data["education"], user_id)
         _load_language(connection, transformed_data["languages"], user_id)
 
+        current_job_ids = {job["id"] for job in jobs}
+
         for job in jobs:
-            experience_id, inserted = _load_experience(connection, job, user_id)
-            counts["experiences_loaded" if inserted else "experiences_skipped"] += 1
+            experience_id, _loaded = _load_experience(connection, job, user_id)
+            counts["experiences_loaded"] += 1
 
+            current_project_ids = {project["id"] for project in job["projects"]}
             for project in job["projects"]:
-                project_id = _load_project(connection, project, experience_id, user_id)
-                counts["projects_loaded" if project_id else "projects_skipped"] += 1
+                _load_project(connection, project, experience_id, user_id)
+                counts["projects_loaded"] += 1
 
-        technologies, concepts = _rollup_names(jobs)
-        load_user_bridge(
-            connection,
-            "UserTechnologies",
-            "technology_id",
-            user_id,
-            [solve_technology_name_id(connection, name) for name in technologies],
-        )
-        load_user_bridge(
-            connection,
-            "UserConcepts",
-            "concept_id",
-            user_id,
-            [solve_concept_name_id(connection, name) for name in concepts],
-        )
+            stale_projects = connection.execute(
+                """
+                SELECT id, source_id
+                FROM Project
+                WHERE experience_id = ?
+                """,
+                (experience_id,),
+            ).fetchall()
+            for project_id, source_id in stale_projects:
+                if source_id not in current_project_ids:
+                    _delete_project(connection, project_id)
+
+        # The TOML is the complete source of truth for experience rows. Remove
+        # jobs that were deleted from it, including their project evidence.
+        stale_experiences = connection.execute(
+            """
+            SELECT id, source_id
+            FROM FactExperience
+            WHERE user_id = ? AND source_id IS NOT NULL
+            """,
+            (user_id,),
+        ).fetchall()
+        for experience_id, source_id in stale_experiences:
+            if source_id not in current_job_ids:
+                _delete_experience(connection, experience_id)
+
+        # Rebuild aggregate skill claims so tags removed from the TOML do not
+        # survive. Personal-project evidence is preserved separately.
+        _replace_user_rollups(connection, jobs, user_id)
 
     return counts
